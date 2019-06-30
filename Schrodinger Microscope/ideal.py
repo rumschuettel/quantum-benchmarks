@@ -47,7 +47,7 @@ for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
         if not any(res.measurements['post_select']):
             num_post_selected += 1
             num_success += 1 if res.measurements['success'][0] else 0
-    zs[i,j] = num_success / num_post_selected if num_post_selected > 0 else 0
+    zs[j,i] = num_success / num_post_selected if num_post_selected > 0 else 0
     print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
 
 # Plot the resulting figure based on the measurement statistics

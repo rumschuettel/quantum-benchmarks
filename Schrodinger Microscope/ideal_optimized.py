@@ -35,7 +35,6 @@ xs = .5*(xs[:-1] + xs[1:])
 ys = np.linspace(-2,2,num_pixels+1)
 ys = .5*(ys[:-1] + ys[1:])
 zs = np.empty((len(xs),len(ys)), dtype = np.float64)
-psps = np.empty((len(xs),len(ys)), dtype = np.float64)
 for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
     z = x + 1j*y
     psi = np.array([z,1], dtype = np.complex64) / np.sqrt(x**2 + y**2 + 1)
@@ -43,10 +42,9 @@ for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
     num_post_selected,num_success = 0,0
     res = cirq.Simulator().simulate(circuit, initial_state = np.array(init_state), qubit_order = qubits)
     psp = np.linalg.norm(res.final_state[::2**(2**num_post_selections-1)])**2
-    psps[i,j] = psp
-    sp = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psps[i,j] if psps[i,j] > 0 else 0
+    sp = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psp if psp > 0 else 0
     num_post_selected = np.random.binomial(num_runs,psp)
-    zs[i,j] = np.random.binomial(num_post_selected,sp)
+    zs[j,i] = np.random.binomial(num_post_selected,sp)
     print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
 
 # Plot the resulting figure based on the measurement statistics

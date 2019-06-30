@@ -41,8 +41,8 @@ for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
     init_state = reduce(lambda x,y : np.kron(x,y), [psi]*(2**num_post_selections))
     num_post_selected,num_success = 0,0
     res = cirq.Simulator().simulate(circuit, initial_state = np.array(init_state), qubit_order = qubits)
-    psps[i,j] = np.linalg.norm(res.final_state[::2**(2**num_post_selections-1)])**2
-    zs[i,j] = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psps[i,j] if psps[i,j] > 0 else 0
+    psps[j,i] = np.linalg.norm(res.final_state[::2**(2**num_post_selections-1)])**2
+    zs[j,i] = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psps[j,i] if psps[j,i] > 0 else 0
     print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
 print()
 
