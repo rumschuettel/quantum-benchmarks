@@ -35,7 +35,7 @@ The following resources are required to perform the experiment (assuming all mea
 
 ## File structure
 
-There are three files in this folder:
+There are two files in this folder:
 
   * `probabilities.py` generates two plots:
 
