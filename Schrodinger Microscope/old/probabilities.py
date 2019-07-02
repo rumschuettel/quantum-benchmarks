@@ -14,6 +14,20 @@ def circuit_to_string(circuit):
 num_post_selections = 2
 num_pixels = 64
 
+# Build the circuit
+qubits = [cirq.GridQubit(0,i) for i in range(2**num_post_selections)]
+circuit = cirq.Circuit()
+for i in range(num_post_selections):
+    for x in range(0,2**num_post_selections,2**(i+1)):
+        circuit.append(cirq.CNOT(qubits[x], qubits[x + 2**i]))
+        circuit.append([cirq.S(qubits[x]), cirq.H(qubits[x]), cirq.S(qubits[x])])
+
+# Print the circuit
+print("The circuit that is being used for benchmarking is:")
+print()
+print(circuit_to_string(circuit))
+print()
+
 # Loop over the pixels
 xs = np.linspace(-2,2,num_pixels+1)
 xs = .5*(xs[:-1] + xs[1:])
@@ -23,30 +37,11 @@ zs = np.empty((len(xs),len(ys)), dtype = np.float64)
 psps = np.empty((len(xs),len(ys)), dtype = np.float64)
 for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
     z = x + 1j*y
-
-    # Calculate some parameters
-    theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z)**2))
-    phi = np.angle(z)
-
-    # Build the circuit
-    qubits = [cirq.GridQubit(0,i) for i in range(2**num_post_selections)]
-    circuit = cirq.Circuit()
-    for k in range(2**num_post_selections):
-        circuit.append(cirq.Ry(theta)(qubits[k]))
-        circuit.append(cirq.Rz(-phi)(qubits[k]))
-    for k in range(num_post_selections):
-        for l in range(0,2**num_post_selections,2**(k+1)):
-            circuit.append(cirq.CNOT(qubits[l], qubits[l + 2**k]))
-            circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
-
-    # Run the simulator
-    res = cirq.Simulator().simulate(circuit, qubit_order = qubits)
-
-    # Calculate the probabilities from the final state
+    psi = np.array([z,1], dtype = np.complex64) / np.sqrt(x**2 + y**2 + 1)
+    init_state = reduce(lambda x,y : np.kron(x,y), [psi]*(2**num_post_selections))
+    res = cirq.Simulator().simulate(circuit, initial_state = np.array(init_state), qubit_order = qubits)
     psps[j,i] = np.linalg.norm(res.final_state[::2**(2**num_post_selections-1)])**2
     zs[j,i] = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psps[j,i] if psps[j,i] > 0 else 0
-
-    # Print the progress
     print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
 print()
 

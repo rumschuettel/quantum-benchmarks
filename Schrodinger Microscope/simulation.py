@@ -13,6 +13,7 @@ def circuit_to_string(circuit):
 # Set the number of iterations
 num_post_selections = 2
 num_pixels = 64
+num_runs = 1024
 
 # Loop over the pixels
 xs = np.linspace(-2,2,num_pixels+1)
@@ -38,13 +39,17 @@ for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
         for l in range(0,2**num_post_selections,2**(k+1)):
             circuit.append(cirq.CNOT(qubits[l], qubits[l + 2**k]))
             circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
+    circuit.append(cirq.measure(*(qubits[k] for k in range(1,2**num_post_selections)), key = 'post_selection'))
+    circuit.append(cirq.measure(qubits[0], key = 'success'))
 
     # Run the simulator
-    res = cirq.Simulator().simulate(circuit, qubit_order = qubits)
+    res = cirq.Simulator().run(circuit, repetitions = num_runs)
 
-    # Calculate the probabilities from the final state
-    psps[j,i] = np.linalg.norm(res.final_state[::2**(2**num_post_selections-1)])**2
-    zs[j,i] = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psps[j,i] if psps[j,i] > 0 else 0
+    # Find the measurement outcome statistics
+    post_selection_result = list(not any(outcome) for outcome in res.measurements['post_selection'])
+    num_post_selected = post_selection_result.count(True)
+    psps[j,i] = num_post_selected / num_runs
+    zs[j,i] = list(success and post_selected for success,post_selected in zip(res.measurements['success'], post_selection_result)).count(True) / num_post_selected if num_post_selected > 0 else 0
 
     # Print the progress
     print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
