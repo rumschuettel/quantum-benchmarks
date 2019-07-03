@@ -3,8 +3,8 @@ import itertools as it
 from experiment import run_experiment_fill_axes
 
 num_pixels = 64
-post_selections = [1,2]
-runs = [float("Inf"),2**5]
+post_selections = [1,2,3]
+runs = [float("Inf"),2**5,2**10]
 
 h = len(runs)
 w = len(post_selections)
