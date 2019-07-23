@@ -1,14 +1,13 @@
 import numpy as np
 np.set_printoptions(linewidth=200)
-import cirq
+from qiskit import QuantumCircuit, execute, Aer
+from qiskit.providers.aer import StatevectorSimulator
 import matplotlib.pyplot as plt
 import itertools as it
 from functools import reduce
 
 def circuit_to_string(circuit):
     # Display the circuit
-    if len(circuit._moments) == 0:
-        return "  << This circuit is empty >>"
     return "\n  " + str(circuit).replace('\n','\n  ') + "\n"
 
 def construct_circuit(num_post_selections, z, add_measurements = True):
@@ -17,18 +16,18 @@ def construct_circuit(num_post_selections, z, add_measurements = True):
     phi = np.angle(z)
 
     # Build the circuit
-    qubits = [cirq.GridQubit(0,i) for i in range(2**num_post_selections)]
-    circuit = cirq.Circuit()
+    circuit = QuantumCircuit(2**num_post_selections, 2**num_post_selections) if add_measurements else QuantumCircuit(2**num_post_selections)
     for k in range(2**num_post_selections):
-        circuit.append(cirq.Ry(theta)(qubits[k]))
-        circuit.append(cirq.Rz(-phi)(qubits[k]))
+        circuit.ry(theta,k)
+        circuit.rz(-phi,k)
     for k in range(num_post_selections):
         for l in range(0,2**num_post_selections,2**(k+1)):
-            circuit.append(cirq.CNOT(qubits[l], qubits[l + 2**k]))
-            circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
+            circuit.cx(l, l+2**k)
+            circuit.s(l)
+            circuit.h(l)
+            circuit.s(l)
     if add_measurements:
-        circuit.append(cirq.measure(*(qubits[k] for k in range(1,2**num_post_selections)), key = 'post_selection'))
-        circuit.append(cirq.measure(qubits[0], key = 'success'))
+        circuit.measure(list(range(2**num_post_selections)), list(range(2**num_post_selections)))
 
     # Return the resulting circuit
     return circuit
@@ -58,23 +57,26 @@ def simulate_schrodinger_microscope(num_post_selections, num_pixels, num_runs = 
             circuit = construct_circuit(num_post_selections, z, add_measurements = False)
 
             # Run the simulator
-            res = cirq.Simulator().simulate(circuit)
+            res = execute(circuit, Aer.get_backend('statevector_simulator')).result().get_statevector(circuit)
 
             # Calculate the probabilities from the final state
-            psps[j,i] = np.linalg.norm(res.final_state[::2**(2**num_post_selections-1)])**2
-            zs[j,i] = np.abs(res.final_state[2**(2**num_post_selections-1)])**2 / psps[j,i] if psps[j,i] > 0 else 0
+            psps[j,i] = np.linalg.norm(res[:2])**2
+            zs[j,i] = np.abs(res[1])**2 / psps[j,i] if psps[j,i] > 0 else 0
         else:
             # Build the circuit
             circuit = construct_circuit(num_post_selections, z)
 
             # Run the simulator
-            res = cirq.Simulator().run(circuit, repetitions = num_runs)
+            res = execute(circuit, Aer.get_backend('qasm_simulator'), shots = num_runs).result().get_counts()
 
             # Find the measurement outcome statistics
-            post_selection_result = list(not any(outcome) for outcome in res.measurements['post_selection'])
-            num_post_selected = post_selection_result.count(True)
+            failure_post_process_key = '0'*(2**num_post_selections-1) + '0'
+            success_post_process_key = '0'*(2**num_post_selections-1) + '1'
+            num_post_selected_failures = res[failure_post_process_key] if failure_post_process_key in res else 0
+            num_post_selected_successes = res[success_post_process_key] if success_post_process_key in res else 0
+            num_post_selected = num_post_selected_failures + num_post_selected_successes
             psps[j,i] = num_post_selected / num_runs
-            zs[j,i] = list(success and post_selected for success,post_selected in zip(res.measurements['success'], post_selection_result)).count(True) / num_post_selected if num_post_selected > 0 else 0
+            zs[j,i] = num_post_selected_successes / num_post_selected if num_post_selected > 0 else 0
 
         # Print the progress
         if output: print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
@@ -112,5 +114,5 @@ if __name__ == "__main__":
     fig = plt.figure(figsize = (12,6))
     ax_psps = fig.add_subplot(1,2,1)
     ax_zs = fig.add_subplot(1,2,2)
-    run_experiment_fill_axes(ax_psps, ax_zs, 2, 64, 1024)
+    run_experiment_fill_axes(ax_psps, ax_zs, 2, 64, float("Inf"))
     plt.show()
