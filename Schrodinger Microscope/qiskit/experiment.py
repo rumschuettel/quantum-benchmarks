@@ -10,6 +10,27 @@ def circuit_to_string(circuit):
     # Display the circuit
     return "\n  " + str(circuit).replace('\n','\n  ') + "\n"
 
+def construct_circuits(num_post_selections, num_pixels, xmin = -2, xmax = 2, ymin = -2, ymax = 2, add_measurements = True):
+    xs = np.linspace(xmin,xmax,num_pixels+1)
+    xs = .5*(xs[:-1] + xs[1:])
+    ys = np.linspace(ymin,ymax,num_pixels+1)
+    ys = .5*(ys[:-1] + ys[1:])
+    circuits = {}
+    for (i,x),(j,y) in it.product(enumerate(xs),enumerate(ys)):
+        z = x + 1j*y
+        circuits[(j,i)] = construct_circuit(num_post_selections, z, add_measurements = add_measurements)
+    return circuits
+
+def parse_measurement_outcomes(res, num_post_selections, num_runs):
+    failure_post_process_key = '0'*(2**num_post_selections-1) + '0'
+    success_post_process_key = '0'*(2**num_post_selections-1) + '1'
+    num_post_selected_failures = res[failure_post_process_key] if failure_post_process_key in res else 0
+    num_post_selected_successes = res[success_post_process_key] if success_post_process_key in res else 0
+    num_post_selected = num_post_selected_failures + num_post_selected_successes
+    psp = num_post_selected / num_runs
+    z = num_post_selected_successes / num_post_selected if num_post_selected > 0 else 0
+    return psp,z
+
 def construct_circuit(num_post_selections, z, add_measurements = True):
     # Calculate some parameters
     theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z)**2))
@@ -70,13 +91,9 @@ def simulate_schrodinger_microscope(num_post_selections, num_pixels, num_runs = 
             res = execute(circuit, Aer.get_backend('qasm_simulator'), shots = num_runs).result().get_counts()
 
             # Find the measurement outcome statistics
-            failure_post_process_key = '0'*(2**num_post_selections-1) + '0'
-            success_post_process_key = '0'*(2**num_post_selections-1) + '1'
-            num_post_selected_failures = res[failure_post_process_key] if failure_post_process_key in res else 0
-            num_post_selected_successes = res[success_post_process_key] if success_post_process_key in res else 0
-            num_post_selected = num_post_selected_failures + num_post_selected_successes
-            psps[j,i] = num_post_selected / num_runs
-            zs[j,i] = num_post_selected_successes / num_post_selected if num_post_selected > 0 else 0
+            psp,z = parse_measurement_outcomes(res)
+            psps[j,i] = psp
+            zs[j,i] = z
 
         # Print the progress
         if output: print("Progress: {:.3f}%".format(100*(i*num_pixels+j+1)/num_pixels**2), end = '\r')
