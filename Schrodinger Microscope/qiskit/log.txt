@@ -1,0 +1,896 @@
+
+Updating an experiment.
+You need to supply the name of the experiment you want to update.
+Experiment done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:01:47 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:02:56 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:04:05 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:05:15 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:06:24 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:07:34 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:08:42 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:09:51 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:11:01 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:12:10 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:13:19 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:14:30 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:15:39 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:16:49 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:17:58 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:19:07 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:20:16 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:21:25 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:22:35 2019
+Number of jobs queued: 256
+Number of jobs pending: 0
+Number of jobs finished: 0
+Sending job 1/256.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.72126) ├┤ Rz(3pi/4) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+Job ID: 5d6e30e02a271000190ed3c2
+Done.
+Sending job 2/256.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.76624) ├┤ Rz(2.4275) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.76624) ├┤ Rz(2.4275) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Attempting to retrieve job 1/1 with job id 5d6e30e02a271000190ed3c2.
+Status: QUEUED
+This job is queued.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:23:55 2019
+Number of jobs queued: 255
+Number of jobs pending: 1
+Job IDs: 5d6e30e02a271000190ed3c2
+Number of jobs finished: 0
+Sending job 1/255.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.76624) ├┤ Rz(2.4275) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.76624) ├┤ Rz(2.4275) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+Job ID: 5d6e313129aae90018a9fa52
+Done.
+Sending job 2/255.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.81234) ├┤ Rz(2.5088) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.81234) ├┤ Rz(2.5088) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+Job ID: 5d6e3133203a94001885a85a
+Done.
+Sending job 3/255.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.85786) ├┤ Rz(2.6012) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.85786) ├┤ Rz(2.6012) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+Job ID: 5d6e3136bea9a9001929aefb
+Done.
+Sending job 4/255.
+Circuit:
+        ┌─────────────┐┌───────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.90039) ├┤ Rz(2.705) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├───────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.90039) ├┤ Rz(2.705) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└───────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ═══════════════════════════════════╬═════════════╩═
+                                           ║               
+ c_1: 0 ═══════════════════════════════════╩═══════════════
+                                                           
+Job ID: 5d6e313918169e0019ef5172
+Done.
+Sending job 5/255.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Attempting to retrieve job 1/5 with job id 5d6e30e02a271000190ed3c2.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 2/5 with job id 5d6e313129aae90018a9fa52.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 3/5 with job id 5d6e3133203a94001885a85a.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 4/5 with job id 5d6e3136bea9a9001929aefb.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 5/5 with job id 5d6e313918169e0019ef5172.
+Status: QUEUED
+This job is queued.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:25:49 2019
+Number of jobs queued: 251
+Number of jobs pending: 5
+Job IDs: 5d6e30e02a271000190ed3c2, 5d6e313129aae90018a9fa52, 5d6e3133203a94001885a85a, 5d6e3136bea9a9001929aefb, 5d6e313918169e0019ef5172
+Number of jobs finished: 0
+Sending job 1/251.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Attempting to retrieve job 1/5 with job id 5d6e30e02a271000190ed3c2.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 2/5 with job id 5d6e313129aae90018a9fa52.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 3/5 with job id 5d6e3133203a94001885a85a.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 4/5 with job id 5d6e3136bea9a9001929aefb.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 5/5 with job id 5d6e313918169e0019ef5172.
+Status: QUEUED
+This job is queued.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:27:33 2019
+Number of jobs queued: 251
+Number of jobs pending: 5
+Job IDs: 5d6e30e02a271000190ed3c2, 5d6e313129aae90018a9fa52, 5d6e3133203a94001885a85a, 5d6e3136bea9a9001929aefb, 5d6e313918169e0019ef5172
+Number of jobs finished: 0
+Sending job 1/251.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Attempting to retrieve job 1/5 with job id 5d6e30e02a271000190ed3c2.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 2/5 with job id 5d6e313129aae90018a9fa52.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 3/5 with job id 5d6e3133203a94001885a85a.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 4/5 with job id 5d6e3136bea9a9001929aefb.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 5/5 with job id 5d6e313918169e0019ef5172.
+Status: QUEUED
+This job is queued.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:29:19 2019
+Number of jobs queued: 251
+Number of jobs pending: 5
+Job IDs: 5d6e30e02a271000190ed3c2, 5d6e313129aae90018a9fa52, 5d6e3133203a94001885a85a, 5d6e3136bea9a9001929aefb, 5d6e313918169e0019ef5172
+Number of jobs finished: 0
+Sending job 1/251.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Attempting to retrieve job 1/5 with job id 5d6e30e02a271000190ed3c2.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 2/5 with job id 5d6e313129aae90018a9fa52.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 3/5 with job id 5d6e3133203a94001885a85a.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 4/5 with job id 5d6e3136bea9a9001929aefb.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 5/5 with job id 5d6e313918169e0019ef5172.
+Status: QUEUED
+This job is queued.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
+Updating an experiment.
+Updating experiment with name: Schrodinger1-16-1024-ibmq_ourense
+Loading job manager from file...
+Done.
+Current timestamp: Tue Sep  3 11:31:03 2019
+Number of jobs queued: 251
+Number of jobs pending: 5
+Job IDs: 5d6e30e02a271000190ed3c2, 5d6e313129aae90018a9fa52, 5d6e3133203a94001885a85a, 5d6e3136bea9a9001929aefb, 5d6e313918169e0019ef5172
+Number of jobs finished: 0
+Sending job 1/251.
+Circuit:
+        ┌─────────────┐┌────────────┐     ┌───┐┌───┐┌───┐┌─┐
+q_0: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├──■──┤ S ├┤ H ├┤ S ├┤M├
+        ├─────────────┤├────────────┤┌─┴─┐└┬─┬┘└───┘└───┘└╥┘
+q_1: |0>┤ Ry(0.93682) ├┤ Rz(2.8198) ├┤ X ├─┤M├────────────╫─
+        └─────────────┘└────────────┘└───┘ └╥┘            ║ 
+ c_0: 0 ════════════════════════════════════╬═════════════╩═
+                                            ║               
+ c_1: 0 ════════════════════════════════════╩═══════════════
+                                                            
+An error occurred obtaining the job id of the job.
+You don't have enough credits to run this job.
+That is why we will suspend sending any further jobs for now.
+Try to run the update script at a later stage.
+Saving job manager to file...
+Done.
+Saving job manager to file...
+Done.
+Attempting to retrieve job 1/5 with job id 5d6e30e02a271000190ed3c2.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 2/5 with job id 5d6e313129aae90018a9fa52.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 3/5 with job id 5d6e3133203a94001885a85a.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 4/5 with job id 5d6e3136bea9a9001929aefb.
+Status: QUEUED
+This job is queued.
+Attempting to retrieve job 5/5 with job id 5d6e313918169e0019ef5172.
+Status: QUEUED
+This job is queued.
+Saving job manager to file...
+Done.
+The final results function is now being run...
+Done.
