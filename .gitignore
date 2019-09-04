@@ -107,3 +107,4 @@ venv.bak/
 IBMCheck.ipynb
 *.pdf
 *.pickle
+.vscode/
