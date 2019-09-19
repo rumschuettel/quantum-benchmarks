@@ -1,7 +1,12 @@
-from ..link import *
-from ..lib import *
+from ..link import VendorLink, VendorJob
+from ..lib import print_hl
 
 from qiskit import IBMQ, Aer
+
+
+class IBMJob(VendorJob):
+    pass
+
 
 class IBMLink(VendorLink):
     def __init__(self):
@@ -23,6 +28,9 @@ class IBMLink(VendorLink):
         return self.IBMQ_cloud.backends()
 
 
+    def run(self, job: IBMJob):
+        pass
+
 
 
 class IBMSimulatorLink(VendorLink):
@@ -36,3 +44,7 @@ class IBMSimulatorLink(VendorLink):
     
     def list_devices(self):
         return self.IBMQ_local.backends()
+
+
+    def run(self, job: IBMJob):
+        pass

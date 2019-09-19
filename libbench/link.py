@@ -1,5 +1,15 @@
 from abc import ABC, abstractmethod
 
+
+class VendorJob(ABC):
+    """
+    Vendor job interface.
+    """
+    @abstractmethod
+    def run(self, *args):
+        raise NotImplementedError()
+
+
 class VendorLink(ABC):
     """
     Vendor link interface
@@ -7,13 +17,11 @@ class VendorLink(ABC):
     """
     @abstractmethod
     def list_devices(self):
-        """return an array of devices"""
-        pass
+        raise NotImplementedError()
 
 
+    @abstractmethod
+    def run(self, job: VendorJob):
+        raise NotImplementedError()
 
-class Job(ABC):
-    """
-    Job interface.
-    This
-    """
+
