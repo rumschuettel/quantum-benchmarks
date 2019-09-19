@@ -1,1 +1,0 @@
-from .rigetti_job_manager import JobManager as RigettiJobManager

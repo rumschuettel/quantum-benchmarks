@@ -1,8 +1,6 @@
 import pyquil as pq
 
-class JobManager:
-
-
+class RigettiLink:
     @staticmethod
     def list_devices():
         print(pq.list_quantum_computers())
