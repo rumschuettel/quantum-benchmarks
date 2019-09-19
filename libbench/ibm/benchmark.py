@@ -1,5 +1,5 @@
 from ..benchmark import *
 
-class IBMBenchmark(Benchmark):
+class IBMBenchmark(VendorBenchmark):
     pass
     

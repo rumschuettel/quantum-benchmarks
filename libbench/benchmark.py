@@ -1,5 +1,5 @@
 import abc
 
-class Benchmark():
+class VendorBenchmark():
     pass
 
