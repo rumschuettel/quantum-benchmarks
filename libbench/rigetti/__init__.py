@@ -1,2 +1,2 @@
-from .benchmark import *
-from .link import *
+from .benchmark import RigettiBenchmark as Benchmark
+from .link import RigettiLink as Link

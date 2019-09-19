@@ -16,7 +16,7 @@ class VendorLink(ABC):
     all methods in here have to be implemented for a valid link
     """
     @abstractmethod
-    def list_devices(self):
+    def get_devices(self):
         raise NotImplementedError()
 
 

@@ -1,5 +1,5 @@
-from ..benchmark import *
+from libbench.benchmark import VendorBenchmark
 
-class GoogleBenchmark(Benchmark):
+class GoogleBenchmark(VendorBenchmark):
     pass
     

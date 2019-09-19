@@ -1,2 +1,2 @@
-from .benchmark import *
-from .link import *
+from .benchmark import GoogleBenchmark as Benchmark
+from .link import GoogleLink as Link

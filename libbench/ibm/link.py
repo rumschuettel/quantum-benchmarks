@@ -1,5 +1,5 @@
-from ..link import VendorLink, VendorJob
-from ..lib import print_hl
+from libbench.link import VendorLink, VendorJob
+from libbench.lib import print_hl
 
 from qiskit import IBMQ, Aer
 
@@ -24,7 +24,7 @@ class IBMLink(VendorLink):
         print_hl("IBMQ cloud account loaded.")
 
 
-    def list_devices(self):
+    def get_devices(self):
         return self.IBMQ_cloud.backends()
 
 
@@ -42,7 +42,7 @@ class IBMSimulatorLink(VendorLink):
         print_hl("qiskit Aer loaded.")
 
     
-    def list_devices(self):
+    def get_devices(self):
         return self.IBMQ_local.backends()
 
 
