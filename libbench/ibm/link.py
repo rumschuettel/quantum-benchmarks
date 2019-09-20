@@ -1,6 +1,5 @@
-from libbench.link import VendorLink, VendorJob
 from libbench.lib import print_hl
-
+from libbench.link import VendorJob, VendorLink
 from qiskit import IBMQ, Aer
 
 
@@ -25,7 +24,10 @@ class IBMLink(VendorLink):
 
 
     def get_devices(self):
-        return self.IBMQ_cloud.backends()
+        return {
+            device.name(): device
+            for device in self.IBMQ_cloud.backends()
+        }
 
 
     def run(self, job: IBMJob):
@@ -43,7 +45,10 @@ class IBMSimulatorLink(VendorLink):
 
     
     def get_devices(self):
-        return self.IBMQ_local.backends()
+        return {
+            device.name(): device
+            for device in self.IBMQ_local.backends()
+        }
 
 
     def run(self, job: IBMJob):
