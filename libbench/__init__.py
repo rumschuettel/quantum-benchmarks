@@ -3,4 +3,5 @@
 
 from .link import VendorLink, VendorJob
 from .benchmark import VendorBenchmark
+from .jobmanager import VendorJobManager
 from .lib import *
