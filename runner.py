@@ -7,7 +7,19 @@ import os
 
 from libbench import VendorBenchmark, VendorLink, print_hl
 
-i = importlib.import_module("matplotlib.text")
+
+def import_benchmark(name, vendor, simulate):
+    benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
+    return getattr(benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark")
+
+def import_link(vendor, simulate):
+    vendor_module = importlib.import_module(f"libbench.{vendor}")
+    return getattr(vendor_module, "Link" if not simulate else "SimulatorLink")
+
+def import_jobmanager(vendor):
+    vendor_module = importlib.import_module(f"libbench.{vendor}")
+    return getattr(vendor_module, "JobManager")
+
 
 # find runnable test modules and vendors
 BENCHMARKS = [
@@ -26,31 +38,6 @@ def info(link: VendorLink):
     print("available devices:")
     for name in link.get_devices():
         print(name)
-
-
-def run(benchmark: VendorBenchmark, link: VendorLink, device_name: str):
-    results = []
-
-    # run every job and collect outcomes
-    for job in benchmark.get_jobs():
-        result = job.run(link.get_device(device_name))
-        parsed_result = benchmark.parse_result(job, result)
-        print(parsed_result)
-        results.append(parsed_result)
-
-    # collate all results together
-    collated_results = benchmark.collate_results(parsed_result)
-    print(collated_results)
-
-
-def import_benchmark(name, vendor, simulate):
-    benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
-    return getattr(benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark")
-
-
-def import_link(vendor, simulate):
-    vendor_module = importlib.import_module(f"libbench.{vendor}")
-    return getattr(vendor_module, "Link" if not simulate else "SimulatorLink")
 
 
 if __name__ == "__main__":
@@ -86,7 +73,7 @@ if __name__ == "__main__":
     assert VENDOR in VENDORS, "vendor does not exist"
     assert BENCHMARK is None or BENCHMARK in BENCHMARKS, "benchmark does not exist"
 
-    # pick backend
+    # pick vendor
     Link = import_link(VENDOR, SIMULATE)
     link = Link()
 
@@ -98,13 +85,14 @@ if __name__ == "__main__":
         # check device exists
         assert DEVICE in link.get_devices(), "device does not exist"
 
-
         # edge cases:
         if VENDOR == "ibm" and SIMULATE and DEVICE == "qasm_simulator":
             SIMULATE = False
 
         Benchmark = import_benchmark(BENCHMARK, VENDOR, SIMULATE)
-        run(Benchmark(), link, DEVICE)
+        JobManager = import_jobmanager(VENDOR)
+        job_manager = JobManager(Benchmark())
+        job_manager.update(link.get_device(DEVICE))
 
     if not INFO and not BENCHMARK:
         parser.print_help()
