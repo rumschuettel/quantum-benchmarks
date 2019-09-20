@@ -17,5 +17,5 @@ class VendorBenchmark(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def collate_results(self, results: List[Dict[VendorJob, object]]):
+    def collate_results(self, results: Dict[VendorJob, object]):
         raise NotImplementedError()

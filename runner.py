@@ -92,7 +92,13 @@ if __name__ == "__main__":
         Benchmark = import_benchmark(BENCHMARK, VENDOR, SIMULATE)
         JobManager = import_jobmanager(VENDOR)
         job_manager = JobManager(Benchmark())
-        job_manager.update(link.get_device(DEVICE))
+        result = job_manager.update(link.get_device(DEVICE))
+
+        if result is not None:
+            print(result)
+
+        else:
+            print("benchmark not done. Resume by calling ...")
 
     if not INFO and not BENCHMARK:
         parser.print_help()
