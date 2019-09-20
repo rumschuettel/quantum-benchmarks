@@ -1,6 +1,12 @@
 # Quantum Benchmarks
 
 
+## Development Instructions
+
+Since python has no strong typing, I recommend you use `pylint` to detect bugs.
+Also, use `black` to indent code uniformly before committing.
+
+
 ## Vendor-Specific Notes
 
 ### Rigetti
