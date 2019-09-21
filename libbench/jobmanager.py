@@ -7,10 +7,6 @@ from .lib import benchmark_id, print_hl
 
 
 class VendorJobManager(ABC):
-    scheduled = []  # list of jobs
-    queued = {}  # job: promise
-    results = {}  # job: result
-
     RUN_FOLDER = "./runs"
     JOBMANAGER_FILENAME = "jobmanager.pickle"
     COLLATED_FILENAME = "collated.pickle"
@@ -21,13 +17,16 @@ class VendorJobManager(ABC):
         self.scheduled = benchmark.get_jobs()
         self.ID = ID if ID is not None else benchmark_id()
 
+        self.queued = {}  # job: promise
+        self.results = {}  # job: result
+
     def update(
         self,
         device,
         additional_stored_info: Optional[dict] = None,
         store_completed_job_results=True,
         store_collated_result=True,
-        store_jobmanager=True,
+        store_jobmanager=True
     ) -> Optional[object]:
         # try to queue more jobs
         new_scheduled = []
@@ -43,7 +42,9 @@ class VendorJobManager(ABC):
         new_queued = {}
         for job in self.queued:
             promise = self.queued[job]
-            result = self.try_get_results(promise)
+
+            # 1. we try to get the result
+            result = self.try_get_results(promise, device)
             if result is not None:
                 print(f"{str(job)} completed.")
                 self.results[job] = self.benchmark.parse_result(job, result)
@@ -53,6 +54,12 @@ class VendorJobManager(ABC):
                     self._save_in_run_folder(
                         f"jobs/{str(job)}.pickle", self.results[job]
                     )
+
+            # 2. if that failed, check whether job is alive and if not reschedule
+            elif not self.job_alive(promise):
+                self.scheduled.append(job)
+
+            # 3. otherwise the job simply wasn't done, put back to queue
             else:
                 new_queued[job] = promise
         self.queued = new_queued
@@ -70,10 +77,19 @@ class VendorJobManager(ABC):
             return collated_result
 
     def save(self, additional_stored_info):
+        # freeze promise queue into something pickleable
+        old_queued = self.queued.copy()
+
+        for job in self.queued:
+            self.queued[job] = self.freeze_promise(self.queued[job])
+
         self._save_in_run_folder(
             self.JOBMANAGER_FILENAME,
             {"jobmanager": self, "additional_stored_info": additional_stored_info},
         )
+
+        # restore queue
+        self.queued = old_queued
 
     def _save_in_run_folder(self, filename: str, obj: object):
         full_filename = f"{self.RUN_FOLDER}/{self.ID}/{filename}"
@@ -90,13 +106,36 @@ class VendorJobManager(ABC):
             f"{clx.RUN_FOLDER}/{ID}/{clx.JOBMANAGER_FILENAME}", "rb"
         ) as f:
             slug = pickle.load(f)
-            assert slug.jobmanager.ID == ID, "instance ID does not match passed ID"
+            assert slug["jobmanager"].ID == ID, "instance ID does not match passed ID"
             return slug
+
+    def thaw(self, device):
+        # thaw queued promises
+        for job in self.queued:
+            self.queued[job] = self.thaw_promise(self.queued[job], device)
 
     @abstractmethod
     def queued_successfully(self, promise) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def try_get_results(self, promise) -> Optional[object]:
+    def freeze_promise(self, promise):
+        """
+            transform promise into something we can pickle
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def thaw_promise(self, promise_id, device):
+        """
+            restore promise from pickled object
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def job_alive(self, promise) -> bool:
+        raise NotImplementedError()    
+
+    @abstractmethod
+    def try_get_results(self, promise, device) -> Optional[object]:
         raise NotImplementedError()

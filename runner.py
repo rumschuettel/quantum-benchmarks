@@ -43,7 +43,7 @@ def _run_update(
 
     else:
         print(
-            f"benchmark not done. Resume by calling ./runner.py --resume {jobmanager.ID}"
+            f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}"
         )
 
 """
@@ -53,16 +53,18 @@ def _run_update(
 def resume_benchmark(args):
     JOBMANAGER_ID = args.jobmanager_id
     slug = VendorJobManager.load(JOBMANAGER_ID)
-    jobmanager = slug.jobmanager
+    jobmanager = slug["jobmanager"]
 
     # restore stuff saved along job manager to recreate device where we run the benchmark on
     VENDOR, DEVICE, SIMULATE = (
-        slug.additional_stored_info["vendor"],
-        slug.additional_stored_info["device"],
-        slug.additional_stored_info["simulate"],
+        slug["additional_stored_info"]["vendor"],
+        slug["additional_stored_info"]["device"],
+        slug["additional_stored_info"]["simulate"],
     )
     link = import_link(VENDOR, SIMULATE)()
     device = link.get_device(DEVICE)
+
+    jobmanager.thaw(device)
 
     # run update
     _run_update(
