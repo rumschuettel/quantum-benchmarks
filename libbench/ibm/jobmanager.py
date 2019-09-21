@@ -2,6 +2,7 @@ from libbench import VendorJobManager
 from .benchmark import IBMBenchmark
 
 from qiskit.providers import JobStatus
+from qiskit.providers.ibmq.api_v2.exceptions import ApiError
 
 
 class IBMJobManager(VendorJobManager):
@@ -17,9 +18,25 @@ class IBMJobManager(VendorJobManager):
     def queued_successfully(self, promise):
         """
             check whether we consider the job behind the promise queued, or more than queued, on an IBM backend;
-            this happens to coincide with self.job_alive
+            this happens to coincide with self.job_alive; however we should also check whether job_id is successful
+            since only that makes a call to the cloud backend
         """
-        return self.job_alive(promise)
+        if not self.job_alive(promise):
+            return False
+
+        try:
+            promise.job_id()
+            
+        except ApiError as e:
+            message = e.message.rstrip('\n .')
+            if message.endswith('QUEUE_DISABLED'):
+                print("The queue for this device is disabled.")
+                return False
+            elif message.endswith('NOT_CREDITS_AVALIABLES'):
+                print("You don't have enough credits to run this job.")
+                return False
+            
+            raise
 
     def try_get_results(self, promise, device):
         """
