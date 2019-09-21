@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 from .benchmark import VendorBenchmark
-from .lib import benchmark_id
+from .lib import benchmark_id, print_hl
 
 
 class VendorJobManager(ABC):
@@ -22,7 +22,12 @@ class VendorJobManager(ABC):
         self.ID = ID if ID is not None else benchmark_id()
 
     def update(
-        self, device, store_completed_job_results=True, store_collated_result=True, store_jobmanager=True
+        self,
+        device,
+        additional_stored_info: Optional[dict] = None,
+        store_completed_job_results=True,
+        store_collated_result=True,
+        store_jobmanager=True,
     ) -> Optional[object]:
         # try to queue more jobs
         new_scheduled = []
@@ -45,14 +50,16 @@ class VendorJobManager(ABC):
 
                 # store job results separately in addition
                 if store_completed_job_results:
-                    self._save_in_run_folder(f"jobs/{str(job)}.pickle", self.results[job])
+                    self._save_in_run_folder(
+                        f"jobs/{str(job)}.pickle", self.results[job]
+                    )
             else:
                 new_queued[job] = promise
         self.queued = new_queued
 
         # store jobmanager for reuse
         if store_jobmanager:
-            self.save()
+            self.save(additional_stored_info)
 
         # if all are done, we can collate the results and potentially store it
         if len(self.scheduled) == 0 and len(self.queued) == 0:
@@ -62,9 +69,11 @@ class VendorJobManager(ABC):
                 self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
             return collated_result
 
-
-    def save(self):
-        self._save_in_run_folder(self.JOBMANAGER_FILENAME, self)
+    def save(self, additional_stored_info):
+        self._save_in_run_folder(
+            self.JOBMANAGER_FILENAME,
+            {"jobmanager": self, "additional_stored_info": additional_stored_info},
+        )
 
     def _save_in_run_folder(self, filename: str, obj: object):
         full_filename = f"{self.RUN_FOLDER}/{self.ID}/{filename}"
@@ -77,10 +86,12 @@ class VendorJobManager(ABC):
 
     @classmethod
     def load(clx, ID):
-        with open(f"{clx.RUN_FOLDER}/{ID}/", "rb") as f:
-            instance = pickle.load(f)
-            assert instance.ID == ID, "instance ID does not match passed ID"
-            return instance
+        with open(
+            f"{clx.RUN_FOLDER}/{ID}/{clx.JOBMANAGER_FILENAME}", "rb"
+        ) as f:
+            slug = pickle.load(f)
+            assert slug.jobmanager.ID == ID, "instance ID does not match passed ID"
+            return slug
 
     @abstractmethod
     def queued_successfully(self, promise) -> bool:
