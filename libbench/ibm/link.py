@@ -22,17 +22,11 @@ class IBMLink(VendorLink):
 
         print_hl("IBMQ cloud account loaded.")
 
-
     def get_devices(self):
-        return {
-            device.name(): device
-            for device in self.IBMQ_cloud.backends()
-        }
-
+        return {device.name(): device for device in self.IBMQ_cloud.backends()}
 
     def run(self, job: IBMJob):
         pass
-
 
 
 class IBMSimulatorLink(VendorLink):
@@ -43,13 +37,8 @@ class IBMSimulatorLink(VendorLink):
 
         print_hl("qiskit Aer loaded.")
 
-    
     def get_devices(self):
-        return {
-            device.name(): device
-            for device in self.IBMQ_local.backends()
-        }
-
+        return {device.name(): device for device in self.IBMQ_local.backends()}
 
     def run(self, job: IBMJob):
         pass

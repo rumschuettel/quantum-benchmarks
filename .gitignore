@@ -108,3 +108,4 @@ IBMCheck.ipynb
 *.pdf
 *.pickle
 .vscode/
+runs/
