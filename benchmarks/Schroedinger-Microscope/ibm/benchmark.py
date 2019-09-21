@@ -33,14 +33,13 @@ class IBMSchroedingerMicroscopeBenchmarkBase(IBMBenchmark):
         )
 
 
-class IBMSchroedingerMicroscopeBenchmark(
-    IBMSchroedingerMicroscopeBenchmarkBase
-):
+class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase):
     """
         Full SM Benchmark
 
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
+
     def __init__(
         self, num_post_selections, num_pixels, xmin=-2, xmax=2, ymin=-2, ymax=2
     ):
@@ -63,6 +62,7 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(
 
         The device behaves like a statevector_simulator, i.e. without noise
     """
+
     def __init__(
         self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2
     ):
@@ -76,19 +76,13 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(
             add_measurements=False,
         )
 
-
     def parse_result(self, job, result):
-        print(result)
         psi = result.get_statevector()
 
-        psp = np.linalg.norm(psi[:2])**2
-        z = np.abs(psi[1])**2 / psp if psp > 0 else 0
+        psp = np.linalg.norm(psi[:2]) ** 2
+        z = np.abs(psi[1]) ** 2 / psp if psp > 0 else 0
 
-        return {
-            "psp": psp,
-            "z": z
-        }
-
+        return {"psp": psp, "z": z}
 
     def collate_results(self, results: Dict[IBMSchroedingerMicroscopeJob, object]):
         # get array dimensions right
@@ -97,13 +91,13 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(
         ys = np.linspace(self.ymin, self.ymax, self.num_pixels + 1)
 
         # output arrays
-        zs = np.empty((len(xs),len(ys)), dtype = np.float64)
-        psps = np.empty((len(xs),len(ys)), dtype = np.float64)
+        zs = np.empty((len(xs), len(ys)), dtype=np.float64)
+        psps = np.empty((len(xs), len(ys)), dtype=np.float64)
 
         # fill in with values from jobs
         for job in results:
             result = results[job]
-            
+
             zs[job.j, job.i] = result["z"]
             psps[job.j, job.i] = result["psp"]
 

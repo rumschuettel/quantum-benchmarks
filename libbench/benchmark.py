@@ -8,6 +8,7 @@ class VendorBenchmark(ABC):
     """
     Vendor benchmark interface.
     """
+
     @abstractmethod
     def get_jobs(self) -> List[VendorJob]:
         raise NotImplementedError()

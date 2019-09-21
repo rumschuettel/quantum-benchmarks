@@ -10,11 +10,15 @@ from libbench import VendorBenchmark, VendorLink, print_hl
 
 def import_benchmark(name, vendor, simulate):
     benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
-    return getattr(benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark")
+    return getattr(
+        benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark"
+    )
+
 
 def import_link(vendor, simulate):
     vendor_module = importlib.import_module(f"libbench.{vendor}")
     return getattr(vendor_module, "Link" if not simulate else "SimulatorLink")
+
 
 def import_jobmanager(vendor):
     vendor_module = importlib.import_module(f"libbench.{vendor}")
@@ -52,7 +56,13 @@ if __name__ == "__main__":
         help=f"vendor to use; one of {', '.join(VENDORS)}",
     )
     parser.add_argument("-i", action="store_true", help="show vendor info")
-    parser.add_argument("--device", metavar="DEVICE", default="", type=str, help="device to use with chosen vendor; run -i to get a list.")
+    parser.add_argument(
+        "--device",
+        metavar="DEVICE",
+        default="",
+        type=str,
+        help="device to use with chosen vendor; run -i to get a list.",
+    )
     parser.add_argument("-s", action="store_true", help="simulate")
     parser.add_argument(
         "--benchmark",

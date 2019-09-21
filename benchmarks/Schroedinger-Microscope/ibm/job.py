@@ -63,4 +63,5 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
     def run(self, device, *args):
         return execute(self.circuit, device, *args)
 
-        
+    def __str__(self):
+        return f"IBMSchroedingerMicroscopeJob-{self.i}-{self.j}"
