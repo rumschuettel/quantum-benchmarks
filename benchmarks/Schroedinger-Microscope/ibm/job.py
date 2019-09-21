@@ -10,7 +10,7 @@ from libbench.ibm import Job as IBMJob
 class IBMSchroedingerMicroscopeJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, add_measurements
+        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -20,10 +20,11 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
             yield IBMSchroedingerMicroscopeJob(
-                num_post_selections, z, add_measurements, i, j
+                num_post_selections, z, add_measurements, i, j, shots
             )
 
-    def __init__(self, num_post_selections, z, add_measurements, i, j):
+
+    def __init__(self, num_post_selections, z, add_measurements, i, j, shots):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -31,6 +32,7 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         self.z = z
         self.i = i
         self.j = j
+        self.shots = shots
 
         # Calculate some parameters
         theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z) ** 2))
@@ -61,7 +63,7 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         self.circuit = circuit
 
     def run(self, device, *args):
-        return execute(self.circuit, device, *args)
+        return execute(self.circuit, device, shots=self.shots, *args)
 
     def __str__(self):
         return f"IBMSchroedingerMicroscopeJob-{self.i}-{self.j}"

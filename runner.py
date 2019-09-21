@@ -125,7 +125,7 @@ VENDORS = [
 
 
 if __name__ == "__main__":
-    print_hl("Quantum Benchmarking Suite", color="cyan")
+    print_hl("qυanтυм вencнмarĸιng ѕυιтe\n", color="cyan")
 
     # arguments
     parser = argparse.ArgumentParser(description="Quantum Benchmark")
