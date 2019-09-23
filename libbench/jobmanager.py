@@ -134,7 +134,7 @@ class VendorJobManager(ABC):
 
     @abstractmethod
     def job_alive(self, promise) -> bool:
-        raise NotImplementedError()    
+        raise NotImplementedError()
 
     @abstractmethod
     def try_get_results(self, promise, device) -> Optional[object]:
