@@ -38,6 +38,8 @@ class IBMJobManager(VendorJobManager):
             
             raise
 
+        return True
+
     def try_get_results(self, promise, device):
         """
             obtain job results when done
