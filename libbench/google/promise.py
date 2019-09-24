@@ -23,7 +23,7 @@ class GooglePromiseBase(ABC):
 
 
 class GooglePromise(GooglePromiseBase):
-    def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1):
+    def __init__(self, circuit: cirq.Circuit, device, repetitions: int):
         raise NotImplementedError("The google api to their hardware is not available yet.")
 
     def job_id(self):
@@ -49,14 +49,14 @@ class GoogleLocalPromise(GooglePromiseBase):
     """
 
     def __init__(
-        self, circuit: cirq.Circuit, device, repetitions: int = 1, simulation: bool = False
+        self, circuit: cirq.Circuit, device, repetitions: int, simulate: bool, *args, **kwargs
     ):
         super().__init__()
 
         self.device = device
         self.circuit = circuit
         self.repetitions = repetitions
-        self.simulation = simulation
+        self.simulate = simulate
         self._result = None
 
     def job_id(self):
@@ -78,7 +78,7 @@ class GoogleLocalPromise(GooglePromiseBase):
             Run the simulator if results are requested.
         """
         if self._result is None:
-            if self.simulation:
+            if self.simulate:
                 self._result = self.device.simulate(self.circuit)
             else:
                 self._result = self.device.run(self.circuit, repetitions=self.repetitions)

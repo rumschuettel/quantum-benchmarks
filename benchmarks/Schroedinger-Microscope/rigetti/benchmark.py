@@ -7,22 +7,25 @@ from libbench.rigetti import LocalPromise as RigettiLocalPromise
 from libbench.rigetti import Promise as RigettiPromise
 
 from .job import RigettiSchroedingerMicroscopeJob
+from .. import SchroedingerMicroscopeBenchmarkMixin
 
 
-class RigettiSchroedingerMicroscopeBenchmarkBase(RigettiBenchmark):
+class RigettiSchroedingerMicroscopeBenchmarkBase(
+    SchroedingerMicroscopeBenchmarkMixin, RigettiBenchmark
+):
     def __init__(
-        self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots,
-        promise_type: Union[RigettiPromise, RigettiLocalPromise]
+        self,
+        num_post_selections,
+        num_pixels,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        shots,
+        promise_type: Union[RigettiPromise, RigettiLocalPromise],
     ):
-        super().__init__()
+        super().__init__(num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots)
 
-        self.num_post_selections = num_post_selections
-        self.num_pixels = num_pixels
-        self.xmin = xmin
-        self.xmax = xmax
-        self.ymin = ymin
-        self.ymax = ymax
-        self.shots = shots
         self.promise_type = promise_type
 
     def get_jobs(self):
@@ -37,25 +40,6 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(RigettiBenchmark):
             self.promise_type,
         )
 
-    def collate_results(self, results: Dict[RigettiSchroedingerMicroscopeJob, object]):
-        # get array dimensions right
-        xs = np.linspace(self.xmin, self.xmax, self.num_pixels + 1)
-        xs = 0.5 * (xs[:-1] + xs[1:])
-        ys = np.linspace(self.ymin, self.ymax, self.num_pixels + 1)
-
-        # output arrays
-        zs = np.empty((len(xs), len(ys)), dtype=np.float64)
-        psps = np.empty((len(xs), len(ys)), dtype=np.float64)
-
-        # fill in with values from jobs
-        for job in results:
-            result = results[job]
-
-            zs[job.j, job.i] = result["z"]
-            psps[job.j, job.i] = result["psp"]
-
-        return zs, psps
-
 
 class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """
@@ -68,7 +52,14 @@ class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchm
         self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2, shots=100
     ):
         super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, promise_type=RigettiPromise
+            num_post_selections,
+            num_pixels,
+            xmin,
+            xmax,
+            ymin,
+            ymax,
+            shots,
+            promise_type=RigettiPromise,
         )
 
 
@@ -81,7 +72,14 @@ class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicrosc
 
     def __init__(self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2):
         super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots=1, promise_type=RigettiLocalPromise
+            num_post_selections,
+            num_pixels,
+            xmin,
+            xmax,
+            ymin,
+            ymax,
+            shots=1,
+            promise_type=RigettiLocalPromise,
         )
 
     def parse_result(self, job, result):

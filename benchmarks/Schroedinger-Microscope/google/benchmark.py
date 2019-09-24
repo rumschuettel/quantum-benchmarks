@@ -7,9 +7,12 @@ from libbench.google import Promise as GooglePromise
 from libbench.google import LocalPromise as GoogleLocalPromise
 
 from .job import GoogleSchroedingerMicroscopeJob
+from .. import SchroedingerMicroscopeBenchmarkMixin
 
 
-class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
+class GoogleSchroedingerMicroscopeBenchmarkBase(
+    SchroedingerMicroscopeBenchmarkMixin, GoogleBenchmark
+):
     def __init__(
         self,
         num_post_selections,
@@ -19,19 +22,12 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
         ymin,
         ymax,
         shots,
-        simulation,
+        add_measurements,
         promise_type: Union[GooglePromise, GoogleLocalPromise],
     ):
-        super().__init__()
+        super().__init__(num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots)
 
-        self.num_post_selections = num_post_selections
-        self.num_pixels = num_pixels
-        self.xmin = xmin
-        self.xmax = xmax
-        self.ymin = ymin
-        self.ymax = ymax
-        self.shots = shots
-        self.simulation = simulation
+        self.add_measurements = add_measurements
         self.promise_type = promise_type
 
     def get_jobs(self):
@@ -43,28 +39,9 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
             self.ymin,
             self.ymax,
             self.shots,
-            self.simulation,
+            self.add_measurements,
             self.promise_type,
         )
-
-    def collate_results(self, results: Dict[GoogleSchroedingerMicroscopeJob, object]):
-        # get array dimensions right
-        xs = np.linspace(self.xmin, self.xmax, self.num_pixels + 1)
-        xs = 0.5 * (xs[:-1] + xs[1:])
-        ys = np.linspace(self.ymin, self.ymax, self.num_pixels + 1)
-
-        # output arrays
-        zs = np.empty((len(xs), len(ys)), dtype=np.float64)
-        psps = np.empty((len(xs), len(ys)), dtype=np.float64)
-
-        # fill in with values from jobs
-        for job in results:
-            result = results[job]
-
-            zs[job.j, job.i] = result["z"]
-            psps[job.j, job.i] = result["psp"]
-
-        return zs, psps
 
 
 class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmarkBase):
@@ -85,7 +62,7 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
             ymin,
             ymax,
             shots=shots,
-            simulation=False,
+            add_measurements=True,
             promise_type=GooglePromise,
         )
 
@@ -126,7 +103,7 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscop
             ymin,
             ymax,
             shots=1,
-            simulation=True,
+            add_measurements=True,
             promise_type=GoogleLocalPromise,
         )
 

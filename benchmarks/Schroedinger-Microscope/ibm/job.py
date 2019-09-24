@@ -60,8 +60,8 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         # store the resulting circuit
         self.circuit = circuit
 
-    def run(self, device, *args):
-        return execute(self.circuit, device, shots=self.shots, *args)
+    def run(self, device, *args, **kwargs):
+        return execute(self.circuit, device, shots=self.shots)
 
     def __str__(self):
         return f"IBMSchroedingerMicroscopeJob-{self.i}-{self.j}"

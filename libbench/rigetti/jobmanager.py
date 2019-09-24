@@ -5,8 +5,8 @@ import pyquil as pq
 
 
 class RigettiJobManager(VendorJobManager):
-    def __init__(self, benchmark: RigettiBenchmark):
-        super().__init__(benchmark)
+    def __init__(self, benchmark: RigettiBenchmark, additional_job_run_info: dict):
+        super().__init__(benchmark, additional_job_run_info)
 
     def job_alive(self, promise):
         """

@@ -50,15 +50,12 @@ class RigettiLocalPromise(RigettiPromiseBase):
         TODO: add pq.WavefunctionSimulator
     """
 
-    def __init__(
-        self, program: pq.Program, device: pq.api.QVM, *args, **kwargs
-    ):
+    def __init__(self, program: pq.Program, device: pq.api.QVM, trials: int, *args, **kwargs):
         super().__init__()
 
         self.device = device
         self.program = program
-        self.args = args
-        self.kwargs = kwargs
+        self.trials = trials
         self._result = None
 
     def job_id(self):
@@ -80,7 +77,7 @@ class RigettiLocalPromise(RigettiPromiseBase):
             Run the simulator if results are requested.
         """
         if self._result is None:
-            self._result = self.device.run_and_measure(self.program, *self.args, **self.kwargs)
+            self._result = self.device.run_and_measure(self.program, trials=self.trials)
         return self._result
 
     def freeze(self):

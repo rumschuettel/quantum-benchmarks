@@ -5,21 +5,15 @@ import numpy as np
 from libbench.ibm import Benchmark as IBMBenchmark
 
 from .job import IBMSchroedingerMicroscopeJob
+from .. import SchroedingerMicroscopeBenchmarkMixin
 
 
-class IBMSchroedingerMicroscopeBenchmarkBase(IBMBenchmark):
+class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixin, IBMBenchmark):
     def __init__(
         self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements
     ):
-        super().__init__()
+        super().__init__(num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots)
 
-        self.num_post_selections = num_post_selections
-        self.num_pixels = num_pixels
-        self.xmin = xmin
-        self.xmax = xmax
-        self.ymin = ymin
-        self.ymax = ymax
-        self.shots = shots
         self.add_measurements = add_measurements
 
     def get_jobs(self):
@@ -33,25 +27,6 @@ class IBMSchroedingerMicroscopeBenchmarkBase(IBMBenchmark):
             self.shots,
             self.add_measurements,
         )
-
-    def collate_results(self, results: Dict[IBMSchroedingerMicroscopeJob, object]):
-        # get array dimensions right
-        xs = np.linspace(self.xmin, self.xmax, self.num_pixels + 1)
-        xs = 0.5 * (xs[:-1] + xs[1:])
-        ys = np.linspace(self.ymin, self.ymax, self.num_pixels + 1)
-
-        # output arrays
-        zs = np.empty((len(xs), len(ys)), dtype=np.float64)
-        psps = np.empty((len(xs), len(ys)), dtype=np.float64)
-
-        # fill in with values from jobs
-        for job in results:
-            result = results[job]
-
-            zs[job.j, job.i] = result["z"]
-            psps[job.j, job.i] = result["psp"]
-
-        return zs, psps
 
 
 class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase):

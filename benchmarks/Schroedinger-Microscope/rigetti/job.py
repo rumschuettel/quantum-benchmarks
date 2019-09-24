@@ -14,8 +14,14 @@ from libbench.rigetti import LocalPromise as RigettiLocalPromise
 class RigettiSchroedingerMicroscopeJob(RigettiJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots,
-        promise_type: Union[RigettiPromise, RigettiLocalPromise]
+        num_post_selections,
+        num_pixels,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        shots,
+        promise_type: Union[RigettiPromise, RigettiLocalPromise],
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -28,9 +34,15 @@ class RigettiSchroedingerMicroscopeJob(RigettiJob):
                 num_post_selections, z, i, j, shots, promise_type
             )
 
-    def __init__(self, num_post_selections, z, i, j, shots,
-        promise_type: Union[RigettiPromise, RigettiLocalPromise]
-        ):
+    def __init__(
+        self,
+        num_post_selections,
+        z,
+        i,
+        j,
+        shots,
+        promise_type: Union[RigettiPromise, RigettiLocalPromise],
+    ):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -46,7 +58,7 @@ class RigettiSchroedingerMicroscopeJob(RigettiJob):
 
         program = pq.Program()
         qubits = 2 ** num_post_selections
-        
+
         for k in range(qubits):
             program += pq.gates.RY(theta, k)
             program += pq.gates.RZ(-phi, k)
@@ -62,7 +74,7 @@ class RigettiSchroedingerMicroscopeJob(RigettiJob):
         self.program = program
 
     def run(self, device, *args, **kwargs):
-        kwargs.update({ "trials": self.shots })
+        kwargs.update({"trials": self.shots})
         return self.promise_type(self.program, device, *args, **kwargs)
 
     def __str__(self):

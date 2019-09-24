@@ -12,13 +12,15 @@ class VendorJobManager(ABC):
     COLLATED_FILENAME = "collated.pickle"
     JOBS_FOLDER = "jobs"
 
-    def __init__(self, benchmark: VendorBenchmark, ID: Optional[str] = None):
+    def __init__(self, benchmark: VendorBenchmark, additional_job_run_info: dict):
         self.benchmark = benchmark
         self.scheduled = benchmark.get_jobs()
-        self.ID = ID if ID is not None else benchmark_id()
+        self.ID = benchmark_id()
 
         self.queued = {}  # job: promise
         self.results = {}  # job: result
+
+        self.additional_job_run_info = additional_job_run_info
 
     def update(
         self,
@@ -31,7 +33,7 @@ class VendorJobManager(ABC):
         # try to queue more jobs
         new_scheduled = []
         for job in self.scheduled:
-            promise = job.run(device)
+            promise = job.run(device, **self.additional_job_run_info)
             if self.queued_successfully(promise):
                 self.queued[job] = promise
             else:

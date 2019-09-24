@@ -102,7 +102,13 @@ def new_benchmark(args):
     device = link.get_device(DEVICE)
     Benchmark = import_benchmark(BENCHMARK, VENDOR, SIMULATE, DEVICE)
     JobManager = import_jobmanager(VENDOR)
-    jobmanager = JobManager(Benchmark())
+    jobmanager = JobManager(
+        Benchmark(),
+        {
+            # additional information that will be available to job.run
+            "simulate": SIMULATE
+        },
+    )
 
     # run update
     _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})

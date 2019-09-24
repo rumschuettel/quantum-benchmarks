@@ -21,7 +21,7 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         ymin,
         ymax,
         shots,
-        simulation,
+        add_measurements,
         promise_type: Union[GooglePromise, GoogleLocalPromise],
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
@@ -32,14 +32,14 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
             yield GoogleSchroedingerMicroscopeJob(
-                num_post_selections, z, simulation, i, j, shots, promise_type
+                num_post_selections, z, add_measurements, i, j, shots, promise_type
             )
 
     def __init__(
         self,
         num_post_selections,
         z,
-        simulation,
+        add_measurements,
         i,
         j,
         shots,
@@ -48,7 +48,7 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         super().__init__()
 
         self.num_post_selections = num_post_selections
-        self.simulation = simulation
+        self.add_measurements = add_measurements
         self.z = z
         self.i = i
         self.j = j
@@ -69,7 +69,7 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
             for l in range(0, 2 ** num_post_selections, 2 ** (k + 1)):
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** k]))
                 circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
-        if not simulation:
+        if add_measurements:
             circuit.append(
                 cirq.measure(
                     *(qubits[k] for k in range(1, 2 ** num_post_selections)), key="post_selection"
@@ -80,10 +80,9 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         # store the resulting circuit
         self.circuit = circuit
 
-    def run(self, device, **kwargs):
-        kwargs.update({"simulation": self.simulation})
-
-        return self.promise_type(self.circuit, device, repetitions=self.shots, **kwargs)
+    def run(self, device, *args, **kwargs):
+        kwargs.update({"repetitions": self.shots})
+        return self.promise_type(self.circuit, device, *args, **kwargs)
 
     def __str__(self):
         return f"GoogleSchroedingerMicroscopeJob-{self.i}-{self.j}"
