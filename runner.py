@@ -18,9 +18,7 @@ def import_benchmark(name, vendor, simulate, device):
         simulate = False
 
     benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
-    return getattr(
-        benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark"
-    )
+    return getattr(benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark")
 
 
 def import_link(vendor, simulate):
@@ -38,18 +36,14 @@ def import_jobmanager(vendor):
 """
 
 
-def _run_update(
-    jobmanager: VendorJobManager, device: object, additional_stored_info: dict
-):
+def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_info: dict):
     result = jobmanager.update(device, additional_stored_info=additional_stored_info)
 
     if result is not None:
         print(result)
 
     else:
-        print(
-            f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}"
-        )
+        print(f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}")
 
 
 """
@@ -74,9 +68,7 @@ def resume_benchmark(args):
     jobmanager.thaw(device)
 
     # run update
-    _run_update(
-        jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE}
-    )
+    _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})
 
 
 def info(args):
@@ -113,9 +105,7 @@ def new_benchmark(args):
     jobmanager = JobManager(Benchmark())
 
     # run update
-    _run_update(
-        jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE}
-    )
+    _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})
 
 
 # find runnable test modules and vendors
@@ -142,10 +132,7 @@ if __name__ == "__main__":
     parser_I = subparsers.add_parser("info", help="Device information")
     parser_I.add_argument("-s", action="store_true", help="simulated devices")
     parser_I.add_argument(
-        "vendor",
-        metavar="VENDOR",
-        type=str,
-        help=f"vendor to use; one of {', '.join(VENDORS)}",
+        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
     )
     parser_I.set_defaults(func=info)
 
@@ -153,10 +140,7 @@ if __name__ == "__main__":
     parser_A = subparsers.add_parser("benchmark", help="Run new benchmark")
     parser_A.add_argument("-s", action="store_true", help="simulate")
     parser_A.add_argument(
-        "vendor",
-        metavar="VENDOR",
-        type=str,
-        help=f"vendor to use; one of {', '.join(VENDORS)}",
+        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
     )
     parser_A.add_argument(
         "device",

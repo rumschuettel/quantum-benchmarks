@@ -54,8 +54,7 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
                 circuit.s(l)
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)),
-                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections))
             )
 
         # store the resulting circuit

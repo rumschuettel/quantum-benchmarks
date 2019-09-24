@@ -68,14 +68,11 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         for k in range(num_post_selections):
             for l in range(0, 2 ** num_post_selections, 2 ** (k + 1)):
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** k]))
-                circuit.append(
-                    [cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])]
-                )
+                circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
         if not simulation:
             circuit.append(
                 cirq.measure(
-                    *(qubits[k] for k in range(1, 2 ** num_post_selections)),
-                    key="post_selection",
+                    *(qubits[k] for k in range(1, 2 ** num_post_selections)), key="post_selection"
                 )
             )
             circuit.append(cirq.measure(qubits[0], key="success"))

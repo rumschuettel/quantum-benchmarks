@@ -24,9 +24,7 @@ class GooglePromiseBase(ABC):
 
 class GooglePromise(GooglePromiseBase):
     def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1):
-        raise NotImplementedError(
-            "The google api to their hardware is not available yet."
-        )
+        raise NotImplementedError("The google api to their hardware is not available yet.")
 
     def job_id(self):
         raise NotImplementedError()
@@ -51,11 +49,7 @@ class GoogleLocalPromise(GooglePromiseBase):
     """
 
     def __init__(
-        self,
-        circuit: cirq.Circuit,
-        device,
-        repetitions: int = 1,
-        simulation: bool = False,
+        self, circuit: cirq.Circuit, device, repetitions: int = 1, simulation: bool = False
     ):
         super().__init__()
 
@@ -87,9 +81,7 @@ class GoogleLocalPromise(GooglePromiseBase):
             if self.simulation:
                 self._result = self.device.simulate(self.circuit)
             else:
-                self._result = self.device.run(
-                    self.circuit, repetitions=self.repetitions
-                )
+                self._result = self.device.run(self.circuit, repetitions=self.repetitions)
         return self._result
 
     def freeze(self):
