@@ -75,14 +75,7 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
     """
 
     def __init__(
-        self,
-        num_post_selections=1,
-        num_pixels=4,
-        xmin=-2,
-        xmax=2,
-        ymin=-2,
-        ymax=2,
-        shots=100,
+        self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2, shots=100
     ):
         super().__init__(
             num_post_selections,
@@ -117,18 +110,14 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
         return {"psp": psp, "z": z}
 
 
-class GoogleSchroedingerMicroscopeSimulatedBenchmark(
-    GoogleSchroedingerMicroscopeBenchmarkBase
-):
+class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscopeBenchmarkBase):
     """
         Simulated SM Benchmark
 
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(
-        self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2
-    ):
+    def __init__(self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2):
         super().__init__(
             num_post_selections,
             num_pixels,
@@ -145,10 +134,6 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(
         psi = result.final_state
 
         psp = np.linalg.norm(psi[:: 2 ** (2 ** self.num_post_selections - 1)]) ** 2
-        z = (
-            np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp
-            if psp > 0
-            else 0
-        )
+        z = np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp if psp > 0 else 0
 
         return {"psp": psp, "z": z}

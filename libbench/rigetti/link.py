@@ -1,20 +1,33 @@
-from libbench.link import VendorLink
+from libbench.link import VendorLink, VendorJob
 
 import pyquil as pq
 
+# with rigetti we can have any kind of qvm we want, and also other topologies etc
+RIGETTI_EXTRA_QVMS = [ nn for n in [8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"] ]
+
+
+class RigettiJob(VendorJob):
+    pass
+
 
 class RigettiLink(VendorLink):
-    def get_devices():
-        return pq.list_quantum_computers()
-
     def __init__(self):
         super().__init__()
 
-        from pyquil.gates import CNOT, Z
+    def get_devices(self):
+        return { n: pq.get_qc(n, as_qvm=False) for n in [
+            *pq.list_quantum_computers(qpus=True, qvms=False),
+            *RIGETTI_EXTRA_QVMS
+        ]}
 
-        # to run on real device, change as_qvm=False
-        qvm = pq.get_qc("9q-square", as_qvm=True)
-        prog = pq.Program(Z(0), CNOT(0, 1))
 
-        results = qvm.run_and_measure(prog, trials=10)
-        print(results)
+class RigettiSimulatorLink(VendorLink):
+    def get_devices(self):
+        # any qpu device can also be used as a qvm for rigetti, so we include both
+        return { n: pq.get_qc(n, as_qvm=True) for n in [
+            *pq.list_quantum_computers(qpus=True, qvms=True),
+            *RIGETTI_EXTRA_QVMS
+        ]}
+
+    def __init__(self):
+        super().__init__()

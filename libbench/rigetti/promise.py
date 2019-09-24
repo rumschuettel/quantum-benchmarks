@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
-import cirq
+import pyquil as pq
 
 
-class GooglePromiseBase(ABC):
+class RigettiPromiseBase(ABC):
     """
-        As the simulators in cirq do not return any promise, we write our own
+        As the QVM runners do not return any promise, we write our own
         promise class. This should be a very thin wrapper around the existing
-        promise structure provided by google which we conjecture to exist.
+        promise structure provided by Rigetti which we conjecture to exist.
     """
 
     @abstractmethod
@@ -22,9 +22,9 @@ class GooglePromiseBase(ABC):
         raise NotImplementedError()
 
 
-class GooglePromise(GooglePromiseBase):
-    def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1):
-        raise NotImplementedError("The google api to their hardware is not available yet.")
+class RigettiPromise(RigettiPromiseBase):
+    def __init__(self, program: pq.Program, device: pq.api.QPU):
+        raise NotImplementedError("The Rigetti api to their hardware is not available yet.")
 
     def job_id(self):
         raise NotImplementedError()
@@ -42,21 +42,23 @@ class GooglePromise(GooglePromiseBase):
         raise NotImplementedError()
 
 
-class GoogleLocalPromise(GooglePromiseBase):
+class RigettiLocalPromise(RigettiPromiseBase):
     """
-        As the simulators in cirq do not return any promise, but just return
+        As the simulators in pyquil do not return any promise, but just return
         the result directly, we emulate this behavior here.
+
+        TODO: add pq.WavefunctionSimulator
     """
 
     def __init__(
-        self, circuit: cirq.Circuit, device, repetitions: int = 1, simulation: bool = False
+        self, program: pq.Program, device: pq.api.QVM, *args, **kwargs
     ):
         super().__init__()
 
         self.device = device
-        self.circuit = circuit
-        self.repetitions = repetitions
-        self.simulation = simulation
+        self.program = program
+        self.args = args
+        self.kwargs = kwargs
         self._result = None
 
     def job_id(self):
@@ -78,10 +80,7 @@ class GoogleLocalPromise(GooglePromiseBase):
             Run the simulator if results are requested.
         """
         if self._result is None:
-            if self.simulation:
-                self._result = self.device.simulate(self.circuit)
-            else:
-                self._result = self.device.run(self.circuit, repetitions=self.repetitions)
+            self._result = self.device.run_and_measure(self.program, *self.args, **self.kwargs)
         return self._result
 
     def freeze(self):

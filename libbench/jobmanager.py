@@ -51,9 +51,7 @@ class VendorJobManager(ABC):
 
                 # store job results separately in addition
                 if store_completed_job_results:
-                    self._save_in_run_folder(
-                        f"jobs/{str(job)}.pickle", self.results[job]
-                    )
+                    self._save_in_run_folder(f"jobs/{str(job)}.pickle", self.results[job])
 
             # 2. if that failed, check whether job is alive and if not reschedule
             elif not self.job_alive(promise):
