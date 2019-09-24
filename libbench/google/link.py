@@ -2,15 +2,12 @@ from libbench.lib import print_hl
 from libbench.link import VendorLink, VendorJob
 import cirq
 
+
+GOOGLE_CLOUD_DEVICES = {}
+
 # Support for the density matrix simulator can be added later if necessary.
 # For now does not seem to be worth the time.
-
-GOOGLE_LOCAL_DEVICES = (
-    cirq.Simulator,
-    # cirq.DensityMatrixSimulator
-)
-
-GOOGLE_DEVICES = {
+GOOGLE_LOCAL_DEVICES = {
     'sparse_simulator' : cirq.Simulator(),
     # 'density_matrix_simulator' : cirq.DensityMatrixSimulator()
 }
@@ -35,10 +32,8 @@ class GoogleLink(VendorLink):
             the available classes that derive from the cirq codebase have a
             simulator signature.
         """
-        return GOOGLE_DEVICES
+        return GOOGLE_CLOUD_DEVICES
 
-    def run(self, job: GoogleJob):
-        raise NotImplementedError()
 
 class GoogleSimulatorLink(VendorLink):
     def __init__(self):
@@ -55,7 +50,5 @@ class GoogleSimulatorLink(VendorLink):
             the available classes that derive from the cirq codebase have a
             simulator signature.
         """
-        return GOOGLE_DEVICES
+        return GOOGLE_LOCAL_DEVICES
 
-    def run(self, job: GoogleJob):
-        pass

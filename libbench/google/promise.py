@@ -20,7 +20,7 @@ class GooglePromiseBase(ABC):
         raise NotImplementedError()
 
 class GooglePromise(GooglePromiseBase):
-    def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1, simulation = None):
+    def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1):
         raise NotImplementedError("The google api to their hardware is not available yet.")
 
     def job_id(self):
@@ -64,7 +64,7 @@ class GoogleLocalPromise(GooglePromiseBase):
             Return the status.
             Will have to be updated to match the Google API at some point.
         """
-        return "PENDING" if self.result is None else "DONE"
+        return "PENDING" if self._result is None else "DONE"
 
     def result(self):
         """
@@ -79,7 +79,7 @@ class GoogleLocalPromise(GooglePromiseBase):
 
     def freeze(self):
         """
-            No problems, so freezing not really necessary.
+            Since promises that resolve immediately will never be pickled, we can just pass self.
             The real promise can return a separate frozen instance if necessary.
         """
         return self

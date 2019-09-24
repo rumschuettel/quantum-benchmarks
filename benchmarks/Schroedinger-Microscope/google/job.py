@@ -1,11 +1,12 @@
 import itertools as it
 from functools import reduce
 
+from typing import Union
+
 import numpy as np
 import cirq
 
 from libbench.google import Job as GoogleJob
-from libbench.google import LOCAL_DEVICES as GOOGLE_LOCAL_DEVICES
 from libbench.google import Promise as GooglePromise
 from libbench.google import LocalPromise as GoogleLocalPromise
 
@@ -13,7 +14,8 @@ from libbench.google import LocalPromise as GoogleLocalPromise
 class GoogleSchroedingerMicroscopeJob(GoogleJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, simulation
+        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, simulation,
+        promise_type: Union[GooglePromise, GoogleLocalPromise]
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -23,10 +25,12 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
             yield GoogleSchroedingerMicroscopeJob(
-                num_post_selections, z, simulation, i, j, shots
+                num_post_selections, z, simulation, i, j, shots, promise_type
             )
 
-    def __init__(self, num_post_selections, z, simulation, i, j, shots):
+    def __init__(self, num_post_selections, z, simulation, i, j, shots,
+        promise_type: Union[GooglePromise, GoogleLocalPromise]
+        ):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -35,6 +39,7 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         self.i = i
         self.j = j
         self.shots = shots
+        self.promise_type = promise_type
 
         # Calculate some parameters
         theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z) ** 2))
@@ -60,10 +65,7 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
     def run(self, device, **kwargs):
         kwargs.update({'simulation' : self.simulation})
 
-        if isinstance(device,GOOGLE_LOCAL_DEVICES):
-            return GoogleLocalPromise(self.circuit, device, repetitions = self.shots, **kwargs)
-        else:
-            return GooglePromise(self.circuit, device, repetitions = self.shots, **kwargs)
+        return self.promise_type(self.circuit, device, repetitions = self.shots, **kwargs)
 
     def __str__(self):
         return f"GoogleSchroedingerMicroscopeJob-{self.i}-{self.j}"

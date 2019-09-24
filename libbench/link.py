@@ -29,6 +29,3 @@ class VendorLink(ABC):
     def get_device(self, name):
         return self.get_devices()[name]
 
-    @abstractmethod
-    def run(self, job: VendorJob):
-        raise NotImplementedError()

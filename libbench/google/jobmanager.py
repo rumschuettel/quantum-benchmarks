@@ -12,17 +12,18 @@ class GoogleJobManager(VendorJobManager):
         """
             Check whether the job is alive.
         """
-        return True
+        return promise.status() in ["PENDING", "DONE"]
 
     def queued_successfully(self, promise):
         """
             Check whether the job is successfully queued.
         """
-        return True
+        return promise.status() in ["PENDING", "DONE"]
 
     def try_get_results(self, promise, device):
         """
             Obtain job results when done.
+            For now we only have simulators that finish immediately.
         """
         return promise.result()
 
@@ -32,7 +33,7 @@ class GoogleJobManager(VendorJobManager):
         """
         return promise.freeze()
 
-    def thaw_promise(self, obj):
+    def thaw_promise(self, promise):
         """
             Thaw a promise.
         """

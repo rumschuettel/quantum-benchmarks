@@ -25,9 +25,6 @@ class IBMLink(VendorLink):
     def get_devices(self):
         return {device.name(): device for device in self.IBMQ_cloud.backends()}
 
-    def run(self, job: IBMJob):
-        pass
-
 
 class IBMSimulatorLink(VendorLink):
     def __init__(self):
@@ -40,5 +37,3 @@ class IBMSimulatorLink(VendorLink):
     def get_devices(self):
         return {device.name(): device for device in self.IBMQ_local.backends()}
 
-    def run(self, job: IBMJob):
-        pass

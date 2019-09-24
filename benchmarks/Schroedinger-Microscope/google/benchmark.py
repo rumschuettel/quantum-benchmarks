@@ -1,15 +1,18 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
 
 from libbench.google import Benchmark as GoogleBenchmark
+from libbench.google import Promise as GooglePromise
+from libbench.google import LocalPromise as GoogleLocalPromise
 
 from .job import GoogleSchroedingerMicroscopeJob
 
 
 class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
     def __init__(
-        self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, simulation
+        self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, simulation,
+        promise_type: Union[GooglePromise, GoogleLocalPromise]
     ):
         super().__init__()
 
@@ -21,6 +24,7 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
         self.ymax = ymax
         self.shots = shots
         self.simulation = simulation
+        self.promise_type = promise_type
 
     def get_jobs(self):
         yield from GoogleSchroedingerMicroscopeJob.job_factory(
@@ -32,6 +36,7 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
             self.ymax,
             self.shots,
             self.simulation,
+            self.promise_type
         )
 
     def collate_results(self, results: Dict[GoogleSchroedingerMicroscopeJob, object]):
@@ -73,6 +78,7 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
             ymax,
             shots = shots,
             simulation = False,
+            promise_type = GooglePromise
         )
 
     def parse_result(self, job, result):
@@ -105,6 +111,7 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(
             ymax,
             shots = 1,
             simulation = True,
+            promise_type = GoogleLocalPromise
         )
 
     def parse_result(self, job, result):
