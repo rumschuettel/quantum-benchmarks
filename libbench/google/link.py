@@ -8,7 +8,7 @@ GOOGLE_CLOUD_DEVICES = {}
 # Support for the density matrix simulator can be added later if necessary.
 # For now does not seem to be worth the time.
 GOOGLE_LOCAL_DEVICES = {
-    'sparse_simulator' : cirq.Simulator(),
+    "sparse_simulator": cirq.Simulator(),
     # 'density_matrix_simulator' : cirq.DensityMatrixSimulator()
 }
 
@@ -51,4 +51,3 @@ class GoogleSimulatorLink(VendorLink):
             simulator signature.
         """
         return GOOGLE_LOCAL_DEVICES
-

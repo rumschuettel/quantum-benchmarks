@@ -11,8 +11,16 @@ from .job import GoogleSchroedingerMicroscopeJob
 
 class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
     def __init__(
-        self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, simulation,
-        promise_type: Union[GooglePromise, GoogleLocalPromise]
+        self,
+        num_post_selections,
+        num_pixels,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        shots,
+        simulation,
+        promise_type: Union[GooglePromise, GoogleLocalPromise],
     ):
         super().__init__()
 
@@ -36,7 +44,7 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(GoogleBenchmark):
             self.ymax,
             self.shots,
             self.simulation,
-            self.promise_type
+            self.promise_type,
         )
 
     def collate_results(self, results: Dict[GoogleSchroedingerMicroscopeJob, object]):
@@ -67,7 +75,14 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
     """
 
     def __init__(
-        self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2, shots=100
+        self,
+        num_post_selections=1,
+        num_pixels=4,
+        xmin=-2,
+        xmax=2,
+        ymin=-2,
+        ymax=2,
+        shots=100,
     ):
         super().__init__(
             num_post_selections,
@@ -76,16 +91,28 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
             xmax,
             ymin,
             ymax,
-            shots = shots,
-            simulation = False,
-            promise_type = GooglePromise
+            shots=shots,
+            simulation=False,
+            promise_type=GooglePromise,
         )
 
     def parse_result(self, job, result):
-        post_selection_result = list(not any(outcome) for outcome in result.measurements['post_selection'])
+        post_selection_result = list(
+            not any(outcome) for outcome in result.measurements["post_selection"]
+        )
         num_post_selected = post_selection_result.count(True)
         psp = num_post_selected / self.shots
-        z = list(success and post_selected for success,post_selected in zip(result.measurements['success'], post_selection_result)).count(True) / num_post_selected if num_post_selected > 0 else 0
+        z = (
+            list(
+                success and post_selected
+                for success, post_selected in zip(
+                    result.measurements["success"], post_selection_result
+                )
+            ).count(True)
+            / num_post_selected
+            if num_post_selected > 0
+            else 0
+        )
 
         return {"psp": psp, "z": z}
 
@@ -109,15 +136,19 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(
             xmax,
             ymin,
             ymax,
-            shots = 1,
-            simulation = True,
-            promise_type = GoogleLocalPromise
+            shots=1,
+            simulation=True,
+            promise_type=GoogleLocalPromise,
         )
 
     def parse_result(self, job, result):
         psi = result.final_state
 
-        psp = np.linalg.norm(psi[::2**(2**self.num_post_selections-1)])**2
-        z = np.abs(psi[2**(2**self.num_post_selections-1)])**2 / psp if psp > 0 else 0
+        psp = np.linalg.norm(psi[:: 2 ** (2 ** self.num_post_selections - 1)]) ** 2
+        z = (
+            np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp
+            if psp > 0
+            else 0
+        )
 
         return {"psp": psp, "z": z}

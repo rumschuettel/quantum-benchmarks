@@ -26,7 +26,7 @@ class VendorJobManager(ABC):
         additional_stored_info: Optional[dict] = None,
         store_completed_job_results=True,
         store_collated_result=True,
-        store_jobmanager=True
+        store_jobmanager=True,
     ) -> Optional[object]:
         # try to queue more jobs
         new_scheduled = []
@@ -102,9 +102,7 @@ class VendorJobManager(ABC):
 
     @classmethod
     def load(clx, ID):
-        with open(
-            f"{clx.RUN_FOLDER}/{ID}/{clx.JOBMANAGER_FILENAME}", "rb"
-        ) as f:
+        with open(f"{clx.RUN_FOLDER}/{ID}/{clx.JOBMANAGER_FILENAME}", "rb") as f:
             slug = pickle.load(f)
             assert slug["jobmanager"].ID == ID, "instance ID does not match passed ID"
             return slug

@@ -10,6 +10,8 @@ from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
 """
     Import Functionality for benchmarks, links and jobmanagers
 """
+
+
 def import_benchmark(name, vendor, simulate, device):
     # handle benchmark selection edge cases:
     if vendor == "ibm" and simulate and device == "qasm_simulator":
@@ -30,9 +32,12 @@ def import_jobmanager(vendor):
     vendor_module = importlib.import_module(f"libbench.{vendor}")
     return getattr(vendor_module, "JobManager")
 
+
 """
     Benchmark step
 """
+
+
 def _run_update(
     jobmanager: VendorJobManager, device: object, additional_stored_info: dict
 ):
@@ -46,9 +51,11 @@ def _run_update(
             f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}"
         )
 
+
 """
     Run mode of ./runner.py
 """
+
 
 def resume_benchmark(args):
     JOBMANAGER_ID = args.jobmanager_id
@@ -109,8 +116,6 @@ def new_benchmark(args):
     _run_update(
         jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE}
     )
-
-
 
 
 # find runnable test modules and vendors

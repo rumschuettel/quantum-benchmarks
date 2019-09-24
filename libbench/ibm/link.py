@@ -36,4 +36,3 @@ class IBMSimulatorLink(VendorLink):
 
     def get_devices(self):
         return {device.name(): device for device in self.IBMQ_local.backends()}
-

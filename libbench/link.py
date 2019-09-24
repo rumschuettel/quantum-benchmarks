@@ -28,4 +28,3 @@ class VendorLink(ABC):
 
     def get_device(self, name):
         return self.get_devices()[name]
-

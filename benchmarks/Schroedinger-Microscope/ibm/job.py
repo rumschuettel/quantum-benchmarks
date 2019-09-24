@@ -23,7 +23,6 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
                 num_post_selections, z, add_measurements, i, j, shots
             )
 
-
     def __init__(self, num_post_selections, z, add_measurements, i, j, shots):
         super().__init__()
 

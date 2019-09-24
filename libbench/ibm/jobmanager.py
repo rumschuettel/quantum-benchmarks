@@ -13,7 +13,13 @@ class IBMJobManager(VendorJobManager):
         """
             check whether we consider the job behind the promise alive on an IBM backend
         """
-        return promise.status() in [JobStatus.DONE, JobStatus.INITIALIZING, JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.VALIDATING]
+        return promise.status() in [
+            JobStatus.DONE,
+            JobStatus.INITIALIZING,
+            JobStatus.QUEUED,
+            JobStatus.RUNNING,
+            JobStatus.VALIDATING,
+        ]
 
     def queued_successfully(self, promise):
         """
@@ -26,16 +32,16 @@ class IBMJobManager(VendorJobManager):
 
         try:
             promise.job_id()
-            
+
         except ApiError as e:
-            message = e.message.rstrip('\n .')
-            if message.endswith('QUEUE_DISABLED'):
+            message = e.message.rstrip("\n .")
+            if message.endswith("QUEUE_DISABLED"):
                 print("The queue for this device is disabled.")
                 return False
-            elif message.endswith('NOT_CREDITS_AVALIABLES'):
+            elif message.endswith("NOT_CREDITS_AVALIABLES"):
                 print("You don't have enough credits to run this job.")
                 return False
-            
+
             raise
 
         return True
@@ -46,7 +52,7 @@ class IBMJobManager(VendorJobManager):
         """
         if device.name() in ["statevector_simulator", "qasm_simulator"]:
             return promise.result()
-            
+
         if not promise.status() == JobStatus.DONE:
             return None
 

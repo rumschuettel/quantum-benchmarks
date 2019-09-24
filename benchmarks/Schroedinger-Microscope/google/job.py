@@ -14,8 +14,15 @@ from libbench.google import LocalPromise as GoogleLocalPromise
 class GoogleSchroedingerMicroscopeJob(GoogleJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, simulation,
-        promise_type: Union[GooglePromise, GoogleLocalPromise]
+        num_post_selections,
+        num_pixels,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        shots,
+        simulation,
+        promise_type: Union[GooglePromise, GoogleLocalPromise],
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -28,9 +35,16 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
                 num_post_selections, z, simulation, i, j, shots, promise_type
             )
 
-    def __init__(self, num_post_selections, z, simulation, i, j, shots,
-        promise_type: Union[GooglePromise, GoogleLocalPromise]
-        ):
+    def __init__(
+        self,
+        num_post_selections,
+        z,
+        simulation,
+        i,
+        j,
+        shots,
+        promise_type: Union[GooglePromise, GoogleLocalPromise],
+    ):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -46,26 +60,33 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         phi = np.angle(z)
 
         # Build the circuit
-        qubits = [cirq.GridQubit(0,i) for i in range(2**num_post_selections)]
+        qubits = [cirq.GridQubit(0, i) for i in range(2 ** num_post_selections)]
         circuit = cirq.Circuit()
-        for k in range(2**num_post_selections):
+        for k in range(2 ** num_post_selections):
             circuit.append(cirq.Ry(theta)(qubits[k]))
             circuit.append(cirq.Rz(-phi)(qubits[k]))
         for k in range(num_post_selections):
-            for l in range(0,2**num_post_selections,2**(k+1)):
-                circuit.append(cirq.CNOT(qubits[l], qubits[l + 2**k]))
-                circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
+            for l in range(0, 2 ** num_post_selections, 2 ** (k + 1)):
+                circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** k]))
+                circuit.append(
+                    [cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])]
+                )
         if not simulation:
-            circuit.append(cirq.measure(*(qubits[k] for k in range(1,2**num_post_selections)), key = 'post_selection'))
-            circuit.append(cirq.measure(qubits[0], key = 'success'))
+            circuit.append(
+                cirq.measure(
+                    *(qubits[k] for k in range(1, 2 ** num_post_selections)),
+                    key="post_selection",
+                )
+            )
+            circuit.append(cirq.measure(qubits[0], key="success"))
 
         # store the resulting circuit
         self.circuit = circuit
 
     def run(self, device, **kwargs):
-        kwargs.update({'simulation' : self.simulation})
+        kwargs.update({"simulation": self.simulation})
 
-        return self.promise_type(self.circuit, device, repetitions = self.shots, **kwargs)
+        return self.promise_type(self.circuit, device, repetitions=self.shots, **kwargs)
 
     def __str__(self):
         return f"GoogleSchroedingerMicroscopeJob-{self.i}-{self.j}"

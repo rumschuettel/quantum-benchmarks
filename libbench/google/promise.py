@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
 import cirq
 
+
 class GooglePromiseBase(ABC):
     """
         As the simulators in cirq do not return any promise, we write our own
         promise class. This should be a very thin wrapper around the existing
         promise structure provided by google which we conjecture to exist.
     """
+
     @abstractmethod
     def job_id(self):
         raise NotImplementedError()
@@ -19,9 +21,12 @@ class GooglePromiseBase(ABC):
     def result(self):
         raise NotImplementedError()
 
+
 class GooglePromise(GooglePromiseBase):
     def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1):
-        raise NotImplementedError("The google api to their hardware is not available yet.")
+        raise NotImplementedError(
+            "The google api to their hardware is not available yet."
+        )
 
     def job_id(self):
         raise NotImplementedError()
@@ -38,12 +43,20 @@ class GooglePromise(GooglePromiseBase):
     def thaw(self):
         raise NotImplementedError()
 
+
 class GoogleLocalPromise(GooglePromiseBase):
     """
         As the simulators in cirq do not return any promise, but just return
         the result directly, we emulate this behavior here.
     """
-    def __init__(self, circuit: cirq.Circuit, device, repetitions: int = 1, simulation: bool = False):
+
+    def __init__(
+        self,
+        circuit: cirq.Circuit,
+        device,
+        repetitions: int = 1,
+        simulation: bool = False,
+    ):
         super().__init__()
 
         self.device = device
@@ -74,7 +87,9 @@ class GoogleLocalPromise(GooglePromiseBase):
             if self.simulation:
                 self._result = self.device.simulate(self.circuit)
             else:
-                self._result = self.device.run(self.circuit, repetitions = self.repetitions)
+                self._result = self.device.run(
+                    self.circuit, repetitions=self.repetitions
+                )
         return self._result
 
     def freeze(self):
