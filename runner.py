@@ -36,8 +36,8 @@ def import_jobmanager(vendor):
 """
 
 
-def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_info: dict):
-    result = jobmanager.update(device, additional_stored_info=additional_stored_info)
+def _run_update(jobmanager: VendorJobManager, device: object):
+    result = jobmanager.update(device)
 
     if result is not None:
         print(result)
@@ -58,9 +58,9 @@ def resume_benchmark(args):
 
     # restore stuff saved along job manager to recreate device where we run the benchmark on
     VENDOR, DEVICE, SIMULATE = (
-        slug["additional_stored_info"]["vendor"],
-        slug["additional_stored_info"]["device"],
-        slug["additional_stored_info"]["simulate"],
+        slug["additional_info"]["vendor"],
+        slug["additional_info"]["device_name"],
+        slug["additional_info"]["simulate"],
     )
     link = import_link(VENDOR, SIMULATE)()
     device = link.get_device(DEVICE)
@@ -68,7 +68,7 @@ def resume_benchmark(args):
     jobmanager.thaw(device)
 
     # run update
-    _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})
+    _run_update(jobmanager, device)
 
 
 def info(args):
@@ -106,12 +106,16 @@ def new_benchmark(args):
         Benchmark(),
         {
             # additional information that will be available to job.run
-            "simulate": SIMULATE
+            "simulate": SIMULATE,
+            "vendor": VENDOR,
+            "simulate": SIMULATE,
+            "device_name": DEVICE,
+            "benchmark" : BENCHMARK
         },
     )
 
     # run update
-    _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})
+    _run_update(jobmanager, device)
 
 
 # find runnable test modules and vendors

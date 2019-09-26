@@ -78,14 +78,14 @@ class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicrosc
             xmax,
             ymin,
             ymax,
-            shots=1,
+            shots=float("Inf"),
             promise_type=RigettiLocalPromise,
         )
 
     def parse_result(self, job, result):
         """
         initially results are in the form qubit : measurement-outcomes
-        {   
+        {
             0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
             1: array([1, 0, 1, 1, 1, 0, 1, 0, 1, 0]),
             2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])

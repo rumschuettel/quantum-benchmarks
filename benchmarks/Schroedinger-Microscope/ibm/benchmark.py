@@ -70,7 +70,7 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(IBMSchroedingerMicroscopeBench
 
     def __init__(self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2):
         super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots=1, add_measurements=False
+            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots=float("Inf"), add_measurements=False
         )
 
     def parse_result(self, job, result):

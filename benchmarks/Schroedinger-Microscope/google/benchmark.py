@@ -102,8 +102,8 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscop
             xmax,
             ymin,
             ymax,
-            shots=1,
-            add_measurements=True,
+            shots=float("Inf"),
+            add_measurements=False,
             promise_type=GoogleLocalPromise,
         )
 

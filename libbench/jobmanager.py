@@ -12,7 +12,7 @@ class VendorJobManager(ABC):
     COLLATED_FILENAME = "collated.pickle"
     JOBS_FOLDER = "jobs"
 
-    def __init__(self, benchmark: VendorBenchmark, additional_job_run_info: dict):
+    def __init__(self, benchmark: VendorBenchmark, additional_info: dict):
         self.benchmark = benchmark
         self.scheduled = benchmark.get_jobs()
         self.ID = benchmark_id()
@@ -20,12 +20,11 @@ class VendorJobManager(ABC):
         self.queued = {}  # job: promise
         self.results = {}  # job: result
 
-        self.additional_job_run_info = additional_job_run_info
+        self.additional_info = additional_info
 
     def update(
         self,
         device,
-        additional_stored_info: Optional[dict] = None,
         store_completed_job_results=True,
         store_collated_result=True,
         store_jobmanager=True,
@@ -33,7 +32,7 @@ class VendorJobManager(ABC):
         # try to queue more jobs
         new_scheduled = []
         for job in self.scheduled:
-            promise = job.run(device, **self.additional_job_run_info)
+            promise = job.run(device, **self.additional_info)
             if self.queued_successfully(promise):
                 self.queued[job] = promise
             else:
@@ -66,17 +65,20 @@ class VendorJobManager(ABC):
 
         # store jobmanager for reuse
         if store_jobmanager:
-            self.save(additional_stored_info)
+            self.save()
 
         # if all are done, we can collate the results and potentially store it
         if len(self.scheduled) == 0 and len(self.queued) == 0:
             print_hl(f"benchmark {self.ID} completed.")
             collated_result = self.benchmark.collate_results(self.results)
             if store_collated_result:
-                self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
+                self._save_in_run_folder(self.COLLATED_FILENAME, {
+                    "collated_result" : collated_result,
+                    "additional_info" : self.additional_info}
+                )
             return collated_result
 
-    def save(self, additional_stored_info):
+    def save(self):
         # freeze promise queue into something pickleable
         old_queued = self.queued.copy()
 
@@ -85,14 +87,14 @@ class VendorJobManager(ABC):
 
         self._save_in_run_folder(
             self.JOBMANAGER_FILENAME,
-            {"jobmanager": self, "additional_stored_info": additional_stored_info},
+            {"jobmanager": self, "additional_info": self.additional_info},
         )
 
         # restore queue
         self.queued = old_queued
 
     def _save_in_run_folder(self, filename: str, obj: object):
-        full_filename = f"{self.RUN_FOLDER}/{self.ID}/{filename}"
+        full_filename = f"runs/{self.ID}/{filename}"
         full_folder = os.path.dirname(full_filename)
         if not os.path.exists(full_folder):
             os.makedirs(full_folder)

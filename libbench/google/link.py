@@ -32,7 +32,8 @@ class GoogleLink(VendorLink):
             the available classes that derive from the cirq codebase have a
             simulator signature.
         """
-        return GOOGLE_CLOUD_DEVICES
+        # We will have to add the cloud devices to this in due course
+        return GOOGLE_LOCAL_DEVICES
 
 
 class GoogleSimulatorLink(VendorLink):
@@ -50,4 +51,6 @@ class GoogleSimulatorLink(VendorLink):
             the available classes that derive from the cirq codebase have a
             simulator signature.
         """
+        # We will have to add the cloud devices to this in due course,
+        # if google decides to provide cloud simulation at some point.
         return GOOGLE_LOCAL_DEVICES
