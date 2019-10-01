@@ -9,7 +9,8 @@ import cirq
 from libbench.google import Job as GoogleJob
 from libbench.google import Promise as GooglePromise
 from libbench.google import LocalPromise as GoogleLocalPromise
-
+from libbench.google import CLOUD_DEVICES as GOOGLE_CLOUD_DEVICES
+from libbench.google import LOCAL_DEVICES as GOOGLE_LOCAL_DEVICES
 
 class GoogleSchroedingerMicroscopeJob(GoogleJob):
     @staticmethod
@@ -82,6 +83,8 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
 
     def run(self, device, *args, **kwargs):
         kwargs.update({"repetitions": self.shots})
+        assert kwargs['device_name'] in GOOGLE_LOCAL_DEVICES or kwargs['device_name'] in GOOGLE_CLOUD_DEVICES
+        self.promise_type = GoogleLocalPromise if kwargs['device_name'] in GOOGLE_LOCAL_DEVICES else GooglePromise
         return self.promise_type(self.circuit, device, *args, **kwargs)
 
     def __str__(self):
