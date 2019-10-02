@@ -211,6 +211,13 @@ def visualize(args):
     JOB_IDS = args.job_ids
     if len(JOB_IDS) == 0:
         print("No job ids supplied, so displaying a list of available job ids.")
+        print("Color coding: ", end = '')
+        print_hl('running', color = 'red', end = '')
+        print(', ', end = '')
+        print_hl('done, no visualzation available', color = 'yellow', end = '')
+        print(', ', end = '')
+        print_hl('done, visualization available', color = 'green', end = '')
+        print('.')
         for folder in glob.glob("./runs/*"):
             if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__":
                 collated_filepath = f"{folder}/{VendorJobManager.COLLATED_FILENAME}"
@@ -218,7 +225,10 @@ def visualize(args):
                     JOB_ID = os.path.basename(folder)
                     collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", 'rb'))
                     additional_stored_info = collated_file['additional_stored_info']
-                    print(JOB_ID, additional_stored_info)
+                    color = 'green' if os.path.isfile(f"{folder}/{VISUALIZATION_FILENAME}") else "yellow"
+                    print_hl(JOB_ID, additional_stored_info, color = color)
+                else:
+                    print_hl(JOB_ID, color = 'red')
     else:
         for JOB_ID in JOB_IDS:
             handle_visualization(JOB_ID)
