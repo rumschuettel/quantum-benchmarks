@@ -6,6 +6,8 @@ from .benchmark import VendorBenchmark
 from .lib import benchmark_id, print_hl
 
 
+MAX_FAILURE_COUNT = 10
+
 class VendorJobManager(ABC):
     RUN_FOLDER = "./runs"
     JOBMANAGER_FILENAME = "jobmanager.pickle"
@@ -30,12 +32,20 @@ class VendorJobManager(ABC):
     ) -> Optional[object]:
         # try to queue more jobs
         new_scheduled = []
+        failure_counter = 0
         for job in self.scheduled:
             promise = job.run(device)
             if self.queued_successfully(promise):
+                print(f"{str(job)} successfully queued.")
                 self.queued[job] = promise
+                failure_counter = 0
             else:
+                print(f"Could not queue {str(job)}.")
                 new_scheduled.append(job)
+                failure_counter += 1
+            if failure_counter >= MAX_FAILURE_COUNT:
+                print(f"{MAX_FAILURE_COUNT} consecutive failures to queue, so refraining from trying again.")
+                break
         self.scheduled = new_scheduled
 
         # try to obtain more results
