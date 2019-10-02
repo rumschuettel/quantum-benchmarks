@@ -35,18 +35,18 @@ class VendorJobManager(ABC):
         new_scheduled = []
         failure_counter = 0
         for job in self.scheduled:
-            promise = job.run(device)
-            if self.queued_successfully(promise):
-                print(f"{str(job)} successfully queued.")
-                self.queued[job] = promise
-                failure_counter = 0
+            if failure_counter < MAX_FAILURE_COUNT:
+                promise = job.run(device)
+                if self.queued_successfully(promise):
+                    print(f"{str(job)} successfully queued.")
+                    self.queued[job] = promise
+                    failure_counter = 0
+                else:
+                    print(f"Could not queue {str(job)}.")
+                    new_scheduled.append(job)
+                    failure_counter += 1
             else:
-                print(f"Could not queue {str(job)}.")
                 new_scheduled.append(job)
-                failure_counter += 1
-            if failure_counter >= MAX_FAILURE_COUNT:
-                print(f"{MAX_FAILURE_COUNT} consecutive failures to queue, so refraining from trying again.")
-                break
         self.scheduled = new_scheduled
 
         # try to obtain more results
