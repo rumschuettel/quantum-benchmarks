@@ -1,6 +1,7 @@
 from typing import Dict
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from libbench import VendorJob
 
@@ -60,3 +61,35 @@ def paramparser(args):
         'ymin' : args.ymin,
         'ymax' : args.ymax
     }
+
+
+def default_visualization(collated_result, params):
+
+    # Unpack the collated result
+    zs,psps = collated_result
+    num_post_selections, num_pixels, num_shots = (
+        params['num_post_selections'],
+        params['num_pixels'],
+        params['num_shots']
+    )
+    extent = (params['xmin'], params['xmax'], params['ymin'], params['ymax'])
+
+    # Set up the figure
+    fig = plt.figure(figsize=(12,8))
+    ax_psps = fig.add_subplot(1,2,1)
+    ax_sps = fig.add_subplot(1,2,2)
+
+    # Draw the
+    ax_psps.imshow(psps, cmap = 'gray', extent = extent, vmin = 0, vmax = 1)
+    ax_psps.set_title(f'PSP({num_post_selections},{num_pixels},{num_shots})')
+    ax_psps.set_xlabel('Re(z)')
+    ax_psps.set_ylabel('Im(z)')
+
+    # Draw the success probabilities
+    ax_sps.imshow(zs, cmap = 'gray', extent = extent, vmin = 0, vmax = 1)
+    ax_sps.set_title(f'SP({num_post_selections},{num_pixels},{num_shots})')
+    ax_sps.set_xlabel('Re(z)')
+    ax_sps.set_ylabel('Im(z)')
+
+    # Return the figure
+    return fig

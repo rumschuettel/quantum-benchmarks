@@ -4,8 +4,37 @@ import argparse
 import glob
 import importlib
 import os
+import pickle
 
 from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
+
+
+"""
+    Definitions of constants
+"""
+
+
+MODE_CLASS_NAMES = {
+    'cloud' : 'Cloud',
+    'measure_local' : 'MeasureLocal',
+    'statevector' : 'Statevector'
+}
+
+# find runnable test modules and vendors
+BENCHMARKS = [
+    os.path.basename(folder)
+    for folder in glob.glob("./benchmarks/*")
+    if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
+]
+VENDORS = [
+    os.path.basename(folder)
+    for folder in glob.glob("./libbench/*")
+    if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
+]
+MODES = list(MODE_CLASS_NAMES.keys())
+
+VISUALIZATION_FILENAME = "visualization.eps"
+
 
 """
     Import Functionality for benchmarks, links and jobmanagers
@@ -13,10 +42,6 @@ from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
 
 
 def import_benchmark(name, vendor, mode, device):
-    # # handle benchmark selection edge cases: (?)
-    # if vendor == "ibm" and simulate and device == "qasm_simulator":
-    #     simulate = False
-
     benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
     return getattr(benchmark_module, "Benchmark" if mode != "Statevector" else "SimulatedBenchmark")
 
@@ -42,6 +67,11 @@ def import_paramparser(name):
     return getattr(benchmark_module, "paramparser")
 
 
+def import_visualize_function(name):
+    benchmark_module = importlib.import_module(f"benchmarks.{name}")
+    return getattr(benchmark_module, "default_visualization")
+
+
 """
     Benchmark step
 """
@@ -51,6 +81,8 @@ def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_
     result = jobmanager.update(device, additional_stored_info=additional_stored_info)
 
     if result is not None:
+        print()
+        print("Collated result:")
         print(result)
 
     else:
@@ -82,11 +114,9 @@ def resume_benchmark(args):
     _run_update(jobmanager, device, slug['additional_stored_info'])
 
 
-MODE_CLASS_NAMES = {
-    'cloud' : 'Cloud',
-    'measure_local' : 'MeasureLocal',
-    'statevector' : 'Statevector'
-}
+"""
+    Vendor information helper function
+"""
 
 
 def info_vendor(args):
@@ -104,12 +134,22 @@ def info_vendor(args):
         print()
 
 
+"""
+    Benchmark information helper function
+"""
+
+
 def info_benchmark(parser_benchmarks, args):
     BENCHMARK = args.benchmark
     assert BENCHMARK in BENCHMARKS
 
     argparser = parser_benchmarks[BENCHMARK]
     argparser.print_help()
+
+
+"""
+    New benchmark starter function
+"""
 
 
 def new_benchmark(args):
@@ -134,35 +174,54 @@ def new_benchmark(args):
     device = link.get_device(DEVICE)
     Benchmark = import_benchmark(BENCHMARK, VENDOR, MODE, DEVICE)
     JobManager = import_jobmanager(VENDOR)
-    jobmanager = JobManager(
-        Benchmark(**params),
-        # {
-        #     # additional information that will be available to job.run
-        #     # "mode": MODE
-        # },
-    )
+    jobmanager = JobManager(Benchmark(**params))
 
     # run update
     _run_update(jobmanager, device, {
         "vendor": VENDOR,
         "mode": MODE,
         "device": DEVICE,
+        "benchmark": BENCHMARK,
         **params
     })
 
 
-# find runnable test modules and vendors
-BENCHMARKS = [
-    os.path.basename(folder)
-    for folder in glob.glob("./benchmarks/*")
-    if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
-]
-VENDORS = [
-    os.path.basename(folder)
-    for folder in glob.glob("./libbench/*")
-    if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
-]
-MODES = list(MODE_CLASS_NAMES.keys())
+"""
+    Visualization functions
+"""
+
+
+def handle_visualization(JOB_ID):
+    folder = f"{VendorJobManager.RUN_FOLDER}/{JOB_ID}"
+    collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", 'rb'))
+    collated_result, additional_stored_info = (
+        collated_file['collated_result'],
+        collated_file['additional_stored_info']
+    )
+    BENCHMARK = additional_stored_info['benchmark']
+    visualize_function = import_visualize_function(BENCHMARK)
+    fig = visualize_function(collated_result, additional_stored_info)
+    visualization_file = f"{folder}/{VISUALIZATION_FILENAME}"
+    fig.savefig(visualization_file)
+    print(f"Wrote the visualization of {JOB_ID} to {visualization_file}.")
+    return fig
+
+
+def visualize(args):
+    JOB_IDS = args.job_ids
+    if len(JOB_IDS) == 0:
+        print("No job ids supplied, so displaying a list of available job ids.")
+        for folder in glob.glob("./runs/*"):
+            if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__":
+                collated_filepath = f"{folder}/{VendorJobManager.COLLATED_FILENAME}"
+                if os.path.isfile(collated_filepath):
+                    JOB_ID = os.path.basename(folder)
+                    collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", 'rb'))
+                    additional_stored_info = collated_file['additional_stored_info']
+                    print(JOB_ID, additional_stored_info)
+    else:
+        for JOB_ID in JOB_IDS:
+            handle_visualization(JOB_ID)
 
 
 if __name__ == "__main__":
@@ -229,13 +288,17 @@ if __name__ == "__main__":
 
     # resume benchmark
     parser_R = subparsers.add_parser("resume", help="Resume old benchmark")
+    parser_R.set_defaults(func=resume_benchmark)
     parser_R.add_argument(
         "jobmanager_id",
         metavar="JOBMANAGER_ID",
         type=str,
         help=f"old jobmanager id; subfolder name in f{VendorJobManager.RUN_FOLDER}",
     )
-    parser_R.set_defaults(func=resume_benchmark)
+
+    parser_V = subparsers.add_parser("visualize", help="Visualize completed benchmarks")
+    parser_V.set_defaults(func=visualize)
+    parser_V.add_argument("job_ids", nargs='*')
 
     args = parser.parse_args()
 
