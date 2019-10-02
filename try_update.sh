@@ -1,3 +1,4 @@
+cd "$(dirname "$0")";
 for f in ./runs/*
 do
   id=$(basename $f)
