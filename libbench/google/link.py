@@ -1,53 +1,83 @@
+from abc import ABC, abstractmethod
 from libbench.lib import print_hl
 from libbench.link import VendorLink, VendorJob
+from .promise import GoogleCloudPromise
+from .promise import GoogleMeasureLocalPromise
+from .promise import GoogleStatevectorPromise
 import cirq
 
+class GoogleDevice(ABC):
+    @abstractmethod
+    def execute(self, circuit: cirq.Circuit, num_shots: int):
+        raise NotImplementedError()
+
+
+class SparseSimulatorMeasureLocal(GoogleDevice):
+    def __init__(self):
+        self.name = "sparse_simulator_measure_local"
+
+    def execute(self, circuit, num_shots: int):
+        return GoogleMeasureLocalPromise(circuit, cirq.Simulator(), num_shots = num_shots)
+
+
+class SparseSimulatorStatevector(GoogleDevice):
+    def __init__(self):
+        self.name = "sparse_simulator_statevector"
+
+    def execute(self, circuit, num_shots: int):
+        return GoogleStatevectorPromise(circuit, cirq.Simulator(), num_shots = num_shots)
+
+
+GOOGLE_STATEVECTOR_DEVICES = {
+    "sparse_simulator_statevector": SparseSimulatorStatevector()
+    # support for the density matrix simulator can be added later if necessary
+}
+
+GOOGLE_MEASURE_LOCAL_DEVICES = {
+    "sparse_simulator_measure_local": SparseSimulatorMeasureLocal()
+}
 
 GOOGLE_CLOUD_DEVICES = {}
-
-# Support for the density matrix simulator can be added later if necessary.
-# For now does not seem to be worth the time.
-GOOGLE_LOCAL_DEVICES = {
-    "sparse_simulator": cirq.Simulator(),
-    # 'density_matrix_simulator' : cirq.DensityMatrixSimulator()
-}
 
 
 class GoogleJob(VendorJob):
     pass
 
 
-class GoogleLink(VendorLink):
+class GoogleCloudLink(VendorLink):
     def __init__(self):
         super().__init__()
 
-        print_hl("cirq runner loaded.")
+        print_hl("cirq cloud backend loaded.")
 
     def get_devices(self):
         """
-            Retrieves the available simulators in cirq.
-            Note that cirq has no built-in method for listing the available
-            simulators, so these will have to be added manually upon every update
-            of cirq, or some dirty python code has to be written that checks whether
-            the available classes that derive from the cirq codebase have a
-            simulator signature.
+            Retrieves the cloud services of Google.
         """
         return GOOGLE_CLOUD_DEVICES
 
 
-class GoogleSimulatorLink(VendorLink):
+class GoogleMeasureLocalLink(VendorLink):
     def __init__(self):
         super().__init__()
 
-        print_hl("cirq simulator loaded.")
+        print_hl("cirq measure local backend loaded.")
 
     def get_devices(self):
         """
-            Retrieves the available simulators in cirq.
-            Note that cirq has no built-in method for listing the available
-            simulators, so these will have to be added manually upon every update
-            of cirq, or some dirty python code has to be written that checks whether
-            the available classes that derive from the cirq codebase have a
-            simulator signature.
+            Retrieves the measure local services of Google.
         """
-        return GOOGLE_LOCAL_DEVICES
+        return GOOGLE_MEASURE_LOCAL_DEVICES
+
+
+class GoogleStatevectorLink(VendorLink):
+    def __init__(self):
+        super().__init__()
+
+        print_hl("cirq statevector simulator backend loaded.")
+
+    def get_devices(self):
+        """
+            Retrieves the available statevector simulators in cirq.
+        """
+        return GOOGLE_STATEVECTOR_DEVICES

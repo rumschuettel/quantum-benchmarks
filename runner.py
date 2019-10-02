@@ -12,23 +12,34 @@ from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
 """
 
 
-def import_benchmark(name, vendor, simulate, device):
-    # handle benchmark selection edge cases:
-    if vendor == "ibm" and simulate and device == "qasm_simulator":
-        simulate = False
+def import_benchmark(name, vendor, mode, device):
+    # # handle benchmark selection edge cases: (?)
+    # if vendor == "ibm" and simulate and device == "qasm_simulator":
+    #     simulate = False
 
     benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
-    return getattr(benchmark_module, "Benchmark" if not simulate else "SimulatedBenchmark")
+    return getattr(benchmark_module, "Benchmark" if mode != "Statevector" else "SimulatedBenchmark")
 
 
-def import_link(vendor, simulate):
+def import_link(vendor, mode):
     vendor_module = importlib.import_module(f"libbench.{vendor}")
-    return getattr(vendor_module, "Link" if not simulate else "SimulatorLink")
+    return getattr(vendor_module, mode + "Link")
 
 
 def import_jobmanager(vendor):
     vendor_module = importlib.import_module(f"libbench.{vendor}")
     return getattr(vendor_module, "JobManager")
+
+
+def import_argparser(name, toadd):
+    benchmark_module = importlib.import_module(f"benchmarks.{name}")
+    argparser = getattr(benchmark_module, "argparser")
+    return argparser(toadd)
+
+
+def import_paramparser(name):
+    benchmark_module = importlib.import_module(f"benchmarks.{name}")
+    return getattr(benchmark_module, "paramparser")
 
 
 """
@@ -57,61 +68,87 @@ def resume_benchmark(args):
     jobmanager = slug["jobmanager"]
 
     # restore stuff saved along job manager to recreate device where we run the benchmark on
-    VENDOR, DEVICE, SIMULATE = (
+    VENDOR, DEVICE, MODE = (
         slug["additional_stored_info"]["vendor"],
         slug["additional_stored_info"]["device"],
-        slug["additional_stored_info"]["simulate"],
+        slug["additional_stored_info"]["mode"],
     )
-    link = import_link(VENDOR, SIMULATE)()
+    link = import_link(VENDOR, MODE)()
     device = link.get_device(DEVICE)
 
     jobmanager.thaw(device)
 
     # run update
-    _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})
+    _run_update(jobmanager, device, slug['additional_stored_info'])
 
 
-def info(args):
+MODE_CLASS_NAMES = {
+    'cloud' : 'Cloud',
+    'measure_local' : 'MeasureLocal',
+    'statevector' : 'Statevector'
+}
+
+
+def info_vendor(args):
     VENDOR = args.vendor.lower()
-    SIMULATE = args.s
 
-    # pick vendor
-    link = import_link(VENDOR, SIMULATE)()
+    for mode, MODE in MODE_CLASS_NAMES.items():
+        link = import_link(VENDOR, MODE)()
+        devices = link.get_devices()
+        print(f"Available {mode} devices:")
+        if len(devices) == 0:
+            print_hl("No devices available.", color='red')
+        else:
+            for name in devices:
+                print(name)
+        print()
 
-    print("available devices:")
-    for name in link.get_devices():
-        print(name)
+
+def info_benchmark(parser_benchmarks, args):
+    BENCHMARK = args.benchmark
+    assert BENCHMARK in BENCHMARKS
+
+    argparser = parser_benchmarks[BENCHMARK]
+    argparser.print_help()
 
 
 def new_benchmark(args):
     VENDOR = args.vendor.lower()
     DEVICE = args.device.lower()
     BENCHMARK = args.benchmark
-    SIMULATE = args.s
+    MODE = MODE_CLASS_NAMES[args.mode]
 
     assert VENDOR in VENDORS, "vendor does not exist"
     assert BENCHMARK is None or BENCHMARK in BENCHMARKS, "benchmark does not exist"
 
     # pick vendor
-    Link = import_link(VENDOR, SIMULATE)
+    Link = import_link(VENDOR, MODE)
     link = Link()
 
     # check device exists
     assert DEVICE in link.get_devices(), "device does not exist"
 
+    paramparser = import_paramparser(BENCHMARK)
+    params = paramparser(args)
+
     device = link.get_device(DEVICE)
-    Benchmark = import_benchmark(BENCHMARK, VENDOR, SIMULATE, DEVICE)
+    Benchmark = import_benchmark(BENCHMARK, VENDOR, MODE, DEVICE)
     JobManager = import_jobmanager(VENDOR)
     jobmanager = JobManager(
-        Benchmark(),
-        {
-            # additional information that will be available to job.run
-            "simulate": SIMULATE
-        },
+        Benchmark(**params),
+        # {
+        #     # additional information that will be available to job.run
+        #     # "mode": MODE
+        # },
     )
 
     # run update
-    _run_update(jobmanager, device, {"vendor": VENDOR, "simulate": SIMULATE, "device": DEVICE})
+    _run_update(jobmanager, device, {
+        "vendor": VENDOR,
+        "mode": MODE,
+        "device": DEVICE,
+        **params
+    })
 
 
 # find runnable test modules and vendors
@@ -125,6 +162,7 @@ VENDORS = [
     for folder in glob.glob("./libbench/*")
     if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
 ]
+MODES = list(MODE_CLASS_NAMES.keys())
 
 
 if __name__ == "__main__":
@@ -132,35 +170,62 @@ if __name__ == "__main__":
 
     # arguments
     parser = argparse.ArgumentParser(description="Quantum Benchmark")
-    subparsers = parser.add_subparsers(help="Show this help")
-
-    # vendor info
-    parser_I = subparsers.add_parser("info", help="Device information")
-    parser_I.add_argument("-s", action="store_true", help="simulated devices")
-    parser_I.add_argument(
-        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
-    )
-    parser_I.set_defaults(func=info)
+    subparsers = parser.add_subparsers(metavar="ACTION", help="Action you want to take")
 
     # new benchmark
     parser_A = subparsers.add_parser("benchmark", help="Run new benchmark")
-    parser_A.add_argument("-s", action="store_true", help="simulate")
+    parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
-        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
+        "vendor",
+        metavar="VENDOR",
+        type=str,
+        help=f"vendor to use; one of {', '.join(VENDORS)}"
+    )
+    parser_A.add_argument(
+        "mode",
+        metavar="MODE",
+        type=str,
+        help=f"mode to run; one of {', '.join(MODES)}"
     )
     parser_A.add_argument(
         "device",
         metavar="DEVICE",
         type=str,
-        help="device to use with chosen vendor; run ./runner.py info [-s] VENDOR to get a list.",
+        help="device to use with chosen vendor; run ./runner.py info vendor VENDOR to get a list.",
     )
-    parser_A.add_argument(
+    subparsers_A = parser_A.add_subparsers(metavar="BENCHMARK", help="benchmark to run")
+
+    parser_benchmarks = {}
+    for benchmark in BENCHMARKS:
+        parser_benchmark = import_argparser(benchmark, subparsers_A)
+        parser_benchmark.set_defaults(benchmark=benchmark)
+        parser_benchmarks[benchmark] = parser_benchmark
+
+    # info
+    parser_I = subparsers.add_parser("info", help="Request information")
+    parser_I.set_defaults(func=lambda args : parser_I.print_help())
+    subparsers_I = parser_I.add_subparsers(metavar="TYPE", help="Type of information requested")
+
+    # vendor info
+    parser_IV = subparsers_I.add_parser("vendor", help="Information about devices")
+    parser_IV.set_defaults(func=info_vendor)
+    parser_IV.add_argument(
+        "vendor",
+        metavar="VENDOR",
+        type=str,
+        default=False,
+        help=f"vendor to use; one of {', '.join(VENDORS)}"
+    )
+
+    # benchmark info
+    parser_IB = subparsers_I.add_parser("benchmark", help="Information about benchmarks")
+    parser_IB.set_defaults(func=lambda args: info_benchmark(parser_benchmarks,args))
+    parser_IB.add_argument(
         "benchmark",
         metavar="BENCHMARK",
         type=str,
-        help=f"benchmark to run; one of {', '.join(BENCHMARKS)}",
+        help=f"benchmark to use; one of {', '.join(BENCHMARKS)}"
     )
-    parser_A.set_defaults(func=new_benchmark)
 
     # resume benchmark
     parser_R = subparsers.add_parser("resume", help="Resume old benchmark")
@@ -173,7 +238,6 @@ if __name__ == "__main__":
     parser_R.set_defaults(func=resume_benchmark)
 
     args = parser.parse_args()
-    print(args)
 
     # correctly parsed? otherwise show help
     if hasattr(args, "func"):

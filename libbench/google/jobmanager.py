@@ -5,8 +5,8 @@ import cirq
 
 
 class GoogleJobManager(VendorJobManager):
-    def __init__(self, benchmark: GoogleBenchmark, additional_job_run_info: dict):
-        super().__init__(benchmark, additional_job_run_info)
+    def __init__(self, benchmark: GoogleBenchmark):
+        super().__init__(benchmark)
 
     def job_alive(self, promise):
         """

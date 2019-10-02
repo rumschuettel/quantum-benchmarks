@@ -10,9 +10,25 @@ from .. import SchroedingerMicroscopeBenchmarkMixin
 
 class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixin, IBMBenchmark):
     def __init__(
-        self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements
+        self,
+        num_post_selections,
+        num_pixels,
+        num_shots,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        add_measurements
     ):
-        super().__init__(num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots)
+        super().__init__(
+            num_post_selections,
+            num_pixels,
+            num_shots,
+            xmin,
+            xmax,
+            ymin,
+            ymax
+        )
 
         self.add_measurements = add_measurements
 
@@ -20,11 +36,11 @@ class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixi
         yield from IBMSchroedingerMicroscopeJob.job_factory(
             self.num_post_selections,
             self.num_pixels,
+            self.num_shots,
             self.xmin,
             self.xmax,
             self.ymin,
             self.ymax,
-            self.shots,
             self.add_measurements,
         )
 
@@ -36,12 +52,9 @@ class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase)
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
-    def __init__(
-        self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2, shots=100
-    ):
-        super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements=True
-        )
+    def __init__(self, *args, **kwargs):
+        kwargs.update({'add_measurements' : True})
+        super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
         counts = result.get_counts()
@@ -55,7 +68,7 @@ class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase)
             counts[success_post_process_key] if success_post_process_key in counts else 0
         )
         num_post_selected = num_post_selected_failures + num_post_selected_successes
-        psp = num_post_selected / self.shots
+        psp = num_post_selected / self.num_shots
         z = num_post_selected_successes / num_post_selected if num_post_selected > 0 else 0
 
         return {"psp": psp, "z": z}
@@ -68,10 +81,9 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(IBMSchroedingerMicroscopeBench
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2):
-        super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots=1, add_measurements=False
-        )
+    def __init__(self, *args, **kwargs):
+        kwargs.update({'add_measurements' : False})
+        super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
         psi = result.get_statevector()

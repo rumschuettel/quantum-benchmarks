@@ -35,3 +35,7 @@ class PlatonicFractalsBenchmarkMixin:
             psps[job.j, job.i] = result["psp"]
 
         return zs, psps
+
+def argparser(toadd):
+    parser = toadd.add_parser("Platonic-Fractals", help="Platonic Fractals benchmark.")
+    return parser
