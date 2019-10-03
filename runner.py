@@ -233,8 +233,8 @@ def visualize(args):
         for folder in glob.glob("./runs/*"):
             if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__":
                 collated_filepath = f"{folder}/{VendorJobManager.COLLATED_FILENAME}"
+                JOB_ID = os.path.basename(folder)
                 if os.path.isfile(collated_filepath):
-                    JOB_ID = os.path.basename(folder)
                     collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", 'rb'))
                     additional_stored_info = collated_file['additional_stored_info']
                     color = 'green' if os.path.isfile(f"{folder}/{VISUALIZATION_FILENAME}") else "yellow"
