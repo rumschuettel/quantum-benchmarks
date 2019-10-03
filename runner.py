@@ -110,17 +110,17 @@ def obtain_jobmanager(args):
 
     jobmanager.thaw(device)
 
-    return jobmanager
+    return jobmanager, device, slug['additional_stored_info']
 
 def resume_benchmark(args):
-    jobmanager = obtain_jobmanager(args)
+    jobmanager, device, slug = obtain_jobmanager(args)
 
     # run update
     _run_update(jobmanager, device, slug['additional_stored_info'])
 
 
 def print_status(args):
-    jobmanager = obtain_jobmanager(args)
+    jobmanager, *_ = obtain_jobmanager(args)
 
     # print the status message
     jobmanager.print_status()
