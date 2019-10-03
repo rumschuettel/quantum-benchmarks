@@ -110,7 +110,7 @@ def obtain_jobmanager(args):
 
     jobmanager.thaw(device)
 
-    return jobmanager, device, slug['additional_stored_info']
+    return jobmanager, device, slug
 
 def resume_benchmark(args):
     jobmanager, device, slug = obtain_jobmanager(args)
