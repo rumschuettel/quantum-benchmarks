@@ -89,12 +89,15 @@ class VendorJobManager(ABC):
                 print(f"Collated results written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
             return collated_result
         else:
-            print()
-            print_hl(f"Status update for {self.ID}:")
-            print_hl("Number of scheduled jobs:", len(self.scheduled), color = 'red')
-            print_hl("Number of queued jobs:", len(self.queued), color = 'yellow')
-            print_hl("Number of completed jobs:", len(self.results), color = 'green')
-            print()
+            self.print_status()
+
+    def print_status(self):
+        print()
+        print_hl(f"Status update for {self.ID}:")
+        print_hl("Number of scheduled jobs:", len(self.scheduled), color = 'red')
+        print_hl("Number of queued jobs:", len(self.queued), color = 'yellow')
+        print_hl("Number of completed jobs:", len(self.results), color = 'green')
+        print()
 
     def save(self, additional_stored_info):
         # freeze promise queue into something pickleable

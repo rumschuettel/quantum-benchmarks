@@ -94,7 +94,7 @@ def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_
 """
 
 
-def resume_benchmark(args):
+def obtain_jobmanager(args):
     JOBMANAGER_ID = args.jobmanager_id
     slug = VendorJobManager.load(JOBMANAGER_ID)
     jobmanager = slug["jobmanager"]
@@ -110,8 +110,20 @@ def resume_benchmark(args):
 
     jobmanager.thaw(device)
 
+    return jobmanager
+
+def resume_benchmark(args):
+    jobmanager = obtain_jobmanager(args)
+
     # run update
     _run_update(jobmanager, device, slug['additional_stored_info'])
+
+
+def print_status(args):
+    jobmanager = obtain_jobmanager(args)
+
+    # print the status message
+    jobmanager.print_status()
 
 
 """
@@ -309,6 +321,15 @@ if __name__ == "__main__":
     parser_V = subparsers.add_parser("visualize", help="Visualize completed benchmarks")
     parser_V.set_defaults(func=visualize)
     parser_V.add_argument("job_ids", nargs='*')
+
+    parser_S = subparsers.add_parser("status", help="Display the status of a benchmark.")
+    parser_S.add_argument(
+        "jobmanager_id",
+        metavar="JOBMANAGER_ID",
+        type=str,
+        help=f"old jobmanager id; subfolder name in f{VendorJobManager.RUN_FOLDER}"
+    )
+    parser_S.set_defaults(func=print_status)
 
     args = parser.parse_args()
 
