@@ -36,7 +36,7 @@ class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):
     """
 
     def __init__(
-        self, body=0, strength=0.93, num_steps=2, num_dirs_change=12, num_shots=1024, random_seed=42
+        self, body=0, strength=0.93, num_steps=2, num_dirs_change=42, num_shots=1024, random_seed=42
     ):
         super().__init__(
             body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements=True
@@ -75,7 +75,7 @@ class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, body=0, strength=0.93, num_steps=2, num_dirs_change=12, random_seed=42):
+    def __init__(self, body=0, strength=0.93, num_steps=2, num_dirs_change=42, random_seed=42):
         super().__init__(
             body, strength, num_steps, num_dirs_change, num_shots=1, random_seed=random_seed, add_measurements=False
         )

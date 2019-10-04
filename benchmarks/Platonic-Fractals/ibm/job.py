@@ -19,15 +19,16 @@ class IBMPlatonicFractalsJob(IBMJob):
         random.seed(random_seed)
 
         if body == 0 : #PlatonicFractalsBenchmarkMixin.BODY_OCTA
-            dirs = []
-            for j in range(1,num_steps):
-                dirs.append(random.randrange(1,3))
-            yield IBMPlatonicFractalsJob(
-                body, strength, dirs, 2, num_shots, add_measurements
-            ) 
-            yield IBMPlatonicFractalsJob(
-                body, strength, dirs, 3, num_shots, add_measurements
-            )
+            for i in range(num_dirs_change):
+                dirs = []
+                for j in range(num_steps):
+                    dirs.append(random.randrange(1,4))
+                yield IBMPlatonicFractalsJob(
+                    body, strength, dirs, 2, num_shots, add_measurements
+                ) 
+                yield IBMPlatonicFractalsJob(
+                    body, strength, dirs, 3, num_shots, add_measurements
+                )
         else : 
             print("This fractal is not yet implemented!")
             raise NotImplementedError
@@ -37,7 +38,7 @@ class IBMPlatonicFractalsJob(IBMJob):
  
         self.body = body
         self.strength = strength    
-        self.meas_Dirs = meas_dirs
+        self.meas_dirs = meas_dirs
         self.final_meas_dir = final_meas_dir
         self.shots = shots
         self.add_measurements = add_measurements  
@@ -57,16 +58,16 @@ class IBMPlatonicFractalsJob(IBMJob):
             else QuantumCircuit(len(meas_dirs)+1)
         )
         circuit.h(0)
-        for i in range(1,len(meas_dirs)): 
+        for i in range(len(meas_dirs)): 
             if meas_dirs[i]==2:
                 circuit.sdg(0)
             if meas_dirs[i]==1 or meas_dirs[i]==2:
                 circuit.h(0)                      
-            circuit.h(i)
-            circuit.rz(2*angle1,i)        
+            circuit.h(i+1)
+            circuit.rz(2*angle1,i+1)        
             #octa.crz(2*(angle2-angle1),qubit,ancillas[i])
-            circuit.crz(2*(pi/2-2*angle1),0,i)
-            circuit.h(i)         
+            circuit.crz(2*(pi/2-2*angle1),0,i+1)
+            circuit.h(i+1)         
             if meas_dirs[i]==1 or meas_dirs[i]==2:
                 circuit.h(0)
             if meas_dirs[i]==2:
@@ -76,8 +77,10 @@ class IBMPlatonicFractalsJob(IBMJob):
         if final_meas_dir==1 or final_meas_dir==2:
             circuit.h(0)
         if add_measurements:
+            #print(list(range(1,len(meas_dirs)+1))+[0])
+            #print([len(meas_dirs)-i for i in range(len(meas_dirs)+1)])
             circuit.measure(
-                range(1,len(meas_dirs))+[0], [len(meas_dirs)-i for i in range(len(meas_dirs)+1)]
+                list(range(1,len(meas_dirs)+1))+[0], [len(meas_dirs)-i for i in range(len(meas_dirs)+1)]
             )                
         # store the resulting circuit
         self.circuit = circuit
