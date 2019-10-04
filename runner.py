@@ -5,6 +5,7 @@ import glob
 import importlib
 import os
 import pickle
+import matplotlib.pyplot as plt
 
 from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
 
@@ -77,13 +78,19 @@ def import_visualize_function(name):
 """
 
 
-def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_info: dict):
+def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_info: dict, visualize: bool = False):
     result = jobmanager.update(device, additional_stored_info=additional_stored_info)
 
     if result is not None:
         print()
         print("Collated result:")
         print(result)
+        if visualize:
+            fig = handle_visualization(jobmanager.ID)
+            if isinstance(fig, plt.Figure):
+                plt.show()
+            else:
+                print("Could not display the visualization as the result was not a figure.")
 
     else:
         print(f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}")
@@ -168,6 +175,7 @@ def new_benchmark(args):
     VENDOR = args.vendor.lower()
     DEVICE = args.device.lower()
     BENCHMARK = args.benchmark
+    VISUALIZE = args.visualize
     MODE = MODE_CLASS_NAMES[args.mode]
 
     assert VENDOR in VENDORS, "vendor does not exist"
@@ -195,7 +203,7 @@ def new_benchmark(args):
         "device": DEVICE,
         "benchmark": BENCHMARK,
         **params
-    })
+    }, visualize = VISUALIZE)
 
 
 """
@@ -273,6 +281,11 @@ if __name__ == "__main__":
         metavar="DEVICE",
         type=str,
         help="device to use with chosen vendor; run ./runner.py info vendor VENDOR to get a list.",
+    )
+    parser_A.add_argument(
+        "--visualize",
+        action="store_true",
+        help="show the visualization if the benchmark completes directly."
     )
     subparsers_A = parser_A.add_subparsers(metavar="BENCHMARK", help="benchmark to run")
 
