@@ -40,6 +40,7 @@ class PlatonicFractalsBenchmarkMixin:
 
         return zs, psps
 
+<<<<<<< HEAD
     def visualize(self, points, figName):
         rcParams['figure.figsize'] = 7, 7
 
@@ -54,3 +55,8 @@ class PlatonicFractalsBenchmarkMixin:
 
         fig.savefig('figName')   # save the figure to file
         plt.close(fig)
+=======
+def argparser(toadd):
+    parser = toadd.add_parser("Platonic-Fractals", help="Platonic Fractals benchmark.")
+    return parser
+>>>>>>> 9d2d1f1025b47db464dafc9e08f751330d75dbbd

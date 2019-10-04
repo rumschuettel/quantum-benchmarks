@@ -10,7 +10,7 @@ from libbench.ibm import Job as IBMJob
 class IBMSchroedingerMicroscopeJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements
+        num_post_selections, num_pixels, shots, xmin, xmax, ymin, ymax, add_measurements
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])

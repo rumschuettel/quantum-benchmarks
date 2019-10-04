@@ -22,8 +22,8 @@ class GooglePromiseBase(ABC):
         raise NotImplementedError()
 
 
-class GooglePromise(GooglePromiseBase):
-    def __init__(self, circuit: cirq.Circuit, device, repetitions: int):
+class GoogleCloudPromise(GooglePromiseBase):
+    def __init__(self, circuit: cirq.Circuit, device, num_shots: int):
         raise NotImplementedError("The google api to their hardware is not available yet.")
 
     def job_id(self):
@@ -48,15 +48,11 @@ class GoogleLocalPromise(GooglePromiseBase):
         the result directly, we emulate this behavior here.
     """
 
-    def __init__(
-        self, circuit: cirq.Circuit, device, repetitions: int, simulate: bool, *args, **kwargs
-    ):
+    def __init__(self, circuit: cirq.Circuit, device):
         super().__init__()
 
         self.device = device
         self.circuit = circuit
-        self.repetitions = repetitions
-        self.simulate = simulate
         self._result = None
 
     def job_id(self):
@@ -73,16 +69,12 @@ class GoogleLocalPromise(GooglePromiseBase):
         """
         return "PENDING" if self._result is None else "DONE"
 
+    @abstractmethod
     def result(self):
         """
             Run the simulator if results are requested.
         """
-        if self._result is None:
-            if self.simulate:
-                self._result = self.device.simulate(self.circuit)
-            else:
-                self._result = self.device.run(self.circuit, repetitions=self.repetitions)
-        return self._result
+        raise NotImplementedError()
 
     def freeze(self):
         """
@@ -97,3 +89,23 @@ class GoogleLocalPromise(GooglePromiseBase):
             The real promise should probably have this method in the frozen instance class.
         """
         return self
+
+
+class GoogleMeasureLocalPromise(GoogleLocalPromise):
+    def __init__(self, *args, num_shots: int, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.num_shots = num_shots
+
+    def result(self):
+        if self._result is None:
+            self._result = self.device.run(self.circuit, repetitions=self.num_shots)
+        return self._result
+
+class GoogleStatevectorPromise(GoogleLocalPromise):
+    def __init__(self, *args, num_shots: int, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def result(self):
+        if self._result is None:
+            self._result = self.device.simulate(self.circuit)
+        return self._result

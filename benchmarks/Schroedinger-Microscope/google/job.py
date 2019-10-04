@@ -7,8 +7,6 @@ import numpy as np
 import cirq
 
 from libbench.google import Job as GoogleJob
-from libbench.google import Promise as GooglePromise
-from libbench.google import LocalPromise as GoogleLocalPromise
 
 
 class GoogleSchroedingerMicroscopeJob(GoogleJob):
@@ -16,13 +14,12 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
     def job_factory(
         num_post_selections,
         num_pixels,
+        num_shots,
         xmin,
         xmax,
         ymin,
         ymax,
-        shots,
         add_measurements,
-        promise_type: Union[GooglePromise, GoogleLocalPromise],
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -32,28 +29,26 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
             yield GoogleSchroedingerMicroscopeJob(
-                num_post_selections, z, add_measurements, i, j, shots, promise_type
+                num_post_selections, num_shots, z, add_measurements, i, j
             )
 
     def __init__(
         self,
         num_post_selections,
+        num_shots,
         z,
         add_measurements,
         i,
         j,
-        shots,
-        promise_type: Union[GooglePromise, GoogleLocalPromise],
     ):
         super().__init__()
 
         self.num_post_selections = num_post_selections
+        self.num_shots = num_shots
         self.add_measurements = add_measurements
         self.z = z
         self.i = i
         self.j = j
-        self.shots = shots
-        self.promise_type = promise_type
 
         # Calculate some parameters
         theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z) ** 2))
@@ -80,9 +75,8 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         # store the resulting circuit
         self.circuit = circuit
 
-    def run(self, device, *args, **kwargs):
-        kwargs.update({"repetitions": self.shots})
-        return self.promise_type(self.circuit, device, *args, **kwargs)
+    def run(self, device):
+        return device.execute(self.circuit, num_shots = self.num_shots)
 
     def __str__(self):
         return f"GoogleSchroedingerMicroscopeJob-{self.i}-{self.j}"

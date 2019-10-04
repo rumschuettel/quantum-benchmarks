@@ -6,21 +6,21 @@ from .benchmark import VendorBenchmark
 from .lib import benchmark_id, print_hl
 
 
+MAX_FAILURE_COUNT = 10
+
 class VendorJobManager(ABC):
     RUN_FOLDER = "./runs"
     JOBMANAGER_FILENAME = "jobmanager.pickle"
     COLLATED_FILENAME = "collated.pickle"
     JOBS_FOLDER = "jobs"
 
-    def __init__(self, benchmark: VendorBenchmark, additional_job_run_info: dict):
+    def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark
         self.scheduled = benchmark.get_jobs()
         self.ID = benchmark_id()
 
         self.queued = {}  # job: promise
         self.results = {}  # job: result
-
-        self.additional_job_run_info = additional_job_run_info
 
     def update(
         self,
@@ -29,13 +29,22 @@ class VendorJobManager(ABC):
         store_completed_job_results=True,
         store_collated_result=True,
         store_jobmanager=True,
+        display_status=True
     ) -> Optional[object]:
         # try to queue more jobs
         new_scheduled = []
+        failure_counter = 0
         for job in self.scheduled:
-            promise = job.run(device, **self.additional_job_run_info)
-            if self.queued_successfully(promise):
-                self.queued[job] = promise
+            if failure_counter < MAX_FAILURE_COUNT:
+                promise = job.run(device)
+                if self.queued_successfully(promise):
+                    print(f"{str(job)} successfully queued.")
+                    self.queued[job] = promise
+                    failure_counter = 0
+                else:
+                    print(f"Could not queue {str(job)}.")
+                    new_scheduled.append(job)
+                    failure_counter += 1
             else:
                 new_scheduled.append(job)
         self.scheduled = new_scheduled
@@ -73,8 +82,22 @@ class VendorJobManager(ABC):
             print_hl(f"benchmark {self.ID} completed.")
             collated_result = self.benchmark.collate_results(self.results)
             if store_collated_result:
-                self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
+                self._save_in_run_folder(self.COLLATED_FILENAME, {
+                    "collated_result": collated_result,
+                    "additional_stored_info": additional_stored_info
+                })
+                print(f"Collated results written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
             return collated_result
+        else:
+            self.print_status()
+
+    def print_status(self):
+        print()
+        print_hl(f"Status update for {self.ID}:")
+        print_hl("Number of scheduled jobs:", len(self.scheduled), color = 'red')
+        print_hl("Number of queued jobs:", len(self.queued), color = 'yellow')
+        print_hl("Number of completed jobs:", len(self.results), color = 'green')
+        print()
 
     def save(self, additional_stored_info):
         # freeze promise queue into something pickleable
@@ -84,8 +107,10 @@ class VendorJobManager(ABC):
             self.queued[job] = self.freeze_promise(self.queued[job])
 
         self._save_in_run_folder(
-            self.JOBMANAGER_FILENAME,
-            {"jobmanager": self, "additional_stored_info": additional_stored_info},
+            self.JOBMANAGER_FILENAME, {
+                "jobmanager": self,
+                "additional_stored_info": additional_stored_info
+            }
         )
 
         # restore queue
