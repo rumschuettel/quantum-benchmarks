@@ -2,61 +2,83 @@ import itertools as it
 from functools import reduce
 
 import numpy as np
+from math import pi
+from numpy import arccos,sqrt
+import random as random
 from qiskit import QuantumCircuit, execute
 
 from libbench.ibm import Job as IBMJob
 
+from .. import PlatonicFractalsBenchmarkMixin
 
 class IBMPlatonicFractalsJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements
+        body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
     ):
-        xs = np.linspace(xmin, xmax, num_pixels + 1)
-        xs = 0.5 * (xs[:-1] + xs[1:])
-        ys = np.linspace(ymin, ymax, num_pixels + 1)
-        ys = 0.5 * (ys[:-1] + ys[1:])
+        random.seed(random_seed)
 
-        for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
-            z = x + 1j * y
+        if body == 0 : #PlatonicFractalsBenchmarkMixin.BODY_OCTA
+            dirs = []
+            for j in range(1,num_steps):
+                dirs.append(random.randrange(1,3))
             yield IBMPlatonicFractalsJob(
-                num_post_selections, z, add_measurements, i, j, shots
+                body, strength, dirs, 2, num_shots, add_measurements
+            ) 
+            yield IBMPlatonicFractalsJob(
+                body, strength, dirs, 3, num_shots, add_measurements
             )
+        else : 
+            print("This fractal is not yet implemented!")
+            raise NotImplementedError
 
-    def __init__(self, num_post_selections, z, add_measurements, i, j, shots):
+    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
         super().__init__()
-
-        self.num_post_selections = num_post_selections
-        self.add_measurements = add_measurements
-        self.z = z
-        self.i = i
-        self.j = j
+ 
+        self.body = body
+        self.strength = strength    
+        self.meas_Dirs = meas_dirs
+        self.final_meas_dir = final_meas_dir
         self.shots = shots
+        self.add_measurements = add_measurements  
+
+        if not body == 0 : #PlatonicFractalsBenchmarkMixin.BODY_OCTA    
+            print("This fractal is not yet implemented!")
+            raise NotImplementedError
 
         # Calculate some parameters
-        theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z) ** 2))
-        phi = np.angle(z)
+        angle1=arccos(sqrt((1+strength)/2))
+        angle2=arccos(sqrt((1-strength)/2))
 
         # Build the circuit
         circuit = (
-            QuantumCircuit(2 ** num_post_selections, 2 ** num_post_selections)
+            QuantumCircuit(len(meas_dirs)+1,len(meas_dirs)+1)
             if add_measurements
-            else QuantumCircuit(2 ** num_post_selections)
+            else QuantumCircuit(len(meas_dirs)+1)
         )
-        for k in range(2 ** num_post_selections):
-            circuit.ry(theta, k)
-            circuit.rz(-phi, k)
-        for k in range(num_post_selections):
-            for l in range(0, 2 ** num_post_selections, 2 ** (k + 1)):
-                circuit.cx(l, l + 2 ** k)
-                circuit.s(l)
-                circuit.h(l)
-                circuit.s(l)
+        circuit.h(0)
+        for i in range(1,len(meas_dirs)): 
+            if meas_dirs[i]==2:
+                circuit.sdg(0)
+            if meas_dirs[i]==1 or meas_dirs[i]==2:
+                circuit.h(0)                      
+            circuit.h(i)
+            circuit.rz(2*angle1,i)        
+            #octa.crz(2*(angle2-angle1),qubit,ancillas[i])
+            circuit.crz(2*(pi/2-2*angle1),0,i)
+            circuit.h(i)         
+            if meas_dirs[i]==1 or meas_dirs[i]==2:
+                circuit.h(0)
+            if meas_dirs[i]==2:
+                circuit.s(0)
+        if final_meas_dir==2:
+            circuit.sdg(0)
+        if final_meas_dir==1 or final_meas_dir==2:
+            circuit.h(0)
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections))
-            )
-
+                range(1,len(meas_dirs))+[0], [len(meas_dirs)-i for i in range(len(meas_dirs)+1)]
+            )                
         # store the resulting circuit
         self.circuit = circuit
 
@@ -64,4 +86,4 @@ class IBMPlatonicFractalsJob(IBMJob):
         return execute(self.circuit, device, shots=self.shots)
 
     def __str__(self):
-        return f"IBMPlatonicFractalsJob-{self.i}-{self.j}"
+        return f"IBMPlatonicFractalsJob-{self.strength}-{self.meas_dirs}-{self.final_meas_dir}"

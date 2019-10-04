@@ -10,22 +10,21 @@ from .. import PlatonicFractalsBenchmarkMixin
 
 class IBMPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, IBMBenchmark):
     def __init__(
-        self, num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements
-    ):
-        super().__init__(num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots)
+        self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
+    ): 
+        super().__init__(body, strength, num_steps, num_dirs_change, num_shots, random_seed)
 
         self.add_measurements = add_measurements
 
     def get_jobs(self):
         yield from IBMPlatonicFractalsJob.job_factory(
-            self.num_post_selections,
-            self.num_pixels,
-            self.xmin,
-            self.xmax,
-            self.ymin,
-            self.ymax,
-            self.shots,
-            self.add_measurements,
+            self.body,
+            self.strength,
+            self.num_steps,
+            self.num_dirs_change,
+            self.num_shots,
+            self.random_seed,
+            self.add_measurements
         )
 
 
@@ -37,28 +36,36 @@ class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):
     """
 
     def __init__(
-        self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2, shots=100
+        self, body=0, strength=0.93, num_steps=2, num_dirs_change=12, num_shots=1024, random_seed=42
     ):
         super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots, add_measurements=True
+            body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements=True
         )
 
     def parse_result(self, job, result):
         counts = result.get_counts()
 
-        failure_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "0"
-        success_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "1"
-        num_post_selected_failures = (
-            counts[failure_post_process_key] if failure_post_process_key in counts else 0
-        )
-        num_post_selected_successes = (
-            counts[success_post_process_key] if success_post_process_key in counts else 0
-        )
-        num_post_selected = num_post_selected_failures + num_post_selected_successes
-        psp = num_post_selected / self.shots
-        z = num_post_selected_successes / num_post_selected if num_post_selected > 0 else 0
+        if self.body != 0 : #PlatonicFractalsBenchmarkMixin.BODY_OCTA    
+            print("This fractal is not yet implemented!")
+            raise NotImplementedError
 
-        return {"psp": psp, "z": z}
+        avg={}
+        total={}
+        state={}
+        for bits in counts:
+            if not bits[:-1] in total:
+                total[bits[:-1]]=0
+                avg[bits[:-1]]=0
+            total[bits[:-1]]+=counts[bits]   
+            avg[bits[:-1]]+=(-2*int(bits[-1])+1)*counts[bits]
+        for dir in total:
+            #if total[dir]>= threshold:
+            state[dir]=avg[dir]/total[dir]
+       
+        if job.final_meas_dir == 2 :
+            return {"dirs": job.meas_dirs, "ymeascounts": total, "ystates": state} #collections.OrderedDict(sorted(state.items()))
+        if job.final_meas_dir == 3 :
+            return {"dirs": job.meas_dirs, "zmeascounts": total, "zstates": state}            
 
 
 class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
@@ -68,15 +75,13 @@ class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, num_post_selections=1, num_pixels=4, xmin=-2, xmax=2, ymin=-2, ymax=2):
+    def __init__(self, body=0, strength=0.93, num_steps=2, num_dirs_change=12, random_seed=42):
         super().__init__(
-            num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots=1, add_measurements=False
+            body, strength, num_steps, num_dirs_change, num_shots=1, random_seed=random_seed, add_measurements=False
         )
+        print("Not implemented yet")
+        raise NotImplementedError        
 
-    def parse_result(self, job, result):
-        psi = result.get_statevector()
-
-        psp = np.linalg.norm(psi[:2]) ** 2
-        z = np.abs(psi[1]) ** 2 / psp if psp > 0 else 0
-
-        return {"psp": psp, "z": z}
+    def parse_result(self, job, result): # Not implemented yet
+        print("Not implemented yet")
+        raise NotImplementedError
