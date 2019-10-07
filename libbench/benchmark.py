@@ -11,12 +11,16 @@ class VendorBenchmark(ABC):
 
     @abstractmethod
     def get_jobs(self) -> List[VendorJob]:
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def parse_result(self, job, result):
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def collate_results(self, results: Dict[VendorJob, object]):
-        raise NotImplementedError()
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass

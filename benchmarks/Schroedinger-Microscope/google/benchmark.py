@@ -37,6 +37,9 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(
             self.add_measurements
         )
 
+    def __str__(self):
+        return "Google-Schroedinger-Microscope"
+
 
 class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmarkBase):
     """

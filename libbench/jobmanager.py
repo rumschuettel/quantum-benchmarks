@@ -6,18 +6,17 @@ from .benchmark import VendorBenchmark
 from .lib import benchmark_id, print_hl
 
 
-MAX_FAILURE_COUNT = 10
-
 class VendorJobManager(ABC):
     RUN_FOLDER = "./runs"
     JOBMANAGER_FILENAME = "jobmanager.pickle"
     COLLATED_FILENAME = "collated.pickle"
     JOBS_FOLDER = "jobs"
+    MAX_FAILURE_COUNT = 10
 
     def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark
         self.scheduled = benchmark.get_jobs()
-        self.ID = benchmark_id()
+        self.ID = str(benchmark) + "--" + benchmark_id()
 
         self.queued = {}  # job: promise
         self.results = {}  # job: result
@@ -35,7 +34,7 @@ class VendorJobManager(ABC):
         new_scheduled = []
         failure_counter = 0
         for job in self.scheduled:
-            if failure_counter < MAX_FAILURE_COUNT:
+            if failure_counter < self.MAX_FAILURE_COUNT:
                 promise = job.run(device)
                 if self.queued_successfully(promise):
                     print(f"{str(job)} successfully queued.")
@@ -139,26 +138,26 @@ class VendorJobManager(ABC):
 
     @abstractmethod
     def queued_successfully(self, promise) -> bool:
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def freeze_promise(self, promise):
         """
             transform promise into something we can pickle
         """
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def thaw_promise(self, promise_id, device):
         """
             restore promise from pickled object
         """
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def job_alive(self, promise) -> bool:
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def try_get_results(self, promise, device) -> Optional[object]:
-        raise NotImplementedError()
+        pass

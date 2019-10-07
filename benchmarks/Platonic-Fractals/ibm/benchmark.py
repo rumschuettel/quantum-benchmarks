@@ -27,6 +27,9 @@ class IBMPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, IBMBenchm
             self.add_measurements
         )
 
+    def __str__(self):
+        return "IBM-Platonic-Fractals"
+
 
 class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):
     """

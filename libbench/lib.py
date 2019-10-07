@@ -2,10 +2,10 @@ from termcolor import colored
 import os, binascii, time
 
 
-def benchmark_id(rnd_len=5):
+def benchmark_id(rnd_len=2):
     datepart = time.strftime("%Y-%m-%d--%H-%M")
     rndpart = binascii.b2a_hex(os.urandom(rnd_len)).decode("ascii")
-    return f"bench-{datepart}--{rndpart}"
+    return f"{datepart}--{rndpart}"
 
 
 def print_hl(*args, color="yellow", **kwargs):

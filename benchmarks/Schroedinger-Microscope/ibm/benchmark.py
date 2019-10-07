@@ -44,6 +44,9 @@ class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixi
             self.add_measurements,
         )
 
+    def __str__(self):
+        return "IBM-Schroedinger-Microscope"
+
 
 class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase):
     """
@@ -55,6 +58,7 @@ class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase)
     def __init__(self, *args, **kwargs):
         kwargs.update({'add_measurements' : True})
         super().__init__(*args, **kwargs)
+
 
     def parse_result(self, job, result):
         counts = result.get_counts()

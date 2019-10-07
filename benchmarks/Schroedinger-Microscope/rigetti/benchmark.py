@@ -40,6 +40,8 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(
             self.promise_type,
         )
 
+    def __str__(self):
+        return "Rigetti-Schroedinger-Microscope"
 
 class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """

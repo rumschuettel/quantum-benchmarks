@@ -9,11 +9,11 @@ class VendorJob(ABC):
 
     @abstractmethod
     def run(self, *args, id):
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def __str__(self):
-        raise NotImplementedError()
+        pass
 
 
 class VendorLink(ABC):
@@ -24,7 +24,7 @@ class VendorLink(ABC):
 
     @abstractmethod
     def get_devices(self) -> Dict[str, object]:
-        raise NotImplementedError()
+        pass
 
     def get_device(self, name):
         return self.get_devices()[name]

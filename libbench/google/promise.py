@@ -11,35 +11,22 @@ class GooglePromiseBase(ABC):
 
     @abstractmethod
     def job_id(self):
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def status(self):
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def result(self):
-        raise NotImplementedError()
+        pass
 
 
 class GoogleCloudPromise(GooglePromiseBase):
-    def __init__(self, circuit: cirq.Circuit, device, num_shots: int):
-        raise NotImplementedError("The google api to their hardware is not available yet.")
-
-    def job_id(self):
-        raise NotImplementedError()
-
-    def status(self):
-        raise NotImplementedError()
-
-    def result(self):
-        raise NotImplementedError()
-
-    def freeze(self):
-        raise NotImplementedError()
-
-    def thaw(self):
-        raise NotImplementedError()
+    """
+        Do not use - we don't know what the interface looks like yet
+    """
+    pass
 
 
 class GoogleLocalPromise(GooglePromiseBase):
