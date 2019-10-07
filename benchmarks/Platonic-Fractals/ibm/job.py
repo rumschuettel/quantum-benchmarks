@@ -3,13 +3,14 @@ from functools import reduce
 
 import numpy as np
 from math import pi
-from numpy import arccos,sqrt
+from numpy import arccos, sqrt
 import random as random
 from qiskit import QuantumCircuit, execute
 
 from libbench.ibm import Job as IBMJob
 
 from .. import PlatonicFractalsBenchmarkMixin
+
 
 class IBMPlatonicFractalsJob(IBMJob):
     @staticmethod
@@ -18,70 +19,67 @@ class IBMPlatonicFractalsJob(IBMJob):
     ):
         random.seed(random_seed)
 
-        if body == 0 : #PlatonicFractalsBenchmarkMixin.BODY_OCTA
+        if body == 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
             for i in range(num_dirs_change):
                 dirs = []
                 for j in range(num_steps):
-                    dirs.append(random.randrange(1,4))
-                yield IBMPlatonicFractalsJob(
-                    body, strength, dirs, 2, num_shots, add_measurements
-                ) 
-                yield IBMPlatonicFractalsJob(
-                    body, strength, dirs, 3, num_shots, add_measurements
-                )
-        else : 
+                    dirs.append(random.randrange(1, 4))
+                yield IBMPlatonicFractalsJob(body, strength, dirs, 2, num_shots, add_measurements)
+                yield IBMPlatonicFractalsJob(body, strength, dirs, 3, num_shots, add_measurements)
+        else:
             print("This fractal is not yet implemented!")
             raise NotImplementedError
 
     def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
         super().__init__()
- 
+
         self.body = body
-        self.strength = strength    
+        self.strength = strength
         self.meas_dirs = meas_dirs
         self.final_meas_dir = final_meas_dir
         self.shots = shots
-        self.add_measurements = add_measurements  
+        self.add_measurements = add_measurements
 
-        if not body == 0 : #PlatonicFractalsBenchmarkMixin.BODY_OCTA    
+        if not body == 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
             print("This fractal is not yet implemented!")
             raise NotImplementedError
 
         # Calculate some parameters
-        angle1=arccos(sqrt((1+strength)/2))
-        angle2=arccos(sqrt((1-strength)/2))
+        angle1 = arccos(sqrt((1 + strength) / 2))
+        angle2 = arccos(sqrt((1 - strength) / 2))
 
         # Build the circuit
         circuit = (
-            QuantumCircuit(len(meas_dirs)+1,len(meas_dirs)+1)
+            QuantumCircuit(len(meas_dirs) + 1, len(meas_dirs) + 1)
             if add_measurements
-            else QuantumCircuit(len(meas_dirs)+1)
+            else QuantumCircuit(len(meas_dirs) + 1)
         )
         circuit.h(0)
-        for i in range(len(meas_dirs)): 
-            if meas_dirs[i]==2:
+        for i in range(len(meas_dirs)):
+            if meas_dirs[i] == 2:
                 circuit.sdg(0)
-            if meas_dirs[i]==1 or meas_dirs[i]==2:
-                circuit.h(0)                      
-            circuit.h(i+1)
-            circuit.rz(2*angle1,i+1)        
-            #octa.crz(2*(angle2-angle1),qubit,ancillas[i])
-            circuit.crz(2*(pi/2-2*angle1),0,i+1)
-            circuit.h(i+1)         
-            if meas_dirs[i]==1 or meas_dirs[i]==2:
+            if meas_dirs[i] == 1 or meas_dirs[i] == 2:
                 circuit.h(0)
-            if meas_dirs[i]==2:
+            circuit.h(i + 1)
+            circuit.rz(2 * angle1, i + 1)
+            # octa.crz(2*(angle2-angle1),qubit,ancillas[i])
+            circuit.crz(2 * (pi / 2 - 2 * angle1), 0, i + 1)
+            circuit.h(i + 1)
+            if meas_dirs[i] == 1 or meas_dirs[i] == 2:
+                circuit.h(0)
+            if meas_dirs[i] == 2:
                 circuit.s(0)
-        if final_meas_dir==2:
+        if final_meas_dir == 2:
             circuit.sdg(0)
-        if final_meas_dir==1 or final_meas_dir==2:
+        if final_meas_dir == 1 or final_meas_dir == 2:
             circuit.h(0)
         if add_measurements:
-            #print(list(range(1,len(meas_dirs)+1))+[0])
-            #print([len(meas_dirs)-i for i in range(len(meas_dirs)+1)])
+            # print(list(range(1,len(meas_dirs)+1))+[0])
+            # print([len(meas_dirs)-i for i in range(len(meas_dirs)+1)])
             circuit.measure(
-                list(range(1,len(meas_dirs)+1))+[0], [len(meas_dirs)-i for i in range(len(meas_dirs)+1)]
-            )                
+                list(range(1, len(meas_dirs) + 1)) + [0],
+                [len(meas_dirs) - i for i in range(len(meas_dirs) + 1)],
+            )
         # store the resulting circuit
         self.circuit = circuit
 

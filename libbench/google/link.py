@@ -6,6 +6,7 @@ from .promise import GoogleMeasureLocalPromise
 from .promise import GoogleStatevectorPromise
 import cirq
 
+
 class GoogleDevice(ABC):
     @abstractmethod
     def execute(self, circuit: cirq.Circuit, num_shots: int):
@@ -17,7 +18,7 @@ class SparseSimulatorMeasureLocal(GoogleDevice):
         self.name = "sparse_simulator_measure_local"
 
     def execute(self, circuit, num_shots: int):
-        return GoogleMeasureLocalPromise(circuit, cirq.Simulator(), num_shots = num_shots)
+        return GoogleMeasureLocalPromise(circuit, cirq.Simulator(), num_shots=num_shots)
 
 
 class SparseSimulatorStatevector(GoogleDevice):
@@ -25,7 +26,7 @@ class SparseSimulatorStatevector(GoogleDevice):
         self.name = "sparse_simulator_statevector"
 
     def execute(self, circuit, num_shots: int):
-        return GoogleStatevectorPromise(circuit, cirq.Simulator(), num_shots = num_shots)
+        return GoogleStatevectorPromise(circuit, cirq.Simulator(), num_shots=num_shots)
 
 
 GOOGLE_STATEVECTOR_DEVICES = {
@@ -33,9 +34,7 @@ GOOGLE_STATEVECTOR_DEVICES = {
     # support for the density matrix simulator can be added later if necessary
 }
 
-GOOGLE_MEASURE_LOCAL_DEVICES = {
-    "sparse_simulator_measure_local": SparseSimulatorMeasureLocal()
-}
+GOOGLE_MEASURE_LOCAL_DEVICES = {"sparse_simulator_measure_local": SparseSimulatorMeasureLocal()}
 
 GOOGLE_CLOUD_DEVICES = {}
 

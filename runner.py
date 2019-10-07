@@ -15,11 +15,7 @@ from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
 """
 
 
-MODE_CLASS_NAMES = {
-    'cloud' : 'Cloud',
-    'measure_local' : 'MeasureLocal',
-    'statevector' : 'Statevector'
-}
+MODE_CLASS_NAMES = {"cloud": "Cloud", "measure_local": "MeasureLocal", "statevector": "Statevector"}
 
 # find runnable test modules and vendors
 BENCHMARKS = [
@@ -78,7 +74,12 @@ def import_visualize_function(name):
 """
 
 
-def _run_update(jobmanager: VendorJobManager, device: object, additional_stored_info: dict, visualize: bool = False):
+def _run_update(
+    jobmanager: VendorJobManager,
+    device: object,
+    additional_stored_info: dict,
+    visualize: bool = False,
+):
     result = jobmanager.update(device, additional_stored_info=additional_stored_info)
 
     if result is not None:
@@ -119,11 +120,12 @@ def obtain_jobmanager(args):
 
     return jobmanager, device, slug
 
+
 def resume_benchmark(args):
     jobmanager, device, slug = obtain_jobmanager(args)
 
     # run update
-    _run_update(jobmanager, device, slug['additional_stored_info'])
+    _run_update(jobmanager, device, slug["additional_stored_info"])
 
 
 def print_status(args):
@@ -146,7 +148,7 @@ def info_vendor(args):
         devices = link.get_devices()
         print(f"Available {mode} devices:")
         if len(devices) == 0:
-            print_hl("No devices available.", color='red')
+            print_hl("No devices available.", color="red")
         else:
             for name in devices:
                 print(name)
@@ -197,13 +199,12 @@ def new_benchmark(args):
     jobmanager = JobManager(Benchmark(**params))
 
     # run update
-    _run_update(jobmanager, device, {
-        "vendor": VENDOR,
-        "mode": MODE,
-        "device": DEVICE,
-        "benchmark": BENCHMARK,
-        **params
-    }, visualize = VISUALIZE)
+    _run_update(
+        jobmanager,
+        device,
+        {"vendor": VENDOR, "mode": MODE, "device": DEVICE, "benchmark": BENCHMARK, **params},
+        visualize=VISUALIZE,
+    )
 
 
 """
@@ -213,12 +214,12 @@ def new_benchmark(args):
 
 def handle_visualization(JOB_ID):
     folder = f"{VendorJobManager.RUN_FOLDER}/{JOB_ID}"
-    collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", 'rb'))
+    collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", "rb"))
     collated_result, additional_stored_info = (
-        collated_file['collated_result'],
-        collated_file['additional_stored_info']
+        collated_file["collated_result"],
+        collated_file["additional_stored_info"],
     )
-    BENCHMARK = additional_stored_info['benchmark']
+    BENCHMARK = additional_stored_info["benchmark"]
     visualize_function = import_visualize_function(BENCHMARK)
     fig = visualize_function(collated_result, additional_stored_info)
     visualization_file = f"{folder}/{VISUALIZATION_FILENAME}"
@@ -231,24 +232,30 @@ def visualize(args):
     JOB_IDS = args.job_ids
     if len(JOB_IDS) == 0:
         print("No job ids supplied, so displaying a list of available job ids.")
-        print("Color coding: ", end = '')
-        print_hl('running', color = 'red', end = '')
-        print(', ', end = '')
-        print_hl('done, no visualzation available', color = 'yellow', end = '')
-        print(', ', end = '')
-        print_hl('done, visualization available', color = 'green', end = '')
-        print('.')
+        print("Color coding: ", end="")
+        print_hl("running", color="red", end="")
+        print(", ", end="")
+        print_hl("done, no visualzation available", color="yellow", end="")
+        print(", ", end="")
+        print_hl("done, visualization available", color="green", end="")
+        print(".")
         for folder in glob.glob("./runs/*"):
             if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__":
                 collated_filepath = f"{folder}/{VendorJobManager.COLLATED_FILENAME}"
                 JOB_ID = os.path.basename(folder)
                 if os.path.isfile(collated_filepath):
-                    collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", 'rb'))
-                    additional_stored_info = collated_file['additional_stored_info']
-                    color = 'green' if os.path.isfile(f"{folder}/{VISUALIZATION_FILENAME}") else "yellow"
-                    print_hl(JOB_ID, additional_stored_info, color = color)
+                    collated_file = pickle.load(
+                        open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", "rb")
+                    )
+                    additional_stored_info = collated_file["additional_stored_info"]
+                    color = (
+                        "green"
+                        if os.path.isfile(f"{folder}/{VISUALIZATION_FILENAME}")
+                        else "yellow"
+                    )
+                    print_hl(JOB_ID, additional_stored_info, color=color)
                 else:
-                    print_hl(JOB_ID, color = 'red')
+                    print_hl(JOB_ID, color="red")
     else:
         for JOB_ID in JOB_IDS:
             handle_visualization(JOB_ID)
@@ -265,16 +272,10 @@ if __name__ == "__main__":
     parser_A = subparsers.add_parser("benchmark", help="Run new benchmark")
     parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
-        "vendor",
-        metavar="VENDOR",
-        type=str,
-        help=f"vendor to use; one of {', '.join(VENDORS)}"
+        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
     )
     parser_A.add_argument(
-        "mode",
-        metavar="MODE",
-        type=str,
-        help=f"mode to run; one of {', '.join(MODES)}"
+        "mode", metavar="MODE", type=str, help=f"mode to run; one of {', '.join(MODES)}"
     )
     parser_A.add_argument(
         "device",
@@ -285,7 +286,7 @@ if __name__ == "__main__":
     parser_A.add_argument(
         "--visualize",
         action="store_true",
-        help="show the visualization if the benchmark completes directly."
+        help="show the visualization if the benchmark completes directly.",
     )
     subparsers_A = parser_A.add_subparsers(metavar="BENCHMARK", help="benchmark to run")
 
@@ -297,7 +298,7 @@ if __name__ == "__main__":
 
     # info
     parser_I = subparsers.add_parser("info", help="Request information")
-    parser_I.set_defaults(func=lambda args : parser_I.print_help())
+    parser_I.set_defaults(func=lambda args: parser_I.print_help())
     subparsers_I = parser_I.add_subparsers(metavar="TYPE", help="Type of information requested")
 
     # vendor info
@@ -308,17 +309,17 @@ if __name__ == "__main__":
         metavar="VENDOR",
         type=str,
         default=False,
-        help=f"vendor to use; one of {', '.join(VENDORS)}"
+        help=f"vendor to use; one of {', '.join(VENDORS)}",
     )
 
     # benchmark info
     parser_IB = subparsers_I.add_parser("benchmark", help="Information about benchmarks")
-    parser_IB.set_defaults(func=lambda args: info_benchmark(parser_benchmarks,args))
+    parser_IB.set_defaults(func=lambda args: info_benchmark(parser_benchmarks, args))
     parser_IB.add_argument(
         "benchmark",
         metavar="BENCHMARK",
         type=str,
-        help=f"benchmark to use; one of {', '.join(BENCHMARKS)}"
+        help=f"benchmark to use; one of {', '.join(BENCHMARKS)}",
     )
 
     # resume benchmark
@@ -333,14 +334,14 @@ if __name__ == "__main__":
 
     parser_V = subparsers.add_parser("visualize", help="Visualize completed benchmarks")
     parser_V.set_defaults(func=visualize)
-    parser_V.add_argument("job_ids", nargs='*')
+    parser_V.add_argument("job_ids", nargs="*")
 
     parser_S = subparsers.add_parser("status", help="Display the status of a benchmark.")
     parser_S.add_argument(
         "jobmanager_id",
         metavar="JOBMANAGER_ID",
         type=str,
-        help=f"old jobmanager id; subfolder name in f{VendorJobManager.RUN_FOLDER}"
+        help=f"old jobmanager id; subfolder name in f{VendorJobManager.RUN_FOLDER}",
     )
     parser_S.set_defaults(func=print_status)
 

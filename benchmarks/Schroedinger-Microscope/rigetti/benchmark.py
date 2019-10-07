@@ -43,6 +43,7 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(
     def __str__(self):
         return "Rigetti-Schroedinger-Microscope"
 
+
 class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """
         Full SM Benchmark

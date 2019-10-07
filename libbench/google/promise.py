@@ -26,6 +26,7 @@ class GoogleCloudPromise(GooglePromiseBase):
     """
         Do not use - we don't know what the interface looks like yet
     """
+
     pass
 
 
@@ -87,6 +88,7 @@ class GoogleMeasureLocalPromise(GoogleLocalPromise):
         if self._result is None:
             self._result = self.device.run(self.circuit, repetitions=self.num_shots)
         return self._result
+
 
 class GoogleStatevectorPromise(GoogleLocalPromise):
     def __init__(self, *args, num_shots: int, **kwargs):

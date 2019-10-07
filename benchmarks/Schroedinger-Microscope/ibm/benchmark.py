@@ -10,25 +10,9 @@ from .. import SchroedingerMicroscopeBenchmarkMixin
 
 class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixin, IBMBenchmark):
     def __init__(
-        self,
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements
+        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
     ):
-        super().__init__(
-            num_post_selections,
-            num_pixels,
-            num_shots,
-            xmin,
-            xmax,
-            ymin,
-            ymax
-        )
+        super().__init__(num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax)
 
         self.add_measurements = add_measurements
 
@@ -56,9 +40,8 @@ class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase)
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.update({'add_measurements' : True})
+        kwargs.update({"add_measurements": True})
         super().__init__(*args, **kwargs)
-
 
     def parse_result(self, job, result):
         counts = result.get_counts()
@@ -86,7 +69,7 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(IBMSchroedingerMicroscopeBench
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.update({'add_measurements' : False})
+        kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):

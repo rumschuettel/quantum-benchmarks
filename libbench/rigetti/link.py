@@ -16,8 +16,7 @@ class RigettiLink(VendorLink):
 
     def get_devices(self):
         return {
-            n: pq.get_qc(n, as_qvm=False)
-            for n in pq.list_quantum_computers(qpus=True, qvms=False)
+            n: pq.get_qc(n, as_qvm=False) for n in pq.list_quantum_computers(qpus=True, qvms=False)
         }
 
 

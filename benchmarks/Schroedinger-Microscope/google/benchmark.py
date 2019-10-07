@@ -11,15 +11,7 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(
     SchroedingerMicroscopeBenchmarkMixin, GoogleBenchmark
 ):
     def __init__(
-        self,
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
+        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
     ):
         super().__init__(num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax)
 
@@ -34,7 +26,7 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(
             self.xmax,
             self.ymin,
             self.ymax,
-            self.add_measurements
+            self.add_measurements,
         )
 
     def __str__(self):
@@ -49,7 +41,7 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.update({'add_measurements' : True})
+        kwargs.update({"add_measurements": True})
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
@@ -81,7 +73,7 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscop
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.update({'add_measurements' : False})
+        kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):

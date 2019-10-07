@@ -2,13 +2,9 @@ from libbench.lib import print_hl
 from libbench.link import VendorJob, VendorLink
 
 
-IBM_KNOWN_STATEVECTOR_DEVICES = [
-    "statevector_simulator"
-]
+IBM_KNOWN_STATEVECTOR_DEVICES = ["statevector_simulator"]
 
-IBM_KNOWN_MEASURE_LOCAL_DEVICES = [
-    "qasm_simulator"
-]
+IBM_KNOWN_MEASURE_LOCAL_DEVICES = ["qasm_simulator"]
 
 
 class IBMJob(VendorJob):
@@ -21,6 +17,7 @@ class IBMCloudLink(VendorLink):
 
         # load accounts
         from qiskit import IBMQ
+
         IBMQ.load_account()
 
         # check whether we have accounts
@@ -40,13 +37,15 @@ class IBMMeasureLocalLink(VendorLink):
         super().__init__()
 
         from qiskit import Aer
+
         self.IBMQ_local = Aer
 
         print_hl("qiskit Aer loaded.")
 
     def get_devices(self):
         return {
-            device.name(): device for device in self.IBMQ_local.backends()
+            device.name(): device
+            for device in self.IBMQ_local.backends()
             if device.name() in IBM_KNOWN_MEASURE_LOCAL_DEVICES
         }
 
@@ -56,12 +55,14 @@ class IBMStatevectorLink(VendorLink):
         super().__init__()
 
         from qiskit import Aer
+
         self.IBMQ_local = Aer
 
         print_hl("qiskit Aer loaded.")
 
     def get_devices(self):
         return {
-            device.name(): device for device in self.IBMQ_local.backends()
+            device.name(): device
+            for device in self.IBMQ_local.backends()
             if device.name() in IBM_KNOWN_STATEVECTOR_DEVICES
         }

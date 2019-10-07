@@ -28,7 +28,7 @@ class VendorJobManager(ABC):
         store_completed_job_results=True,
         store_collated_result=True,
         store_jobmanager=True,
-        display_status=True
+        display_status=True,
     ) -> Optional[object]:
         # try to queue more jobs
         new_scheduled = []
@@ -81,11 +81,16 @@ class VendorJobManager(ABC):
             print_hl(f"benchmark {self.ID} completed.")
             collated_result = self.benchmark.collate_results(self.results)
             if store_collated_result:
-                self._save_in_run_folder(self.COLLATED_FILENAME, {
-                    "collated_result": collated_result,
-                    "additional_stored_info": additional_stored_info
-                })
-                print(f"Collated results written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
+                self._save_in_run_folder(
+                    self.COLLATED_FILENAME,
+                    {
+                        "collated_result": collated_result,
+                        "additional_stored_info": additional_stored_info,
+                    },
+                )
+                print(
+                    f"Collated results written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}."
+                )
             return collated_result
         else:
             self.print_status()
@@ -93,9 +98,9 @@ class VendorJobManager(ABC):
     def print_status(self):
         print()
         print_hl(f"Status update for {self.ID}:")
-        print_hl("Number of scheduled jobs:", len(self.scheduled), color = 'red')
-        print_hl("Number of queued jobs:", len(self.queued), color = 'yellow')
-        print_hl("Number of completed jobs:", len(self.results), color = 'green')
+        print_hl("Number of scheduled jobs:", len(self.scheduled), color="red")
+        print_hl("Number of queued jobs:", len(self.queued), color="yellow")
+        print_hl("Number of completed jobs:", len(self.results), color="green")
         print()
 
     def save(self, additional_stored_info):
@@ -106,10 +111,8 @@ class VendorJobManager(ABC):
             self.queued[job] = self.freeze_promise(self.queued[job])
 
         self._save_in_run_folder(
-            self.JOBMANAGER_FILENAME, {
-                "jobmanager": self,
-                "additional_stored_info": additional_stored_info
-            }
+            self.JOBMANAGER_FILENAME,
+            {"jobmanager": self, "additional_stored_info": additional_stored_info},
         )
 
         # restore queue
