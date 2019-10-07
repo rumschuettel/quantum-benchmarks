@@ -13,7 +13,9 @@ from libbench import VendorJob
 class PlatonicFractalsBenchmarkMixin:
     BODY_OCTA = 0
 
-    def __init__(self, body, strength, num_steps, num_dirs_change, num_shots, random_seed):
+    def __init__(
+        self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, **_
+    ):
         super().__init__()
 
         self.body = body
@@ -136,17 +138,6 @@ def argparser(toadd):
         default=random.randint(1, 100000000),
     )
     return parser
-
-
-def paramparser(args):
-    return {
-        "body": args.body,
-        "strength": args.strength,
-        "num_steps": args.num_steps,
-        "num_dirs_change": args.num_dirs_change,
-        "num_shots": args.num_shots,
-        "random_seed": args.random_seed,
-    }
 
 
 def default_visualization(collated_result, params=[]):

@@ -7,7 +7,9 @@ from libbench import VendorJob
 
 
 class SchroedingerMicroscopeBenchmarkMixin:
-    def __init__(self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax):
+    def __init__(
+        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, **_
+    ):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -63,18 +65,6 @@ def argparser(toadd):
     parser.add_argument("--ymin", type=int, help="Minimal y-value (default=-2)", default=-2)
     parser.add_argument("--ymax", type=int, help="Maximal y-value (default=2)", default=2)
     return parser
-
-
-def paramparser(args):
-    return {
-        "num_post_selections": args.num_post_selections,
-        "num_pixels": args.num_pixels,
-        "num_shots": args.num_shots,
-        "xmin": args.xmin,
-        "xmax": args.xmax,
-        "ymin": args.ymin,
-        "ymax": args.ymax,
-    }
 
 
 def default_visualization(collated_result, params):

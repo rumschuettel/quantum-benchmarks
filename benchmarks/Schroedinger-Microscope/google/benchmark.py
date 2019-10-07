@@ -11,7 +11,16 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(
     SchroedingerMicroscopeBenchmarkMixin, GoogleBenchmark
 ):
     def __init__(
-        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
+        self,
+        num_post_selections,
+        num_pixels,
+        num_shots,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        add_measurements,
+        **kwargs
     ):
         super().__init__(num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax)
 

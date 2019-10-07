@@ -23,6 +23,7 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(
         ymax,
         shots,
         promise_type: Union[RigettiPromise, RigettiLocalPromise],
+        **kwargs
     ):
         super().__init__(num_post_selections, num_pixels, xmin, xmax, ymin, ymax, shots)
 

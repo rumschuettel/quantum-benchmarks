@@ -9,10 +9,8 @@ from .. import PlatonicFractalsBenchmarkMixin
 
 
 class IBMPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, IBMBenchmark):
-    def __init__(
-        self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
-    ):
-        super().__init__(body, strength, num_steps, num_dirs_change, num_shots, random_seed)
+    def __init__(self, add_measurements, **kwargs):
+        super().__init__(**kwargs)
 
         self.add_measurements = add_measurements
 
@@ -38,18 +36,9 @@ class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
-    def __init__(
-        self, body=0, strength=0.93, num_steps=2, num_dirs_change=42, num_shots=1024, random_seed=42
-    ):
-        super().__init__(
-            body,
-            strength,
-            num_steps,
-            num_dirs_change,
-            num_shots,
-            random_seed,
-            add_measurements=True,
-        )
+    def __init__(self, *args, **kwargs):
+        kwargs.update({"add_measurements": True})
+        super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
         counts = result.get_counts()
@@ -88,16 +77,9 @@ class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, body=0, strength=0.93, num_steps=2, num_dirs_change=42, random_seed=42):
-        super().__init__(
-            body,
-            strength,
-            num_steps,
-            num_dirs_change,
-            num_shots=1,
-            random_seed=random_seed,
-            add_measurements=False,
-        )
+    def __init__(self, **kwargs):
+        kwargs.update({"add_measurements": False})
+        super().__init__(**kwargs)
         print("Not implemented yet")
         raise NotImplementedError
 

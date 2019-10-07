@@ -14,9 +14,6 @@ from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
     Definitions of constants
 """
 
-
-MODE_CLASS_NAMES = {"cloud": "Cloud", "measure_local": "MeasureLocal", "statevector": "Statevector"}
-
 # find runnable test modules and vendors
 BENCHMARKS = [
     os.path.basename(folder)
@@ -28,9 +25,9 @@ VENDORS = [
     for folder in glob.glob("./libbench/*")
     if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
 ]
-MODES = list(MODE_CLASS_NAMES.keys())
 
-VISUALIZATION_FILENAME = "visualization.eps"
+MODE_CLASS_NAMES = {"cloud": "Cloud", "measure_local": "MeasureLocal", "statevector": "Statevector"}
+MODES = list(MODE_CLASS_NAMES.keys())
 
 
 """
@@ -57,11 +54,6 @@ def import_argparser(name, toadd):
     benchmark_module = importlib.import_module(f"benchmarks.{name}")
     argparser = getattr(benchmark_module, "argparser")
     return argparser(toadd)
-
-
-def import_paramparser(name):
-    benchmark_module = importlib.import_module(f"benchmarks.{name}")
-    return getattr(benchmark_module, "paramparser")
 
 
 def import_visualize_function(name):
@@ -174,8 +166,8 @@ def info_benchmark(parser_benchmarks, args):
 
 
 def new_benchmark(args):
-    VENDOR = args.vendor.lower()
-    DEVICE = args.device.lower()
+    VENDOR = args.vendor
+    DEVICE = args.device
     BENCHMARK = args.benchmark
     VISUALIZE = args.visualize
     MODE = MODE_CLASS_NAMES[args.mode]
@@ -190,19 +182,21 @@ def new_benchmark(args):
     # check device exists
     assert DEVICE in link.get_devices(), "device does not exist"
 
-    paramparser = import_paramparser(BENCHMARK)
-    params = paramparser(args)
-
     device = link.get_device(DEVICE)
     Benchmark = import_benchmark(BENCHMARK, VENDOR, MODE, DEVICE)
     JobManager = import_jobmanager(VENDOR)
-    jobmanager = JobManager(Benchmark(**params))
+    jobmanager = JobManager(Benchmark(**vars(args)))
 
     # run update
     _run_update(
         jobmanager,
         device,
-        {"vendor": VENDOR, "mode": MODE, "device": DEVICE, "benchmark": BENCHMARK, **params},
+        additional_stored_info={
+            "vendor": VENDOR,
+            "mode": MODE,
+            "device": DEVICE,
+            "benchmark": BENCHMARK,
+        },
         visualize=VISUALIZE,
     )
 
@@ -210,6 +204,7 @@ def new_benchmark(args):
 """
     Visualization functions
 """
+VISUALIZATION_FILENAME = "visualization.eps"
 
 
 def handle_visualization(JOB_ID):

@@ -9,10 +9,8 @@ from .. import SchroedingerMicroscopeBenchmarkMixin
 
 
 class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixin, IBMBenchmark):
-    def __init__(
-        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
-    ):
-        super().__init__(num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax)
+    def __init__(self, add_measurements, **kwargs):
+        super().__init__(**kwargs)
 
         self.add_measurements = add_measurements
 
@@ -39,9 +37,9 @@ class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase)
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         kwargs.update({"add_measurements": True})
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
     def parse_result(self, job, result):
         counts = result.get_counts()
@@ -68,9 +66,9 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(IBMSchroedingerMicroscopeBench
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         kwargs.update({"add_measurements": False})
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
     def parse_result(self, job, result):
         psi = result.get_statevector()
