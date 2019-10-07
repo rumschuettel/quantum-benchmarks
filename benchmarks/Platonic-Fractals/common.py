@@ -1,4 +1,5 @@
 from typing import Dict
+from pathlib import Path
 
 import numpy as np
 from math import pi
@@ -13,9 +14,7 @@ from libbench import VendorJob
 class PlatonicFractalsBenchmarkMixin:
     BODY_OCTA = 0
 
-    def __init__(
-        self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, **_
-    ):
+    def __init__(self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, **_):
         super().__init__()
 
         self.body = body
@@ -27,7 +26,7 @@ class PlatonicFractalsBenchmarkMixin:
 
         print("Random seed: " + str(random_seed))
 
-    def collate_results(self, results: Dict[VendorJob, object], threshold=300):
+    def collate_results(self, results: Dict[VendorJob, object], path: Path, threshold=300):
         dirStats = {}
 
         # fill in with values from jobs
@@ -96,6 +95,22 @@ class PlatonicFractalsBenchmarkMixin:
 
         return points
 
+    def visualize(self, collated_result: object, path: Path):
+        # def visualize(self, points, figName):
+        rcParams["figure.figsize"] = 7, 7
+
+        theta = np.arange(0, 2 * np.pi, 0.004)
+
+        fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
+        plt.plot(1 * np.cos(theta), 1 * np.sin(theta), color="#14498C")  #'#A3E3D9'#'#14498C'
+        plt.scatter(*zip(*collated_result), color="#A3E3D9")  #'#3ACC23'
+        ax.set_facecolor("xkcd:black")  #'xkcd:salmon'
+        ax.set_xlim([-1.1, 1.1])
+        ax.set_ylim([-1.1, 1.1])
+
+        fig.savefig(path / "visualize.pdf")  # save the figure to file
+        return fig
+
 
 def argparser(toadd):
     parser = toadd.add_parser("Platonic-Fractals", help="Platonic Fractals benchmark.")
@@ -138,21 +153,3 @@ def argparser(toadd):
         default=random.randint(1, 100000000),
     )
     return parser
-
-
-def default_visualization(collated_result, params=[]):
-    # def visualize(self, points, figName):
-    rcParams["figure.figsize"] = 7, 7
-
-    theta = np.arange(0, 2 * np.pi, 0.004)
-
-    fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
-    plt.plot(1 * np.cos(theta), 1 * np.sin(theta), color="#14498C")  #'#A3E3D9'#'#14498C'
-    plt.scatter(*zip(*collated_result), color="#A3E3D9")  #'#3ACC23'
-    ax.set_facecolor("xkcd:black")  #'xkcd:salmon'
-    ax.set_xlim([-1.1, 1.1])
-    ax.set_ylim([-1.1, 1.1])
-
-    # fig.savefig('figName') # save the figure to file
-    # plt.close(fig)
-    return fig

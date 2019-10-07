@@ -1,6 +1,7 @@
 import pickle, os
+from pathlib import Path
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Callable
 
 from .benchmark import VendorBenchmark
 from .lib import benchmark_id, print_hl
@@ -10,6 +11,7 @@ class VendorJobManager(ABC):
     RUN_FOLDER = "./runs"
     JOBMANAGER_FILENAME = "jobmanager.pickle"
     COLLATED_FILENAME = "collated.pickle"
+    VISUALIZED_FILENAME = "visualized.pickle"
     JOBS_FOLDER = "jobs"
     MAX_FAILURE_COUNT = 10
 
@@ -25,8 +27,8 @@ class VendorJobManager(ABC):
         self,
         device,
         additional_stored_info: Optional[dict] = None,
+        figure_callback: Callable = lambda *_: None,
         store_completed_job_results=True,
-        store_collated_result=True,
         store_jobmanager=True,
         display_status=True,
     ) -> Optional[object]:
@@ -76,32 +78,74 @@ class VendorJobManager(ABC):
         if store_jobmanager:
             self.save(additional_stored_info)
 
-        # if all are done, we can collate the results and potentially store it
+        # if all are done, we can finalize the result
         if len(self.scheduled) == 0 and len(self.queued) == 0:
             print_hl(f"benchmark {self.ID} completed.")
-            collated_result = self.benchmark.collate_results(self.results)
-            if store_collated_result:
-                self._save_in_run_folder(
-                    self.COLLATED_FILENAME,
-                    {
-                        "collated_result": collated_result,
-                        "additional_stored_info": additional_stored_info,
-                    },
-                )
-                print(
-                    f"Collated results written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}."
-                )
-            return collated_result
-        else:
-            self.print_status()
+            self.finalize(figure_callback)
+            return True
 
-    def print_status(self):
-        print()
-        print_hl(f"Status update for {self.ID}:")
-        print_hl("Number of scheduled jobs:", len(self.scheduled), color="red")
-        print_hl("Number of queued jobs:", len(self.queued), color="yellow")
-        print_hl("Number of completed jobs:", len(self.results), color="green")
-        print()
+        # otherwise print status
+        self.print_legend()
+        self.print_status()
+        return False
+
+    def finalize(
+        self,
+        figure_callback=lambda *_: None,
+        backup_collated_result=True,
+        backup_visualized_result=False,
+    ):
+        """
+            collate results, visualize, and call visualization callback
+        """
+        path = Path(self.RUN_FOLDER) / self.ID
+
+        collated_result = self.benchmark.collate_results(self.results, path)
+        print("Collated.")
+
+        if backup_collated_result:
+            self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
+            print(f"Backup written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
+
+        visualized_result = self.benchmark.visualize(collated_result, path)
+        figure_callback(visualized_result)
+        print("Visualized.")
+
+        if backup_visualized_result:
+            self._save_in_run_folder(self.VISUALIZED_FILENAME, visualized_result)
+            print(f"Backup  written to {self.RUN_FOLDER}/{self.ID}/{self.VISUALIZED_FILENAME}.")
+
+        return True
+
+    @staticmethod
+    def print_legend():
+        print("Job status: ", end="")
+        print_hl("scheduled", color="red", end=" ")
+        print_hl("queued", color="yellow", end=" ")
+        print_hl("completed", color="green", end="")
+        print(".")
+
+    def print_status(self, tail: str = ""):
+        status = self.status()
+
+        print(self.ID, end=": ")
+        print_hl(str(status["scheduled"]), color="red", end=" ")
+        print_hl(str(status["queued"]), color="yellow", end=" ")
+        print_hl(str(status["completed"]), color="green", end=" ")
+
+        print(tail)
+
+    def status(self):
+        return {
+            "scheduled": len(self.scheduled),
+            "queued": len(self.queued),
+            "completed": len(self.results),
+        }
+
+    @property
+    def done(self):
+        status = self.status()
+        return status["scheduled"] == 0 and status["queued"] == 0
 
     def save(self, additional_stored_info):
         # freeze promise queue into something pickleable

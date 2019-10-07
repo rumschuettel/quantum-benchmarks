@@ -44,8 +44,7 @@ class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):
         counts = result.get_counts()
 
         if self.body != 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
-            print("This fractal is not yet implemented!")
-            raise NotImplementedError
+            raise NotImplementedError("This fractal has not been implemented")
 
         avg = {}
         total = {}
@@ -77,12 +76,10 @@ class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
         The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         kwargs.update({"add_measurements": False})
-        super().__init__(**kwargs)
-        print("Not implemented yet")
-        raise NotImplementedError
+        super().__init__(*args, **kwargs)
+        raise NotImplementedError()
 
-    def parse_result(self, job, result):  # Not implemented yet
-        print("Not implemented yet")
-        raise NotImplementedError
+    def parse_result(self, job, result):
+        raise NotImplementedError()

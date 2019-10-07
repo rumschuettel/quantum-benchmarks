@@ -5,6 +5,9 @@ import glob
 import importlib
 import os
 import pickle
+import matplotlib
+
+matplotlib.use("Cairo")  # backend without X server requirements
 import matplotlib.pyplot as plt
 
 from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
@@ -56,47 +59,8 @@ def import_argparser(name, toadd):
     return argparser(toadd)
 
 
-def import_visualize_function(name):
-    benchmark_module = importlib.import_module(f"benchmarks.{name}")
-    return getattr(benchmark_module, "default_visualization")
-
-
-"""
-    Benchmark step
-"""
-
-
-def _run_update(
-    jobmanager: VendorJobManager,
-    device: object,
-    additional_stored_info: dict,
-    visualize: bool = False,
-):
-    result = jobmanager.update(device, additional_stored_info=additional_stored_info)
-
-    if result is not None:
-        print()
-        print("Collated result:")
-        print(result)
-        if visualize:
-            fig = handle_visualization(jobmanager.ID)
-            if isinstance(fig, plt.Figure):
-                plt.show()
-            else:
-                print("Could not display the visualization as the result was not a figure.")
-
-    else:
-        print(f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}")
-
-
-"""
-    Run mode of ./runner.py
-"""
-
-
-def obtain_jobmanager(args):
-    JOBMANAGER_ID = args.jobmanager_id
-    slug = VendorJobManager.load(JOBMANAGER_ID)
+def obtain_jobmanager(job_id, recreate_device):
+    slug = VendorJobManager.load(job_id)
     jobmanager = slug["jobmanager"]
 
     # restore stuff saved along job manager to recreate device where we run the benchmark on
@@ -105,30 +69,19 @@ def obtain_jobmanager(args):
         slug["additional_stored_info"]["device"],
         slug["additional_stored_info"]["mode"],
     )
-    link = import_link(VENDOR, MODE)()
-    device = link.get_device(DEVICE)
 
-    jobmanager.thaw(device)
+    device = None
+    if recreate_device:
+        link = import_link(VENDOR, MODE)()
+        device = link.get_device(DEVICE)
+
+        jobmanager.thaw(device)
 
     return jobmanager, device, slug
 
 
-def resume_benchmark(args):
-    jobmanager, device, slug = obtain_jobmanager(args)
-
-    # run update
-    _run_update(jobmanager, device, slug["additional_stored_info"])
-
-
-def print_status(args):
-    jobmanager, *_ = obtain_jobmanager(args)
-
-    # print the status message
-    jobmanager.print_status()
-
-
 """
-    Vendor information helper function
+    INFO
 """
 
 
@@ -147,11 +100,6 @@ def info_vendor(args):
         print()
 
 
-"""
-    Benchmark information helper function
-"""
-
-
 def info_benchmark(parser_benchmarks, args):
     BENCHMARK = args.benchmark
     assert BENCHMARK in BENCHMARKS
@@ -161,15 +109,41 @@ def info_benchmark(parser_benchmarks, args):
 
 
 """
-    New benchmark starter function
+    BENCHMARK and RESUME
 """
+
+
+def _show_figure(fig):
+    matplotlib.use("GTK3Cairo")  # GUI backend
+    fig.show()
+
+
+def _run_update(
+    jobmanager: VendorJobManager,
+    device: object,
+    additional_stored_info: dict,
+    show_directly: bool = False,
+):
+    if not jobmanager.update(
+        device,
+        additional_stored_info=additional_stored_info,
+        figure_callback=_show_figure if show_directly else lambda *x: None,
+    ):
+        print(f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}")
+
+
+def resume_benchmark(args):
+    JOB_ID = args.job_id
+    jobmanager, device, slug = obtain_jobmanager(JOB_ID, recreate_device=True)
+
+    # run update
+    _run_update(jobmanager, device, slug["additional_stored_info"])
 
 
 def new_benchmark(args):
     VENDOR = args.vendor
     DEVICE = args.device
     BENCHMARK = args.benchmark
-    VISUALIZE = args.visualize
     MODE = MODE_CLASS_NAMES[args.mode]
 
     assert VENDOR in VENDORS, "vendor does not exist"
@@ -197,63 +171,49 @@ def new_benchmark(args):
             "device": DEVICE,
             "benchmark": BENCHMARK,
         },
-        visualize=VISUALIZE,
+        show_directly=args.show_directly,
     )
 
 
 """
-    Visualization functions
+    REFRESH
 """
-VISUALIZATION_FILENAME = "visualization.eps"
 
 
-def handle_visualization(JOB_ID):
-    folder = f"{VendorJobManager.RUN_FOLDER}/{JOB_ID}"
-    collated_file = pickle.load(open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", "rb"))
-    collated_result, additional_stored_info = (
-        collated_file["collated_result"],
-        collated_file["additional_stored_info"],
-    )
-    BENCHMARK = additional_stored_info["benchmark"]
-    visualize_function = import_visualize_function(BENCHMARK)
-    fig = visualize_function(collated_result, additional_stored_info)
-    visualization_file = f"{folder}/{VISUALIZATION_FILENAME}"
-    fig.savefig(visualization_file)
-    print(f"Wrote the visualization of {JOB_ID} to {visualization_file}.")
-    return fig
+def _get_job_ids():
+    return [
+        os.path.basename(folder)
+        for folder in glob.glob(f"{VendorJobManager.RUN_FOLDER}/*")
+        if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
+    ]
 
 
-def visualize(args):
-    JOB_IDS = args.job_ids
-    if len(JOB_IDS) == 0:
-        print("No job ids supplied, so displaying a list of available job ids.")
-        print("Color coding: ", end="")
-        print_hl("running", color="red", end="")
-        print(", ", end="")
-        print_hl("done, no visualzation available", color="yellow", end="")
-        print(", ", end="")
-        print_hl("done, visualization available", color="green", end="")
-        print(".")
-        for folder in glob.glob("./runs/*"):
-            if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__":
-                collated_filepath = f"{folder}/{VendorJobManager.COLLATED_FILENAME}"
-                JOB_ID = os.path.basename(folder)
-                if os.path.isfile(collated_filepath):
-                    collated_file = pickle.load(
-                        open(f"{folder}/{VendorJobManager.COLLATED_FILENAME}", "rb")
-                    )
-                    additional_stored_info = collated_file["additional_stored_info"]
-                    color = (
-                        "green"
-                        if os.path.isfile(f"{folder}/{VISUALIZATION_FILENAME}")
-                        else "yellow"
-                    )
-                    print_hl(JOB_ID, additional_stored_info, color=color)
-                else:
-                    print_hl(JOB_ID, color="red")
-    else:
-        for JOB_ID in JOB_IDS:
-            handle_visualization(JOB_ID)
+def refresh(args):
+    ALL = args.all
+    job_ids = args.job_ids if not ALL else _get_job_ids()
+
+    for JOB_ID in job_ids:
+        print(f"refreshing {JOB_ID}...", end=" ")
+        jobmanager, *_ = obtain_jobmanager(JOB_ID, recreate_device=False)
+
+        if jobmanager.done:
+            jobmanager.finalize()
+            print("done.")
+        else:
+            print("not done yet.")
+
+
+"""
+    STATUS
+"""
+
+
+def status(args):
+    VendorJobManager.print_legend()
+
+    for job_id in _get_job_ids():
+        jobmanager, _, slug = obtain_jobmanager(job_id, recreate_device=False)
+        jobmanager.print_status(tail=slug["additional_stored_info"])
 
 
 if __name__ == "__main__":
@@ -279,7 +239,7 @@ if __name__ == "__main__":
         help="device to use with chosen vendor; run ./runner.py info vendor VENDOR to get a list.",
     )
     parser_A.add_argument(
-        "--visualize",
+        "--show_directly",
         action="store_true",
         help="show the visualization if the benchmark completes directly.",
     )
@@ -321,24 +281,23 @@ if __name__ == "__main__":
     parser_R = subparsers.add_parser("resume", help="Resume old benchmark")
     parser_R.set_defaults(func=resume_benchmark)
     parser_R.add_argument(
-        "jobmanager_id",
-        metavar="JOBMANAGER_ID",
+        "job_id",
+        metavar="JOB_ID",
         type=str,
-        help=f"old jobmanager id; subfolder name in f{VendorJobManager.RUN_FOLDER}",
+        help=f"old job id; subfolder name in f{VendorJobManager.RUN_FOLDER}",
     )
 
-    parser_V = subparsers.add_parser("visualize", help="Visualize completed benchmarks")
-    parser_V.set_defaults(func=visualize)
+    # update collation and visualization steps of jobmanager
+    parser_V = subparsers.add_parser(
+        "refresh", help="Update already completed benchmarks from individual job runs."
+    )
+    parser_V.set_defaults(func=refresh)
+    parser_V.add_argument("--all", action="store_true", help="refresh all completed benchmarks")
     parser_V.add_argument("job_ids", nargs="*")
 
-    parser_S = subparsers.add_parser("status", help="Display the status of a benchmark.")
-    parser_S.add_argument(
-        "jobmanager_id",
-        metavar="JOBMANAGER_ID",
-        type=str,
-        help=f"old jobmanager id; subfolder name in f{VendorJobManager.RUN_FOLDER}",
-    )
-    parser_S.set_defaults(func=print_status)
+    # benchmark status
+    parser_S = subparsers.add_parser("status", help="Display the status of all benchmarks.")
+    parser_S.set_defaults(func=status)
 
     args = parser.parse_args()
 

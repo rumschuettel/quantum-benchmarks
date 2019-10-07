@@ -1,4 +1,5 @@
 from typing import Dict
+from pathlib import Path
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,9 +8,7 @@ from libbench import VendorJob
 
 
 class SchroedingerMicroscopeBenchmarkMixin:
-    def __init__(
-        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, **_
-    ):
+    def __init__(self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, **_):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -20,7 +19,7 @@ class SchroedingerMicroscopeBenchmarkMixin:
         self.ymin = ymin
         self.ymax = ymax
 
-    def collate_results(self, results: Dict[VendorJob, object]):
+    def collate_results(self, results: Dict[VendorJob, object], path: Path):
         # get array dimensions right
         xs = np.linspace(self.xmin, self.xmax, self.num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -39,6 +38,34 @@ class SchroedingerMicroscopeBenchmarkMixin:
             psps[job.j, job.i] = result["psp"]
 
         return zs, psps
+
+    def visualize(self, collated_result: object, path: Path):
+        # Unpack the collated result
+        zs, psps = collated_result
+        extent = (self.xmin, self.xmax, self.ymin, self.ymax)
+
+        # Set up the figure
+        fig = plt.figure(figsize=(12, 8))
+        ax_psps = fig.add_subplot(1, 2, 1)
+        ax_sps = fig.add_subplot(1, 2, 2)
+
+        # Draw the postselection probabilities
+        ax_psps.imshow(psps, cmap="gray", extent=extent, vmin=0, vmax=1)
+        ax_psps.set_title(f"PSP({self.num_post_selections},{self.num_pixels},{self.num_shots})")
+        ax_psps.set_xlabel("Re(z)")
+        ax_psps.set_ylabel("Im(z)")
+
+        # Draw the success probabilities
+        ax_sps.imshow(zs, cmap="gray", extent=extent, vmin=0, vmax=1)
+        ax_sps.set_title(f"SP({self.num_post_selections},{self.num_pixels},{self.num_shots})")
+        ax_sps.set_xlabel("Re(z)")
+        ax_sps.set_ylabel("Im(z)")
+
+        # save figure
+        fig.savefig(path / "visualize.pdf")
+
+        # Return the figure
+        return fig
 
 
 def argparser(toadd):
@@ -65,35 +92,3 @@ def argparser(toadd):
     parser.add_argument("--ymin", type=int, help="Minimal y-value (default=-2)", default=-2)
     parser.add_argument("--ymax", type=int, help="Maximal y-value (default=2)", default=2)
     return parser
-
-
-def default_visualization(collated_result, params):
-
-    # Unpack the collated result
-    zs, psps = collated_result
-    num_post_selections, num_pixels, num_shots = (
-        params["num_post_selections"],
-        params["num_pixels"],
-        params["num_shots"],
-    )
-    extent = (params["xmin"], params["xmax"], params["ymin"], params["ymax"])
-
-    # Set up the figure
-    fig = plt.figure(figsize=(12, 8))
-    ax_psps = fig.add_subplot(1, 2, 1)
-    ax_sps = fig.add_subplot(1, 2, 2)
-
-    # Draw the
-    ax_psps.imshow(psps, cmap="gray", extent=extent, vmin=0, vmax=1)
-    ax_psps.set_title(f"PSP({num_post_selections},{num_pixels},{num_shots})")
-    ax_psps.set_xlabel("Re(z)")
-    ax_psps.set_ylabel("Im(z)")
-
-    # Draw the success probabilities
-    ax_sps.imshow(zs, cmap="gray", extent=extent, vmin=0, vmax=1)
-    ax_sps.set_title(f"SP({num_post_selections},{num_pixels},{num_shots})")
-    ax_sps.set_xlabel("Re(z)")
-    ax_sps.set_ylabel("Im(z)")
-
-    # Return the figure
-    return fig
