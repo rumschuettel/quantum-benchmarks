@@ -68,27 +68,27 @@ class SchroedingerMicroscopeBenchmarkMixin:
         return fig
 
 
-def argparser(toadd):
-    parser = toadd.add_parser("Schroedinger-Microscope", help="Schroedinger microscope benchmark.")
+def argparser(toadd, **argparse_options):
+    parser = toadd.add_parser("Schroedinger-Microscope", help="Schroedinger microscope benchmark.", **argparse_options)
     parser.add_argument(
         "-ps",
         "--num_post_selections",
         type=int,
-        help="Number of post selections rounds. (default=1)",
+        help="Number of post selections rounds",
         default=1,
     )
     parser.add_argument(
-        "-p", "--num_pixels", type=int, help="Number of pixels. (default=4)", default=4
+        "-p", "--num_pixels", type=int, help="Number of pixels", default=4
     )
     parser.add_argument(
         "-s",
         "--num_shots",
         type=int,
-        help="Number of shots per pixel. (default=1024)",
+        help="Number of shots per pixel",
         default=1024,
     )
-    parser.add_argument("--xmin", type=int, help="Minimal x-value (default=-2)", default=-2)
-    parser.add_argument("--xmax", type=int, help="Maximal x-value (default=2)", default=2)
-    parser.add_argument("--ymin", type=int, help="Minimal y-value (default=-2)", default=-2)
-    parser.add_argument("--ymax", type=int, help="Maximal y-value (default=2)", default=2)
+    parser.add_argument("--xmin", type=int, help="Minimal x-value", default=-2)
+    parser.add_argument("--xmax", type=int, help="Maximal x-value", default=2)
+    parser.add_argument("--ymin", type=int, help="Minimal y-value", default=-2)
+    parser.add_argument("--ymax", type=int, help="Maximal y-value", default=2)
     return parser

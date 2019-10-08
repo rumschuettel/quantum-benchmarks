@@ -53,10 +53,10 @@ def import_jobmanager(vendor):
     return getattr(vendor_module, "JobManager")
 
 
-def import_argparser(name, toadd):
+def import_argparser(name, toadd, **argparse_options):
     benchmark_module = importlib.import_module(f"benchmarks.{name}")
     argparser = getattr(benchmark_module, "argparser")
-    return argparser(toadd)
+    return argparser(toadd, **argparse_options)
 
 
 def obtain_jobmanager(job_id, recreate_device):
@@ -220,11 +220,14 @@ if __name__ == "__main__":
     print_hl("qυanтυм вencнмarĸιng ѕυιтe\n", color="cyan")
 
     # arguments
-    parser = argparse.ArgumentParser(description="Quantum Benchmark")
+    argparse_options = {
+        "formatter_class": argparse.ArgumentDefaultsHelpFormatter
+    }
+    parser = argparse.ArgumentParser(description="Quantum Benchmark", **argparse_options)
     subparsers = parser.add_subparsers(metavar="ACTION", help="Action you want to take")
 
     # new benchmark
-    parser_A = subparsers.add_parser("benchmark", help="Run new benchmark")
+    parser_A = subparsers.add_parser("benchmark", help="Run new benchmark", **argparse_options)
     parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
         "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
@@ -243,21 +246,26 @@ if __name__ == "__main__":
         action="store_true",
         help="show the visualization if the benchmark completes directly.",
     )
+    parser_A.add_argument(
+        "--runpath",
+        default=VendorJobManager.RUN_FOLDER,
+        help=f"folder to store benchmark jobs in; created if it does not exist"
+    )
     subparsers_A = parser_A.add_subparsers(metavar="BENCHMARK", help="benchmark to run")
 
     parser_benchmarks = {}
     for benchmark in BENCHMARKS:
-        parser_benchmark = import_argparser(benchmark, subparsers_A)
+        parser_benchmark = import_argparser(benchmark, subparsers_A, **argparse_options)
         parser_benchmark.set_defaults(benchmark=benchmark)
         parser_benchmarks[benchmark] = parser_benchmark
 
     # info
-    parser_I = subparsers.add_parser("info", help="Request information")
+    parser_I = subparsers.add_parser("info", help="Request information", **argparse_options)
     parser_I.set_defaults(func=lambda args: parser_I.print_help())
     subparsers_I = parser_I.add_subparsers(metavar="TYPE", help="Type of information requested")
 
     # vendor info
-    parser_IV = subparsers_I.add_parser("vendor", help="Information about devices")
+    parser_IV = subparsers_I.add_parser("vendor", help="Information about devices", **argparse_options)
     parser_IV.set_defaults(func=info_vendor)
     parser_IV.add_argument(
         "vendor",
@@ -268,7 +276,7 @@ if __name__ == "__main__":
     )
 
     # benchmark info
-    parser_IB = subparsers_I.add_parser("benchmark", help="Information about benchmarks")
+    parser_IB = subparsers_I.add_parser("benchmark", help="Information about benchmarks", **argparse_options)
     parser_IB.set_defaults(func=lambda args: info_benchmark(parser_benchmarks, args))
     parser_IB.add_argument(
         "benchmark",
@@ -278,7 +286,7 @@ if __name__ == "__main__":
     )
 
     # resume benchmark
-    parser_R = subparsers.add_parser("resume", help="Resume old benchmark")
+    parser_R = subparsers.add_parser("resume", help="Resume old benchmark", **argparse_options)
     parser_R.set_defaults(func=resume_benchmark)
     parser_R.add_argument(
         "job_id",
@@ -289,14 +297,15 @@ if __name__ == "__main__":
 
     # update collation and visualization steps of jobmanager
     parser_V = subparsers.add_parser(
-        "refresh", help="Update already completed benchmarks from individual job runs."
+        "refresh", help="Update already completed benchmarks from individual job runs.",
+        **argparse_options
     )
     parser_V.set_defaults(func=refresh)
     parser_V.add_argument("--all", action="store_true", help="refresh all completed benchmarks")
     parser_V.add_argument("job_ids", nargs="*")
 
     # benchmark status
-    parser_S = subparsers.add_parser("status", help="Display the status of all benchmarks.")
+    parser_S = subparsers.add_parser("status", help="Display the status of all benchmarks.", **argparse_options)
     parser_S.set_defaults(func=status)
 
     args = parser.parse_args()

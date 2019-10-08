@@ -1,6 +1,15 @@
 # Quantum Benchmarks
 
 
+## Dependencies
+
+We strongly recommend having a separate conda environment per vendor.
+Each requires the following dependencies.
+
+    pip install termcolor
+    conda install pycairo
+
+
 ## Development Instructions
 
 Since python has no strong typing, I recommend you use `pylint` to detect bugs.

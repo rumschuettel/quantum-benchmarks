@@ -112,44 +112,44 @@ class PlatonicFractalsBenchmarkMixin:
         return fig
 
 
-def argparser(toadd):
-    parser = toadd.add_parser("Platonic-Fractals", help="Platonic Fractals benchmark.")
+def argparser(toadd, **argparse_options):
+    parser = toadd.add_parser("Platonic-Fractals", help="Platonic Fractals benchmark.", **argparse_options)
     parser.add_argument(
         "-b",
         "--body",
         type=int,
-        help="The type of the Platonic boby. (default=0 -- Octahedron)",
+        help="The type of the Platonic body; (0 -- Octahedron)",
         default=0,
     )
     parser.add_argument(
         "-e",
         "--strength",
         type=float,
-        help="The strength of the mesurements. (default=0.93)",
+        help="The strength of the mesurements",
         default=0.93,
     )
     parser.add_argument(
-        "-t", "--num_steps", type=int, help="Number of steps of the process. (default=2)", default=2
+        "-t", "--num_steps", type=int, help="Number of steps of the process", default=2
     )
     parser.add_argument(
         "-d",
         "--num_dirs_change",
         type=int,
-        help="Number of different random measurement oritentations used. (default=42)",
+        help="Number of different random measurement oritentations used",
         default=42,
     )
     parser.add_argument(
         "-s",
         "--num_shots",
         type=int,
-        help="Number of shots per random orientations. (default=1024)",
+        help="Number of shots per random orientations",
         default=1024,
     )
     parser.add_argument(
         "-r",
         "--random_seed",
         type=int,
-        help="The random seed used for generatic the random orienations (default=random)",
+        help="The random seed used for generatic the random orienations; random if not specified",
         default=random.randint(1, 100000000),
     )
     return parser
