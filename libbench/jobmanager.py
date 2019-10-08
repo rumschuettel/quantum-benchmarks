@@ -13,7 +13,7 @@ class VendorJobManager(ABC):
     COLLATED_FILENAME = "collated.pickle"
     VISUALIZED_FILENAME = "visualized.pickle"
     JOBS_FOLDER = "jobs"
-    MAX_FAILURE_COUNT = 10
+    MAX_FAILURE_COUNT = 3
 
     def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark
