@@ -2,7 +2,7 @@ import itertools as it
 from functools import reduce
 
 import numpy as np
-from qiskit import QuantumCircuit, execute
+from qiskit.aqua.algorithms import ExactEigensolver
 
 from libbench.ibm import Job as IBMJob
 
