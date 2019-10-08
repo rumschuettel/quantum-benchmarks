@@ -39,6 +39,14 @@ class RigettiSchroedingerMicroscopeSimulatedBenchmark(
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def parse_result(self, job, result):
+        psi = result.amplitudes
+
+        psp = np.linalg.norm(psi[:2]) ** 2
+        z = np.abs(psi[1]) ** 2 / psp if psp > 0 else 0
+
+        return {"psp": psp, "z": z}
+
 
 class RigettiSchroedingerMicroscopeBenchmark(
     RigettiSchroedingerMicroscopeBenchmarkBase

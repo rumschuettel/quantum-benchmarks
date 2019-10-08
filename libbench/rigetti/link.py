@@ -43,7 +43,7 @@ class RigettiStatevectorSimulator(RigettiDevice):
         return "WavefunctionSimulator"
 
     def execute(self, program: pq.Program, **_):
-        return ThinPromise(self.device.wavefunction, program=program)
+        return ThinPromise(self.device.wavefunction, program)
 
 
 # with rigetti we can have any kind of qvm we want, and also other topologies etc

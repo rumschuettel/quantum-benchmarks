@@ -10,9 +10,10 @@ class ThinPromise(ABC):
         This can be used as a promise whenever the execution is immediate.
     """
 
-    def __init__(self, result_callback: Callable, **kwargs):
+    def __init__(self, result_callback: Callable, *args, **kwargs):
         self._result = None
         self.result_callback = result_callback
+        self.args = args
         self.kwargs = kwargs
 
     def job_id(self):
@@ -23,7 +24,7 @@ class ThinPromise(ABC):
 
     def result(self):
         if self._result is None:
-            self._result = self.result_callback(**self.kwargs)
+            self._result = self.result_callback(*self.args, **self.kwargs)
         return self._result
 
 
