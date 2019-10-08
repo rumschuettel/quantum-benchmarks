@@ -41,7 +41,7 @@ class SchroedingerMicroscopeBenchmarkMixin:
 
         return zs, psps
 
-    def visualize(self, collated_result: object, path: Path):
+    def visualize(self, collated_result: object, path: Path) -> Path:
         # Unpack the collated result
         zs, psps = collated_result
         extent = (self.xmin, self.xmax, self.ymin, self.ymax)
@@ -68,10 +68,11 @@ class SchroedingerMicroscopeBenchmarkMixin:
         ax_sps.set_ylabel("Im(z)")
 
         # save figure
-        fig.savefig(path / "visualize.pdf")
+        figpath = path / "visualize.pdf"
+        fig.savefig(figpath)
 
-        # Return the figure
-        return fig
+        # default figure to display
+        return figpath
 
 
 def argparser(toadd, **argparse_options):

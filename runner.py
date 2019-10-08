@@ -7,6 +7,7 @@ import os
 import pickle
 import matplotlib
 
+DEFAULT_MPL_BACKEND = matplotlib.get_backend()
 matplotlib.use("Cairo")  # backend without X server requirements
 import matplotlib.pyplot as plt
 
@@ -120,9 +121,9 @@ def info_benchmark(parser_benchmarks, args):
 """
 
 
-def _show_figure(fig):
-    matplotlib.use("GTK3Cairo")  # GUI backend
-    fig.show()
+def _show_figure(figpath):
+    import webbrowser
+    webbrowser.open_new(str(figpath))
 
 
 def _run_update(

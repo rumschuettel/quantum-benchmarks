@@ -25,20 +25,16 @@ class IBMPlatonicFractalsJob(IBMJob):
     ):
         random.seed(random_seed)
 
-        if body == 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
-            for i in range(num_dirs_change):
-                dirs = []
-                for j in range(num_steps):
-                    dirs.append(random.randrange(1, 4))
-                yield IBMPlatonicFractalsJob(
-                    body, strength, dirs, 2, num_shots, add_measurements
-                )
-                yield IBMPlatonicFractalsJob(
-                    body, strength, dirs, 3, num_shots, add_measurements
-                )
-        else:
-            print("This fractal is not yet implemented!")
-            raise NotImplementedError
+        for _ in range(num_dirs_change):
+            dirs = []
+            for _ in range(num_steps):
+                dirs.append(random.randrange(1, 4))
+            yield IBMPlatonicFractalsJob(
+                body, strength, dirs, 2, num_shots, add_measurements
+            )
+            yield IBMPlatonicFractalsJob(
+                body, strength, dirs, 3, num_shots, add_measurements
+            )
 
     def __init__(
         self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements
@@ -53,8 +49,7 @@ class IBMPlatonicFractalsJob(IBMJob):
         self.add_measurements = add_measurements
 
         if not body == 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
-            print("This fractal is not yet implemented!")
-            raise NotImplementedError
+            raise NotImplementedError("This fractal is not yet implemented!")
 
         # Calculate some parameters
         angle1 = arccos(sqrt((1 + strength) / 2))

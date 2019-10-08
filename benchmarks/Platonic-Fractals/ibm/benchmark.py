@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 import numpy as np
 
 from libbench.ibm import Benchmark as IBMBenchmark
@@ -31,7 +29,7 @@ class IBMPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, IBMBenchm
 
 class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):
     """
-        Full SM Benchmark
+        Full Benchmark
 
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """

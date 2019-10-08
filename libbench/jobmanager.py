@@ -27,7 +27,7 @@ class VendorJobManager(ABC):
         self,
         device,
         additional_stored_info: Optional[dict] = None,
-        figure_callback: Callable = lambda *_: None,
+        figure_callback: Callable[[Path], None] = lambda *_: None,
         store_completed_job_results=True,
         store_jobmanager=True,
         display_status=True,

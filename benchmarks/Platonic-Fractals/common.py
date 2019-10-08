@@ -108,7 +108,7 @@ class PlatonicFractalsBenchmarkMixin:
 
         return points
 
-    def visualize(self, collated_result: object, path: Path):
+    def visualize(self, collated_result: object, path: Path) -> Path:
         # def visualize(self, points, figName):
         rcParams["figure.figsize"] = 7, 7
 
@@ -123,8 +123,11 @@ class PlatonicFractalsBenchmarkMixin:
         ax.set_xlim([-1.1, 1.1])
         ax.set_ylim([-1.1, 1.1])
 
-        fig.savefig(path / "visualize.pdf")  # save the figure to file
-        return fig
+        figpath = path / "visualize.pdf"
+        fig.savefig(figpath)  # save the figure to file
+
+        # default figure to display
+        return figpath
 
 
 def argparser(toadd, **argparse_options):
