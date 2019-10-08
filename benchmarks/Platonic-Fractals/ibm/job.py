@@ -15,7 +15,13 @@ from .. import PlatonicFractalsBenchmarkMixin
 class IBMPlatonicFractalsJob(IBMJob):
     @staticmethod
     def job_factory(
-        body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
+        body,
+        strength,
+        num_steps,
+        num_dirs_change,
+        num_shots,
+        random_seed,
+        add_measurements,
     ):
         random.seed(random_seed)
 
@@ -24,13 +30,19 @@ class IBMPlatonicFractalsJob(IBMJob):
                 dirs = []
                 for j in range(num_steps):
                     dirs.append(random.randrange(1, 4))
-                yield IBMPlatonicFractalsJob(body, strength, dirs, 2, num_shots, add_measurements)
-                yield IBMPlatonicFractalsJob(body, strength, dirs, 3, num_shots, add_measurements)
+                yield IBMPlatonicFractalsJob(
+                    body, strength, dirs, 2, num_shots, add_measurements
+                )
+                yield IBMPlatonicFractalsJob(
+                    body, strength, dirs, 3, num_shots, add_measurements
+                )
         else:
             print("This fractal is not yet implemented!")
             raise NotImplementedError
 
-    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
+    def __init__(
+        self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements
+    ):
         super().__init__()
 
         self.body = body

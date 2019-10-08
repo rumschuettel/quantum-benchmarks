@@ -14,7 +14,9 @@ from libbench import VendorJob
 class PlatonicFractalsBenchmarkMixin:
     BODY_OCTA = 0
 
-    def __init__(self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, **_):
+    def __init__(
+        self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, **_
+    ):
         super().__init__()
 
         self.body = body
@@ -26,7 +28,9 @@ class PlatonicFractalsBenchmarkMixin:
 
         print("Random seed: " + str(random_seed))
 
-    def collate_results(self, results: Dict[VendorJob, object], path: Path, threshold=300):
+    def collate_results(
+        self, results: Dict[VendorJob, object], path: Path, threshold=300
+    ):
         dirStats = {}
 
         # fill in with values from jobs
@@ -42,11 +46,14 @@ class PlatonicFractalsBenchmarkMixin:
                 else:
                     for meas in result["ymeascounts"]:
                         if meas not in dirStats[dirs]["ymeascounts"]:
-                            dirStats[dirs]["ymeascounts"][meas] = result["ymeascounts"][meas]
+                            dirStats[dirs]["ymeascounts"][meas] = result["ymeascounts"][
+                                meas
+                            ]
                             dirStats[dirs]["ystates"][meas] = result["ystates"][meas]
                         else:
                             total = (
-                                result["ymeascounts"][meas] + dirStats[dirs]["ymeascounts"][meas]
+                                result["ymeascounts"][meas]
+                                + dirStats[dirs]["ymeascounts"][meas]
                             )
                             dirStats[dirs]["ystates"][meas] = (
                                 result["ymeascounts"][meas] * result["ystates"][meas]
@@ -60,11 +67,14 @@ class PlatonicFractalsBenchmarkMixin:
                 else:
                     for meas in result["zmeascounts"]:
                         if meas not in dirStats[dirs]["zmeascounts"]:
-                            dirStats[dirs]["zmeascounts"][meas] = result["zmeascounts"][meas]
+                            dirStats[dirs]["zmeascounts"][meas] = result["zmeascounts"][
+                                meas
+                            ]
                             dirStats[dirs]["zstates"][meas] = result["zstates"][meas]
                         else:
                             total = (
-                                result["zmeascounts"][meas] + dirStats[dirs]["zmeascounts"][meas]
+                                result["zmeascounts"][meas]
+                                + dirStats[dirs]["zmeascounts"][meas]
                             )
                             dirStats[dirs]["zstates"][meas] = (
                                 result["zmeascounts"][meas] * result["zstates"][meas]
@@ -84,7 +94,10 @@ class PlatonicFractalsBenchmarkMixin:
                             and dirStats[dirs]["zmeascounts"][meas] > threshold
                         ):
                             points += [
-                                [dirStats[dirs]["ystates"][meas], dirStats[dirs]["zstates"][meas]]
+                                [
+                                    dirStats[dirs]["ystates"][meas],
+                                    dirStats[dirs]["zstates"][meas],
+                                ]
                             ]
 
         import datetime
@@ -102,7 +115,9 @@ class PlatonicFractalsBenchmarkMixin:
         theta = np.arange(0, 2 * np.pi, 0.004)
 
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
-        plt.plot(1 * np.cos(theta), 1 * np.sin(theta), color="#14498C")  #'#A3E3D9'#'#14498C'
+        plt.plot(
+            1 * np.cos(theta), 1 * np.sin(theta), color="#14498C"
+        )  #'#A3E3D9'#'#14498C'
         plt.scatter(*zip(*collated_result), color="#A3E3D9")  #'#3ACC23'
         ax.set_facecolor("xkcd:black")  #'xkcd:salmon'
         ax.set_xlim([-1.1, 1.1])
@@ -113,7 +128,9 @@ class PlatonicFractalsBenchmarkMixin:
 
 
 def argparser(toadd, **argparse_options):
-    parser = toadd.add_parser("Platonic-Fractals", help="Platonic Fractals benchmark.", **argparse_options)
+    parser = toadd.add_parser(
+        "Platonic-Fractals", help="Platonic Fractals benchmark.", **argparse_options
+    )
     parser.add_argument(
         "-b",
         "--body",

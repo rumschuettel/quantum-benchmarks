@@ -10,7 +10,14 @@ from libbench.ibm import Job as IBMJob
 class IBMSchroedingerMicroscopeJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, shots, xmin, xmax, ymin, ymax, add_measurements
+        num_post_selections,
+        num_pixels,
+        num_shots,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        add_measurements,
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -20,10 +27,10 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
             yield IBMSchroedingerMicroscopeJob(
-                num_post_selections, z, add_measurements, i, j, shots
+                num_post_selections, z, add_measurements, i, j, num_shots
             )
 
-    def __init__(self, num_post_selections, z, add_measurements, i, j, shots):
+    def __init__(self, num_post_selections, z, add_measurements, i, j, num_shots):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -31,7 +38,7 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         self.z = z
         self.i = i
         self.j = j
-        self.shots = shots
+        self.num_shots = num_shots
 
         # Calculate some parameters
         theta = 2 * np.arccos(abs(z) / np.sqrt(1 + abs(z) ** 2))
@@ -54,14 +61,15 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
                 circuit.s(l)
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections))
+                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)),
             )
 
         # store the resulting circuit
         self.circuit = circuit
 
-    def run(self, device, *args, **kwargs):
-        return execute(self.circuit, device, shots=self.shots)
+    def run(self, device):
+        return execute(self.circuit, device, shots=self.num_shots)
 
     def __str__(self):
         return f"IBMSchroedingerMicroscopeJob-{self.i}-{self.j}"

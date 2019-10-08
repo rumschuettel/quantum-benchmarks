@@ -29,7 +29,11 @@ VENDORS = [
     if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
 ]
 
-MODE_CLASS_NAMES = {"cloud": "Cloud", "measure_local": "MeasureLocal", "statevector": "Statevector"}
+MODE_CLASS_NAMES = {
+    "cloud": "Cloud",
+    "measure_local": "MeasureLocal",
+    "statevector": "Statevector",
+}
 MODES = list(MODE_CLASS_NAMES.keys())
 
 
@@ -40,7 +44,9 @@ MODES = list(MODE_CLASS_NAMES.keys())
 
 def import_benchmark(name, vendor, mode, device):
     benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
-    return getattr(benchmark_module, "Benchmark" if mode != "Statevector" else "SimulatedBenchmark")
+    return getattr(
+        benchmark_module, "SimulatedBenchmark" if mode == "Statevector" else "Benchmark"
+    )
 
 
 def import_link(vendor, mode):
@@ -130,13 +136,17 @@ def _run_update(
         additional_stored_info=additional_stored_info,
         figure_callback=_show_figure if show_directly else lambda *x: None,
     ):
-        print(f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}")
+        print(
+            f"benchmark not done. Resume by calling ./runner.py resume {jobmanager.ID}"
+        )
 
 
 def resume_benchmark(args):
     RUN_FOLDER = args.run_folder
     JOB_ID = args.job_id
-    jobmanager, device, slug = obtain_jobmanager(JOB_ID, RUN_FOLDER, recreate_device=True)
+    jobmanager, device, slug = obtain_jobmanager(
+        JOB_ID, RUN_FOLDER, recreate_device=True
+    )
 
     # run update
     _run_update(jobmanager, device, slug["additional_stored_info"])
@@ -147,7 +157,9 @@ def new_benchmark(args):
     DEVICE = args.device
     BENCHMARK = args.benchmark
     MODE = MODE_CLASS_NAMES[args.mode]
-    RUN_FOLDER = args.run_folder  # we do not validate this since the folder is created on-the-fly
+    RUN_FOLDER = (
+        args.run_folder
+    )  # we do not validate this since the folder is created on-the-fly
 
     assert VENDOR in VENDORS, "vendor does not exist"
     assert BENCHMARK is None or BENCHMARK in BENCHMARKS, "benchmark does not exist"
@@ -218,7 +230,9 @@ def status(args):
     VendorJobManager.print_legend()
 
     for job_id in _get_job_ids(RUN_FOLDER):
-        jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER, recreate_device=False)
+        jobmanager, _, slug = obtain_jobmanager(
+            job_id, RUN_FOLDER, recreate_device=False
+        )
         jobmanager.print_status(tail=slug["additional_stored_info"])
 
 
@@ -226,17 +240,22 @@ if __name__ == "__main__":
     print_hl("qυanтυм вencнмarĸιng ѕυιтe\n", color="cyan")
 
     # arguments
-    argparse_options = {
-        "formatter_class": argparse.ArgumentDefaultsHelpFormatter
-    }
-    parser = argparse.ArgumentParser(description="Quantum Benchmark", **argparse_options)
+    argparse_options = {"formatter_class": argparse.ArgumentDefaultsHelpFormatter}
+    parser = argparse.ArgumentParser(
+        description="Quantum Benchmark", **argparse_options
+    )
     subparsers = parser.add_subparsers(metavar="ACTION", help="Action you want to take")
 
     # new benchmark
-    parser_A = subparsers.add_parser("benchmark", help="Run new benchmark", **argparse_options)
+    parser_A = subparsers.add_parser(
+        "benchmark", help="Run new benchmark", **argparse_options
+    )
     parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
-        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
+        "vendor",
+        metavar="VENDOR",
+        type=str,
+        help=f"vendor to use; one of {', '.join(VENDORS)}",
     )
     parser_A.add_argument(
         "mode", metavar="MODE", type=str, help=f"mode to run; one of {', '.join(MODES)}"
@@ -255,7 +274,7 @@ if __name__ == "__main__":
     parser_A.add_argument(
         "--run_folder",
         default=VendorJobManager.RUN_FOLDER,
-        help=f"folder to store benchmark jobs in; created if it does not exist"
+        help=f"folder to store benchmark jobs in; created if it does not exist",
     )
     subparsers_A = parser_A.add_subparsers(metavar="BENCHMARK", help="benchmark to run")
 
@@ -266,12 +285,18 @@ if __name__ == "__main__":
         parser_benchmarks[benchmark] = parser_benchmark
 
     # info
-    parser_I = subparsers.add_parser("info", help="Information for vendors or benchmarks", **argparse_options)
+    parser_I = subparsers.add_parser(
+        "info", help="Information for vendors or benchmarks", **argparse_options
+    )
     parser_I.set_defaults(func=lambda args: parser_I.print_help())
-    subparsers_I = parser_I.add_subparsers(metavar="TYPE", help="Type of information requested")
+    subparsers_I = parser_I.add_subparsers(
+        metavar="TYPE", help="Type of information requested"
+    )
 
     # vendor info
-    parser_IV = subparsers_I.add_parser("vendor", help="Information about devices", **argparse_options)
+    parser_IV = subparsers_I.add_parser(
+        "vendor", help="Information about devices", **argparse_options
+    )
     parser_IV.set_defaults(func=info_vendor)
     parser_IV.add_argument(
         "vendor",
@@ -282,7 +307,9 @@ if __name__ == "__main__":
     )
 
     # benchmark info
-    parser_IB = subparsers_I.add_parser("benchmark", help="Information about benchmarks", **argparse_options)
+    parser_IB = subparsers_I.add_parser(
+        "benchmark", help="Information about benchmarks", **argparse_options
+    )
     parser_IB.set_defaults(func=lambda args: info_benchmark(parser_benchmarks, args))
     parser_IB.add_argument(
         "benchmark",
@@ -292,7 +319,9 @@ if __name__ == "__main__":
     )
 
     # resume benchmark
-    parser_R = subparsers.add_parser("resume", help="Resume old benchmark", **argparse_options)
+    parser_R = subparsers.add_parser(
+        "resume", help="Resume old benchmark", **argparse_options
+    )
     parser_R.set_defaults(func=resume_benchmark)
     parser_R.add_argument(
         "job_id",
@@ -303,25 +332,30 @@ if __name__ == "__main__":
     parser_R.add_argument(
         "--run_folder",
         default=VendorJobManager.RUN_FOLDER,
-        help=f"folder to store benchmark jobs in; created if it does not exist"
+        help=f"folder to store benchmark jobs in; created if it does not exist",
     )
 
     # update collation and visualization steps of jobmanager
     parser_V = subparsers.add_parser(
-        "refresh", help="Update already completed benchmarks from individual job runs.",
-        **argparse_options
+        "refresh",
+        help="Update already completed benchmarks from individual job runs.",
+        **argparse_options,
     )
     parser_V.set_defaults(func=refresh)
-    parser_V.add_argument("--all", action="store_true", help="refresh all completed benchmarks")
+    parser_V.add_argument(
+        "--all", action="store_true", help="refresh all completed benchmarks"
+    )
     parser_V.add_argument("job_ids", nargs="*")
 
     # benchmark status
-    parser_S = subparsers.add_parser("status", help="Display the status of all benchmarks.", **argparse_options)
+    parser_S = subparsers.add_parser(
+        "status", help="Display the status of all benchmarks.", **argparse_options
+    )
     parser_S.set_defaults(func=status)
     parser_S.add_argument(
         "--run_folder",
         default=VendorJobManager.RUN_FOLDER,
-        help=f"folder to store benchmark jobs in; created if it does not exist"
+        help=f"folder to store benchmark jobs in; created if it does not exist",
     )
 
     args = parser.parse_args()

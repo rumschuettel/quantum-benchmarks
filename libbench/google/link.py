@@ -10,7 +10,7 @@ import cirq
 class GoogleDevice(ABC):
     @abstractmethod
     def execute(self, circuit: cirq.Circuit, num_shots: int):
-        raise NotImplementedError()
+        pass
 
 
 class SparseSimulatorMeasureLocal(GoogleDevice):
@@ -34,7 +34,9 @@ GOOGLE_STATEVECTOR_DEVICES = {
     # support for the density matrix simulator can be added later if necessary
 }
 
-GOOGLE_MEASURE_LOCAL_DEVICES = {"sparse_simulator_measure_local": SparseSimulatorMeasureLocal()}
+GOOGLE_MEASURE_LOCAL_DEVICES = {
+    "sparse_simulator_measure_local": SparseSimulatorMeasureLocal()
+}
 
 GOOGLE_CLOUD_DEVICES = {}
 

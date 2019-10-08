@@ -63,7 +63,9 @@ class VendorJobManager(ABC):
 
                 # store job results separately in addition
                 if store_completed_job_results:
-                    self._save_in_run_folder(f"jobs/{str(job)}.pickle", self.results[job])
+                    self._save_in_run_folder(
+                        f"jobs/{str(job)}.pickle", self.results[job]
+                    )
 
             # 2. if that failed, check whether job is alive and if not reschedule
             elif not self.job_alive(promise):
@@ -105,7 +107,9 @@ class VendorJobManager(ABC):
 
         if backup_collated_result:
             self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
-            print(f"Backup written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
+            print(
+                f"Backup written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}."
+            )
 
         visualized_result = self.benchmark.visualize(collated_result, path)
         figure_callback(visualized_result)
@@ -113,7 +117,9 @@ class VendorJobManager(ABC):
 
         if backup_visualized_result:
             self._save_in_run_folder(self.VISUALIZED_FILENAME, visualized_result)
-            print(f"Backup  written to {self.RUN_FOLDER}/{self.ID}/{self.VISUALIZED_FILENAME}.")
+            print(
+                f"Backup  written to {self.RUN_FOLDER}/{self.ID}/{self.VISUALIZED_FILENAME}."
+            )
 
         return True
 

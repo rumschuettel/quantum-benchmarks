@@ -21,13 +21,22 @@ class GooglePromiseBase(ABC):
     def result(self):
         pass
 
+    @abstractmethod
+    def freeze(self):
+        pass
+
+    @abstractmethod
+    def thaw(self):
+        pass
+
 
 class GoogleCloudPromise(GooglePromiseBase):
     """
         Do not use - we don't know what the interface looks like yet
     """
 
-    pass
+    def __init__(self):
+        raise NotImplementedError()
 
 
 class GoogleLocalPromise(GooglePromiseBase):
@@ -56,13 +65,6 @@ class GoogleLocalPromise(GooglePromiseBase):
             Will have to be updated to match the Google API at some point.
         """
         return "PENDING" if self._result is None else "DONE"
-
-    @abstractmethod
-    def result(self):
-        """
-            Run the simulator if results are requested.
-        """
-        raise NotImplementedError()
 
     def freeze(self):
         """

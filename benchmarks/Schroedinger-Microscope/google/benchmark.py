@@ -10,20 +10,8 @@ from .. import SchroedingerMicroscopeBenchmarkMixin
 class GoogleSchroedingerMicroscopeBenchmarkBase(
     SchroedingerMicroscopeBenchmarkMixin, GoogleBenchmark
 ):
-    def __init__(
-        self,
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
-        **kwargs
-    ):
-        super().__init__(num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax)
-
+    def __init__(self, add_measurements, **kwargs):
+        super().__init__(**kwargs)
         self.add_measurements = add_measurements
 
     def get_jobs(self):
@@ -49,9 +37,9 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         kwargs.update({"add_measurements": True})
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
     def parse_result(self, job, result):
         post_selection_result = list(
@@ -74,7 +62,9 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
         return {"psp": psp, "z": z}
 
 
-class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscopeBenchmarkBase):
+class GoogleSchroedingerMicroscopeSimulatedBenchmark(
+    GoogleSchroedingerMicroscopeBenchmarkBase
+):
     """
         Simulated SM Benchmark
 
@@ -89,6 +79,10 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscop
         psi = result.final_state
 
         psp = np.linalg.norm(psi[:: 2 ** (2 ** self.num_post_selections - 1)]) ** 2
-        z = np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp if psp > 0 else 0
+        z = (
+            np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp
+            if psp > 0
+            else 0
+        )
 
         return {"psp": psp, "z": z}
