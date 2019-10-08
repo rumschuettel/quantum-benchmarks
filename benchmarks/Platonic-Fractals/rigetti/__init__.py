@@ -1,0 +1,2 @@
+from .benchmark import RigettiPlatonicFractalsBenchmark as Benchmark
+from .benchmark import RigettiPlatonicFractalsSimulatedBenchmark as SimulatedBenchmark
