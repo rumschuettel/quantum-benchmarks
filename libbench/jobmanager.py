@@ -35,6 +35,7 @@ class VendorJobManager(ABC):
         # try to queue more jobs
         new_scheduled = []
         failure_counter = 0
+
         for job in self.scheduled:
             if failure_counter < self.MAX_FAILURE_COUNT:
                 promise = job.run(device)

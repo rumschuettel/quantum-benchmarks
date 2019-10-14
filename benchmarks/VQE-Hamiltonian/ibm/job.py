@@ -1,5 +1,7 @@
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.algorithms import ExactEigensolver
+from qiskit.aqua import run_algorithm
+from qiskit.aqua.input import EnergyInput
 
 from libbench.ibm import Job as IBMJob
 from libbench.ibm import IBMThinPromise
@@ -49,8 +51,8 @@ def Paulis_Heisenberg_NNN(N, J2, J1=1.):
 
 
 
-class IBMVQEHamiltonianJob(IBMJob):
-    def __init__(self, qubits: int, J1: float, J2: float, type: HamiltonianType):
+class IBMVQEHamiltonianSimulatedJob(IBMJob):
+    def __init__(self, qubits: int, J1: float, J2: float, type: HamiltonianType, **kwargs):
         self.J1 = J1
         self.J2 = J2
 
@@ -64,6 +66,50 @@ class IBMVQEHamiltonianJob(IBMJob):
     def run(self, device):
         exact_eigensolver = ExactEigensolver(self.operator)
         return IBMThinPromise(exact_eigensolver.run)
+
+    def __str__(self):
+        return f"IBMVQEHamiltonianSimulatedJob-{self.J1}-{self.J2}"
+
+
+class IBMVQEHamiltonianJob(IBMVQEHamiltonianSimulatedJob):
+    @staticmethod
+    def AquaCfgDict(depth, rounds, method='SLSQP', optimizer_rounds_name='maxiter'):
+        return {
+            'algorithm': {
+                'name': 'VQE',
+                'operator_mode': 'matrix'
+            },
+            'variational_form': {
+                'name': 'RYRZ',
+                'depth': rounds,
+                'entanglement': 'full'
+            },
+            'optimizer': {
+                'name': method,
+                optimizer_rounds_name: rounds
+            },
+            'backend': {
+                'name': 'statevector_simulator',
+                'provider': 'qiskit.BasicAer'
+            }
+        }
+
+    def __init__(self, depth, rounds, *args):
+        super().__init__(*args)
+        self.depth = depth
+        self.rounds = rounds
+
+    def run(self, device):
+        result_q = run_algorithm(
+            self.AquaCfgDict(self.depth, self.rounds),
+            EnergyInput(self.operator)
+        )
+        result_cl = super().run(device)
+
+        return IBMThinPromise(lambda: {
+            "q": result_q,
+            "c": result_cl.result()
+        })
 
     def __str__(self):
         return f"IBMVQEHamiltonianJob-{self.J1}-{self.J2}"

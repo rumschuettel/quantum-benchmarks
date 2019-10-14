@@ -1,5 +1,13 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.colors import Normalize, LinearSegmentedColormap
+
+
+# linear colormap which only changes alpha
+def alpha_colormap(color, steps=32):
+    colors = [ (*color, 0), (*color, 0), (*color, 1) ]
+    return LinearSegmentedColormap.from_list("alphamap", colors, N=steps)
+
 
 def qubism_indices(depth):
     def _qubism_indices(depth, prefix):
@@ -27,9 +35,9 @@ def qubism_array(vector, verbose=False):
     
     return np.abs(shuffled)
 
-def qubism_plot(vector, vmax_vec=None, plot=None):
-    # bias somewhat so that small numbers show up stronger
-    vector_mapped = np.power(vector, .5)
+def qubism_plot(vector, deviation=None, vmax_vec=None, plot=None):
+    # optionally bias somewhat so that small numbers show up stronger
+    vector_mapped = np.power(vector, 1.0)
     # take maximum range from own vector by default
     vmax_vec = vector_mapped if not isinstance(vmax_vec, np.ndarray) else np.power(vmax_vec, .5)
     vmax = np.max(np.abs(vmax_vec))
@@ -39,6 +47,18 @@ def qubism_plot(vector, vmax_vec=None, plot=None):
         
     plot.set_xticks([], []) 
     plot.set_yticks([], [])
-    plot.imshow(qubism_array(vector_mapped), cmap='viridis', vmin=0, vmax=vmax)
+
+    qubism = plt.cm.get_cmap("binary")(
+        Normalize(vmin=0, vmax=vmax)(qubism_array(vector_mapped))
+    )
+    plot.imshow(qubism)
+
+    # show deviation overlay
+    if deviation is not None:
+        cmap = alpha_colormap([1., 0., 0.])
+        overlay = cmap(
+            Normalize(vmin=0, vmax=2)(qubism_array(abs(deviation) / abs(vector)))
+        )
+        plot.imshow(overlay)
 
     return fig
