@@ -15,6 +15,10 @@ echo "IBM SCHROEDINGER MICROSCOPE"
 echo "IBM PLATONIC FRACTALS"
 ./runner.py benchmark --run_folder="$TMP_DIR" ibm measure_local qasm_simulator Platonic-Fractals
 
+echo "IBM VQE"
+./runner.py benchmark --run_folder="$TMP_DIR" ibm statevector statevector_simulator VQE-Hamiltonian --qubits=4 --rounds=10
+./runner.py benchmark --run_folder="$TMP_DIR" ibm measure_local qasm_simulator VQE-Hamiltonian --qubits=4 --rounds=10
+
 echo "IBM JOB STATUS"
 ./runner.py status --run_folder="$TMP_DIR"
 

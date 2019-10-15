@@ -9,7 +9,12 @@ IBM_KNOWN_MEASURE_LOCAL_DEVICES = ["qasm_simulator"]
 
 
 class IBMJob(VendorJob):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.circuit = None
+
+    def serialize(self):
+        return self.circuit
 
 
 class IBMThinPromise(ThinPromise):

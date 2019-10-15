@@ -79,5 +79,3 @@ class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
         super().__init__(*args, **kwargs)
         raise NotImplementedError()
 
-    def parse_result(self, job, result):
-        raise NotImplementedError()

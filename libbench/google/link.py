@@ -42,7 +42,12 @@ GOOGLE_CLOUD_DEVICES = {}
 
 
 class GoogleJob(VendorJob):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.circuit = None
+
+    def serialize(self):
+        return self.circuit
 
 
 class GoogleCloudLink(VendorLink):

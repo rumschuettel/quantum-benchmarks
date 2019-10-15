@@ -53,6 +53,7 @@ def Paulis_Heisenberg_NNN(N, J2, J1=1.):
 
 class IBMVQEHamiltonianSimulatedJob(IBMJob):
     def __init__(self, qubits: int, J1: float, J2: float, type: HamiltonianType, **kwargs):
+        super().__init__()
         self.J1 = J1
         self.J2 = J2
 

@@ -41,6 +41,10 @@ class VendorJob(ABC):
     def __str__(self):
         pass
 
+    @abstractmethod
+    def serialize(self):
+        pass
+
 
 class VendorLink(ABC):
     """

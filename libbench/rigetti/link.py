@@ -53,7 +53,12 @@ RIGETTI_EXTRA_QVMS = [
 
 
 class RigettiJob(VendorJob):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.program = None
+
+    def serialize(self):
+        return self.program
 
 
 class RigettiCloudLink(VendorLink):

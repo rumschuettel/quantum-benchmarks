@@ -28,7 +28,7 @@ class VendorJobManager(ABC):
         device,
         additional_stored_info: Optional[dict] = None,
         figure_callback: Callable[[Path], None] = lambda *_: None,
-        store_completed_job_results=True,
+        store_job_and_results=True,
         store_jobmanager=True,
         display_status=True,
     ) -> Optional[object]:
@@ -63,9 +63,12 @@ class VendorJobManager(ABC):
                 self.results[job] = self.benchmark.parse_result(job, result)
 
                 # store job results separately in addition
-                if store_completed_job_results:
+                if store_job_and_results:
                     self._save_in_run_folder(
                         f"jobs/{str(job)}.pickle", self.results[job]
+                    )
+                    self._save_in_run_folder(
+                        f"jobs/{str(job)}.circuit.pickle", job.serialize()
                     )
 
             # 2. if that failed, check whether job is alive and if not reschedule
