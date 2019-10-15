@@ -13,6 +13,21 @@ class HamiltonianType(Enum):
     HEISENBERG = 1
     ISING = 2
 
+
+def AnsatzCircuit(qubits: int, depth: int, hamiltonian_type: HamiltonianType):
+    layers = []
+    for l in range(depth):
+        # parametrized 1-qubit rotations
+        layers.append([
+            (True, "Rz", i) for i in range(qubits)
+        ])
+        # alternating layer of unparametrized CNOT's
+        layers.append([
+            (False, "CNOT", i, i+1) for i in range(l%2, qubits-1, 2)
+        ])
+    return layers
+
+
 class VQEHamiltonianBenchmarkMixin:
     def __init__(self, hamiltonian_type: str, qubits: int, J1: float, J2: float, **_):
         self.hamiltonian_type = HamiltonianType[hamiltonian_type]
