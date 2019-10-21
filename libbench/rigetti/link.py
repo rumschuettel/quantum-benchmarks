@@ -22,11 +22,30 @@ class RigettiQVM(RigettiDevice):
     def name(self):
         return self.device.name
 
+    def _run_and_measure(self, program: pq.Program, num_shots: int, optimize=True):
+        program = program.copy()
+        qubits = program.get_qubits()
+
+        # add measurements everywhere
+        ro = program.declare("ro", "BIT", len(qubits))
+        for i, q in enumerate(qubits):
+            program.inst(pq.gates.MEASURE(q, ro[i]))
+
+        program.wrap_in_numshots_loop(shots=num_shots)
+
+        executable = self.device.compile(program)
+        bitstring_array = self.device.run(executable=executable)
+        bitstring_dict = {}
+        for i, q in enumerate(qubits):
+            bitstring_dict[q] = bitstring_array[:, i]
+
+        return bitstring_dict
+
     def execute(self, program: pq.Program, num_shots: int):
         return ThinPromise(
-            self.device.run_and_measure,
-            program=self.device.compile(program=program),
-            trials=num_shots,
+            self._run_and_measure,
+            program=program,
+            num_shots=num_shots,
         )
 
 
