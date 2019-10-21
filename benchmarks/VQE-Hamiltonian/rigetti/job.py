@@ -8,8 +8,6 @@ from ..common import HamiltonianType, AnsatzCircuit
 import pyquil as pq
 
 
-GATENAME_MAP
-
 
 class RigettiVQEHamiltonianSimulatedJob(RigettiJob):
     def __init__(self, qubits: int, J1: float, J2: float, type: HamiltonianType, **kwargs):
@@ -43,7 +41,7 @@ class RigettiVQEHamiltonianSimulatedJob(RigettiJob):
                         program += pq.gates.RY(theta, *location)
                     elif gate_name == "Rz":
                         program += pq.gates.RZ(theta, *location)
-                    else
+                    else:
                         raise NotImplementedError("gate not implemented for VQE ansatz")
 
                 else:
@@ -51,7 +49,7 @@ class RigettiVQEHamiltonianSimulatedJob(RigettiJob):
                         program += pq.gates.CNOT(*location)
                     elif gate_name == "CZ":
                         program += pq.gates.CZ(*location)
-                    else
+                    else:
                         raise NotImplementedError("gate not implemented for VQE ansatz")
 
         self.program = program
