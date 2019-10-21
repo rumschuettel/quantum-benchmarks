@@ -14,3 +14,4 @@ echo "starting benchmark..."
 
 # run
 ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Schroedinger-Microscope -ps 1 -p 32 -s 1024
+./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Platonic-Fractals -ps 1 -p 32 -s 1024
