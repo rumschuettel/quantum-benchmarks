@@ -48,7 +48,7 @@ class RigettiStatevectorSimulator(RigettiDevice):
 
 # with rigetti we can have any kind of qvm we want, and also other topologies etc
 RIGETTI_EXTRA_QVMS = [
-    nn for n in [8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]
+    nn for n in [2, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]
 ]
 
 
