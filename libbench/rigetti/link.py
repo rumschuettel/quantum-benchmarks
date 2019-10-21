@@ -24,7 +24,9 @@ class RigettiQVM(RigettiDevice):
 
     def execute(self, program: pq.Program, num_shots: int):
         return ThinPromise(
-            self.device.run_and_measure, program=program, trials=num_shots
+            self.device.run_and_measure,
+            program=self.device.compile(program=program),
+            trials=num_shots,
         )
 
 

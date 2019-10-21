@@ -6,7 +6,9 @@ from .job import RigettiPlatonicFractalsJob
 from .. import PlatonicFractalsBenchmarkMixin
 
 
-class RigettiPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, RigettiBenchmark):
+class RigettiPlatonicFractalsBenchmarkBase(
+    PlatonicFractalsBenchmarkMixin, RigettiBenchmark
+):
     def __init__(self, add_measurements, **kwargs):
         super().__init__(**kwargs)
 
@@ -94,4 +96,3 @@ class RigettiPlatonicFractalsSimulatedBenchmark(RigettiPlatonicFractalsBenchmark
         kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
         raise NotImplementedError()
-

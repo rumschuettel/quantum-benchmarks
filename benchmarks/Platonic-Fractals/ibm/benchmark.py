@@ -78,4 +78,3 @@ class IBMPlatonicFractalsSimulatedBenchmark(IBMPlatonicFractalsBenchmarkBase):
         kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
         raise NotImplementedError()
-

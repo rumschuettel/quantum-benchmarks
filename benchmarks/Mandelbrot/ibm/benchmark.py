@@ -8,9 +8,7 @@ from .job import IBMMandelbrotJob
 from .. import MandelbrotBenchmarkMixin
 
 
-class IBMMandelbrotBenchmarkBase(
-    MandelbrotBenchmarkMixin, IBMBenchmark
-):
+class IBMMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, IBMBenchmark):
     def __init__(self, add_measurements, **kwargs):
         super().__init__(**kwargs)
         self.add_measurements = add_measurements
@@ -68,9 +66,7 @@ class IBMMandelbrotBenchmark(IBMMandelbrotBenchmarkBase):
         return {"psp": psp, "z": z}
 
 
-class IBMMandelbrotSimulatedBenchmark(
-    IBMMandelbrotBenchmarkBase
-):
+class IBMMandelbrotSimulatedBenchmark(IBMMandelbrotBenchmarkBase):
     """
         Simulated SM Benchmark
 

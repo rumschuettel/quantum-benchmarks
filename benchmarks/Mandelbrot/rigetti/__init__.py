@@ -1,4 +1,2 @@
 from .benchmark import RigettiMandelbrotBenchmark as Benchmark
-from .benchmark import (
-    RigettiMandelbrotSimulatedBenchmark as SimulatedBenchmark,
-)
+from .benchmark import RigettiMandelbrotSimulatedBenchmark as SimulatedBenchmark
