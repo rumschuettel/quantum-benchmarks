@@ -61,7 +61,7 @@ class RigettiSchroedingerMicroscopeBenchmark(
     def parse_result(self, job, result):
         """
         initially results are in the form qubit : measurement-outcomes
-        {   
+        {
             0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
             1: array([1, 0, 1, 1, 1, 0, 1, 0, 1, 0]),
             2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])
@@ -78,8 +78,8 @@ class RigettiSchroedingerMicroscopeBenchmark(
             else:
                 counts[key] = 1
 
-        failure_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "0"
-        success_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "1"
+        failure_post_process_key = "0" + "0" * (2 ** self.num_post_selections - 1)
+        success_post_process_key = "1" + "0" * (2 ** self.num_post_selections - 1)
         num_post_selected_failures = (
             counts[failure_post_process_key]
             if failure_post_process_key in counts
