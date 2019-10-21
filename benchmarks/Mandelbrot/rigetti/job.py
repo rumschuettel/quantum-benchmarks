@@ -4,6 +4,7 @@ from typing import Union
 
 import numpy as np
 import pyquil as pq
+from pyquil.quil import Pragma
 
 from libbench.rigetti import Job as RigettiJob
 

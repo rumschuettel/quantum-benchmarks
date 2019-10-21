@@ -6,6 +6,8 @@ from math import pi
 from numpy import arccos, sqrt
 import random as random
 import pyquil as pq
+from pyquil.quil import Pragma
+
 
 from libbench.rigetti import Job as RigettiJob
 
