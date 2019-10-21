@@ -13,6 +13,7 @@ from libbench.rigetti import Job as RigettiJob
 
 from .. import PlatonicFractalsBenchmarkMixin
 
+
 class RigettiPlatonicFractalsJob(RigettiJob):
     @staticmethod
     def job_factory(
@@ -57,21 +58,21 @@ class RigettiPlatonicFractalsJob(RigettiJob):
 
         # Build the circuit
         program = pq.Program()
-        program += Pragma('INITIAL_REWIRING', ['"GREEDY"'])
-        
+        program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
+
         program += pq.gates.H(0)
         for i in range(len(meas_dirs)):
             if meas_dirs[i] == 2:
                 program += pq.gates.S(0).dagger()
             if meas_dirs[i] == 1 or meas_dirs[i] == 2:
                 program += pq.gates.H(0)
-            
-            program += pq.gates.H(i+1)
-            program += pq.gates.RZ(2 * angle1, i+1)
-            
-            program += pq.gates.RZ(2 * (pi / 2 - 2 * angle1), i+1).controlled(0)
+
             program += pq.gates.H(i + 1)
-            
+            program += pq.gates.RZ(2 * angle1, i + 1)
+
+            program += pq.gates.RZ(2 * (pi / 2 - 2 * angle1), i + 1).controlled(0)
+            program += pq.gates.H(i + 1)
+
             if meas_dirs[i] == 1 or meas_dirs[i] == 2:
                 program += pq.gates.H(0)
             if meas_dirs[i] == 2:

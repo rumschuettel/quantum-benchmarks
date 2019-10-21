@@ -123,6 +123,7 @@ def info_benchmark(parser_benchmarks, args):
 
 def _show_figure(figpath):
     import webbrowser
+
     webbrowser.open_new(str(figpath))
 
 

@@ -8,9 +8,7 @@ from .job import RigettiMandelbrotJob
 from .. import MandelbrotBenchmarkMixin
 
 
-class RigettiMandelbrotBenchmarkBase(
-    MandelbrotBenchmarkMixin, RigettiBenchmark
-):
+class RigettiMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, RigettiBenchmark):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -29,9 +27,7 @@ class RigettiMandelbrotBenchmarkBase(
         return "Rigetti-Schroedinger-Microscope"
 
 
-class RigettiMandelbrotSimulatedBenchmark(
-    RigettiMandelbrotBenchmarkBase
-):
+class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):
     """
         Statevector simulator
     """
@@ -48,9 +44,7 @@ class RigettiMandelbrotSimulatedBenchmark(
         return {"psp": psp, "z": z}
 
 
-class RigettiMandelbrotBenchmark(
-    RigettiMandelbrotBenchmarkBase
-):
+class RigettiMandelbrotBenchmark(RigettiMandelbrotBenchmarkBase):
     """
         Measure and run
     """

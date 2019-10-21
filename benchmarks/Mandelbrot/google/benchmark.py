@@ -7,9 +7,7 @@ from .job import GoogleMandelbrotJob
 from .. import MandelbrotBenchmarkMixin
 
 
-class GoogleMandelbrotBenchmarkBase(
-    MandelbrotBenchmarkMixin, GoogleBenchmark
-):
+class GoogleMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, GoogleBenchmark):
     def __init__(self, add_measurements, **kwargs):
         super().__init__(**kwargs)
         self.add_measurements = add_measurements
@@ -62,9 +60,7 @@ class GoogleMandelbrotBenchmark(GoogleMandelbrotBenchmarkBase):
         return {"psp": psp, "z": z}
 
 
-class GoogleMandelbrotSimulatedBenchmark(
-    GoogleMandelbrotBenchmarkBase
-):
+class GoogleMandelbrotSimulatedBenchmark(GoogleMandelbrotBenchmarkBase):
     """
         Simulated SM Benchmark
 

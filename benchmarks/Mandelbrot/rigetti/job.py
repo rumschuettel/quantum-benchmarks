@@ -31,22 +31,22 @@ class RigettiMandelbrotJob(RigettiJob):
         self.shots = shots
 
         # Calculate the required circuit parameters
-        r2 = abs(z) * np.sqrt(1 + .5*np.sqrt(1 + 4/abs(z)**2))
-        r1 = 1/r2
+        r2 = abs(z) * np.sqrt(1 + 0.5 * np.sqrt(1 + 4 / abs(z) ** 2))
+        r1 = 1 / r2
         phi = np.angle(z)
-        r1rot = -2*np.arccos(1/np.sqrt(1.+r1**2))
-        r2rot = -2*np.arccos(1/np.sqrt(1.+r2**2))
+        r1rot = -2 * np.arccos(1 / np.sqrt(1.0 + r1 ** 2))
+        r2rot = -2 * np.arccos(1 / np.sqrt(1.0 + r2 ** 2))
 
         # Build the circuit
         program = pq.Program()
-        program += Pragma('INITIAL_REWIRING', ['"GREEDY"'])
+        program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
         qubits = 2 ** num_post_selections
-        for k in range(2**num_post_selections):
+        for k in range(2 ** num_post_selections):
             program += pq.gates.X(k)
 
-        for k in range(1,num_post_selections+1):
-            for l in range(0,2**num_post_selections,2**k):
+        for k in range(1, num_post_selections + 1):
+            for l in range(0, 2 ** num_post_selections, 2 ** k):
                 program += pq.gates.CNOT(l, l + 2 ** (k - 1))
                 program += pq.gates.H(l).controlled(l + 2 ** (k - 1))
                 program += pq.gates.RY(r1rot, l + 2 ** (k - 1)).controlled(l)

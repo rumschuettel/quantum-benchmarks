@@ -41,31 +41,40 @@ class IBMMandelbrotJob(IBMJob):
         self.num_shots = num_shots
 
         # Calculate the required circuit parameters
-        r2 = abs(z) * np.sqrt(1 + .5*np.sqrt(1 + 4/abs(z)**2))
-        r1 = 1/r2
+        r2 = abs(z) * np.sqrt(1 + 0.5 * np.sqrt(1 + 4 / abs(z) ** 2))
+        r1 = 1 / r2
         phi = np.angle(z)
-        r1rot = -2*np.arccos(1/np.sqrt(1.+r1**2))
-        r2rot = -2*np.arccos(1/np.sqrt(1.+r2**2))
+        r1rot = -2 * np.arccos(1 / np.sqrt(1.0 + r1 ** 2))
+        r2rot = -2 * np.arccos(1 / np.sqrt(1.0 + r2 ** 2))
 
         # Set up the circuit
-        circuit = QuantumCircuit(2**num_post_selections, 2**num_post_selections) if add_measurements else QuantumCircuit(2**num_post_selections)
-        for k in range(2**num_post_selections):
+        circuit = (
+            QuantumCircuit(2 ** num_post_selections, 2 ** num_post_selections)
+            if add_measurements
+            else QuantumCircuit(2 ** num_post_selections)
+        )
+        for k in range(2 ** num_post_selections):
             circuit.x(k)
-        for k in range(1,num_post_selections+1):
-            for l in range(0,2**num_post_selections,2**k):
-                circuit.cx(l, l+2**(k-1))
-                circuit.ch(l+2**(k-1), l)
-                circuit.cu3(r1rot, 0, 0, l, l+2**(k-1)) # cu3(theta,0,0) == cry(theta)
-                circuit.cz(l, l+2**(k-1))
+        for k in range(1, num_post_selections + 1):
+            for l in range(0, 2 ** num_post_selections, 2 ** k):
+                circuit.cx(l, l + 2 ** (k - 1))
+                circuit.ch(l + 2 ** (k - 1), l)
+                circuit.cu3(
+                    r1rot, 0, 0, l, l + 2 ** (k - 1)
+                )  # cu3(theta,0,0) == cry(theta)
+                circuit.cz(l, l + 2 ** (k - 1))
                 circuit.rz(phi, l)
-                circuit.rz(-phi, l+2**(k-1))
-                circuit.x(l+2**(k-1))
-                circuit.cu3(r2rot, 0, 0, l+2**(k-1), l)
-                circuit.cz(l, l+2**(k-1))
-                circuit.cx(l, l+2**(k-1))
-                circuit.x(l+2**(k-1))
+                circuit.rz(-phi, l + 2 ** (k - 1))
+                circuit.x(l + 2 ** (k - 1))
+                circuit.cu3(r2rot, 0, 0, l + 2 ** (k - 1), l)
+                circuit.cz(l, l + 2 ** (k - 1))
+                circuit.cx(l, l + 2 ** (k - 1))
+                circuit.x(l + 2 ** (k - 1))
         if add_measurements:
-            circuit.measure(list(range(2**num_post_selections)), list(range(2**num_post_selections)))
+            circuit.measure(
+                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)),
+            )
 
         # store the resulting circuit
         self.circuit = circuit

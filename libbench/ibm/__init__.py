@@ -5,4 +5,3 @@ from .link import IBMStatevectorLink as StatevectorLink
 from .link import IBMJob as Job
 from .link import IBMThinPromise
 from .jobmanager import IBMJobManager as JobManager
-

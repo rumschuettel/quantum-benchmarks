@@ -77,9 +77,7 @@ class MandelbrotBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "Mandelbrot",
-        help="Mandelbrot benchmark.",
-        **argparse_options,
+        "Mandelbrot", help="Mandelbrot benchmark.", **argparse_options
     )
     parser.add_argument(
         "-ps",
