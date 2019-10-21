@@ -72,8 +72,8 @@ class RigettiMandelbrotBenchmark(RigettiMandelbrotBenchmarkBase):
             else:
                 counts[key] = 1
 
-        failure_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "0"
-        success_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "1"
+        failure_post_process_key = "0" + "0" * (2 ** self.num_post_selections - 1)
+        success_post_process_key = "1" + "0" * (2 ** self.num_post_selections - 1)
         num_post_selected_failures = (
             counts[failure_post_process_key]
             if failure_post_process_key in counts
