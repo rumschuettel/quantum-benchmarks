@@ -6,6 +6,7 @@ class ThinPromise(ABC):
     """
         This is a thin promise that simply executes the given callback,
         and otherwise mimics the IBM interface.
+        The first execution attempt is done when accessing result or status.
 
         This can be used as a promise whenever the execution is immediate.
     """
@@ -20,12 +21,26 @@ class ThinPromise(ABC):
         return id(self)
 
     def status(self):
-        return "PENDING" if self._result is None else "DONE"
+        return "PENDING" if not self._try_get_result() else "DONE"
+
+    def _try_get_result(self):
+        if self._result is not None:
+            return True
+        try:
+            self._result = self.result_callback(*self.args, **self.kwargs)
+            return True
+        except:
+            return False
 
     def result(self):
-        if self._result is None:
-            self._result = self.result_callback(*self.args, **self.kwargs)
+        self._try_get_result()
         return self._result
+
+    def freeze(self):
+        return self
+    
+    def thaw(self):
+        return self
 
 
 class VendorJob(ABC):
