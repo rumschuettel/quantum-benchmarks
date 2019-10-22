@@ -19,11 +19,10 @@ class IBMJob(VendorJob):
 
 class IBMThinPromise(ThinPromise):
     """
-        Override for fake status report to work with IBMJobManager
+        Override mock status report to work with IBMJobManager
     """
-
     def status(self):
-        return JobStatus.QUEUED if self._result is None else JobStatus.DONE
+        return JobStatus.ERROR if self._result is None else JobStatus.DONE
 
 
 class IBMCloudLink(VendorLink):

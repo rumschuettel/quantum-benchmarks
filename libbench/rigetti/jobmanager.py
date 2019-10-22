@@ -12,13 +12,13 @@ class RigettiJobManager(VendorJobManager):
         """
             Check whether the job is alive.
         """
-        return promise.status() in ["PENDING", "DONE"]
+        return promise.status() == "DONE"
 
     def queued_successfully(self, promise):
         """
             Check whether the job is successfully queued.
         """
-        return promise.status() in ["PENDING", "DONE"]
+        return promise.status() == "DONE"
 
     def try_get_results(self, promise, device):
         """
