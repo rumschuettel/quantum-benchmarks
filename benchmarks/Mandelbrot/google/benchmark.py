@@ -25,7 +25,7 @@ class GoogleMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, GoogleBenchmark):
         )
 
     def __str__(self):
-        return "Google-Schroedinger-Microscope"
+        return "Google-Mandelbrot"
 
 
 class GoogleMandelbrotBenchmark(GoogleMandelbrotBenchmarkBase):

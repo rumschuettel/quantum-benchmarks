@@ -26,7 +26,7 @@ class IBMMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, IBMBenchmark):
         )
 
     def __str__(self):
-        return "IBM-Schroedinger-Microscope"
+        return "IBM-Mandelbrot"
 
 
 class IBMMandelbrotBenchmark(IBMMandelbrotBenchmarkBase):

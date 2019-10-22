@@ -24,7 +24,7 @@ class RigettiMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, RigettiBenchmark)
         )
 
     def __str__(self):
-        return "Rigetti-Schroedinger-Microscope"
+        return "Rigetti-Mandelbrot"
 
 
 class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):
