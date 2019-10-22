@@ -14,6 +14,7 @@ class ThinPromise(ABC):
         try:
             self._result = result_callback(*args, **kwargs)
         except:
+            self._result = None
             pass
 
     def job_id(self):
