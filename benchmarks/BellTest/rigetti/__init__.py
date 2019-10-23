@@ -1,0 +1,2 @@
+from .benchmark import RigettiBellTestBenchmark as Benchmark
+from .benchmark import RigettiBellTestSimulatedBenchmark as SimulatedBenchmark

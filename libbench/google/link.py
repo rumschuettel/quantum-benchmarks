@@ -5,6 +5,7 @@ from .promise import GoogleCloudPromise
 from .promise import GoogleMeasureLocalPromise
 from .promise import GoogleStatevectorPromise
 import cirq
+import functools
 
 
 class GoogleDevice(ABC):
@@ -50,12 +51,18 @@ class GoogleJob(VendorJob):
         return self.circuit
 
 
-class GoogleCloudLink(VendorLink):
+class GoogleLinkBase(VendorLink):
+    def get_device_topology(self, name):
+        return None
+
+
+class GoogleCloudLink(GoogleLinkBase):
     def __init__(self):
         super().__init__()
 
         print_hl("cirq cloud backend loaded.")
 
+    @functools.lru_cache()
     def get_devices(self):
         """
             Retrieves the cloud services of Google.
@@ -63,12 +70,13 @@ class GoogleCloudLink(VendorLink):
         return GOOGLE_CLOUD_DEVICES
 
 
-class GoogleMeasureLocalLink(VendorLink):
+class GoogleMeasureLocalLink(GoogleLinkBase):
     def __init__(self):
         super().__init__()
 
         print_hl("cirq measure local backend loaded.")
 
+    @functools.lru_cache()
     def get_devices(self):
         """
             Retrieves the measure local services of Google.
@@ -76,12 +84,13 @@ class GoogleMeasureLocalLink(VendorLink):
         return GOOGLE_MEASURE_LOCAL_DEVICES
 
 
-class GoogleStatevectorLink(VendorLink):
+class GoogleStatevectorLink(GoogleLinkBase):
     def __init__(self):
         super().__init__()
 
         print_hl("cirq statevector simulator backend loaded.")
 
+    @functools.lru_cache()
     def get_devices(self):
         """
             Retrieves the available statevector simulators in cirq.

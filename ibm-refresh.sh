@@ -26,6 +26,8 @@ function check() {
                     eval $cmd
                 fi
             fi
+
+            return
         fi
     done < <(./runner.py status)
 }

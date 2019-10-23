@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Callable
+from typing import Dict, Callable, Tuple, List, Union
 
 
 class ThinPromise(ABC):
@@ -11,11 +11,7 @@ class ThinPromise(ABC):
     """
 
     def __init__(self, result_callback: Callable, *args, **kwargs):
-        try:
-            self._result = result_callback(*args, **kwargs)
-        except:
-            self._result = None
-            pass
+        self._result = result_callback(*args, **kwargs)
 
     def job_id(self):
         return id(self)
@@ -28,7 +24,7 @@ class ThinPromise(ABC):
 
     def freeze(self):
         return self
-    
+
     def thaw(self):
         return self
 
@@ -59,6 +55,10 @@ class VendorLink(ABC):
 
     @abstractmethod
     def get_devices(self) -> Dict[str, object]:
+        pass
+
+    @abstractmethod
+    def get_device_topology(self, name) -> Union[List[Tuple[int, int]], None]:
         pass
 
     def get_device(self, name):

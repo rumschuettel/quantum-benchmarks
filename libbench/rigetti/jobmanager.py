@@ -5,9 +5,6 @@ import pyquil as pq
 
 
 class RigettiJobManager(VendorJobManager):
-    def __init__(self, benchmark: RigettiBenchmark):
-        super().__init__(benchmark)
-
     def job_alive(self, promise):
         """
             Check whether the job is alive.

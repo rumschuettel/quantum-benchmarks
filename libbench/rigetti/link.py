@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod, abstractproperty
 from libbench.link import VendorLink, VendorJob, ThinPromise
+from typing import Union, Tuple, List
 
 import pyquil as pq
+
+import functools
 
 
 class RigettiDevice(ABC):
@@ -22,7 +25,7 @@ class RigettiQVM(RigettiDevice):
     def name(self):
         return self.device.name
 
-    def _run_and_measure(self, program: pq.Program, num_shots: int, optimize=True):
+    def _run_and_measure(self, program: pq.Program, num_shots: int, optimize):
         program = program.copy()
         qubits = program.get_qubits()
 
@@ -33,19 +36,25 @@ class RigettiQVM(RigettiDevice):
 
         program.wrap_in_numshots_loop(shots=num_shots)
 
-        executable = self.device.compile(program)
+        executable = self.device.compile(program, optimize=optimize)
+
+        # try:
         bitstring_array = self.device.run(executable=executable)
+        # except:  # TODO be more specific
+        #    return None
+
         bitstring_dict = {}
         for i, q in enumerate(qubits):
             bitstring_dict[q] = bitstring_array[:, i]
 
         return bitstring_dict
 
-    def execute(self, program: pq.Program, num_shots: int):
+    def execute(self, program: pq.Program, num_shots: int, optimize=True):
         return ThinPromise(
             self._run_and_measure,
             program=program,
             num_shots=num_shots,
+            optimize=optimize,
         )
 
 
@@ -86,6 +95,7 @@ class RigettiCloudLink(VendorLink):
     def __init__(self):
         super().__init__()
 
+    @functools.lru_cache()
     def get_devices(self):
         devices = {}
         for n in pq.list_quantum_computers(qpus=True, qvms=False):
@@ -95,11 +105,16 @@ class RigettiCloudLink(VendorLink):
                 pass
         return devices
 
+    def get_device_topology(self, name) -> List[Tuple[int, int]]:
+        # .qubit_topology() returns a networkx graph
+        return list(self.get_device(name).device.qubit_topology().edges())
+
 
 class RigettiMeasureLocalLink(VendorLink):
     def __init__(self):
         super().__init__()
 
+    @functools.lru_cache()
     def get_devices(self):
         # any qpu device can also be used as a qvm for rigetti, so we include both
         return {
@@ -110,6 +125,10 @@ class RigettiMeasureLocalLink(VendorLink):
             ]
         }
 
+    def get_device_topology(self, name) -> List[Tuple[int, int]]:
+        # .qubit_topology() returns a networkx graph
+        return list(self.get_device(name).device.qubit_topology().edges())
+
 
 class RigettiStatevectorLink(VendorLink):
     def __init__(self):
@@ -117,3 +136,6 @@ class RigettiStatevectorLink(VendorLink):
 
     def get_devices(self):
         return {"WavefunctionSimulator": RigettiStatevectorSimulator()}
+
+    def get_device_topology(self, name) -> None:
+        return None

@@ -177,7 +177,9 @@ def new_benchmark(args):
     Benchmark = import_benchmark(BENCHMARK, VENDOR, MODE, DEVICE)
     JobManager = import_jobmanager(VENDOR)
     JobManager.RUN_FOLDER = RUN_FOLDER
-    jobmanager = JobManager(Benchmark(**vars(args)))
+    jobmanager = JobManager(
+        Benchmark(topology=link.get_device_topology(DEVICE), **vars(args))
+    )
 
     # run update
     _run_update(

@@ -80,7 +80,7 @@ class VendorJobManager(ABC):
             # 3. otherwise the job simply wasn't done, put back to queue
             else:
                 new_queued[job] = promise
-                
+
         self.queued = new_queued
 
         # store jobmanager for reuse

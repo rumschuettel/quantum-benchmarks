@@ -1,6 +1,6 @@
 from libbench.lib import print_hl
 from libbench.link import VendorJob, VendorLink, ThinPromise
-
+import functools
 from qiskit.providers import JobStatus
 
 IBM_KNOWN_STATEVECTOR_DEVICES = ["statevector_simulator"]
@@ -21,11 +21,17 @@ class IBMThinPromise(ThinPromise):
     """
         Override mock status report to work with IBMJobManager
     """
+
     def status(self):
         return JobStatus.ERROR if self._result is None else JobStatus.DONE
 
 
-class IBMCloudLink(VendorLink):
+class IBMLinkBase(VendorLink):
+    def get_device_topology(self, name):
+        return self.get_device(name).configuration().coupling_map
+
+
+class IBMCloudLink(IBMLinkBase):
     def __init__(self):
         super().__init__()
 
@@ -42,11 +48,12 @@ class IBMCloudLink(VendorLink):
 
         print_hl("IBMQ cloud account loaded.")
 
+    @functools.lru_cache()
     def get_devices(self):
         return {device.name(): device for device in self.IBMQ_cloud.backends()}
 
 
-class IBMMeasureLocalLink(VendorLink):
+class IBMMeasureLocalLink(IBMLinkBase):
     def __init__(self):
         super().__init__()
 
@@ -56,6 +63,7 @@ class IBMMeasureLocalLink(VendorLink):
 
         print_hl("qiskit Aer loaded.")
 
+    @functools.lru_cache()
     def get_devices(self):
         return {
             device.name(): device
@@ -64,7 +72,7 @@ class IBMMeasureLocalLink(VendorLink):
         }
 
 
-class IBMStatevectorLink(VendorLink):
+class IBMStatevectorLink(IBMLinkBase):
     def __init__(self):
         super().__init__()
 
@@ -74,6 +82,7 @@ class IBMStatevectorLink(VendorLink):
 
         print_hl("qiskit Aer loaded.")
 
+    @functools.lru_cache()
     def get_devices(self):
         return {
             device.name(): device

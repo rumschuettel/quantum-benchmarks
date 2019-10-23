@@ -5,9 +5,6 @@ import cirq
 
 
 class GoogleJobManager(VendorJobManager):
-    def __init__(self, benchmark: GoogleBenchmark):
-        super().__init__(benchmark)
-
     def job_alive(self, promise):
         """
             Check whether the job is alive.

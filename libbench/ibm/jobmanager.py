@@ -6,9 +6,6 @@ from qiskit.providers.ibmq.api_v2.exceptions import ApiError
 
 
 class IBMJobManager(VendorJobManager):
-    def __init__(self, benchmark: IBMBenchmark):
-        super().__init__(benchmark)
-
     def job_alive(self, promise):
         """
             check whether we consider the job behind the promise alive on an IBM backend
