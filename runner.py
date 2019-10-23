@@ -329,7 +329,7 @@ if __name__ == "__main__":
         "job_id",
         metavar="JOB_ID",
         type=str,
-        help=f"old job id; subfolder name in f{VendorJobManager.RUN_FOLDER}",
+        help=f"old job id; subfolder name in {VendorJobManager.RUN_FOLDER}",
     )
     parser_R.add_argument(
         "--run_folder",
