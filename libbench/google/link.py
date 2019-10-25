@@ -26,8 +26,8 @@ class SparseSimulatorStatevector(GoogleDevice):
     def __init__(self):
         self.name = "sparse_simulator_statevector"
 
-    def execute(self, circuit, num_shots: int):
-        return GoogleStatevectorPromise(circuit, cirq.Simulator(), num_shots=num_shots)
+    def execute(self, circuit, num_shots: int, **kwargs):
+        return GoogleStatevectorPromise(circuit, cirq.Simulator(), num_shots=num_shots, **kwargs)
 
 
 GOOGLE_STATEVECTOR_DEVICES = {

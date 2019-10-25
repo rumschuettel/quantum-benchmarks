@@ -94,9 +94,13 @@ class GoogleMeasureLocalPromise(GoogleLocalPromise):
 
 class GoogleStatevectorPromise(GoogleLocalPromise):
     def __init__(self, *args, num_shots: int, **kwargs):
+        self.kwargs = {}
+        if 'qubit_order' in kwargs:
+            self.kwargs['qubit_order'] = kwargs['qubit_order']
+        del kwargs['qubit_order']
         super().__init__(*args, **kwargs)
 
     def result(self):
         if self._result is None:
-            self._result = self.device.simulate(self.circuit)
+            self._result = self.device.simulate(self.circuit, **self.kwargs)
         return self._result
