@@ -61,5 +61,6 @@ class GoogleLineDrawingSimulatedBenchmark(
     def parse_result(self, job, result):
         n = len(job.qubits)
         psi = result.final_state
+        psi = psi[::len(psi)//(2**n)]
         hist = {f'{i:0{n}b}' : abs(psi[i])**2 for i in range(2**n)}
         return hist

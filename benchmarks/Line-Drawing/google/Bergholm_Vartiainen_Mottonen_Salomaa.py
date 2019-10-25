@@ -1,6 +1,6 @@
 import numpy as np
 import cirq
-from .uniformly_controlled import generate_uniformly_controlled_circuit
+from .uniformly_controlled_circuits import generate_uniformly_controlled_circuit
 
 def normalize_and_remove_phase(v):
     return v / np.linalg.norm(v) / np.exp(1.j * np.angle(v[0]))

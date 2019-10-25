@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 
 import numpy as np
+np.set_printoptions(linewidth=200)
 import matplotlib.pyplot as plt
 import itertools as it
 
@@ -80,7 +81,8 @@ class LineDrawingBenchmarkMixin:
     def visualize(self, collated_result: object, path: Path) -> Path:
         estimates = collated_result
         xs,ys = list(np.real(estimates)), list(np.imag(estimates))
-        print(xs,ys)
+        print("X coordinates:", np.round(xs,3))
+        print("Y coordinates:", np.round(ys,3))
 
         # Set up the figure
         fig = plt.figure(figsize=(12, 8))
@@ -92,6 +94,15 @@ class LineDrawingBenchmarkMixin:
         # Plot the ideal contour
         ideal_xs,ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
         ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color = 'blue', linestyle = '--')
+
+        xmin,xmax,ymin,ymax = min(ideal_xs),max(ideal_xs),min(ideal_ys),max(ideal_ys)
+        dx,dy = xmax-xmin,ymax-ymin
+        if dx < dy*1.5: dx = dy*1.5
+        else: dy = dx/1.5
+        print(dx,dy)
+
+        ax.set_xlim((xmin-.1*dx, xmax+.1*dx))
+        ax.set_ylim((ymin-.1*dy, ymax+.1*dy))
 
         # save figure
         figpath = path / "visualize.pdf"

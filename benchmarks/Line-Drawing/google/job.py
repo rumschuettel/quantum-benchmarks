@@ -62,8 +62,13 @@ class GoogleLineDrawingJob(GoogleJob):
         self.qubits = qubits
         self.circuit = circuit
 
+        # Display some statistics
+        qubit_ops = [len(op.qubits) for moment in circuit for op in moment]
+        print(" - No. single qubit gates:", qubit_ops.count(1))
+        print(" - No. two qubit gates:", qubit_ops.count(2))
+
     def prepare_state(self, state, qubits, method):
-        assert method in ['DC', 'SBM', 'BVMS']
+        assert method in ['DC', 'SBM', 'SBM+GC', 'BVMS']
 
         n = int(np.log2(len(state)))
         assert len(state) == 2**n
@@ -72,9 +77,12 @@ class GoogleLineDrawingJob(GoogleJob):
         qubits = [cirq.GridQubit(0,i) for i in range(n)]
         circuit = cirq.Circuit()
         if method == 'DC':
-            circuit.append(divide_and_conquer(state, qubits))
+            ancilla_qubits = [cirq.GridQubit(1,i) for i in range(n-2)]
+            circuit.append(divide_and_conquer(state, qubits, ancilla_qubits))
         elif method == 'SBM':
-            circuit.append(Shende_Bullock_Markov(state, qubits))
+            circuit.append(Shende_Bullock_Markov(state, qubits, False, True))
+        elif method == 'SBM+GC':
+            circuit.append(Shende_Bullock_Markov(state, qubits, True, True))
         elif method == 'BVMS':
             circuit.append(Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits))
         return circuit
@@ -94,7 +102,7 @@ class GoogleLineDrawingJob(GoogleJob):
     def run(self, device):
         kwargs = {}
         if not self.add_measurements:
-            kwargs['qubit_order'] = self.qubits
+            kwargs['qubit_order'] = self.qubits + list(set(self.circuit.all_qubits()).difference(self.qubits))
         return device.execute(self.circuit, num_shots = self.num_shots, **kwargs)
 
     def __str__(self):
