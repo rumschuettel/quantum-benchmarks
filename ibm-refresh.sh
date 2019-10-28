@@ -18,16 +18,15 @@ function check() {
             mode=$(echo "$info" | sed "s/'/\"/g" | jq -r ".mode")
             device=$(echo "$info" | sed "s/'/\"/g" | jq -r ".device")
 
-            if (( $todo >= 0 || $scheduled >= 0 )); then
+            if (( $todo > 0 || $scheduled > 0 )); then
                 if [[ "$mode" == "Cloud" ]]; then
                     echo "resuming $path on $device"
                     cmd="./runner.py resume \"$path\""
                     echo "$cmd"
                     eval $cmd
+                    return
                 fi
             fi
-
-            return
         fi
     done < <(./runner.py status)
 }
@@ -42,5 +41,5 @@ trap 'on_ctrl_c' SIGINT
 # check forever
 while :; do
     check
-    sleep 180
+    sleep 60
 done
