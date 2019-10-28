@@ -5,11 +5,11 @@ for f in ./runs/*
 do
   id=$(basename $f)
   printf "Checking folder $id..."
-  if [ -f "./runs/$id/collated.pickle" ]
+  if [ -f "./runs/$id/visualize.pdf" ]
   then
     printf " done.\n"
   else
     printf " invoking update\n"
-    python3 runner.py resume $id
+    ./runner.py resume $id
   fi
 done
