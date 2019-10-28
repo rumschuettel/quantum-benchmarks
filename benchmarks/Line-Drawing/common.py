@@ -20,7 +20,7 @@ class LineDrawingBenchmarkMixin:
 
         points = [
             complex(*SHAPE_FUNCTIONS[shape](t))
-            for t in np.linspace(0, 2 * np.pi, num=num_points)
+            for t in np.linspace(0, 2 * np.pi, num=num_points+1)[:num_points]
         ]
         self.points = np.array(points) / np.linalg.norm(points)
 
@@ -34,7 +34,7 @@ class LineDrawingBenchmarkMixin:
 
 
     def collate_results(self, results: Dict[VendorJob, object], path: Path):
-        n = len(self.points)
+        n = int(np.log2(len(self.points)))
 
         # Retrieve the amplitude estimates
         curves = []
