@@ -47,7 +47,8 @@ def decompose_singly_controlled_unitaries(A,B):
 
     # Check if operation is equal
     O = fullR @ np.kron(np.eye(2), U) @ CNOT @ np.kron(np.eye(2), V)
-    print("Single control error:", np.max(np.abs(O - op)))
+    single_control_error = np.max(np.abs(O - op))
+    assert single_control_error < 1e-8, f"Single control error: {single_control_error}"
 
     # Return the operations U, V and the full diagonal matrix
     return U,V,np.diag(fullR)
@@ -128,7 +129,8 @@ def decompose_uniformly_controlled_unitaries(unitaries):
         full_unitary[2*i:2*i+2,2*i:2*i+2] = unitary
 
     # Check if decomposition worked
-    print("Full construction error:", np.max(np.abs(full_unitary - constructed_unitary)))
+    full_construction_error = np.max(np.abs(full_unitary - constructed_unitary))
+    assert full_construction_error < 1e-8, f"Full construction error: {full_construction_error}"
 
     # Implement the Vs, minus the Hadamards at the end
     Vs = [H @ V for V in Vs]
@@ -137,7 +139,8 @@ def decompose_uniformly_controlled_unitaries(unitaries):
     # Check if decomposition worked
     new_fullV = reconstruct_operation(VGs, VR)
     new_fullV = np.kron(np.eye(2**(n-1)), H) @ new_fullV
-    print("V error:", np.max(np.abs(fullV - new_fullV)))
+    V_error = np.max(np.abs(fullV - new_fullV))
+    assert V_error < 1e-8, f"V error: {V_error}"
 
     # Merge the last H gate into the V gate array
     VGs[-1] = H @ VGs[-1]
@@ -167,7 +170,8 @@ def decompose_uniformly_controlled_unitaries(unitaries):
     full_operation = reconstruct_operation(Gs, Rs)
 
     # Check the results
-    print("Full operation error:", np.max(np.abs(full_operation - full_unitary)))
+    full_operation_error = np.max(np.abs(full_operation - full_unitary))
+    assert full_operation_error < 1e-8, f"Full operation error: {full_operation_error}"
 
     # Return the gates and the diagonal unitary
     return Gs, Rs
@@ -196,6 +200,7 @@ def decompose_single_qubit_unitary(U):
     Utilde = np.diag([1, np.exp(1.j * np.pi * c)]) \
         @ np.array([[np.cos(.5*np.pi*b), -np.sin(.5*np.pi*b)], [np.sin(.5*np.pi*b), np.cos(.5*np.pi*b)]]) \
         @ np.diag([1, np.exp(1.j * np.pi * a)])
-    print("Single qubit gate error:", np.max(np.abs(U - Utilde)))
+    single_qubit_error = np.max(np.abs(U - Utilde))
+    assert single_qubit_error < 1e-8, f"Single qubit gate error: {single_qubit_error}"
 
     return phi,a,b,c

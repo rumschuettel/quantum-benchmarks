@@ -16,24 +16,27 @@ class IBMLineDrawingJob(IBMJob):
         points,
         num_shots,
         add_measurements,
-        state_prepartion_method
+        state_prepartion_method,
+        num_repetitions
     ):
         n = int(np.log2(len(points)))
         assert len(points) == 2**n
         assert abs(np.linalg.norm(points) - 1.) < 1e-4
 
-        yield IBMLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method)
-        for i in range(n):
-            yield IBMLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, Hadamard_qubit = i, S_qubit = None)
-            yield IBMLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, Hadamard_qubit = i, S_qubit = i)
+        for j in range(num_repetitions):
+            yield IBMLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, j)
+            for i in range(n):
+                yield IBMLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, j, Hadamard_qubit = i)
+                yield IBMLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, j, Hadamard_qubit = i, S_qubit = i)
 
-    def __init__(self, points, num_shots, add_measurements, state_prepartion_method, Hadamard_qubit = None, S_qubit = None):
+    def __init__(self, points, num_shots, add_measurements, state_prepartion_method, repetition, Hadamard_qubit = None, S_qubit = None):
         super().__init__()
 
         self.points = points
         self.num_shots = num_shots
         self.add_measurements = add_measurements
         self.state_prepartion_method = state_prepartion_method
+        self.repetition = repetition
         self.Hadamard_qubit = Hadamard_qubit
         self.S_qubit = S_qubit
 
@@ -95,4 +98,4 @@ class IBMLineDrawingJob(IBMJob):
         return execute(self.circuit, device, shots=self.num_shots)
 
     def __str__(self):
-        return f"IBMLineDrawingJob-{self.Hadamard_qubit}-{self.S_qubit}"
+        return f"IBMLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"

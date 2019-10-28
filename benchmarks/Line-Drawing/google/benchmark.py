@@ -19,7 +19,8 @@ class GoogleLineDrawingBenchmarkBase(
             self.points,
             self.num_shots,
             self.add_measurements,
-            self.state_prepartion_method
+            self.state_prepartion_method,
+            self.num_repetitions
         )
 
     def __str__(self):

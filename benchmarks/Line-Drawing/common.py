@@ -12,7 +12,7 @@ from libbench import VendorJob
 
 class LineDrawingBenchmarkMixin:
     def __init__(
-        self, filename, num_shots, method, **_
+        self, filename, method, num_shots, num_repetitions, **_
     ):
         super().__init__()
 
@@ -23,8 +23,9 @@ class LineDrawingBenchmarkMixin:
 
         self.filename = os.path.basename(filename)
         self.points = np.array(points) / np.linalg.norm(points)
-        self.num_shots = num_shots
         self.state_prepartion_method = method
+        self.num_shots = num_shots
+        self.num_repetitions = num_repetitions
         for p in self.points:
             if abs(p) > 1e-8:
                 self.correction_angle = np.angle(p)
@@ -38,60 +39,63 @@ class LineDrawingBenchmarkMixin:
         assert len(self.points) == 2**n
 
         # Retrieve the amplitude estimates
-        for job in results:
-            if job.Hadamard_qubit == None and job.S_qubit == None:
-                prob_hist = results[job]
-                estimates = {k : np.sqrt(v) for k,v in prob_hist.items()}
-                break
-        else:
-            raise AssertionError("The probability job was not found in the results data structure.")
-
-        # Retrieve the relative phase estimates
-        for k in range(n-1,-1,-1):
+        curves = []
+        for j in range(self.num_repetitions):
             for job in results:
-                if job.Hadamard_qubit == k and job.S_qubit == None:
-                    cos_hist = results[job]
+                if job.repetition == j and job.Hadamard_qubit == None and job.S_qubit == None:
+                    prob_hist = results[job]
+                    estimates = {k : np.sqrt(v) for k,v in prob_hist.items()}
                     break
             else:
-                raise AssertionError(f"The job with Hadamard qubit {k} and S qubit None is missing.")
+                raise AssertionError(f"The probability job with repetition {j} was not found in the results data structure.")
 
-            for job in results:
-                if job.Hadamard_qubit == k and job.S_qubit == k:
-                    sin_hist = results[job]
-                    break
-            else:
-                raise AssertionError(f"The job with Hadamard qubit {k} and S qubit {k} is missing.")
+            # Retrieve the relative phase estimates
+            for k in range(n-1,-1,-1):
+                for job in results:
+                    if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit == None:
+                        cos_hist = results[job]
+                        break
+                else:
+                    raise AssertionError(f"The job with repetition {j}, Hadamard qubit {k} and S qubit None is missing.")
 
-            its = [['0']]*(k+1) + [['0','1']]*(n-1-k)
-            for j0 in it.product(*its):
-                j0 = ''.join(j0)
-                j1 = j0[:k] + '1' + j0[(k+1):]
-                fact = abs(estimates[j0] * estimates[j1])
-                if fact == 0: continue
-                cos_phase_diff = (cos_hist[j0] - cos_hist[j1]) / (2*fact)
-                sin_phase_diff = (sin_hist[j0] - sin_hist[j1]) / (2*fact)
-                phase_diff = np.arctan2(sin_phase_diff, cos_phase_diff)
+                for job in results:
+                    if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit == k:
+                        sin_hist = results[job]
+                        break
+                else:
+                    raise AssertionError(f"The job with repetition {j}, Hadamard qubit {k} and S qubit {k} is missing.")
 
-                # Iterate over the part of the Hamming cube that is influenced
-                new_its = [['0','1']]*k + [['1']] + [[j0[i]] for i in range(k+1,n)]
-                for j1 in it.product(*new_its):
-                    j1 = ''.join(j1)
-                    estimates[j1] *= np.exp(-1.j * phase_diff)
+                its = [['0']]*(k+1) + [['0','1']]*(n-1-k)
+                for j0 in it.product(*its):
+                    j0 = ''.join(j0)
+                    j1 = j0[:k] + '1' + j0[(k+1):]
+                    fact = abs(estimates[j0] * estimates[j1])
+                    if fact == 0: continue
+                    cos_phase_diff = (cos_hist[j0] - cos_hist[j1]) / (2*fact)
+                    sin_phase_diff = (sin_hist[j0] - sin_hist[j1]) / (2*fact)
+                    phase_diff = np.arctan2(sin_phase_diff, cos_phase_diff)
 
-        return np.array([v for k,v in sorted(estimates.items())]) * np.exp(1.j * self.correction_angle)
+                    # Iterate over the part of the Hamming cube that is influenced
+                    new_its = [['0','1']]*k + [['1']] + [[j0[i]] for i in range(k+1,n)]
+                    for j1 in it.product(*new_its):
+                        j1 = ''.join(j1)
+                        estimates[j1] *= np.exp(-1.j * phase_diff)
+
+            curve = np.array([v for k,v in sorted(estimates.items())]) * np.exp(1.j * self.correction_angle)
+            curves.append(curve)
+        return curves
 
     def visualize(self, collated_result: object, path: Path) -> Path:
-        estimates = collated_result
-        xs,ys = list(np.real(estimates)), list(np.imag(estimates))
-        print("X coordinates:", np.round(xs,3))
-        print("Y coordinates:", np.round(ys,3))
-
         # Set up the figure
         fig = plt.figure(figsize=(12, 8))
         ax = fig.gca()
 
-        # Plot the contour
-        ax.plot(xs + [xs[0]], ys + [ys[0]], color = 'red')
+        # Plot the contours
+        for curve in collated_result:
+            xs,ys = list(np.real(curve)), list(np.imag(curve))
+            # print("X coordinates:", np.round(xs,3))
+            # print("Y coordinates:", np.round(ys,3))
+            ax.plot(xs + [xs[0]], ys + [ys[0]], color = 'red', alpha = .3)
 
         # Plot the ideal contour
         ideal_xs,ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
@@ -133,5 +137,8 @@ def argparser(toadd, **argparse_options):
     )
     parser.add_argument(
         "-s", "--num_shots", type=int, help="Number of shots per circuit", default=1024
+    )
+    parser.add_argument(
+        "-r", "--num_repetitions", type=int, help="Number of repetitions", default=1
     )
     return parser
