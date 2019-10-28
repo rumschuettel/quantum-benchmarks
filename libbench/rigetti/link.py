@@ -5,6 +5,7 @@ from typing import Union, Tuple, List
 import pyquil as pq
 
 import functools
+from libbench import print_stderr
 
 
 class RigettiDevice(ABC):
@@ -44,12 +45,13 @@ class RigettiQVM(RigettiDevice):
 
         program.wrap_in_numshots_loop(shots=num_shots)
 
-        executable = self.device.compile(program, optimize=optimize)
 
-        # try:
-        bitstring_array = self.device.run(executable=executable)
-        # except:  # TODO be more specific
-        #    return None
+        try:
+            executable = self.device.compile(program, optimize=optimize)
+            bitstring_array = self.device.run(executable=executable)
+        except Exception as e:
+            print_stderr(e) # we want to log, but not interrupt
+            return None
 
         bitstring_dict = {}
         for i, q in enumerate(qubits):

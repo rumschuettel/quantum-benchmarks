@@ -1,5 +1,5 @@
 from termcolor import colored
-import os, binascii, time
+import os, binascii, time, sys
 
 
 def benchmark_id(rnd_len=2):
@@ -10,6 +10,10 @@ def benchmark_id(rnd_len=2):
 
 def print_hl(*args, color="yellow", **kwargs):
     print(*[colored(arg, color) for arg in args], **kwargs)
+
+
+def print_stderr(*args):
+    print(*args, file=sys.stderr)
 
 
 def is_power_of_2(num):
