@@ -34,12 +34,14 @@ class LineDrawingBenchmarkMixin:
 
     def collate_results(self, results: Dict[VendorJob, object], path: Path):
 
+        n = int(np.log2(len(self.points)))
+        assert len(self.points) == 2**n
+
         # Retrieve the amplitude estimates
         for job in results:
             if job.Hadamard_qubit == None and job.S_qubit == None:
                 prob_hist = results[job]
                 estimates = {k : np.sqrt(v) for k,v in prob_hist.items()}
-                n = len(job.qubits)
                 break
         else:
             raise AssertionError("The probability job was not found in the results data structure.")
@@ -99,7 +101,6 @@ class LineDrawingBenchmarkMixin:
         dx,dy = xmax-xmin,ymax-ymin
         if dx < dy*1.5: dx = dy*1.5
         else: dy = dx/1.5
-        print(dx,dy)
 
         ax.set_xlim((xmin-.1*dx, xmax+.1*dx))
         ax.set_ylim((ymin-.1*dy, ymax+.1*dy))

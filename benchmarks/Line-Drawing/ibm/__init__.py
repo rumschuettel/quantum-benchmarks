@@ -1,2 +1,2 @@
-from .benchmark import IBMSchroedingerMicroscopeBenchmark as Benchmark
-from .benchmark import IBMSchroedingerMicroscopeSimulatedBenchmark as SimulatedBenchmark
+from .benchmark import IBMLineDrawingBenchmark as Benchmark
+from .benchmark import IBMLineDrawingSimulatedBenchmark as SimulatedBenchmark

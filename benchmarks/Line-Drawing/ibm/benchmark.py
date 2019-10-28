@@ -4,36 +4,32 @@ import numpy as np
 
 from libbench.ibm import Benchmark as IBMBenchmark
 
-from .job import IBMSchroedingerMicroscopeJob
-from .. import SchroedingerMicroscopeBenchmarkMixin
+from .job import IBMLineDrawingJob
+from .. import LineDrawingBenchmarkMixin
 
 
-class IBMSchroedingerMicroscopeBenchmarkBase(
-    SchroedingerMicroscopeBenchmarkMixin, IBMBenchmark
+class IBMLineDrawingBenchmarkBase(
+    LineDrawingBenchmarkMixin, IBMBenchmark
 ):
     def __init__(self, add_measurements, **kwargs):
         super().__init__(**kwargs)
         self.add_measurements = add_measurements
 
     def get_jobs(self):
-        yield from IBMSchroedingerMicroscopeJob.job_factory(
-            self.num_post_selections,
-            self.num_pixels,
+        yield from IBMLineDrawingJob.job_factory(
+            self.points,
             self.num_shots,
-            self.xmin,
-            self.xmax,
-            self.ymin,
-            self.ymax,
             self.add_measurements,
+            self.state_prepartion_method
         )
 
     def __str__(self):
-        return "IBM-Schroedinger-Microscope"
+        return f"IBM-Line-Drawing-{self.filename}"
 
 
-class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase):
+class IBMLineDrawingBenchmark(IBMLineDrawingBenchmarkBase):
     """
-        Full SM Benchmark
+        Full Line Drawing Benchmark
 
         Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
@@ -43,36 +39,21 @@ class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase)
         super().__init__(**kwargs)
 
     def parse_result(self, job, result):
-        counts = result.get_counts()
+        n = int(np.log2(len(self.points)))
+        assert len(self.points) == 2**n
 
-        failure_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "0"
-        success_post_process_key = "0" * (2 ** self.num_post_selections - 1) + "1"
-        num_post_selected_failures = (
-            counts[failure_post_process_key]
-            if failure_post_process_key in counts
-            else 0
-        )
-        num_post_selected_successes = (
-            counts[success_post_process_key]
-            if success_post_process_key in counts
-            else 0
-        )
-        num_post_selected = num_post_selected_failures + num_post_selected_successes
-        psp = num_post_selected / self.num_shots
-        z = (
-            num_post_selected_successes / num_post_selected
-            if num_post_selected > 0
-            else 0
-        )
+        hist = result.get_counts()
+        corrected_hist = {}
+        for i in range(2**n):
+            s = f"{i:0{n}b}"
+            corrected_hist[''.join(reversed(s))] = hist[s] / self.num_shots if s in hist else 0
+        return corrected_hist
 
-        return {"psp": psp, "z": z}
-
-
-class IBMSchroedingerMicroscopeSimulatedBenchmark(
-    IBMSchroedingerMicroscopeBenchmarkBase
+class IBMLineDrawingSimulatedBenchmark(
+    IBMLineDrawingBenchmarkBase
 ):
     """
-        Simulated SM Benchmark
+        Simulated Line Drawing Benchmark
 
         The device behaves like a statevector_simulator, i.e. without noise
     """
@@ -82,9 +63,15 @@ class IBMSchroedingerMicroscopeSimulatedBenchmark(
         super().__init__(**kwargs)
 
     def parse_result(self, job, result):
+        n = int(np.log2(len(self.points)))
+        assert len(self.points) == 2**n
+
+        # NOTE: Qubits are reversed, so no need to revert again
         psi = result.get_statevector()
-
-        psp = np.linalg.norm(psi[:2]) ** 2
-        z = np.abs(psi[1]) ** 2 / psp if psp > 0 else 0
-
-        return {"psp": psp, "z": z}
+        psi = psi[:2**n]
+        corrected_psi = psi
+        # corrected_psi = np.empty(psi.shape, dtype = np.complex_)
+        # for i,r in enumerate(psi):
+        #     corrected_psi[int(''.join(reversed(f"{i:0{n}b}")),2)] = r
+        hist = {f'{i:0{n}b}' : abs(corrected_psi[i])**2 for i in range(2**n)}
+        return hist
