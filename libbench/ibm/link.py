@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from libbench.lib import print_hl
 from libbench.link import VendorJob, VendorLink, ThinPromise
 import functools
@@ -12,9 +13,17 @@ class IBMJob(VendorJob):
     def __init__(self):
         super().__init__()
         self.circuit = None
+        self.device_info = None
+
+    @abstractmethod
+    def run(self, device):
+        self.device_info = device.configuration().to_dict()
 
     def serialize(self):
-        return self.circuit
+        return {
+            "circuit": self.circuit,
+            "device_info": self.device_info
+        }
 
 
 class IBMThinPromise(ThinPromise):

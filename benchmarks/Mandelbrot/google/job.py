@@ -86,6 +86,7 @@ class GoogleMandelbrotJob(GoogleJob):
         self.circuit = circuit
 
     def run(self, device):
+        super().run(device)
         return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):

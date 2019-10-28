@@ -35,7 +35,7 @@ class VendorJob(ABC):
     """
 
     @abstractmethod
-    def run(self, *args, id):
+    def run(self, device):
         pass
 
     @abstractmethod

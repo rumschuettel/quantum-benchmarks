@@ -90,7 +90,8 @@ class IBMPlatonicFractalsJob(IBMJob):
         # store the resulting circuit
         self.circuit = circuit
 
-    def run(self, device, *args, **kwargs):
+    def run(self, device):
+        super().run(device)
         return execute(self.circuit, device, shots=self.shots)
 
     def __str__(self):

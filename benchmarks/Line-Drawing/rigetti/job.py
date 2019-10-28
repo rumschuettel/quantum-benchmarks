@@ -92,7 +92,8 @@ class RigettiLineDrawingJob(RigettiJob):
         return program
 
     def run(self, device):
-        return device.execute(self.program, num_shots=self.num_shots)
+        super().run(device)
+        return device.execute(self.program, num_shots=self.shots)
 
     def __str__(self):
         return f"RigettiLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"

@@ -105,6 +105,7 @@ class IBMVQEHamiltonianSimulatedJob(IBMJob):
             raise NotImplementedError()
 
     def run(self, device):
+        super().run(device)
         exact_eigensolver = ExactEigensolver(self.operator)
         return IBMThinPromise(exact_eigensolver.run)
 
@@ -132,6 +133,7 @@ class IBMVQEHamiltonianJob(IBMVQEHamiltonianSimulatedJob):
         self.rounds = rounds
 
     def run(self, device):
+        super().run(device)
         result_q = run_algorithm(
             self.AquaCfgDict(self.depth, self.rounds), EnergyInput(self.operator)
         )

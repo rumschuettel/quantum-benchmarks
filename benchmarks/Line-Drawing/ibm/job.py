@@ -95,6 +95,7 @@ class IBMLineDrawingJob(IBMJob):
         return circuit
 
     def run(self, device):
+        super().run(device)
         return execute(self.circuit, device, shots=self.num_shots)
 
     def __str__(self):

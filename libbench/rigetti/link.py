@@ -16,6 +16,10 @@ class RigettiDevice(ABC):
     def name(self):
         pass
 
+    @abstractproperty
+    def info(self):
+        pass
+
 
 class RigettiQVM(RigettiDevice):
     def __init__(self, device_name: str):
@@ -24,6 +28,10 @@ class RigettiQVM(RigettiDevice):
     @property
     def name(self):
         return self.device.name
+
+    @property
+    def info(self):
+        return self.device.device.get_specs().to_dict()
 
     def _run_and_measure(self, program: pq.Program, num_shots: int, optimize):
         program = program.copy()
@@ -72,6 +80,10 @@ class RigettiStatevectorSimulator(RigettiDevice):
     def name(self):
         return "WavefunctionSimulator"
 
+    @property
+    def info(self):
+        return None
+        
     def execute(self, program: pq.Program, **_):
         return ThinPromise(self.device.wavefunction, program)
 
@@ -86,9 +98,17 @@ class RigettiJob(VendorJob):
     def __init__(self):
         super().__init__()
         self.program = None
+        self.device_info = None
 
     def serialize(self):
-        return self.program
+        return {
+            "program": self.program,
+            "device_info": self.device_info
+        }
+
+    @abstractmethod
+    def run(self, device: RigettiDevice):
+        self.device_info = device.info
 
 
 class RigettiCloudLink(VendorLink):
