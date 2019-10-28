@@ -115,4 +115,6 @@ class RigettiLineDrawingJob(RigettiJob):
         return device.execute(self.program, num_shots=self.num_shots)
 
     def __str__(self):
+        if not self.add_measurements:
+            return f"RigettiLineDrawingJob-{self.Hadamard_qubit}-{self.S_qubit}"
         return f"RigettiLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"

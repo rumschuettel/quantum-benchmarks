@@ -15,12 +15,12 @@ from .shapes import SHAPE_FUNCTIONS
 class LineDrawingBenchmarkMixin:
     def __init__(self, shape, method, num_points, num_shots, num_repetitions, **_):
         super().__init__()
-        assert is_power_of_2(num_points), "number of points needs to be power of 2" 
+        assert is_power_of_2(num_points), "number of points needs to be power of 2"
         assert shape in SHAPE_FUNCTIONS, f"{shape} not one of {SHAPE_FUNCTIONS.keys()}"
 
         points = [
             complex(*SHAPE_FUNCTIONS[shape](t))
-            for t in np.linspace(0, 2 * np.pi, num=num_points+1)[:num_points]
+            for t in np.linspace(0, 2 * np.pi, num=num_points + 1)[:num_points]
         ]
         self.points = np.array(points) / np.linalg.norm(points)
 
@@ -31,7 +31,6 @@ class LineDrawingBenchmarkMixin:
 
         # correction angle as reference to re-orient final drawing
         self.correction_angle = np.angle(points[0])
-
 
     def collate_results(self, results: Dict[VendorJob, object], path: Path):
         n = int(np.log2(len(self.points)))

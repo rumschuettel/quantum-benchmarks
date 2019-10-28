@@ -131,6 +131,5 @@ class GoogleLineDrawingJob(GoogleJob):
 
     def __str__(self):
         if not self.add_measurements:
-            return "GoogleLineDrawingJob"
-        else:
-            return f"GoogleLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"
+            return f"GoogleLineDrawingJob-{self.Hadamard_qubit}-{self.S_qubit}"
+        return f"GoogleLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"
