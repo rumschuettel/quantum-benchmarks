@@ -83,7 +83,7 @@ class RigettiStatevectorSimulator(RigettiDevice):
     @property
     def info(self):
         return None
-        
+
     def execute(self, program: pq.Program, **_):
         return ThinPromise(self.device.wavefunction, program)
 
@@ -101,10 +101,7 @@ class RigettiJob(VendorJob):
         self.device_info = None
 
     def serialize(self):
-        return {
-            "program": self.program,
-            "device_info": self.device_info
-        }
+        return {"program": self.program, "device_info": self.device_info}
 
     @abstractmethod
     def run(self, device: RigettiDevice):

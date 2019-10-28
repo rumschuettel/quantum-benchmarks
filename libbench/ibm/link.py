@@ -20,10 +20,7 @@ class IBMJob(VendorJob):
         self.device_info = device.configuration().to_dict()
 
     def serialize(self):
-        return {
-            "circuit": self.circuit,
-            "device_info": self.device_info
-        }
+        return {"circuit": self.circuit, "device_info": self.device_info}
 
 
 class IBMThinPromise(ThinPromise):

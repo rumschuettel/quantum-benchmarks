@@ -10,3 +10,7 @@ def benchmark_id(rnd_len=2):
 
 def print_hl(*args, color="yellow", **kwargs):
     print(*[colored(arg, color) for arg in args], **kwargs)
+
+
+def is_power_of_2(num):
+    return num != 0 and ((num & (num - 1)) == 0)

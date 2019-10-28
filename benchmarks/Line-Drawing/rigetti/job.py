@@ -14,69 +14,88 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 class RigettiLineDrawingJob(RigettiJob):
     @staticmethod
     def job_factory(
+        points, num_shots, add_measurements, state_preparation_method, num_repetitions
+    ):
+        n = int(np.log2(len(points)))
+
+        for j in range(num_repetitions):
+            yield RigettiLineDrawingJob(
+                points, num_shots, add_measurements, state_preparation_method, j
+            )
+            for i in range(n):
+                yield RigettiLineDrawingJob(
+                    points,
+                    num_shots,
+                    add_measurements,
+                    state_preparation_method,
+                    j,
+                    Hadamard_qubit=i,
+                )
+                yield RigettiLineDrawingJob(
+                    points,
+                    num_shots,
+                    add_measurements,
+                    state_preparation_method,
+                    j,
+                    Hadamard_qubit=i,
+                    S_qubit=i,
+                )
+
+    def __init__(
+        self,
         points,
         num_shots,
         add_measurements,
-        state_prepartion_method,
-        num_repetitions
+        state_preparation_method,
+        repetition,
+        Hadamard_qubit=None,
+        S_qubit=None,
     ):
-        n = int(np.log2(len(points)))
-        assert len(points) == 2**n
-        assert abs(np.linalg.norm(points) - 1.) < 1e-4
-
-        for j in range(num_repetitions):
-            yield RigettiLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, j)
-            for i in range(n):
-                yield RigettiLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, j, Hadamard_qubit = i)
-                yield RigettiLineDrawingJob(points, num_shots, add_measurements, state_prepartion_method, j, Hadamard_qubit = i, S_qubit = i)
-
-    def __init__(self, points, num_shots, add_measurements, state_prepartion_method, repetition, Hadamard_qubit = None, S_qubit = None):
         super().__init__()
 
         self.points = points
         self.num_shots = num_shots
         self.add_measurements = add_measurements
-        self.state_prepartion_method = state_prepartion_method
+        self.state_preparation_method = state_preparation_method
         self.repetition = repetition
         self.Hadamard_qubit = Hadamard_qubit
         self.S_qubit = S_qubit
 
         n = int(np.log2(len(points)))
-        assert len(points) == 2**n
-        assert abs(np.linalg.norm(points) - 1.) < 1e-4
 
         # NOTE: This is actually the INVERSE QFT because of incompatible definitions
-        Fourier_coeffs = np.fft.fft(points, norm = 'ortho')
+        Fourier_coeffs = np.fft.fft(points, norm="ortho")
 
         program = pq.Program()
         program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
-        program += self.prepare_state(Fourier_coeffs, list(range(n)), state_prepartion_method)
+        program += self.prepare_state(
+            Fourier_coeffs, list(range(n)), state_preparation_method
+        )
         program += self.QFT(list(range(n)))
         # NOTE: qubits is now reversed
 
-        if S_qubit != None:
-            program += pq.gates.S(n-1-S_qubit)
-        if Hadamard_qubit != None:
-            program += pq.gates.H(n-1-Hadamard_qubit)
+        if S_qubit is not None:
+            program += pq.gates.S(n - 1 - S_qubit)
+        if Hadamard_qubit is not None:
+            program += pq.gates.H(n - 1 - Hadamard_qubit)
 
         # store the resulting program
         self.program = program
 
     def prepare_state(self, state, qubits, method):
-        assert method in ['DC', 'SBM', 'SBM+GC', 'BVMS']
+        assert method in ["DC", "SBM", "SBM+GC", "BVMS"]
 
         n = len(qubits)
-        assert abs(np.linalg.norm(state) - 1.) < 1e-4
 
-        if method == 'DC':
-            ancilla_qubits = list(range(n,2*n-2))
+        if method == "DC":
+            ancilla_qubits = list(range(n, 2 * n - 2))
             return divide_and_conquer(state, qubits, ancilla_qubits)
-        elif method == 'SBM':
+        elif method == "SBM":
             return Shende_Bullock_Markov(state, qubits, False, True)
-        elif method == 'SBM+GC':
+        elif method == "SBM+GC":
             return Shende_Bullock_Markov(state, qubits, True, True)
-        elif method == 'BVMS':
+        elif method == "BVMS":
             return Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits)
 
     def QFT(self, qubits):
@@ -84,11 +103,11 @@ class RigettiLineDrawingJob(RigettiJob):
         # rather than implementing a bunch of swaps at the end
         # Handle with care!
         program = pq.Program()
-        for i,tq in enumerate(qubits):
+        for i, tq in enumerate(qubits):
             program += pq.gates.H(tq)
-            for j,cq in list(enumerate(qubits))[i+1:]:
-                program += pq.gates.RZ(2**(-(j-i)) * np.pi, tq).controlled(cq)
-                program += pq.gates.RZ(2**(-(j-i+1)) * np.pi, cq)
+            for j, cq in list(enumerate(qubits))[i + 1 :]:
+                program += pq.gates.RZ(2 ** (-(j - i)) * np.pi, tq).controlled(cq)
+                program += pq.gates.RZ(2 ** (-(j - i + 1)) * np.pi, cq)
         return program
 
     def run(self, device):

@@ -7,9 +7,7 @@ from .job import GoogleLineDrawingJob
 from .. import LineDrawingBenchmarkMixin
 
 
-class GoogleLineDrawingBenchmarkBase(
-    LineDrawingBenchmarkMixin, GoogleBenchmark
-):
+class GoogleLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, GoogleBenchmark):
     def __init__(self, add_measurements, **kwargs):
         super().__init__(**kwargs)
         self.add_measurements = add_measurements
@@ -19,12 +17,12 @@ class GoogleLineDrawingBenchmarkBase(
             self.points,
             self.num_shots,
             self.add_measurements,
-            self.state_prepartion_method,
-            self.num_repetitions
+            self.state_preparation_method,
+            self.num_repetitions,
         )
 
     def __str__(self):
-        return f"Google-Line-Drawing-{self.filename}"
+        return f"Google-Line-Drawing--{self.shape}-{len(self.points)}"
 
 
 class GoogleLineDrawingBenchmark(GoogleLineDrawingBenchmarkBase):
@@ -40,15 +38,18 @@ class GoogleLineDrawingBenchmark(GoogleLineDrawingBenchmarkBase):
 
     def parse_result(self, job, result):
         n = len(job.qubits)
-        measurements = result.measurements['result']
-        str_measurements = [''.join(map(lambda x : str(int(x)), r)) for r in measurements]
-        hist = {f'{i:0{n}b}' : str_measurements.count(f'{i:0{n}b}') / job.num_shots for i in range(2**n)}
+        measurements = result.measurements["result"]
+        str_measurements = [
+            "".join(map(lambda x: str(int(x)), r)) for r in measurements
+        ]
+        hist = {
+            f"{i:0{n}b}": str_measurements.count(f"{i:0{n}b}") / job.num_shots
+            for i in range(2 ** n)
+        }
         return hist
 
 
-class GoogleLineDrawingSimulatedBenchmark(
-    GoogleLineDrawingBenchmarkBase
-):
+class GoogleLineDrawingSimulatedBenchmark(GoogleLineDrawingBenchmarkBase):
     """
         Simulated Line Drawing benchmark
 
@@ -62,6 +63,6 @@ class GoogleLineDrawingSimulatedBenchmark(
     def parse_result(self, job, result):
         n = len(job.qubits)
         psi = result.final_state
-        psi = psi[::len(psi)//(2**n)]
-        hist = {f'{i:0{n}b}' : abs(psi[i])**2 for i in range(2**n)}
+        psi = psi[:: len(psi) // (2 ** n)]
+        hist = {f"{i:0{n}b}": abs(psi[i]) ** 2 for i in range(2 ** n)}
         return hist

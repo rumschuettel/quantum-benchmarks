@@ -27,7 +27,9 @@ class SparseSimulatorStatevector(GoogleDevice):
         self.name = "sparse_simulator_statevector"
 
     def execute(self, circuit, num_shots: int, **kwargs):
-        return GoogleStatevectorPromise(circuit, cirq.Simulator(), num_shots=num_shots, **kwargs)
+        return GoogleStatevectorPromise(
+            circuit, cirq.Simulator(), num_shots=num_shots, **kwargs
+        )
 
 
 GOOGLE_STATEVECTOR_DEVICES = {
@@ -49,10 +51,7 @@ class GoogleJob(VendorJob):
         self.device_info = None
 
     def serialize(self):
-        return {
-            "circuit": self.circuit,
-            "device_info": self.device_info
-        }
+        return {"circuit": self.circuit, "device_info": self.device_info}
 
     def run(self, device):
         self.device_info = None

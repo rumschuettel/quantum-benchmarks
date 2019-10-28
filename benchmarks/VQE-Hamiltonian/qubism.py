@@ -56,7 +56,7 @@ def qubism_plot(vector, deviation=None, vmax_vec=None, plot=None):
     )
     vmax = np.max(np.abs(vmax_vec))
 
-    if plot == None:
+    if plot is None:
         fig, plot = plt.subplots(1, 1, figsize=(8, 8))
 
     plot.set_xticks([], [])
