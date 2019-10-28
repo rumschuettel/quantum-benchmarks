@@ -86,6 +86,7 @@ class RigettiPlatonicFractalsJob(RigettiJob):
         self.program = program
 
     def run(self, device):
+        super().run(device)
         return device.execute(self.program, num_shots=self.shots)
 
     def __str__(self):

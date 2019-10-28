@@ -103,6 +103,7 @@ class GoogleLineDrawingJob(GoogleJob):
         return circuit
 
     def run(self, device):
+        super().run(device)
         kwargs = {}
         if not self.add_measurements:
             kwargs['qubit_order'] = self.qubits + list(set(self.circuit.all_qubits()).difference(self.qubits))

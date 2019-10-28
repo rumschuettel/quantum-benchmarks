@@ -46,9 +46,16 @@ class GoogleJob(VendorJob):
     def __init__(self):
         super().__init__()
         self.circuit = None
+        self.device_info = None
 
     def serialize(self):
-        return self.circuit
+        return {
+            "circuit": self.circuit,
+            "device_info": self.device_info
+        }
+
+    def run(self, device):
+        self.device_info = None
 
 
 class GoogleLinkBase(VendorLink):

@@ -69,6 +69,7 @@ class RigettiBellTestJob(RigettiJob):
         self.program = program
 
     def run(self, device):
+        super().run(device)
         return device.execute(self.program, num_shots=self.num_shots)
 
     def __str__(self):
