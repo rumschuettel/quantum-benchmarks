@@ -117,12 +117,38 @@ class LineDrawingBenchmarkMixin:
             # print("Y coordinates:", np.round(ys,3))
             ax.plot(xs + [xs[0]], ys + [ys[0]], color="red", alpha=0.3)
 
+        # Plot an averaged contour
+        from matplotlib.collections import LineCollection
+
+        def interp(a, fac=100):
+            return np.interp(
+                np.linspace(0, len(a) - 1 / fac, fac * len(a)),
+                range(len(a)),
+                a,
+                period=len(a),
+            )
+
+        all = np.array(collated_result)
+        avg = np.mean(all, axis=0)
+        avg_x, avg_y = interp(np.real(avg)), interp(np.imag(avg))
+        avg_pts = np.array([avg_x, avg_y]).T.reshape(-1, 1, 2)
+        widths = interp(
+            (np.std(np.real(all), axis=0) ** 2 + np.std(np.imag(all), axis=0) ** 2)
+            ** (1 / 2)
+        )
+        avg_segments = np.concatenate([avg_pts[:-1], avg_pts[1:]], axis=1)
+        ax.add_collection(
+            LineCollection(
+                avg_segments, linewidths=widths, color="blue", capstyle="round"
+            )
+        )
+
         # Plot the ideal contour
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
         ax.plot(
             ideal_xs + [ideal_xs[0]],
             ideal_ys + [ideal_ys[0]],
-            color="blue",
+            color="black",
             linestyle="--",
         )
 

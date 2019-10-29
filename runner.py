@@ -347,9 +347,14 @@ if __name__ == "__main__":
     )
     parser_V.set_defaults(func=refresh)
     parser_V.add_argument(
-        "--all", action="store_true", help="refresh all completed benchmarks"
+        "--all", type=bool, help="refresh all completed benchmarks", default=False
     )
     parser_V.add_argument("job_ids", nargs="*")
+    parser_V.add_argument(
+        "--run_folder",
+        default=VendorJobManager.RUN_FOLDER,
+        help=f"run folder within which to refresh runs",
+    )
 
     # benchmark status
     parser_S = subparsers.add_parser(
