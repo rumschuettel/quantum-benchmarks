@@ -107,7 +107,7 @@ class LineDrawingBenchmarkMixin:
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # Set up the figure
-        fig = plt.figure(figsize=(12, 8))
+        fig = plt.figure(figsize=(8, 8))
         ax = fig.gca()
 
         # Plot the contours
@@ -115,7 +115,7 @@ class LineDrawingBenchmarkMixin:
             xs, ys = list(np.real(curve)), list(np.imag(curve))
             # print("X coordinates:", np.round(xs,3))
             # print("Y coordinates:", np.round(ys,3))
-            ax.plot(xs + [xs[0]], ys + [ys[0]], color="red", alpha=0.3)
+            ax.plot(xs + [xs[0]], ys + [ys[0]], color="black", alpha=0.3)
 
         # Plot an averaged contour
         from matplotlib.collections import LineCollection
@@ -136,10 +136,14 @@ class LineDrawingBenchmarkMixin:
             (np.std(np.real(all), axis=0) ** 2 + np.std(np.imag(all), axis=0) ** 2)
             ** (1 / 2)
         )
+        axes_scale = np.linalg.norm(
+            ax.transData.transform([1, 0]) - ax.transData.transform([0, 0])
+        )
+        widths *= 72. * axes_scale / fig.dpi
         avg_segments = np.concatenate([avg_pts[:-1], avg_pts[1:]], axis=1)
         ax.add_collection(
             LineCollection(
-                avg_segments, linewidths=widths, color="blue", capstyle="round"
+                avg_segments, linewidths=widths, color="red", capstyle="round"
             )
         )
 
@@ -148,7 +152,7 @@ class LineDrawingBenchmarkMixin:
         ax.plot(
             ideal_xs + [ideal_xs[0]],
             ideal_ys + [ideal_ys[0]],
-            color="black",
+            color="yellow",
             linestyle="--",
         )
 
