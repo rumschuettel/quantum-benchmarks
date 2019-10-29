@@ -130,8 +130,14 @@ class BellTestBenchmarkMixin:
 
         return None
 
-    def parameter_dict(self):
-        return {'distance' : self.distance, 'num_pixels' : self.topology, 'num_shots' : self.num_shots}
+    def __repr__(self):
+        return str(
+            {
+                "distance": self.distance,
+                "num_pixels": self.topology,
+                "num_shots": self.num_shots,
+            }
+        )
 
 
 def argparser(toadd, **argparse_options):

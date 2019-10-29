@@ -144,9 +144,10 @@ class VendorJobManager(ABC):
         print(self.ID, end=": ")
         print_hl(str(status["scheduled"]), color="red", end=" ")
         print_hl(str(status["queued"]), color="yellow", end=" ")
-        print_hl(str(status["completed"]), color="green", end=" ")
-
-        print(tail, self.benchmark.parameter_dict())
+        print_hl(str(status["completed"]), color="green")
+        if tail:
+            print("  ", tail)
+            print("  ", str(repr(self.benchmark)))
 
     def status(self):
         return {

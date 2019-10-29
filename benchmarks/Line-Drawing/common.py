@@ -148,13 +148,15 @@ class LineDrawingBenchmarkMixin:
         # default figure to display
         return figpath
 
-    def parameter_dict(self):
-        return {
-            'shape' : self.shape,
-            'num_points' : len(self.points),
-            'num_repetitions' : self.num_repetitions,
-            'state_preparation_method' : self.state_preparation_method
-        }
+    def __repr__(self):
+        return str(
+            {
+                "shape": self.shape,
+                "num_points": len(self.points),
+                "num_repetitions": self.num_repetitions,
+                "state_preparation_method": self.state_preparation_method,
+            }
+        )
 
 
 def argparser(toadd, **argparse_options):

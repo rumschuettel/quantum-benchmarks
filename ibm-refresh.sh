@@ -11,12 +11,21 @@ function check() {
         line=$(echo "$line" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
 
         if [[ $line =~ ^IBM- ]]; then
+            lastline="IBM"
+
             path=$(echo "$line" | cut -f1 -d ":")
             todo=$(echo "$line" | cut -f2 -d " ")
             scheduled=$(echo "$line" | cut -f3 -d " ")
-            info=$(echo "$line" | cut -f 5- -d " ")
-            mode=$(echo "$info" | sed "s/'/\"/g" | jq -r ".mode")
-            device=$(echo "$info" | sed "s/'/\"/g" | jq -r ".device")
+
+            continue
+        fi
+
+        if [[ $lastline == "IBM" ]]; then
+            lastline="info"
+
+            # read in info json
+            mode=$(echo "$line" | sed "s/'/\"/g" | jq -r ".mode")
+            device=$(echo "$line" | sed "s/'/\"/g" | jq -r ".device")
 
             if (( $todo > 0 || $scheduled > 0 )); then
                 if [[ "$mode" == "Cloud" ]]; then
@@ -41,5 +50,5 @@ trap 'on_ctrl_c' SIGINT
 # check forever
 while :; do
     check
-    sleep 20
+    sleep 30
 done
