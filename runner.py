@@ -347,7 +347,7 @@ if __name__ == "__main__":
     )
     parser_V.set_defaults(func=refresh)
     parser_V.add_argument(
-        "--all", type=bool, help="refresh all completed benchmarks", default=False
+        "--all", action="store_true", help="refresh all completed benchmarks"
     )
     parser_V.add_argument("job_ids", nargs="*")
     parser_V.add_argument(
