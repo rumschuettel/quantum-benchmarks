@@ -129,6 +129,16 @@ class PlatonicFractalsBenchmarkMixin:
         # default figure to display
         return figpath
 
+    def parameter_dict(self):
+        return {
+            'body' : self.body,
+            'strength' : self.strength,
+            'num_steps' : self.num_steps,
+            'num_dirs_change' : self.num_dirs_change,
+            'num_shots' : self.num_shots,
+            'random_seed' : self.random_seed
+        }
+
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(

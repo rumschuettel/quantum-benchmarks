@@ -34,6 +34,14 @@ class VQEHamiltonianBenchmarkMixin:
             )
             fig.savefig(path / f"plot-{job}.pdf")
 
+    def parameter_dict(self):
+        return {
+            'Hamiltonian type' : self.hamiltonian_type,
+            'qubits' : self.qubits,
+            'J1' : self.J1,
+            'J2' : self.J2
+        }
+
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(

@@ -74,6 +74,13 @@ class SchroedingerMicroscopeBenchmarkMixin:
         # default figure to display
         return figpath
 
+    def parameter_dict(self):
+        return {
+            'num_post_selections' : self.num_post_selections,
+            'num_pixels' : self.num_pixels,
+            'num_shots' : self.num_shots
+        }
+
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(

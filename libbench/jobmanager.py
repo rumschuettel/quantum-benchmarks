@@ -146,7 +146,7 @@ class VendorJobManager(ABC):
         print_hl(str(status["queued"]), color="yellow", end=" ")
         print_hl(str(status["completed"]), color="green", end=" ")
 
-        print(tail)
+        print(tail, self.benchmark.parameter_dict())
 
     def status(self):
         return {
