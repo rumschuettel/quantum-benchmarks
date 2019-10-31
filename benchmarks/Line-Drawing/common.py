@@ -139,7 +139,7 @@ class LineDrawingBenchmarkMixin:
         axes_scale = np.linalg.norm(
             ax.transData.transform([1, 0]) - ax.transData.transform([0, 0])
         )
-        widths *= 72. * axes_scale / fig.dpi
+        widths *= 72.0 * axes_scale / fig.dpi
         avg_segments = np.concatenate([avg_pts[:-1], avg_pts[1:]], axis=1)
         ax.add_collection(
             LineCollection(

@@ -2,9 +2,11 @@ from typing import Dict
 from pathlib import Path
 
 import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib
-
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import seaborn as sns
+import pandas as pd
 import networkx as nx
 import operator
 
@@ -48,87 +50,61 @@ class BellTestBenchmarkMixin:
         print(self.qubit_pairs_to_test)
 
     def collate_results(self, results: Dict[VendorJob, object], path: Path):
-        per_qubit = {}
+        per_qubit_bell = {}
 
         for job in results:
             qubit_a, qubit_b = job.qubit_a, job.qubit_b
 
             # accumulate results here
-            if not qubit_a in per_qubit:
-                per_qubit[qubit_a] = {}
-            acc_a = per_qubit[qubit_a]
+            if not qubit_a in per_qubit_bell:
+                per_qubit_bell[qubit_a] = {}
+            acc_a = per_qubit_bell[qubit_a]
 
             if not qubit_b in acc_a:
-                acc_a[qubit_b] = {"bell": 0.0}
-            acc_a_b = acc_a[qubit_b]
+                acc_a[qubit_b] = 0.0
 
             # accumulate four measurement outcomes
             res = results[job]
             p = (res["eq"] - res["ineq"]) / (res["eq"] + res["ineq"])
             # bell inequality is P(a,c) - P(a,b) - P(b,c)
-            acc_a_b["bell"] += p * (1 if job.test_type == BellTestType.AC else -1)
+            acc_a[qubit_b] += p * (1 if job.test_type == BellTestType.AC else -1)
 
-        return per_qubit
+        return {
+            "bell": per_qubit_bell
+        }
 
     def visualize(self, collated_result: object, path: Path) -> Path:
-        G = nx.Graph(self.topology)
-        G_layout = nx.spring_layout(G, seed=0)
+        data = pd.DataFrame(collated_result["bell"])
+        data = data.sort_index(axis=0).sort_index(axis=1)
+        fig = plt.figure(figsize=(12, 8))
+        plt.title(f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15)
 
-        cmap = plt.get_cmap("inferno")
-        weight_norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.5)
+        # combine them and build a new colormap
+        colors1 = matplotlib.cm.get_cmap("Greys")(np.linspace(0.2, .8, 200))
+        colors2 = matplotlib.cm.get_cmap("inferno")(np.linspace(0.8, 0.2, 100))
 
-        for qubit_a in collated_result:
-            # get shortest paths to all other qubits
-            # this is a dict { q: dist, ... }
-            dists = nx.single_source_shortest_path_length(G, qubit_a)
+        colors = np.vstack((colors1, colors2))
+        mymap = mcolors.LinearSegmentedColormap.from_list("bell_map", colors)
 
-            # starting at the longest path, set edge weights of graph
-            sorted_dists = sorted(
-                dists.items(), key=operator.itemgetter(1), reverse=True
-            )
+        ax = sns.heatmap(
+            data,
+            cmap=mymap,
+            linewidths=0.5,
+            vmin=0,
+            vmax=1.5,
+            square=True,
+            linecolor="white",
+            annot=True,
+            fmt=".2f"
+        )
+        bottom, top = ax.get_ylim()  # fixes a bug in matplotlib 3.11
+        ax.set_ylim(bottom + 0.5, top - 0.5)
 
-            edges = {}
-            for qubit_b, _ in sorted_dists:
-                if not qubit_b in collated_result[qubit_a]:
-                    continue
+        # save figure
+        figpath = path / "visualize.pdf"
+        fig.savefig(figpath)
 
-                weight = weight_norm(collated_result[qubit_a][qubit_b]["bell"])
-
-                # color entire path connecting a and b with this weight
-                qubit_path = nx.shortest_path(G, qubit_a, qubit_b)
-                for x, y in list(zip(qubit_path[:-1], qubit_path[1:])):
-                    edges[(x, y)] = weight
-                    edges[(y, x)] = weight
-
-            for u, v, d in G.edges(data=True):
-                if (u, v) in edges:
-                    d["weight"] = edges[(u, v)]
-                else:
-                    d["weight"] = 0
-
-            edges, weights = zip(*nx.get_edge_attributes(G, "weight").items())
-
-            nx.draw(
-                G,
-                G_layout,
-                width=10.0,
-                node_color=["r" if v == qubit_a else "b" for v in G.nodes()],
-                with_labels=True,
-                edgelist=edges,
-                edge_color=weights,
-                edge_cmap=cmap,
-                edge_vmin=0,  # we scale the colormap ourselves
-                edge_vmax=1,
-            )
-
-            print(qubit_a, edges, weights)
-
-            # save figure
-            figpath = path / f"visualize-{qubit_a}.pdf"
-            plt.savefig(figpath)
-            plt.close()
-
-        return None
+        return figpath
 
     def __repr__(self):
         return str(
@@ -142,7 +118,7 @@ class BellTestBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "BellTest", help="CHSH/Bell Test benchmark.", **argparse_options
+        "Bell-Test", help="CHSH/Bell Test benchmark.", **argparse_options
     )
     parser.add_argument(
         "-d",
