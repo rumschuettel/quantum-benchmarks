@@ -26,6 +26,8 @@ class BellTestBenchmarkMixin:
         super().__init__()
 
         assert distance > 0, "cannot test bell violation with distance 0"
+        if distance == float("inf"):
+            assert topology is not None, "specify a distance explicitly when no topology is given"
 
         self.distance = distance
         self.topology = (
@@ -34,7 +36,10 @@ class BellTestBenchmarkMixin:
         self.num_shots = num_shots
 
         # create a list of qubits to test
-        graph = nx.Graph(self.topology)
+        if self.topology is not None:
+            graph = nx.Graph(self.topology)
+        else:
+            graph = nx.complete_graph(self.distance)
 
         self.qubit_pairs_to_test = []
         for a in graph.nodes:
@@ -47,7 +52,9 @@ class BellTestBenchmarkMixin:
             len(self.qubit_pairs_to_test) > 0
         ), f"no qubit pairs to test at distance <= {distance}"
 
-        print(self.qubit_pairs_to_test)
+        print("testing qubit pairs:")
+        for p in self.qubit_pairs_to_test:
+            print(p)
 
     def collate_results(self, results: Dict[VendorJob, object], path: Path):
         per_qubit_bell = {}
@@ -69,18 +76,20 @@ class BellTestBenchmarkMixin:
             # bell inequality is P(a,c) - P(a,b) - P(b,c)
             acc_a[qubit_b] += p * (1 if job.test_type == BellTestType.AC else -1)
 
-        return {
-            "bell": per_qubit_bell
-        }
+        return {"bell": per_qubit_bell}
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         data = pd.DataFrame(collated_result["bell"])
         data = data.sort_index(axis=0).sort_index(axis=1)
         fig = plt.figure(figsize=(12, 8))
-        plt.title(f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15)
+        plt.title(
+            f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}",
+            y=1.05,
+            size=15,
+        )
 
         # combine them and build a new colormap
-        colors1 = matplotlib.cm.get_cmap("Greys")(np.linspace(0.2, .8, 200))
+        colors1 = matplotlib.cm.get_cmap("Greys")(np.linspace(0.2, 0.8, 200))
         colors2 = matplotlib.cm.get_cmap("inferno")(np.linspace(0.8, 0.2, 100))
 
         colors = np.vstack((colors1, colors2))
@@ -95,7 +104,7 @@ class BellTestBenchmarkMixin:
             square=True,
             linecolor="white",
             annot=True,
-            fmt=".2f"
+            fmt=".2f",
         )
         bottom, top = ax.get_ylim()  # fixes a bug in matplotlib 3.11
         ax.set_ylim(bottom + 0.5, top - 0.5)
