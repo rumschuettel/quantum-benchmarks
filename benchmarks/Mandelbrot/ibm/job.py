@@ -2,7 +2,7 @@ import itertools as it
 from functools import reduce
 
 import numpy as np
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit
 
 from libbench.ibm import Job as IBMJob
 
@@ -10,14 +10,7 @@ from libbench.ibm import Job as IBMJob
 class IBMMandelbrotJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
+        num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -26,9 +19,7 @@ class IBMMandelbrotJob(IBMJob):
 
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
-            yield IBMMandelbrotJob(
-                num_post_selections, z, add_measurements, i, j, num_shots
-            )
+            yield IBMMandelbrotJob(num_post_selections, z, add_measurements, i, j, num_shots)
 
     def __init__(self, num_post_selections, z, add_measurements, i, j, num_shots):
         super().__init__()
@@ -59,9 +50,7 @@ class IBMMandelbrotJob(IBMJob):
             for l in range(0, 2 ** num_post_selections, 2 ** k):
                 circuit.cx(l, l + 2 ** (k - 1))
                 circuit.ch(l + 2 ** (k - 1), l)
-                circuit.cu3(
-                    r1rot, 0, 0, l, l + 2 ** (k - 1)
-                )  # cu3(theta,0,0) == cry(theta)
+                circuit.cu3(r1rot, 0, 0, l, l + 2 ** (k - 1))  # cu3(theta,0,0) == cry(theta)
                 circuit.cz(l, l + 2 ** (k - 1))
                 circuit.rz(phi, l)
                 circuit.rz(-phi, l + 2 ** (k - 1))
@@ -72,8 +61,7 @@ class IBMMandelbrotJob(IBMJob):
                 circuit.x(l + 2 ** (k - 1))
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)),
-                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections))
             )
 
         # store the resulting circuit
@@ -81,7 +69,7 @@ class IBMMandelbrotJob(IBMJob):
 
     def run(self, device):
         super().run(device)
-        return execute(self.circuit, device, shots=self.num_shots)
+        return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
         return f"IBMMandelbrotJob-{self.i}-{self.j}"

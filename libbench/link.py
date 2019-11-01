@@ -34,6 +34,10 @@ class VendorJob(ABC):
     Vendor job interface.
     """
 
+    def __init__(self):
+        self.device_info = None
+        self.transpiled_circuit = None
+
     @abstractmethod
     def run(self, device):
         pass
@@ -44,7 +48,7 @@ class VendorJob(ABC):
 
     @abstractmethod
     def serialize(self):
-        pass
+        return {"device_info": None, "transpiled_circuit": self.transpiled_circuit}
 
 
 class VendorLink(ABC):

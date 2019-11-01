@@ -21,22 +21,12 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
                             1.0j
                             * np.mean(
                                 np.angle(
-                                    state[
-                                        2
-                                        * j
-                                        * 2 ** (n - i - 1) : (2 * j + 1)
-                                        * 2 ** (n - i - 1)
-                                    ]
+                                    state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
                                 )
                             )
                         )
                         * np.linalg.norm(
-                            state[
-                                2
-                                * j
-                                * 2 ** (n - i - 1) : (2 * j + 1)
-                                * 2 ** (n - i - 1)
-                            ]
+                            state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
                         ),
                         np.exp(
                             1.0j
@@ -51,11 +41,7 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
                             )
                         )
                         * np.linalg.norm(
-                            state[
-                                (2 * j + 1)
-                                * 2 ** (n - i - 1) : (2 * j + 2)
-                                * 2 ** (n - i - 1)
-                            ]
+                            state[(2 * j + 1) * 2 ** (n - i - 1) : (2 * j + 2) * 2 ** (n - i - 1)]
                         ),
                     ]
                 )
@@ -64,19 +50,13 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
         ]
         circuit.append(
             prepare_multiplexed(
-                states,
-                qubits[:i],
-                qubits[i],
-                GRAY_CODE=GRAY_CODE,
-                REVERSE_ZS=REVERSE_ZS,
+                states, qubits[:i], qubits[i], GRAY_CODE=GRAY_CODE, REVERSE_ZS=REVERSE_ZS
             )
         )
     return circuit
 
 
-def prepare_multiplexed(
-    states, control_qubits, target_qubit, GRAY_CODE=True, REVERSE_ZS=True
-):
+def prepare_multiplexed(states, control_qubits, target_qubit, GRAY_CODE=True, REVERSE_ZS=True):
     assert len(states) == 2 ** len(control_qubits)
     assert all(abs(np.linalg.norm(state) - 1.0) < 1e-8 for state in states)
     n = len(control_qubits)
@@ -102,10 +82,7 @@ def prepare_multiplexed(
         # Implement multiplexed Ry
         for b, c in zip(bs[:-1], bs[1:]):
             theta = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             circuit.append(cirq.Y(target_qubit) ** theta)
@@ -116,20 +93,14 @@ def prepare_multiplexed(
             )
         b = bs[-1]
         theta = (
-            sum(
-                (-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j]
-                for j, d in enumerate(bs)
-            )
+            sum((-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j] for j, d in enumerate(bs))
             / 2 ** n
         )
         circuit.append(cirq.Y(target_qubit) ** theta)
 
         # Implement reverse of multiplexed Rz
         phi = (
-            sum(
-                (-1) ** sum(x * y for x, y in zip(b, d)) * phis[j]
-                for j, d in zip(nums, bs)
-            )
+            sum((-1) ** sum(x * y for x, y in zip(b, d)) * phis[j] for j, d in zip(nums, bs))
             / 2 ** n
         )
         circuit.append(cirq.Z(target_qubit) ** phi)
@@ -140,10 +111,7 @@ def prepare_multiplexed(
                 if x != y
             )
             phi = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * phis[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * phis[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             circuit.append(cirq.Z(target_qubit) ** phi)
@@ -151,10 +119,7 @@ def prepare_multiplexed(
         # Implement multiplexed Ry
         for b, c in zip(bs, bs[1:] + [bs[0]]):
             theta = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             circuit.append(cirq.Y(target_qubit) ** theta)
@@ -167,10 +132,7 @@ def prepare_multiplexed(
         # Implement multiplexed Rz
         for b, c in zip(bs, bs[1:] + [bs[0]]):
             phi = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * phis[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * phis[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             circuit.append(cirq.Z(target_qubit) ** phi)
@@ -185,9 +147,7 @@ def prepare_multiplexed(
 
 if __name__ == "__main__":
     n = 3
-    state = normalize_and_remove_phase(
-        np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n)
-    )
+    state = normalize_and_remove_phase(np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n))
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     circuit = Shende_Bullock_Markov(state, qubits, True, True)
     print(circuit)

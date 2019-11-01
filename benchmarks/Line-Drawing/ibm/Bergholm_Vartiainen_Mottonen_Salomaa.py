@@ -18,11 +18,7 @@ def Bergholm_Vartiainen_Mottonen_Salomaa(circuit, qubits, state):
         r = np.linalg.norm(s)
         nullified_state[i] = r
         unitaries.append(
-            np.conj(
-                np.array(
-                    [[s[0] / r, -np.conj(s[1] / r)], [s[1] / r, np.conj(s[0] / r)]]
-                )
-            ).T
+            np.conj(np.array([[s[0] / r, -np.conj(s[1] / r)], [s[1] / r, np.conj(s[0] / r)]])).T
             if r > 1e-8
             else np.eye(2)
         )
@@ -30,18 +26,14 @@ def Bergholm_Vartiainen_Mottonen_Salomaa(circuit, qubits, state):
     # Generate uniformly controlled circuit
     UCC = circuit.copy()
     UCC._data = []
-    UCC, R = generate_uniformly_controlled_circuit(
-        UCC, qubits[:-1], qubits[-1], unitaries
-    )
+    UCC, R = generate_uniformly_controlled_circuit(UCC, qubits[:-1], qubits[-1], unitaries)
 
     # Correct for phases
     nullified_state /= R[::2]
 
     # Merge everything into one circuit
     if n > 1:
-        circuit = Bergholm_Vartiainen_Mottonen_Salomaa(
-            circuit, qubits[:-1], nullified_state
-        )
+        circuit = Bergholm_Vartiainen_Mottonen_Salomaa(circuit, qubits[:-1], nullified_state)
     circuit = circuit.combine(UCC.inverse())
     return circuit
 
@@ -79,7 +71,4 @@ if __name__ == "__main__":
     # Check resulting state
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
     print("Maximum absolute error:", np.max(np.abs(corrected_result - points)))
-    print(
-        "Inner product error:",
-        abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0),
-    )
+    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0))

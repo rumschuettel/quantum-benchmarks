@@ -62,9 +62,7 @@ class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmar
         return {"psp": psp, "z": z}
 
 
-class GoogleSchroedingerMicroscopeSimulatedBenchmark(
-    GoogleSchroedingerMicroscopeBenchmarkBase
-):
+class GoogleSchroedingerMicroscopeSimulatedBenchmark(GoogleSchroedingerMicroscopeBenchmarkBase):
     """
         Simulated SM Benchmark
 
@@ -79,10 +77,6 @@ class GoogleSchroedingerMicroscopeSimulatedBenchmark(
         psi = result.final_state
 
         psp = np.linalg.norm(psi[:: 2 ** (2 ** self.num_post_selections - 1)]) ** 2
-        z = (
-            np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp
-            if psp > 0
-            else 0
-        )
+        z = np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp if psp > 0 else 0
 
         return {"psp": psp, "z": z}

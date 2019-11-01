@@ -47,9 +47,7 @@ if __name__ == "__main__":
     unitaries = [unitary_group.rvs(2) for _ in range(2 ** n)]
     qubits = list(range(n + 1))
     circuit = QuantumCircuit(n + 1)
-    circuit, R = generate_uniformly_controlled_circuit(
-        circuit, qubits[:n], qubits[-1], unitaries
-    )
+    circuit, R = generate_uniformly_controlled_circuit(circuit, qubits[:n], qubits[-1], unitaries)
     print("Circuit:")
     print(circuit)
     print("Phases:")
@@ -64,8 +62,7 @@ if __name__ == "__main__":
     corrected_U = np.empty(U.shape, dtype=np.complex_)
     for i, j in it.product(range(2 ** (n + 1)), repeat=2):
         corrected_U[
-            int("".join(reversed(f"{i:0{n+1}b}")), 2),
-            int("".join(reversed(f"{j:0{n+1}b}")), 2),
+            int("".join(reversed(f"{i:0{n+1}b}")), 2), int("".join(reversed(f"{j:0{n+1}b}")), 2)
         ] = U[i][j]
 
     M = np.diag(R) @ corrected_U

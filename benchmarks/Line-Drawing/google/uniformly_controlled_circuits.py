@@ -22,13 +22,9 @@ def fill_uniformly_controlled_circuit(Gs, cqs, tq):
     if n == 0:
         circuit.append(generate_single_qubit_circuit(Gs[0], tq))
     else:
-        circuit.append(
-            fill_uniformly_controlled_circuit(Gs[: 2 ** (n - 1)], cqs[1:], tq)
-        )
+        circuit.append(fill_uniformly_controlled_circuit(Gs[: 2 ** (n - 1)], cqs[1:], tq))
         circuit.append(cirq.CNOT(cqs[0], tq))
-        circuit.append(
-            fill_uniformly_controlled_circuit(Gs[2 ** (n - 1) :], cqs[1:], tq)
-        )
+        circuit.append(fill_uniformly_controlled_circuit(Gs[2 ** (n - 1) :], cqs[1:], tq))
     return circuit
 
 
@@ -50,9 +46,7 @@ if __name__ == "__main__":
     n = 2
     unitaries = [unitary_group.rvs(2) for _ in range(2 ** n)]
     qubits = [cirq.GridQubit(0, i) for i in range(n + 1)]
-    circuit, R = generate_uniformly_controlled_circuit(
-        unitaries, qubits[:n], qubits[-1]
-    )
+    circuit, R = generate_uniformly_controlled_circuit(unitaries, qubits[:n], qubits[-1])
     print("Circuit:")
     print(circuit)
     print("Phases:")

@@ -20,7 +20,6 @@ class RigettiJobManager(VendorJobManager):
     def try_get_results(self, promise, device):
         """
             Obtain job results when done.
-            For now we only have simulators that finish immediately.
         """
         return promise.result()
 

@@ -39,11 +39,7 @@ class LineDrawingBenchmarkMixin:
         curves = []
         for j in range(self.num_repetitions):
             for job in results:
-                if (
-                    job.repetition == j
-                    and job.Hadamard_qubit is None
-                    and job.S_qubit is None
-                ):
+                if job.repetition == j and job.Hadamard_qubit is None and job.S_qubit is None:
                     prob_hist = results[job]
                     estimates = {k: np.sqrt(v) for k, v in prob_hist.items()}
                     break
@@ -55,11 +51,7 @@ class LineDrawingBenchmarkMixin:
             # Retrieve the relative phase estimates
             for k in range(n - 1, -1, -1):
                 for job in results:
-                    if (
-                        job.repetition == j
-                        and job.Hadamard_qubit == k
-                        and job.S_qubit is None
-                    ):
+                    if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit is None:
                         cos_hist = results[job]
                         break
                 else:
@@ -68,11 +60,7 @@ class LineDrawingBenchmarkMixin:
                     )
 
                 for job in results:
-                    if (
-                        job.repetition == j
-                        and job.Hadamard_qubit == k
-                        and job.S_qubit == k
-                    ):
+                    if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit == k:
                         sin_hist = results[job]
                         break
                 else:
@@ -92,9 +80,7 @@ class LineDrawingBenchmarkMixin:
                     phase_diff = np.arctan2(sin_phase_diff, cos_phase_diff)
 
                     # Iterate over the part of the Hamming cube that is influenced
-                    new_its = (
-                        [["0", "1"]] * k + [["1"]] + [[j0[i]] for i in range(k + 1, n)]
-                    )
+                    new_its = [["0", "1"]] * k + [["1"]] + [[j0[i]] for i in range(k + 1, n)]
                     for j1 in it.product(*new_its):
                         j1 = "".join(j1)
                         estimates[j1] *= np.exp(-1.0j * phase_diff)
@@ -122,10 +108,7 @@ class LineDrawingBenchmarkMixin:
 
         def interp(a, fac=100):
             return np.interp(
-                np.linspace(0, len(a) - 1 / fac, fac * len(a)),
-                range(len(a)),
-                a,
-                period=len(a),
+                np.linspace(0, len(a) - 1 / fac, fac * len(a)), range(len(a)), a, period=len(a)
             )
 
         all = np.array(collated_result)
@@ -133,35 +116,20 @@ class LineDrawingBenchmarkMixin:
         avg_x, avg_y = interp(np.real(avg)), interp(np.imag(avg))
         avg_pts = np.array([avg_x, avg_y]).T.reshape(-1, 1, 2)
         widths = interp(
-            (np.std(np.real(all), axis=0) ** 2 + np.std(np.imag(all), axis=0) ** 2)
-            ** (1 / 2)
+            (np.std(np.real(all), axis=0) ** 2 + np.std(np.imag(all), axis=0) ** 2) ** (1 / 2)
         )
-        axes_scale = np.linalg.norm(
-            ax.transData.transform([1, 0]) - ax.transData.transform([0, 0])
-        )
+        axes_scale = np.linalg.norm(ax.transData.transform([1, 0]) - ax.transData.transform([0, 0]))
         widths *= 72.0 * axes_scale / fig.dpi
         avg_segments = np.concatenate([avg_pts[:-1], avg_pts[1:]], axis=1)
         ax.add_collection(
-            LineCollection(
-                avg_segments, linewidths=widths, color="red", capstyle="round"
-            )
+            LineCollection(avg_segments, linewidths=widths, color="red", capstyle="round")
         )
 
         # Plot the ideal contour
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
-        ax.plot(
-            ideal_xs + [ideal_xs[0]],
-            ideal_ys + [ideal_ys[0]],
-            color="yellow",
-            linestyle="--",
-        )
+        ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color="yellow", linestyle="--")
 
-        xmin, xmax, ymin, ymax = (
-            min(ideal_xs),
-            max(ideal_xs),
-            min(ideal_ys),
-            max(ideal_ys),
-        )
+        xmin, xmax, ymin, ymax = (min(ideal_xs), max(ideal_xs), min(ideal_ys), max(ideal_ys))
         dx, dy = xmax - xmin, ymax - ymin
         if dx < dy * 1.5:
             dx = dy * 1.5
@@ -190,18 +158,14 @@ class LineDrawingBenchmarkMixin:
 
 
 def argparser(toadd, **argparse_options):
-    parser = toadd.add_parser(
-        "Line-Drawing", help="Line drawing benchmark.", **argparse_options
-    )
+    parser = toadd.add_parser("Line-Drawing", help="Line drawing benchmark.", **argparse_options)
     parser.add_argument(
         "--shape",
         type=str,
         help=f"The shape to draw, one of {SHAPE_FUNCTIONS.keys()}",
         default="heart",
     )
-    parser.add_argument(
-        "-m", "--method", type=str, help="State preparation method", default="BVMS"
-    )
+    parser.add_argument("-m", "--method", type=str, help="State preparation method", default="BVMS")
     parser.add_argument(
         "-n",
         "--num_points",

@@ -8,9 +8,7 @@ from libbench import VendorJob
 
 
 class SchroedingerMicroscopeBenchmarkMixin:
-    def __init__(
-        self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, **_
-    ):
+    def __init__(self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, **_):
         super().__init__()
 
         self.num_post_selections = num_post_selections
@@ -53,17 +51,13 @@ class SchroedingerMicroscopeBenchmarkMixin:
 
         # Draw the postselection probabilities
         ax_psps.imshow(psps, cmap="gray", extent=extent, vmin=0, vmax=1)
-        ax_psps.set_title(
-            f"PSP({self.num_post_selections},{self.num_pixels},{self.num_shots})"
-        )
+        ax_psps.set_title(f"PSP({self.num_post_selections},{self.num_pixels},{self.num_shots})")
         ax_psps.set_xlabel("Re(z)")
         ax_psps.set_ylabel("Im(z)")
 
         # Draw the success probabilities
         ax_sps.imshow(zs, cmap="gray", extent=extent, vmin=0, vmax=1)
-        ax_sps.set_title(
-            f"SP({self.num_post_selections},{self.num_pixels},{self.num_shots})"
-        )
+        ax_sps.set_title(f"SP({self.num_post_selections},{self.num_pixels},{self.num_shots})")
         ax_sps.set_xlabel("Re(z)")
         ax_sps.set_ylabel("Im(z)")
 
@@ -86,20 +80,12 @@ class SchroedingerMicroscopeBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "Schroedinger-Microscope",
-        help="Schroedinger microscope benchmark.",
-        **argparse_options,
+        "Schroedinger-Microscope", help="Schroedinger microscope benchmark.", **argparse_options
     )
     parser.add_argument(
-        "-ps",
-        "--num_post_selections",
-        type=int,
-        help="Number of post selections rounds",
-        default=1,
+        "-ps", "--num_post_selections", type=int, help="Number of post selections rounds", default=1
     )
-    parser.add_argument(
-        "-p", "--num_pixels", type=int, help="Number of pixels", default=4
-    )
+    parser.add_argument("-p", "--num_pixels", type=int, help="Number of pixels", default=4)
     parser.add_argument(
         "-s", "--num_shots", type=int, help="Number of shots per pixel", default=1024
     )

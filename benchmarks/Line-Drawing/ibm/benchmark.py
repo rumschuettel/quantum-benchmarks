@@ -45,9 +45,7 @@ class IBMLineDrawingBenchmark(IBMLineDrawingBenchmarkBase):
         corrected_hist = {}
         for i in range(2 ** n):
             s = f"{i:0{n}b}"
-            corrected_hist["".join(reversed(s))] = (
-                hist[s] / self.num_shots if s in hist else 0
-            )
+            corrected_hist["".join(reversed(s))] = hist[s] / self.num_shots if s in hist else 0
         return corrected_hist
 
 

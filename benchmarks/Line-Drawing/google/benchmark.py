@@ -39,9 +39,7 @@ class GoogleLineDrawingBenchmark(GoogleLineDrawingBenchmarkBase):
     def parse_result(self, job, result):
         n = len(job.qubits)
         measurements = result.measurements["result"]
-        str_measurements = [
-            "".join(map(lambda x: str(int(x)), r)) for r in measurements
-        ]
+        str_measurements = ["".join(map(lambda x: str(int(x)), r)) for r in measurements]
         hist = {
             f"{i:0{n}b}": str_measurements.count(f"{i:0{n}b}") / job.num_shots
             for i in range(2 ** n)

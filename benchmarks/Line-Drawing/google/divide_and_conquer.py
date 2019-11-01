@@ -60,13 +60,9 @@ def divide_and_conquer(points, qubits, ancilla_qubits, ctrl=None):
         zero_part = points[: 2 ** (n - 1)]
 
         if np.linalg.norm(one_part) < 1e-4:
-            circuit.append(
-                divide_and_conquer(zero_part, qubits[1:], ancilla_qubits[1:], ctrl)
-            )
+            circuit.append(divide_and_conquer(zero_part, qubits[1:], ancilla_qubits[1:], ctrl))
         elif np.linalg.norm(zero_part) < 1e-4:
-            circuit.append(
-                divide_and_conquer(one_part, qubits[1:], ancilla_qubits[1:], ctrl)
-            )
+            circuit.append(divide_and_conquer(one_part, qubits[1:], ancilla_qubits[1:], ctrl))
         else:
             new_qubits = qubits[1:]
             if ctrl is not None:
@@ -77,22 +73,16 @@ def divide_and_conquer(points, qubits, ancilla_qubits, ctrl=None):
             else:
                 new_ctrl = qubits[0]
                 new_ancilla_qubits = ancilla_qubits
-            circuit.append(
-                divide_and_conquer(one_part, new_qubits, new_ancilla_qubits, new_ctrl)
-            )
+            circuit.append(divide_and_conquer(one_part, new_qubits, new_ancilla_qubits, new_ctrl))
             if ctrl is not None:
                 circuit.append(cirq.CNOT(ctrl, new_ctrl))
             else:
                 circuit.append(cirq.X(new_ctrl))
-            circuit.append(
-                divide_and_conquer(zero_part, new_qubits, new_ancilla_qubits, new_ctrl)
-            )
+            circuit.append(divide_and_conquer(zero_part, new_qubits, new_ancilla_qubits, new_ctrl))
             if ctrl is not None:
                 circuit.append(cirq.CNOT(ctrl, new_ctrl))
                 # circuit.append(cirq.CCX(ctrl, qubits[0], new_ctrl))
-                circuit.append(
-                    cirq.inverse(optimize_toffoli(ctrl, qubits[0], new_ctrl))
-                )
+                circuit.append(cirq.inverse(optimize_toffoli(ctrl, qubits[0], new_ctrl)))
             else:
                 circuit.append(cirq.X(new_ctrl))
     return circuit

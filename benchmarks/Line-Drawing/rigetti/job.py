@@ -13,9 +13,7 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class RigettiLineDrawingJob(RigettiJob):
     @staticmethod
-    def job_factory(
-        points, num_shots, add_measurements, state_preparation_method, num_repetitions
-    ):
+    def job_factory(points, num_shots, add_measurements, state_preparation_method, num_repetitions):
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
@@ -69,9 +67,7 @@ class RigettiLineDrawingJob(RigettiJob):
         program = pq.Program()
         program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
-        program += self.prepare_state(
-            Fourier_coeffs, list(range(n)), state_preparation_method
-        )
+        program += self.prepare_state(Fourier_coeffs, list(range(n)), state_preparation_method)
         program += self.QFT(list(range(n)))
         # NOTE: qubits is now reversed
 

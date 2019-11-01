@@ -29,9 +29,7 @@ class VQEHamiltonianBenchmarkMixin:
         for job in collated_result:
             wv = collated_result[job]
 
-            fig = qubism_plot(
-                wv["c,wv"], wv["q,wv"] - wv["c,wv"] if "q,wv" in wv else None
-            )
+            fig = qubism_plot(wv["c,wv"], wv["q,wv"] - wv["c,wv"] if "q,wv" in wv else None)
             fig.savefig(path / f"plot-{job}.pdf")
 
     def __repr__(self):
@@ -47,9 +45,7 @@ class VQEHamiltonianBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "VQE-Hamiltonian",
-        help="VQE Hamiltonian Ground State Benchmark",
-        **argparse_options,
+        "VQE-Hamiltonian", help="VQE Hamiltonian Ground State Benchmark", **argparse_options
     )
     parser.add_argument(
         "--hamiltonian_type",
@@ -57,15 +53,10 @@ def argparser(toadd, **argparse_options):
         help=f"Which Hamiltonian to simulate. One of {', '.join(t.name for t in HamiltonianType)}",
     )
     parser.add_argument(
-        "--qubits",
-        default=6,
-        type=int,
-        help="How many qubits the Hamiltonian is defined on",
+        "--qubits", default=6, type=int, help="How many qubits the Hamiltonian is defined on"
     )
     parser.add_argument("--J1", default=1.0, type=float, help="First coupling constant")
-    parser.add_argument(
-        "--J2", default=1.0, type=float, help="Second coupling constant"
-    )
+    parser.add_argument("--J2", default=1.0, type=float, help="Second coupling constant")
     parser.add_argument("--depth", default=2, type=int, help="VQE ansatz circuit depth")
     parser.add_argument("--rounds", default=500, type=int, help="VQE training rounds")
     return parser

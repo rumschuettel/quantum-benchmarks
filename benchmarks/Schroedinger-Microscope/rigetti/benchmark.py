@@ -29,9 +29,7 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(
         return "Rigetti-Schroedinger-Microscope"
 
 
-class RigettiSchroedingerMicroscopeSimulatedBenchmark(
-    RigettiSchroedingerMicroscopeBenchmarkBase
-):
+class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """
         Statevector simulator
     """
@@ -48,9 +46,7 @@ class RigettiSchroedingerMicroscopeSimulatedBenchmark(
         return {"psp": psp, "z": z}
 
 
-class RigettiSchroedingerMicroscopeBenchmark(
-    RigettiSchroedingerMicroscopeBenchmarkBase
-):
+class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """
         Measure and run
     """
@@ -81,21 +77,13 @@ class RigettiSchroedingerMicroscopeBenchmark(
         failure_post_process_key = "0" + "0" * (2 ** self.num_post_selections - 1)
         success_post_process_key = "1" + "0" * (2 ** self.num_post_selections - 1)
         num_post_selected_failures = (
-            counts[failure_post_process_key]
-            if failure_post_process_key in counts
-            else 0
+            counts[failure_post_process_key] if failure_post_process_key in counts else 0
         )
         num_post_selected_successes = (
-            counts[success_post_process_key]
-            if success_post_process_key in counts
-            else 0
+            counts[success_post_process_key] if success_post_process_key in counts else 0
         )
         num_post_selected = num_post_selected_failures + num_post_selected_successes
         psp = num_post_selected / self.num_shots
-        z = (
-            num_post_selected_successes / num_post_selected
-            if num_post_selected > 0
-            else 0
-        )
+        z = num_post_selected_successes / num_post_selected if num_post_selected > 0 else 0
 
         return {"psp": psp, "z": z}

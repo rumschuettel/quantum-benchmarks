@@ -14,9 +14,7 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class GoogleLineDrawingJob(GoogleJob):
     @staticmethod
-    def job_factory(
-        points, num_shots, add_measurements, state_preparation_method, num_repetitions
-    ):
+    def job_factory(points, num_shots, add_measurements, state_preparation_method, num_repetitions):
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
@@ -68,9 +66,7 @@ class GoogleLineDrawingJob(GoogleJob):
 
         qubits = [cirq.GridQubit(0, i) for i in range(n)]
         circuit = cirq.Circuit()
-        circuit.append(
-            self.prepare_state(Fourier_coeffs, qubits, state_preparation_method)
-        )
+        circuit.append(self.prepare_state(Fourier_coeffs, qubits, state_preparation_method))
         circuit.append(self.QFT(qubits))
         # NOTE: qubits is now reversed
 

@@ -30,9 +30,7 @@ class BellTestBenchmarkMixin:
             assert topology is not None, "specify a distance explicitly when no topology is given"
 
         self.distance = distance
-        self.topology = (
-            topology if topology is not None else [(i, i + 1) for i in range(distance)]
-        )
+        self.topology = topology if topology is not None else [(i, i + 1) for i in range(distance)]
         self.num_shots = num_shots
 
         # create a list of qubits to test
@@ -82,11 +80,7 @@ class BellTestBenchmarkMixin:
         data = pd.DataFrame(collated_result["bell"])
         data = data.sort_index(axis=0).sort_index(axis=1)
         fig = plt.figure(figsize=(12, 8))
-        plt.title(
-            f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}",
-            y=1.05,
-            size=15,
-        )
+        plt.title(f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15)
 
         # combine them and build a new colormap
         colors1 = matplotlib.cm.get_cmap("Greys")(np.linspace(0.2, 0.8, 200))
@@ -117,18 +111,12 @@ class BellTestBenchmarkMixin:
 
     def __repr__(self):
         return str(
-            {
-                "distance": self.distance,
-                "num_pixels": self.topology,
-                "num_shots": self.num_shots,
-            }
+            {"distance": self.distance, "num_pixels": self.topology, "num_shots": self.num_shots}
         )
 
 
 def argparser(toadd, **argparse_options):
-    parser = toadd.add_parser(
-        "Bell-Test", help="CHSH/Bell Test benchmark.", **argparse_options
-    )
+    parser = toadd.add_parser("Bell-Test", help="CHSH/Bell Test benchmark.", **argparse_options)
     parser.add_argument(
         "-d",
         "--distance",

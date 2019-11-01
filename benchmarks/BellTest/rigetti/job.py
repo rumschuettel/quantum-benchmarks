@@ -18,9 +18,7 @@ class RigettiBellTestJob(RigettiJob):
             yield RigettiBellTestJob(path, BellTestType.AC, add_measurements, num_shots)
             yield RigettiBellTestJob(path, BellTestType.BC, add_measurements, num_shots)
 
-    def __init__(
-        self, path: list, test_type: BellTestType, add_measurements, num_shots
-    ):
+    def __init__(self, path: list, test_type: BellTestType, add_measurements, num_shots):
         super().__init__()
 
         assert len(path) >= 2, "qubit path has to have length at least 2"

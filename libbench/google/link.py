@@ -19,7 +19,10 @@ class SparseSimulatorMeasureLocal(GoogleDevice):
         self.name = "sparse_simulator_measure_local"
 
     def execute(self, circuit, num_shots: int):
-        return GoogleMeasureLocalPromise(circuit, cirq.Simulator(), num_shots=num_shots)
+        return {
+            "result": GoogleMeasureLocalPromise(circuit, cirq.Simulator(), num_shots=num_shots),
+            "transpiled_circuit": None,
+        }
 
 
 class SparseSimulatorStatevector(GoogleDevice):
@@ -27,9 +30,12 @@ class SparseSimulatorStatevector(GoogleDevice):
         self.name = "sparse_simulator_statevector"
 
     def execute(self, circuit, num_shots: int, **kwargs):
-        return GoogleStatevectorPromise(
-            circuit, cirq.Simulator(), num_shots=num_shots, **kwargs
-        )
+        return {
+            "result": GoogleStatevectorPromise(
+                circuit, cirq.Simulator(), num_shots=num_shots, **kwargs
+            ),
+            "transpiled_circuit": None,
+        }
 
 
 GOOGLE_STATEVECTOR_DEVICES = {
@@ -37,9 +43,7 @@ GOOGLE_STATEVECTOR_DEVICES = {
     # support for the density matrix simulator can be added later if necessary
 }
 
-GOOGLE_MEASURE_LOCAL_DEVICES = {
-    "sparse_simulator_measure_local": SparseSimulatorMeasureLocal()
-}
+GOOGLE_MEASURE_LOCAL_DEVICES = {"sparse_simulator_measure_local": SparseSimulatorMeasureLocal()}
 
 GOOGLE_CLOUD_DEVICES = {}
 
@@ -51,7 +55,9 @@ class GoogleJob(VendorJob):
         self.device_info = None
 
     def serialize(self):
-        return {"circuit": self.circuit, "device_info": self.device_info}
+        info = super().serialize()
+        info.update({"circuit": self.circuit})
+        return info
 
     def run(self, device):
         self.device_info = None

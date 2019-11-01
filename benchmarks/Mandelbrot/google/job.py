@@ -12,14 +12,7 @@ from libbench.google import Job as GoogleJob
 class GoogleMandelbrotJob(GoogleJob):
     @staticmethod
     def job_factory(
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
+        num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -28,9 +21,7 @@ class GoogleMandelbrotJob(GoogleJob):
 
         for (i, x), (j, y) in it.product(enumerate(xs), enumerate(ys)):
             z = x + 1j * y
-            yield GoogleMandelbrotJob(
-                num_post_selections, num_shots, z, add_measurements, i, j
-            )
+            yield GoogleMandelbrotJob(num_post_selections, num_shots, z, add_measurements, i, j)
 
     def __init__(self, num_post_selections, num_shots, z, add_measurements, i, j):
         super().__init__()
@@ -57,27 +48,20 @@ class GoogleMandelbrotJob(GoogleJob):
         for k in range(1, num_post_selections + 1):
             for l in range(0, 2 ** num_post_selections, 2 ** k):
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** (k - 1)]))
-                circuit.append(
-                    cirq.H(qubits[l]).controlled_by(qubits[l + 2 ** (k - 1)])
-                )
-                circuit.append(
-                    cirq.Ry(r1rot)(qubits[l + 2 ** (k - 1)]).controlled_by(qubits[l])
-                )
+                circuit.append(cirq.H(qubits[l]).controlled_by(qubits[l + 2 ** (k - 1)]))
+                circuit.append(cirq.Ry(r1rot)(qubits[l + 2 ** (k - 1)]).controlled_by(qubits[l]))
                 circuit.append(cirq.CZ(qubits[l], qubits[l + 2 ** (k - 1)]))
                 circuit.append(cirq.Rz(phi)(qubits[l]))
                 circuit.append(cirq.Rz(-phi)(qubits[l + 2 ** (k - 1)]))
                 circuit.append(cirq.X(qubits[l + 2 ** (k - 1)]))
-                circuit.append(
-                    cirq.Ry(r2rot)(qubits[l]).controlled_by(qubits[l + 2 ** (k - 1)])
-                )
+                circuit.append(cirq.Ry(r2rot)(qubits[l]).controlled_by(qubits[l + 2 ** (k - 1)]))
                 circuit.append(cirq.CZ(qubits[l], qubits[l + 2 ** (k - 1)]))
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** (k - 1)]))
                 circuit.append(cirq.X(qubits[l + 2 ** (k - 1)]))
         if add_measurements:
             circuit.append(
                 cirq.measure(
-                    *(qubits[k] for k in range(1, 2 ** num_post_selections)),
-                    key="post_selection",
+                    *(qubits[k] for k in range(1, 2 ** num_post_selections)), key="post_selection"
                 )
             )
             circuit.append(cirq.measure(qubits[0], key="success"))

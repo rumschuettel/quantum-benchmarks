@@ -19,11 +19,7 @@ def Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits):
         r = np.linalg.norm(s)
         nullified_state[i] = r
         unitaries.append(
-            np.conj(
-                np.array(
-                    [[s[0] / r, -np.conj(s[1] / r)], [s[1] / r, np.conj(s[0] / r)]]
-                )
-            ).T
+            np.conj(np.array([[s[0] / r, -np.conj(s[1] / r)], [s[1] / r, np.conj(s[0] / r)]])).T
             if r > 1e-8
             else np.eye(2)
         )
@@ -37,18 +33,14 @@ def Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits):
     # Merge everything into one circuit
     circuit = cirq.Circuit()
     if n > 1:
-        circuit.append(
-            Bergholm_Vartiainen_Mottonen_Salomaa(nullified_state, qubits[:-1])
-        )
+        circuit.append(Bergholm_Vartiainen_Mottonen_Salomaa(nullified_state, qubits[:-1]))
     circuit.append(cirq.inverse(UCC))
     return circuit
 
 
 if __name__ == "__main__":
     n = 3
-    state = normalize_and_remove_phase(
-        np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n)
-    )
+    state = normalize_and_remove_phase(np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n))
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     circuit = Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits)
     print(circuit)

@@ -5,7 +5,7 @@ import numpy as np
 from math import pi
 from numpy import arccos, sqrt
 import random as random
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit
 
 from libbench.ibm import Job as IBMJob
 
@@ -15,13 +15,7 @@ from .. import PlatonicFractalsBenchmarkMixin
 class IBMPlatonicFractalsJob(IBMJob):
     @staticmethod
     def job_factory(
-        body,
-        strength,
-        num_steps,
-        num_dirs_change,
-        num_shots,
-        random_seed,
-        add_measurements,
+        body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
     ):
         random.seed(random_seed)
 
@@ -29,16 +23,10 @@ class IBMPlatonicFractalsJob(IBMJob):
             dirs = []
             for _ in range(num_steps):
                 dirs.append(random.randrange(1, 4))
-            yield IBMPlatonicFractalsJob(
-                body, strength, dirs, 2, num_shots, add_measurements
-            )
-            yield IBMPlatonicFractalsJob(
-                body, strength, dirs, 3, num_shots, add_measurements
-            )
+            yield IBMPlatonicFractalsJob(body, strength, dirs, 2, num_shots, add_measurements)
+            yield IBMPlatonicFractalsJob(body, strength, dirs, 3, num_shots, add_measurements)
 
-    def __init__(
-        self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements
-    ):
+    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
         super().__init__()
 
         self.body = body
@@ -92,7 +80,7 @@ class IBMPlatonicFractalsJob(IBMJob):
 
     def run(self, device):
         super().run(device)
-        return execute(self.circuit, device, shots=self.shots)
+        return device.execute(self.circuit, num_shots=self.shots)
 
     def __str__(self):
         return f"IBMPlatonicFractalsJob-{self.strength}-{self.meas_dirs}-{self.final_meas_dir}"

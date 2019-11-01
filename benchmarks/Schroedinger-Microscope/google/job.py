@@ -12,14 +12,7 @@ from libbench.google import Job as GoogleJob
 class GoogleSchroedingerMicroscopeJob(GoogleJob):
     @staticmethod
     def job_factory(
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
+        num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -55,14 +48,11 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         for k in range(num_post_selections):
             for l in range(0, 2 ** num_post_selections, 2 ** (k + 1)):
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** k]))
-                circuit.append(
-                    [cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])]
-                )
+                circuit.append([cirq.S(qubits[l]), cirq.H(qubits[l]), cirq.S(qubits[l])])
         if add_measurements:
             circuit.append(
                 cirq.measure(
-                    *(qubits[k] for k in range(1, 2 ** num_post_selections)),
-                    key="post_selection",
+                    *(qubits[k] for k in range(1, 2 ** num_post_selections)), key="post_selection"
                 )
             )
             circuit.append(cirq.measure(qubits[0], key="success"))

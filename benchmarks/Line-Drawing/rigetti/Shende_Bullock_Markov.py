@@ -22,22 +22,12 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
                             1.0j
                             * np.mean(
                                 np.angle(
-                                    state[
-                                        2
-                                        * j
-                                        * 2 ** (n - i - 1) : (2 * j + 1)
-                                        * 2 ** (n - i - 1)
-                                    ]
+                                    state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
                                 )
                             )
                         )
                         * np.linalg.norm(
-                            state[
-                                2
-                                * j
-                                * 2 ** (n - i - 1) : (2 * j + 1)
-                                * 2 ** (n - i - 1)
-                            ]
+                            state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
                         ),
                         np.exp(
                             1.0j
@@ -52,11 +42,7 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
                             )
                         )
                         * np.linalg.norm(
-                            state[
-                                (2 * j + 1)
-                                * 2 ** (n - i - 1) : (2 * j + 2)
-                                * 2 ** (n - i - 1)
-                            ]
+                            state[(2 * j + 1) * 2 ** (n - i - 1) : (2 * j + 2) * 2 ** (n - i - 1)]
                         ),
                     ]
                 )
@@ -69,9 +55,7 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
     return program
 
 
-def prepare_multiplexed(
-    states, control_qubits, target_qubit, GRAY_CODE=True, REVERSE_ZS=True
-):
+def prepare_multiplexed(states, control_qubits, target_qubit, GRAY_CODE=True, REVERSE_ZS=True):
     assert len(states) == 2 ** len(control_qubits)
     assert all(abs(np.linalg.norm(state) - 1.0) < 1e-8 for state in states)
     n = len(control_qubits)
@@ -97,10 +81,7 @@ def prepare_multiplexed(
         # Implement multiplexed Ry
         for b, c in zip(bs[:-1], bs[1:]):
             theta = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             # program.append(cirq.Y(target_qubit)**theta)
@@ -111,10 +92,7 @@ def prepare_multiplexed(
                     program += pq.gates.CNOT(control_qubits[j], target_qubit)
         b = bs[-1]
         theta = (
-            sum(
-                (-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j]
-                for j, d in enumerate(bs)
-            )
+            sum((-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j] for j, d in enumerate(bs))
             / 2 ** n
         )
         # program.append(cirq.Y(target_qubit)**theta)
@@ -122,10 +100,7 @@ def prepare_multiplexed(
 
         # Implement reverse of multiplexed Rz
         phi = (
-            sum(
-                (-1) ** sum(x * y for x, y in zip(b, d)) * phis[j]
-                for j, d in zip(nums, bs)
-            )
+            sum((-1) ** sum(x * y for x, y in zip(b, d)) * phis[j] for j, d in zip(nums, bs))
             / 2 ** n
         )
         # program.append(cirq.Z(target_qubit)**phi)
@@ -136,10 +111,7 @@ def prepare_multiplexed(
                 if x != y:
                     program += pq.gates.CNOT(control_qubits[j], target_qubit)
             phi = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * phis[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * phis[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             # program.append(cirq.Z(target_qubit)**phi)
@@ -148,10 +120,7 @@ def prepare_multiplexed(
         # Implement multiplexed Ry
         for b, c in zip(bs, bs[1:] + [bs[0]]):
             theta = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * thetas[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             # program.append(cirq.Y(target_qubit)**theta)
@@ -164,10 +133,7 @@ def prepare_multiplexed(
         # Implement multiplexed Rz
         for b, c in zip(bs, bs[1:] + [bs[0]]):
             phi = (
-                sum(
-                    (-1) ** sum(x * y for x, y in zip(b, d)) * phis[j]
-                    for j, d in zip(nums, bs)
-                )
+                sum((-1) ** sum(x * y for x, y in zip(b, d)) * phis[j] for j, d in zip(nums, bs))
                 / 2 ** n
             )
             # program.append(cirq.Z(target_qubit)**phi)
@@ -213,7 +179,4 @@ if __name__ == "__main__":
     # Check resulting state
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
     print("Maximum absolute error:", np.max(np.abs(corrected_result - points)))
-    print(
-        "Inner product error:",
-        abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0),
-    )
+    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0))

@@ -2,7 +2,7 @@ import itertools as it
 from functools import reduce
 
 import numpy as np
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit
 
 from libbench.ibm import Job as IBMJob
 
@@ -17,9 +17,7 @@ class IBMBellTestJob(IBMJob):
             yield IBMBellTestJob(path, BellTestType.AC, add_measurements, num_shots)
             yield IBMBellTestJob(path, BellTestType.BC, add_measurements, num_shots)
 
-    def __init__(
-        self, path: list, test_type: BellTestType, add_measurements, num_shots
-    ):
+    def __init__(self, path: list, test_type: BellTestType, add_measurements, num_shots):
         super().__init__()
         assert len(path) >= 2, "qubit path has to have length at least 2"
 
@@ -42,11 +40,7 @@ class IBMBellTestJob(IBMJob):
         _qubit_a = 0
         _qubit_b = len(path) - 1
 
-        circuit = (
-            QuantumCircuit(len(path), 2)
-            if add_measurements
-            else QuantumCircuit(len(path))
-        )
+        circuit = QuantumCircuit(len(path), 2) if add_measurements else QuantumCircuit(len(path))
 
         circuit.x(_qubit_a)
         circuit.x(_qubit_b)
@@ -76,19 +70,15 @@ class IBMBellTestJob(IBMJob):
 
         # measurements
         if add_measurements:
-            circuit.measure([_qubit_a, _qubit_b], [0,1])
+            circuit.measure([_qubit_a, _qubit_b], [0, 1])
 
         # store the resulting circuit
         self.circuit = circuit
 
     def run(self, device):
         super().run(device)
-        return execute(
-            self.circuit,
-            device,
-            shots=self.num_shots,
-            initial_layout=self.path,
-            optimization_level=0,
+        return device.execute(
+            self.circuit, num_shots=self.num_shots, initial_layout=self.path, optimization_level=0
         )
 
     def __str__(self):

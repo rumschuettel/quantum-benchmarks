@@ -1,6 +1,8 @@
 from libbench import VendorJobManager
 from .benchmark import IBMBenchmark
 
+from .link import IBMDevice
+
 from qiskit.providers import JobStatus
 from qiskit.providers.ibmq.api_v2.exceptions import ApiError
 
@@ -43,11 +45,11 @@ class IBMJobManager(VendorJobManager):
 
         return True
 
-    def try_get_results(self, promise, device):
+    def try_get_results(self, promise, device: IBMDevice):
         """
             obtain job results when done
         """
-        if device.name() in ["statevector_simulator", "qasm_simulator"]:
+        if device.device.name() in ["statevector_simulator", "qasm_simulator"]:
             return promise.result()
 
         if not promise.status() == JobStatus.DONE:
@@ -62,8 +64,8 @@ class IBMJobManager(VendorJobManager):
         """
         return promise.job_id()
 
-    def thaw_promise(self, job_id, device):
+    def thaw_promise(self, job_id, device: IBMDevice):
         """
             load job by job_id
         """
-        return device.retrieve_job(job_id)
+        return device.device.retrieve_job(job_id)

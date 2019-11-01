@@ -53,13 +53,9 @@ def divide_and_conquer(points, qubits, ancilla_qubits, ctrl=None):
         zero_part = points[: 2 ** (n - 1)]
 
         if np.linalg.norm(one_part) < 1e-4:
-            program += divide_and_conquer(
-                zero_part, qubits[1:], ancilla_qubits[1:], ctrl
-            )
+            program += divide_and_conquer(zero_part, qubits[1:], ancilla_qubits[1:], ctrl)
         elif np.linalg.norm(zero_part) < 1e-4:
-            program += divide_and_conquer(
-                one_part, qubits[1:], ancilla_qubits[1:], ctrl
-            )
+            program += divide_and_conquer(one_part, qubits[1:], ancilla_qubits[1:], ctrl)
         else:
             new_qubits = qubits[1:]
             if ctrl is not None:
@@ -70,16 +66,12 @@ def divide_and_conquer(points, qubits, ancilla_qubits, ctrl=None):
             else:
                 new_ctrl = qubits[0]
                 new_ancilla_qubits = ancilla_qubits
-            program += divide_and_conquer(
-                one_part, new_qubits, new_ancilla_qubits, new_ctrl
-            )
+            program += divide_and_conquer(one_part, new_qubits, new_ancilla_qubits, new_ctrl)
             if ctrl is not None:
                 program += pq.gates.CNOT(ctrl, new_ctrl)
             else:
                 program += pq.gates.X(new_ctrl)
-            program += divide_and_conquer(
-                zero_part, new_qubits, new_ancilla_qubits, new_ctrl
-            )
+            program += divide_and_conquer(zero_part, new_qubits, new_ancilla_qubits, new_ctrl)
             if ctrl is not None:
                 program += pq.gates.CNOT(ctrl, new_ctrl)
                 # program.append(cirq.CCX(ctrl, qubits[0], new_ctrl))
@@ -134,7 +126,4 @@ if __name__ == "__main__":
     # Check resulting state
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
     print("Maximum absolute error:", np.max(np.abs(corrected_result - points)))
-    print(
-        "Inner product error:",
-        abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0),
-    )
+    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0))

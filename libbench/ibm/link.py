@@ -3,24 +3,49 @@ from libbench.lib import print_hl
 from libbench.link import VendorJob, VendorLink, ThinPromise
 import functools
 from qiskit.providers import JobStatus
+import qiskit
 
 IBM_KNOWN_STATEVECTOR_DEVICES = ["statevector_simulator"]
 
 IBM_KNOWN_MEASURE_LOCAL_DEVICES = ["qasm_simulator"]
 
 
+class IBMDevice:
+    def __init__(self, device):
+        self.device = device
+
+    def execute(
+        self,
+        cirquit: qiskit.QuantumCircuit,
+        num_shots=1024,
+        initial_layout=None,
+        optimization_level=3,
+    ):
+        experiment = qiskit.compiler.transpile(
+            cirquit,
+            initial_layout=initial_layout,
+            optimization_level=optimization_level,
+            backend=self.device,
+        )
+        qobj = qiskit.compiler.assemble(
+            experiment, shots=num_shots, max_credits=15, backend=self.device
+        )
+        return {"result": self.device.run(qobj), "transpiled_circuit": experiment}
+
+
 class IBMJob(VendorJob):
     def __init__(self):
         super().__init__()
         self.circuit = None
-        self.device_info = None
 
     @abstractmethod
     def run(self, device):
-        self.device_info = device.configuration().to_dict()
+        self.device_info = device.device.configuration().to_dict()
 
     def serialize(self):
-        return {"circuit": self.circuit, "device_info": self.device_info}
+        info = super().serialize()
+        info.update({"circuit": self.circuit})
+        return info
 
 
 class IBMThinPromise(ThinPromise):
@@ -34,7 +59,7 @@ class IBMThinPromise(ThinPromise):
 
 class IBMLinkBase(VendorLink):
     def get_device_topology(self, name):
-        return self.get_device(name).configuration().coupling_map
+        return self.get_device(name).device.configuration().coupling_map
 
 
 class IBMCloudLink(IBMLinkBase):
@@ -56,7 +81,7 @@ class IBMCloudLink(IBMLinkBase):
 
     @functools.lru_cache()
     def get_devices(self):
-        return {device.name(): device for device in self.IBMQ_cloud.backends()}
+        return {device.name(): IBMDevice(device) for device in self.IBMQ_cloud.backends()}
 
 
 class IBMMeasureLocalLink(IBMLinkBase):
@@ -72,7 +97,7 @@ class IBMMeasureLocalLink(IBMLinkBase):
     @functools.lru_cache()
     def get_devices(self):
         return {
-            device.name(): device
+            device.name(): IBMDevice(device)
             for device in self.IBMQ_local.backends()
             if device.name() in IBM_KNOWN_MEASURE_LOCAL_DEVICES
         }
@@ -91,7 +116,7 @@ class IBMStatevectorLink(IBMLinkBase):
     @functools.lru_cache()
     def get_devices(self):
         return {
-            device.name(): device
+            device.name(): IBMDevice(device)
             for device in self.IBMQ_local.backends()
             if device.name() in IBM_KNOWN_STATEVECTOR_DEVICES
         }

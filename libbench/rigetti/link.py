@@ -56,15 +56,12 @@ class RigettiQVM(RigettiDevice):
         for i, q in enumerate(qubits):
             bitstring_dict[q] = bitstring_array[:, i]
 
-        return bitstring_dict
+        return {"result": bitstring_dict, "transpiled_circuit": executable.asdict()}
 
     def execute(self, program: pq.Program, num_shots: int, optimize=True):
-        return ThinPromise(
-            self._run_and_measure,
-            program=program,
-            num_shots=num_shots,
-            optimize=optimize,
-        )
+        response = self._run_and_measure(program, num_shots, optimize)
+        response["result"] = ThinPromise(lambda: response["result"])
+        return response
 
 
 class RigettiQPU(RigettiQVM):
@@ -90,23 +87,22 @@ class RigettiStatevectorSimulator(RigettiDevice):
 
 
 # with rigetti we can have any kind of qvm we want, and also other topologies etc
-RIGETTI_EXTRA_QVMS = [
-    nn for n in [2, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]
-]
+RIGETTI_EXTRA_QVMS = [nn for n in [2, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]]
 
 
 class RigettiJob(VendorJob):
     def __init__(self):
         super().__init__()
         self.program = None
-        self.device_info = None
-
-    def serialize(self):
-        return {"program": self.program, "device_info": self.device_info}
 
     @abstractmethod
     def run(self, device: RigettiDevice):
         self.device_info = device.info
+
+    def serialize(self):
+        info = super().serialize()
+        info.update({"program": self.program})
+        return info
 
 
 class RigettiCloudLink(VendorLink):
@@ -137,10 +133,7 @@ class RigettiMeasureLocalLink(VendorLink):
         # any qpu device can also be used as a qvm for rigetti, so we include both
         return {
             n: RigettiQVM(n)
-            for n in [
-                *pq.list_quantum_computers(qpus=True, qvms=True),
-                *RIGETTI_EXTRA_QVMS,
-            ]
+            for n in [*pq.list_quantum_computers(qpus=True, qvms=True), *RIGETTI_EXTRA_QVMS]
         }
 
     def get_device_topology(self, name) -> List[Tuple[int, int]]:

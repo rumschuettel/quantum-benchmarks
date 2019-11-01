@@ -2,7 +2,7 @@ import itertools as it
 from functools import reduce
 
 import numpy as np
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit
 
 from libbench.ibm import Job as IBMJob
 
@@ -10,14 +10,7 @@ from libbench.ibm import Job as IBMJob
 class IBMSchroedingerMicroscopeJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
+        num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -61,8 +54,7 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
                 circuit.s(l)
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)),
-                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections))
             )
 
         # store the resulting circuit
@@ -70,7 +62,7 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
 
     def run(self, device):
         super().run(device)
-        return execute(self.circuit, device, shots=self.num_shots)
+        return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
         return f"IBMSchroedingerMicroscopeJob-{self.i}-{self.j}"

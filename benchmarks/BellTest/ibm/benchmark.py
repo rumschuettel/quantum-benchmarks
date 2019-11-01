@@ -36,10 +36,7 @@ class IBMBellTestBenchmark(IBMBellTestBenchmarkBase):
     def parse_result(self, job, result):
         counts = result.get_counts()
 
-        return {
-            "eq": counts["00"] + counts["11"],
-            "ineq": counts["01"] + counts["10"]
-        }
+        return {"eq": counts["00"] + counts["11"], "ineq": counts["01"] + counts["10"]}
 
 
 class IBMBellTestSimulatedBenchmark(IBMBellTestBenchmarkBase):

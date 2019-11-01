@@ -49,11 +49,7 @@ def qubism_plot(vector, deviation=None, vmax_vec=None, plot=None):
     # optionally bias somewhat so that small numbers show up stronger
     vector_mapped = np.power(vector, 1.0)
     # take maximum range from own vector by default
-    vmax_vec = (
-        vector_mapped
-        if not isinstance(vmax_vec, np.ndarray)
-        else np.power(vmax_vec, 0.5)
-    )
+    vmax_vec = vector_mapped if not isinstance(vmax_vec, np.ndarray) else np.power(vmax_vec, 0.5)
     vmax = np.max(np.abs(vmax_vec))
 
     if plot is None:
@@ -62,17 +58,13 @@ def qubism_plot(vector, deviation=None, vmax_vec=None, plot=None):
     plot.set_xticks([], [])
     plot.set_yticks([], [])
 
-    qubism = plt.cm.get_cmap("binary")(
-        Normalize(vmin=0, vmax=vmax)(qubism_array(vector_mapped))
-    )
+    qubism = plt.cm.get_cmap("binary")(Normalize(vmin=0, vmax=vmax)(qubism_array(vector_mapped)))
     plot.imshow(qubism)
 
     # show deviation overlay
     if deviation is not None:
         cmap = alpha_colormap([1.0, 0.0, 0.0])
-        overlay = cmap(
-            Normalize(vmin=0, vmax=2)(qubism_array(abs(deviation) / abs(vector)))
-        )
+        overlay = cmap(Normalize(vmin=0, vmax=2)(qubism_array(abs(deviation) / abs(vector))))
         plot.imshow(overlay)
 
     return fig

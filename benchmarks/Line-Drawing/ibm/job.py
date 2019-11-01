@@ -2,7 +2,7 @@ import itertools as it
 from functools import reduce
 
 import numpy as np
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit
 
 from libbench.ibm import Job as IBMJob
 from .divide_and_conquer import divide_and_conquer
@@ -12,9 +12,7 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class IBMLineDrawingJob(IBMJob):
     @staticmethod
-    def job_factory(
-        points, num_shots, add_measurements, state_preparation_method, num_repetitions
-    ):
+    def job_factory(points, num_shots, add_measurements, state_preparation_method, num_repetitions):
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
@@ -65,9 +63,7 @@ class IBMLineDrawingJob(IBMJob):
         # NOTE: This is actually the INVERSE QFT because of incompatible definitions
         Fourier_coeffs = np.fft.fft(points, norm="ortho")
 
-        circuit = self.prepare_state(
-            Fourier_coeffs, list(range(n)), state_preparation_method
-        )
+        circuit = self.prepare_state(Fourier_coeffs, list(range(n)), state_preparation_method)
         self.QFT(circuit, list(range(n)))
         # NOTE: qubits is now reversed
 
@@ -115,9 +111,7 @@ class IBMLineDrawingJob(IBMJob):
 
     def run(self, device):
         super().run(device)
-        return execute(self.circuit, device, shots=self.num_shots)
+        return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
-        return (
-            f"IBMLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"
-        )
+        return f"IBMLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"

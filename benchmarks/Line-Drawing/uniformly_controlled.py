@@ -116,9 +116,7 @@ def decompose_uniformly_controlled_unitaries(unitaries):
 
     # Decompose the given uniformly controlled operation
     Us, Vs, Rs = [], [], np.zeros(2 ** (n + 1), dtype=np.complex_)
-    for i, (A, B) in enumerate(
-        zip(unitaries[: 2 ** (n - 1)], unitaries[2 ** (n - 1) :])
-    ):
+    for i, (A, B) in enumerate(zip(unitaries[: 2 ** (n - 1)], unitaries[2 ** (n - 1) :])):
         U, V, R = decompose_singly_controlled_unitaries(A, B)
         Us.append(U)
         Vs.append(V)
@@ -132,9 +130,7 @@ def decompose_uniformly_controlled_unitaries(unitaries):
         fullU[2 * i : 2 * i + 2, 2 * i : 2 * i + 2] = U
         fullV[2 * i : 2 * i + 2, 2 * i : 2 * i + 2] = V
         fullCNOT[2 * i : 2 * i + 2, 2 * i : 2 * i + 2] = np.eye(2)
-        fullCNOT[
-            2 ** n + 2 * i : 2 ** n + 2 * i + 2, 2 ** n + 2 * i : 2 ** n + 2 * i + 2
-        ] = X
+        fullCNOT[2 ** n + 2 * i : 2 ** n + 2 * i + 2, 2 ** n + 2 * i : 2 ** n + 2 * i + 2] = X
     constructed_unitary = (
         np.diag(Rs) @ np.kron(np.eye(2), fullU) @ fullCNOT @ np.kron(np.eye(2), fullV)
     )
@@ -145,9 +141,7 @@ def decompose_uniformly_controlled_unitaries(unitaries):
 
     # Check if decomposition worked
     full_construction_error = np.max(np.abs(full_unitary - constructed_unitary))
-    assert (
-        full_construction_error < 1e-8
-    ), f"Full construction error: {full_construction_error}"
+    assert full_construction_error < 1e-8, f"Full construction error: {full_construction_error}"
 
     # Implement the Vs, minus the Hadamards at the end
     Vs = [H @ V for V in Vs]
