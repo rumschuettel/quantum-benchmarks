@@ -34,9 +34,13 @@ class RigettiQVM(RigettiDevice):
     def info(self):
         return self.device.device.get_specs().to_dict()
 
-    def _run_and_measure(self, program: pq.Program, num_shots: int, optimize):
+    def _run_and_measure(self, program: pq.Program, num_shots: int, measure_qubits: list, optimize, active_reset=True):
         program = program.copy()
-        qubits = program.get_qubits()
+        qubits = measure_qubits if measure_qubits is not None else program.get_qubits()
+
+        # actively reset qubits at start
+        if active_reset:
+            program = pq.Program(pq.gates.RESET()) + program
 
         # add measurements everywhere
         ro = program.declare("ro", "BIT", len(qubits))
@@ -58,8 +62,8 @@ class RigettiQVM(RigettiDevice):
 
         return {"result": bitstring_dict, "transpiled_circuit": executable.asdict()}
 
-    def execute(self, program: pq.Program, num_shots: int, optimize=True):
-        response = self._run_and_measure(program, num_shots, optimize)
+    def execute(self, program: pq.Program, num_shots: int, measure_qubits: list = None, optimize=True):
+        response = self._run_and_measure(program, num_shots, measure_qubits, optimize)
         response["result"] = ThinPromise(lambda: response["result"])
         return response
 
