@@ -27,6 +27,8 @@ class IBMDevice:
             optimization_level=optimization_level,
             backend=self.device,
         )
+        print_hl(cirquit, color="grey")
+        print_hl(experiment, color="grey")
         qobj = qiskit.compiler.assemble(
             experiment, shots=num_shots, max_credits=15, backend=self.device
         )

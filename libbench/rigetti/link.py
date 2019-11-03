@@ -7,6 +7,8 @@ import pyquil as pq
 import functools
 from libbench import print_stderr
 
+from .. import print_hl
+
 
 class RigettiDevice(ABC):
     @abstractmethod
@@ -34,7 +36,9 @@ class RigettiQVM(RigettiDevice):
     def info(self):
         return self.device.device.get_specs().to_dict()
 
-    def _run_and_measure(self, program: pq.Program, num_shots: int, measure_qubits: list, optimize, active_reset=True):
+    def _run_and_measure(
+        self, program: pq.Program, num_shots: int, measure_qubits: list, optimize, active_reset=True
+    ):
         program = program.copy()
         qubits = measure_qubits if measure_qubits is not None else program.get_qubits()
 
@@ -56,13 +60,19 @@ class RigettiQVM(RigettiDevice):
             print_stderr(e)  # we want to log, but not interrupt
             return None
 
+        breakpoint()
+        print_hl(program, color="grey")
+        print_hl(executable.program, color="grey")
+
         bitstring_dict = {}
         for i, q in enumerate(qubits):
             bitstring_dict[q] = bitstring_array[:, i]
 
         return {"result": bitstring_dict, "transpiled_circuit": executable.asdict()}
 
-    def execute(self, program: pq.Program, num_shots: int, measure_qubits: list = None, optimize=True):
+    def execute(
+        self, program: pq.Program, num_shots: int, measure_qubits: list = None, optimize=True
+    ):
         response = self._run_and_measure(program, num_shots, measure_qubits, optimize)
         response["result"] = ThinPromise(lambda: response["result"])
         return response

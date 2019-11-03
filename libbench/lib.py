@@ -8,8 +8,8 @@ def benchmark_id(rnd_len=2):
     return f"{datepart}--{rndpart}"
 
 
-def print_hl(*args, color="yellow", **kwargs):
-    print(*[colored(arg, color) for arg in args], **kwargs)
+def print_hl(*args, color="yellow", bold=False, **kwargs):
+    print(*[colored(arg, color, attrs=[] if not bold else ["bold"]) for arg in args], **kwargs)
 
 
 def print_stderr(*args):

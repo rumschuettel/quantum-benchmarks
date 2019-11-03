@@ -77,9 +77,6 @@ class IBMBellTestJob(IBMJob):
 
     def run(self, device):
         super().run(device)
-        from libbench import print_hl
-        print_hl(self.path)
-        print(self.circuit)
         return device.execute(
             self.circuit, num_shots=self.num_shots, initial_layout=self.path, optimization_level=0
         )

@@ -111,7 +111,7 @@ class BellTestBenchmarkMixin:
 
     def __repr__(self):
         return str(
-            {"distance": self.distance, "num_pixels": self.topology, "num_shots": self.num_shots}
+            {"distance": self.distance, "topology": self.topology, "num_shots": self.num_shots}
         )
 
 
