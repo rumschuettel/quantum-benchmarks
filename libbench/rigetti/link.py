@@ -59,7 +59,7 @@ class RigettiQVM(RigettiDevice):
         except Exception as e:
             print_stderr(e)  # we want to log, but not interrupt
             return {
-                "result": None,
+                "result": ThinPromise(lambda: None),
                 "transpiled_circuit": None
             }
 
