@@ -114,15 +114,17 @@ class BellTestBenchmarkMixin:
 
         # GRAPH
         fig = plt.figure(figsize=(12, 8))
-        plt.title(f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15)
+        plt.title(
+            f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15
+        )
 
-        G = nx.DiGraph([
-            edge for (a, b) in self.topology for edge in ((a,b), (b,a))
-        ])
+        G = nx.DiGraph([edge for (a, b) in self.topology for edge in ((a, b), (b, a))])
         G_layout = nx.spectral_layout(G)
 
         edges = {
-            (a, b): collated_result["bell"][a][b] for a in collated_result["bell"] for b in collated_result["bell"][a]
+            (a, b): collated_result["bell"][a][b]
+            for a in collated_result["bell"]
+            for b in collated_result["bell"][a]
         }
 
         for u, v, d in G.edges(data=True):
@@ -132,7 +134,7 @@ class BellTestBenchmarkMixin:
                 d["weight"] = 0
         edges, weights = zip(*nx.get_edge_attributes(G, "weight").items())
 
-        DIST = .25
+        DIST = 0.25
         nx.draw(
             G,
             G_layout,
@@ -149,12 +151,7 @@ class BellTestBenchmarkMixin:
             edge_vmin=0,  # we scale the colormap ourselves
             edge_vmax=1.5,
         )
-        nx.draw_networkx_edges(
-            nx.Graph(self.topology),
-            G_layout,
-            edge_color="grey",
-            style="dashed"
-        )
+        nx.draw_networkx_edges(nx.Graph(self.topology), G_layout, edge_color="grey", style="dashed")
 
         sm = plt.cm.ScalarMappable(cmap=mymap, norm=plt.Normalize(vmin=0, vmax=1.5))
         sm.set_array([])
@@ -189,7 +186,7 @@ def argparser(toadd, **argparse_options):
         "-a",
         "--all_shortest_paths",
         action="store_true",
-        help="Use all shortest paths instead of just a single one"
+        help="Use all shortest paths instead of just a single one",
     )
     parser.add_argument(
         "-s", "--num_shots", type=int, help="Number of shots per test", default=1024

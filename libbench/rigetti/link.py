@@ -58,10 +58,7 @@ class RigettiQVM(RigettiDevice):
             bitstring_array = self.device.run(executable=executable)
         except Exception as e:
             print_stderr(e)  # we want to log, but not interrupt
-            return {
-                "result": ThinPromise(lambda: None),
-                "transpiled_circuit": None
-            }
+            return {"result": ThinPromise(lambda: None), "transpiled_circuit": None}
 
         print_hl(program, color="grey")
         print_hl(executable.program, color="grey")
@@ -72,7 +69,7 @@ class RigettiQVM(RigettiDevice):
 
         return {
             "result": ThinPromise(lambda: bitstring_dict),
-            "transpiled_circuit": executable.asdict()
+            "transpiled_circuit": executable.asdict(),
         }
 
     def execute(

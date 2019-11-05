@@ -8,10 +8,12 @@ from qiskit.providers.ibmq.api_v2.exceptions import ApiError
 
 import datetime, dateutil
 
+
 def utc_timestamp():
     return datetime.datetime.utcnow().isoformat()
 
-def time_elapsed(then : str):
+
+def time_elapsed(then: str):
     # current time in UTC format
     now = utc_timestamp()
     now = dateutil.parser.parse(now)
@@ -31,10 +33,10 @@ class IBMJobManager(VendorJobManager):
         # this does not mean that the job is broken;
         # it could e.g. be a network issue. We let that error propagate
         status = promise.status()
-        
+
         if status in [JobStatus.QUEUED, JobStatus.DONE]:
             return True
-        
+
         elif status in [JobStatus.ERROR, JobStatus.CANCELLED]:
             return False
 
@@ -47,18 +49,18 @@ class IBMJobManager(VendorJobManager):
 
         # calculate time difference; if below threshold all is ok
         age = time_elapsed(then)
+
         if age <= self.MAX_JOB_AGE:
             return True
 
         # otherwise try to cancel old job
         try:
             promise.cancel()
+            del meta["first_running_status_time"]
         except ApiError as e:
             print_stderr(e)
         finally:
             return False
-    
-
 
     def queued_successfully(self, promise, meta: dict):
         """
