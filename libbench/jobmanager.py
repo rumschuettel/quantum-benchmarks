@@ -45,7 +45,11 @@ class VendorJobManager(ABC):
             promise = response["result"]
             job.transpiled_circuit = response["transpiled_circuit"]
 
-            if self.queued_successfully(promise):
+            # TODO remove
+            if not hasattr(job, "meta"):
+                job.meta = {}
+
+            if self.queued_successfully(promise, job.meta):
                 print(f"{str(job)} successfully queued.")
                 self.queued[job] = promise
                 failure_counter = 0
@@ -61,6 +65,10 @@ class VendorJobManager(ABC):
         for job in self.queued:
             promise = self.queued[job]
 
+            # TODO remove
+            if not hasattr(job, "meta"):
+                job.meta = {}
+
             # 1. we try to get the result
             result = self.try_get_results(promise, device)
             if result is not None:
@@ -73,7 +81,7 @@ class VendorJobManager(ABC):
                     self._save_in_run_folder(f"jobs/{str(job)}.circuit.pickle", job.serialize())
 
             # 2. if that failed, check whether job is alive and if not reschedule
-            elif not self.job_alive(promise):
+            elif not self.job_alive(promise, job.meta):
                 self.scheduled.append(job)
 
             # 3. otherwise the job simply wasn't done, put back to queue
@@ -193,7 +201,7 @@ class VendorJobManager(ABC):
             self.queued[job] = self.thaw_promise(self.queued[job], device)
 
     @abstractmethod
-    def queued_successfully(self, promise) -> bool:
+    def queued_successfully(self, promise, meta: dict) -> bool:
         pass
 
     @abstractmethod
@@ -211,7 +219,7 @@ class VendorJobManager(ABC):
         pass
 
     @abstractmethod
-    def job_alive(self, promise) -> bool:
+    def job_alive(self, promise, meta: dict) -> bool:
         pass
 
     @abstractmethod

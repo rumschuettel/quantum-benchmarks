@@ -1,4 +1,4 @@
-from libbench import VendorJobManager
+from libbench import VendorJobManager, print_stderr
 from .benchmark import IBMBenchmark
 
 from .link import IBMDevice
@@ -6,27 +6,67 @@ from .link import IBMDevice
 from qiskit.providers import JobStatus
 from qiskit.providers.ibmq.api_v2.exceptions import ApiError
 
+import datetime, dateutil
+
+def utc_timestamp():
+    return datetime.datetime.utcnow().isoformat()
+
+def time_elapsed(then : str):
+    # current time in UTC format
+    now = utc_timestamp()
+    now = dateutil.parser.parse(now)
+    then = dateutil.parser.parse(then)
+    return now - then
+
 
 class IBMJobManager(VendorJobManager):
-    def job_alive(self, promise):
+    # maximum time for a job to be considered a failure
+    MAX_JOB_AGE = datetime.timedelta(minutes=10)
+
+    def job_alive(self, promise, meta: dict):
         """
             check whether we consider the job behind the promise alive on an IBM backend
         """
-        return promise.status() in [
-            JobStatus.DONE,
-            JobStatus.INITIALIZING,
-            JobStatus.QUEUED,
-            JobStatus.RUNNING,
-            JobStatus.VALIDATING,
-        ]
+        # note that if this fails due to e.g. a TimeoutError
+        # this does not mean that the job is broken;
+        # it could e.g. be a network issue. We let that error propagate
+        status = promise.status()
+        
+        if status in [JobStatus.QUEUED, JobStatus.DONE]:
+            return True
+        
+        elif status in [JobStatus.ERROR, JobStatus.CANCELLED]:
+            return False
 
-    def queued_successfully(self, promise):
+        # check whether status has been like this before
+        if "first_running_status_time" in meta:
+            then = meta["first_running_status_time"]
+        # otherwise mark status to be in this state for the first time
+        else:
+            then = meta["first_running_status_time"] = utc_timestamp()
+
+        # calculate time difference; if below threshold all is ok
+        age = time_elapsed(then)
+        if age <= self.MAX_JOB_AGE:
+            return True
+
+        # otherwise try to cancel old job
+        try:
+            promise.cancel()
+        except ApiError as e:
+            print_stderr(e)
+        finally:
+            return False
+    
+
+
+    def queued_successfully(self, promise, meta: dict):
         """
             check whether we consider the job behind the promise queued, or more than queued, on an IBM backend;
             this happens to coincide with self.job_alive; however we should also check whether job_id is successful
             since only that makes a call to the cloud backend
         """
-        if not self.job_alive(promise):
+        if not self.job_alive(promise, meta):
             return False
 
         try:

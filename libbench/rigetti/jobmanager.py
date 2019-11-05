@@ -5,13 +5,13 @@ import pyquil as pq
 
 
 class RigettiJobManager(VendorJobManager):
-    def job_alive(self, promise):
+    def job_alive(self, promise, meta: dict):
         """
             Check whether the job is alive.
         """
         return promise.status() == "DONE"
 
-    def queued_successfully(self, promise):
+    def queued_successfully(self, promise, meta: dict):
         """
             Check whether the job is successfully queued.
         """

@@ -37,6 +37,7 @@ class VendorJob(ABC):
     def __init__(self):
         self.device_info = None
         self.transpiled_circuit = None
+        self.meta = {}  # additional information that can be stored alongside job
 
     @abstractmethod
     def run(self, device):
