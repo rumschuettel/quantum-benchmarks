@@ -41,16 +41,8 @@ class RigettiBellTestJob(RigettiJob):
         program += pq.gates.X(qubit_b)
         program += pq.gates.H(qubit_a)
 
-        # SWAP's along path
-        for x, y in list(zip(path[:-1], path[1:]))[:-1]:
-            program += pq.gates.SWAP(x, y)
-
         # CNOT the last pair
-        program += pq.gates.CNOT(path[-2], qubit_b)
-
-        # SWAP's back
-        for x, y in reversed(list(zip(path[:-1], path[1:]))[:-1]):
-            program += pq.gates.SWAP(x, y)
+        program += pq.gates.CNOT(qubit_a, qubit_b)
 
         # measurement directions
         angle_a, angle_b = test_type.value
@@ -71,4 +63,4 @@ class RigettiBellTestJob(RigettiJob):
         return device.execute(self.program, num_shots=self.num_shots)
 
     def __str__(self):
-        return f"RigettiBellTestJob-{self.qubit_a}-{self.qubit_b}"
+        return f"RigettiBellTestJob--{self.qubit_a}-{self.qubit_b}-{self.test_type}"

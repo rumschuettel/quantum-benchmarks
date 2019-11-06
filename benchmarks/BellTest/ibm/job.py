@@ -35,27 +35,20 @@ class IBMBellTestJob(IBMJob):
         # in qiskit, we cannot directly specify the target qubits;
         # this will be done in the transpiler pass for which we
         # will provide the map [0, ..., len(path)-1] -> path.
+        # because we do not want to do the swaps manually, we trust in the compiler
+        # to do so by disabling the optimization
 
-        _path = range(len(path))
         _qubit_a = 0
-        _qubit_b = len(path) - 1
+        _qubit_b = 1
 
-        circuit = QuantumCircuit(len(path), 2) if add_measurements else QuantumCircuit(len(path))
+        circuit = QuantumCircuit(2, 2) if add_measurements else QuantumCircuit(2)
 
         circuit.x(_qubit_a)
         circuit.x(_qubit_b)
         circuit.h(_qubit_a)
 
-        # SWAP's along path
-        for _x, _y in list(zip(_path[:-1], _path[1:]))[:-1]:
-            circuit.swap(_x, _y)
-
         # CNOT the last pair
-        circuit.cx(_path[-2], _qubit_b)
-
-        # SWAP's back
-        for _x, _y in reversed(list(zip(_path[:-1], _path[1:]))[:-1]):
-            circuit.swap(_x, _y)
+        circuit.cx(_qubit_a, _qubit_b)
 
         # measurement directions
         angle_a, angle_b = test_type.value
@@ -78,8 +71,11 @@ class IBMBellTestJob(IBMJob):
     def run(self, device):
         super().run(device)
         return device.execute(
-            self.circuit, num_shots=self.num_shots, initial_layout=self.path, optimization_level=0
+            self.circuit,
+            num_shots=self.num_shots,
+            initial_layout=[self.path[0], self.path[-1]],
+            optimization_level=0,
         )
 
     def __str__(self):
-        return f"IBMBellTestJob-{self.qubit_a}-{self.qubit_b}"
+        return f"IBMBellTestJob--{self.qubit_a}-{self.qubit_b}-{self.test_type}"

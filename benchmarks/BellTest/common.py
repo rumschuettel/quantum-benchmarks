@@ -22,7 +22,7 @@ class BellTestType(Enum):
 
 
 class BellTestBenchmarkMixin:
-    def __init__(self, distance, topology, num_shots, all_shortest_paths, **_):
+    def __init__(self, distance, topology, num_shots, **_):
         super().__init__()
 
         assert distance > 0, "cannot test bell violation with distance 0"
@@ -181,12 +181,6 @@ def argparser(toadd, **argparse_options):
         type=int,
         help="Maximum distance between qubits to test; if 0 no restriction",
         default=np.inf,
-    )
-    parser.add_argument(
-        "-a",
-        "--all_shortest_paths",
-        action="store_true",
-        help="Use all shortest paths instead of just a single one",
     )
     parser.add_argument(
         "-s", "--num_shots", type=int, help="Number of shots per test", default=1024

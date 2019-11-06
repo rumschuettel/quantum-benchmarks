@@ -1,2 +1,2 @@
-from .benchmark import GoogleMandelbrotBenchmark as Benchmark
-from .benchmark import GoogleMandelbrotSimulatedBenchmark as SimulatedBenchmark
+from .benchmark import GoogleBellTestBenchmark as Benchmark
+from .benchmark import GoogleBellTestSimulatedBenchmark as SimulatedBenchmark

@@ -14,14 +14,7 @@ class GoogleBellTestBenchmarkBase(BellTestBenchmarkMixin, GoogleBenchmark):
 
     def get_jobs(self):
         yield from GoogleBellTestJob.job_factory(
-            self.num_post_selections,
-            self.num_pixels,
-            self.num_shots,
-            self.xmin,
-            self.xmax,
-            self.ymin,
-            self.ymax,
-            self.add_measurements,
+            self.qubit_pairs_to_test, self.add_measurements, self.num_shots
         )
 
     def __str__(self):
@@ -40,24 +33,10 @@ class GoogleBellTestBenchmark(GoogleBellTestBenchmarkBase):
         super().__init__(**kwargs)
 
     def parse_result(self, job, result):
-        post_selection_result = list(
-            not any(outcome) for outcome in result.measurements["post_selection"]
-        )
-        num_post_selected = post_selection_result.count(True)
-        psp = num_post_selected / self.num_shots
-        z = (
-            list(
-                success and post_selected
-                for success, post_selected in zip(
-                    result.measurements["success"], post_selection_result
-                )
-            ).count(True)
-            / num_post_selected
-            if num_post_selected > 0
-            else 0
-        )
+        A = result.measurements["A"].T[0]
+        B = result.measurements["B"].T[0]
 
-        return {"psp": psp, "z": z}
+        return {"eq": sum(A == B), "ineq": sum(A != B)}
 
 
 class GoogleBellTestSimulatedBenchmark(GoogleBellTestBenchmarkBase):
@@ -70,11 +49,3 @@ class GoogleBellTestSimulatedBenchmark(GoogleBellTestBenchmarkBase):
     def __init__(self, *args, **kwargs):
         kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
-
-    def parse_result(self, job, result):
-        psi = result.final_state
-
-        psp = np.linalg.norm(psi[:: 2 ** (2 ** self.num_post_selections - 1)]) ** 2
-        z = np.abs(psi[2 ** (2 ** self.num_post_selections - 1)]) ** 2 / psp if psp > 0 else 0
-
-        return {"psp": psp, "z": z}
