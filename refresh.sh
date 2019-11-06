@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-CONDA_BASE=$(conda info --base)
-source "$CONDA_BASE/etc/profile.d/conda.sh"
-conda activate qiskit
+if [ ! -z "$1" ]; then
+    CONDA_BASE=$(conda info --base)
+    source "$CONDA_BASE/etc/profile.d/conda.sh"
+    conda activate $1
+fi
 
 function check() {
     while read -r line
