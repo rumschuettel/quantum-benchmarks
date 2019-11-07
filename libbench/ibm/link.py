@@ -85,27 +85,27 @@ class IBMLinkBase(VendorLink):
             }
             for e in edges:
                 if not e in gates_cx:
-                    topology[e] = 1.
+                    topology[e] = 1.0
                 else:
                     # we already ensured the parameter exists above
                     error_param = [p for p in gates_cx[e].parameters if p.name == "gate_error"][0]
-                    topology[e] = 1. - error_param.value
-                
+                    topology[e] = 1.0 - error_param.value
+
                 # reverse edge: weigh by four hadamards
                 # we probably overestimate the error slightly by assuming an u3 gate
                 a, b = e
                 topology[(b, a)] = topology[(a, b)]
                 if a in gates_h:
                     error_param = [p for p in gates_h[a].parameters if p.name == "gate_error"][0]
-                    topology[e] -= 2*error_param.value
+                    topology[e] -= 2 * error_param.value
                 if b in gates_h:
                     error_param = [p for p in gates_h[b].parameters if p.name == "gate_error"][0]
-                    topology[e] -= 2*error_param.value        
-            
+                    topology[e] -= 2 * error_param.value
+
         else:
             for a, b in edges:
-                topology[(a,b)] = 1.
-                topology[(b,a)] = 1.
+                topology[(a, b)] = 1.0
+                topology[(b, a)] = 1.0
 
         return topology
 

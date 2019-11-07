@@ -30,7 +30,11 @@ class BellTestBenchmarkMixin:
             assert topology is not None, "specify a distance explicitly when no topology is given"
 
         self.distance = distance
-        self.topology = topology if topology is not None else { e: 1. for i in range(distance) for e in [(i, i+1), (i+1, i)] }
+        self.topology = (
+            topology
+            if topology is not None
+            else {e: 1.0 for i in range(distance) for e in [(i, i + 1), (i + 1, i)]}
+        )
         self.num_shots = num_shots
 
         # graph
@@ -117,7 +121,8 @@ class BellTestBenchmarkMixin:
             f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15
         )
 
-        G = nx.DiGraph(self.topology.keys())
+        qubit_edges = [e for e in self.topology]
+        G = nx.DiGraph(qubit_edges)
         G_layout = nx.spectral_layout(G)
 
         edges = {
@@ -150,7 +155,7 @@ class BellTestBenchmarkMixin:
             edge_vmin=0,  # we scale the colormap ourselves
             edge_vmax=1.5,
         )
-        nx.draw_networkx_edges(nx.Graph(self.topology), G_layout, edge_color="grey", style="dashed")
+        nx.draw_networkx_edges(nx.Graph(qubit_edges), G_layout, edge_color="grey", style="dashed")
 
         sm = plt.cm.ScalarMappable(cmap=mymap, norm=plt.Normalize(vmin=0, vmax=1.5))
         sm.set_array([])
@@ -168,7 +173,11 @@ class BellTestBenchmarkMixin:
 
     def __repr__(self):
         return str(
-            {"distance": self.distance, "topology": self.topology, "num_shots": self.num_shots}
+            {
+                "distance": self.distance,
+                "topology": [e for e in self.topology],
+                "num_shots": self.num_shots,
+            }
         )
 
 

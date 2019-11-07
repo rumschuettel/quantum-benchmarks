@@ -6,7 +6,7 @@
 We strongly recommend having a separate conda environment per vendor.
 Each requires the following dependencies.
 
-    pip install termcolor matplotlib networkx
+    pip install termcolor matplotlib seaborn networkx
     conda install pycairo
 
 

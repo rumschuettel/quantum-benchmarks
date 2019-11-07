@@ -41,8 +41,16 @@ class RigettiBellTestJob(RigettiJob):
         program += pq.gates.X(qubit_b)
         program += pq.gates.H(qubit_a)
 
+        # CNOT along path
+        for (x, y) in zip(path[:-2], path[1:-1]):
+            program += pq.gates.CNOT(x, y)
+
         # CNOT the last pair
-        program += pq.gates.CNOT(qubit_a, qubit_b)
+        program += pq.gates.CNOT(path[-2], qubit_b)
+
+        # undo CNOT along path
+        for (x, y) in reversed(list(zip(path[:-2], path[1:-1]))):
+            program += pq.gates.CNOT(x, y)
 
         # measurement directions
         angle_a, angle_b = test_type.value

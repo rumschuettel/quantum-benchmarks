@@ -119,7 +119,34 @@ class RigettiJob(VendorJob):
         return info
 
 
-class RigettiCloudLink(VendorLink):
+class RigettiLinkBase(VendorLink):
+    def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
+        device = self.get_device(name).device.device
+        edges = device.edges()
+        params = device.get_specs().to_dict()
+
+        def edge2tuple(edge: str):
+            edge = edge.split("-")
+            return int(edge[0]), int(edge[1])
+
+        gates_1q = {int(q): 1.0 - params["1Q"][q]["f1QRB"] for q in params["1Q"]}
+        gates_2q = {edge2tuple(e): 1.0 - params["2Q"][e]["fCZ"] for e in params["2Q"]}
+
+        def cnot_fid(a, b):
+            if (a, b) in gates_2q:
+                return 1.0 - gates_2q[(a, b)]
+
+            if (b, a) in gates_2q:
+                err_a = gates_1q[a] if a in gates_1q else 0.0
+                err_b = gates_1q[b] if b in gates_1q else 0.0
+                return 1.0 - gates_2q[(b, a)] - 2 * err_a - 2 * err_b
+
+            return 1.0
+
+        return {e: cnot_fid(*e) for a, b in edges for e in [(a, b), (b, a)]}
+
+
+class RigettiCloudLink(RigettiLinkBase):
     def __init__(self):
         super().__init__()
 
@@ -133,12 +160,8 @@ class RigettiCloudLink(VendorLink):
                 pass
         return devices
 
-    def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
-        # .qubit_topology() returns a networkx graph
-        return list(self.get_device(name).device.qubit_topology().edges())
 
-
-class RigettiMeasureLocalLink(VendorLink):
+class RigettiMeasureLocalLink(RigettiLinkBase):
     def __init__(self):
         super().__init__()
 
@@ -149,10 +172,6 @@ class RigettiMeasureLocalLink(VendorLink):
             n: RigettiQVM(n)
             for n in [*pq.list_quantum_computers(qpus=True, qvms=True), *RIGETTI_EXTRA_QVMS]
         }
-
-    def get_device_topology(self, name) -> List[Tuple[int, int]]:
-        # .qubit_topology() returns a networkx graph
-        return list(self.get_device(name).device.qubit_topology().edges())
 
 
 class RigettiStatevectorLink(VendorLink):
