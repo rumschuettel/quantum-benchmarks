@@ -30,21 +30,20 @@ class BellTestBenchmarkMixin:
             assert topology is not None, "specify a distance explicitly when no topology is given"
 
         self.distance = distance
-        self.topology = topology if topology is not None else [(i, i + 1) for i in range(distance)]
+        self.topology = topology if topology is not None else { e: 1. for i in range(distance) for e in [(i, i+1), (i+1, i)] }
         self.num_shots = num_shots
 
-        # create a list of qubits to test
-        if self.topology is not None:
-            graph = nx.Graph(self.topology)
-        else:
-            graph = nx.complete_graph(self.distance)
+        # graph
+        graph = nx.DiGraph()
+        for edge in self.topology:
+            graph.add_edge(*edge, weight=self.topology[edge])
 
         self.qubit_pairs_to_test = []
         for a in graph.nodes:
             dists = nx.single_source_shortest_path_length(graph, a)
             for b in dists:
                 if dists[b] >= 1 and dists[b] <= distance:
-                    self.qubit_pairs_to_test.append(nx.shortest_path(graph, a, b))
+                    self.qubit_pairs_to_test.append(nx.dijkstra_path(graph, a, b, weight="weight"))
 
         assert (
             len(self.qubit_pairs_to_test) > 0
@@ -118,7 +117,7 @@ class BellTestBenchmarkMixin:
             f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15
         )
 
-        G = nx.DiGraph([edge for (a, b) in self.topology for edge in ((a, b), (b, a))])
+        G = nx.DiGraph(self.topology.keys())
         G_layout = nx.spectral_layout(G)
 
         edges = {
@@ -129,10 +128,10 @@ class BellTestBenchmarkMixin:
 
         for u, v, d in G.edges(data=True):
             if (u, v) in edges:
-                d["weight"] = edges[(u, v)]
+                d["bell"] = edges[(u, v)]
             else:
-                d["weight"] = 0
-        edges, weights = zip(*nx.get_edge_attributes(G, "weight").items())
+                d["bell"] = None
+        edges, weights = zip(*nx.get_edge_attributes(G, "bell").items())
 
         DIST = 0.25
         nx.draw(

@@ -63,7 +63,7 @@ class VendorLink(ABC):
         pass
 
     @abstractmethod
-    def get_device_topology(self, name) -> Union[List[Tuple[int, int]], None]:
+    def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
         pass
 
     def get_device(self, name):

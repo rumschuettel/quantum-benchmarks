@@ -4,6 +4,7 @@ from libbench.link import VendorJob, VendorLink, ThinPromise
 import functools
 from qiskit.providers import JobStatus
 import qiskit
+from typing import Union, Tuple, List, Dict
 
 IBM_KNOWN_STATEVECTOR_DEVICES = ["statevector_simulator"]
 
@@ -42,7 +43,12 @@ class IBMJob(VendorJob):
 
     @abstractmethod
     def run(self, device):
-        self.device_info = device.device.configuration().to_dict()
+        device = device.device
+        self.device_info = {}
+        if device.configuration() is not None:
+            self.device_info["configuration"] = device.configuration().to_dict()
+        if device.properties() is not None:
+            self.device_info["properties"] = device.configuration().to_dict()
 
     def serialize(self):
         info = super().serialize()
@@ -60,8 +66,48 @@ class IBMThinPromise(ThinPromise):
 
 
 class IBMLinkBase(VendorLink):
-    def get_device_topology(self, name):
-        return self.get_device(name).device.configuration().coupling_map
+    def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
+        device = self.get_device(name).device
+        edges = [tuple(e) for e in device.configuration().coupling_map]
+
+        topology = {}
+
+        if device.properties() is not None:
+            gates_cx = {
+                tuple(g.qubits): g
+                for g in device.properties().gates
+                if g.gate == "cx" and any(param.name == "gate_error" for param in g.parameters)
+            }
+            gates_h = {
+                g.qubits[0]: g
+                for g in device.properties().gates
+                if g.gate == "u3" and any(param.name == "gate_error" for param in g.parameters)
+            }
+            for e in edges:
+                if not e in gates_cx:
+                    topology[e] = 1.
+                else:
+                    # we already ensured the parameter exists above
+                    error_param = [p for p in gates_cx[e].parameters if p.name == "gate_error"][0]
+                    topology[e] = 1. - error_param.value
+                
+                # reverse edge: weigh by four hadamards
+                # we probably overestimate the error slightly by assuming an u3 gate
+                a, b = e
+                topology[(b, a)] = topology[(a, b)]
+                if a in gates_h:
+                    error_param = [p for p in gates_h[a].parameters if p.name == "gate_error"][0]
+                    topology[e] -= 2*error_param.value
+                if b in gates_h:
+                    error_param = [p for p in gates_h[b].parameters if p.name == "gate_error"][0]
+                    topology[e] -= 2*error_param.value        
+            
+        else:
+            for a, b in edges:
+                topology[(a,b)] = 1.
+                topology[(b,a)] = 1.
+
+        return topology
 
 
 class IBMCloudLink(IBMLinkBase):

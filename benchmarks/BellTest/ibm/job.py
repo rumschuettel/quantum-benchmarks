@@ -38,17 +38,26 @@ class IBMBellTestJob(IBMJob):
         # because we do not want to do the swaps manually, we trust in the compiler
         # to do so by disabling the optimization
 
-        _qubit_a = 0
-        _qubit_b = 1
+        _path = range(len(path))
+        _qubit_a = _path[0]
+        _qubit_b = _path[-1]
 
-        circuit = QuantumCircuit(2, 2) if add_measurements else QuantumCircuit(2)
+        circuit = QuantumCircuit(len(path), 2) if add_measurements else QuantumCircuit(len(path))
 
         circuit.x(_qubit_a)
         circuit.x(_qubit_b)
         circuit.h(_qubit_a)
 
+        # CNOT along path
+        for (_x, _y) in zip(_path[:-2], _path[1:-1]):
+            circuit.cx(_x, _y)
+
         # CNOT the last pair
-        circuit.cx(_qubit_a, _qubit_b)
+        circuit.cx(_path[-2], _qubit_b)
+
+        # undo CNOT along path
+        for (_x, _y) in reversed(list(zip(_path[:-2], _path[1:-1]))):
+            circuit.cx(_x, _y)
 
         # measurement directions
         angle_a, angle_b = test_type.value
@@ -71,10 +80,7 @@ class IBMBellTestJob(IBMJob):
     def run(self, device):
         super().run(device)
         return device.execute(
-            self.circuit,
-            num_shots=self.num_shots,
-            initial_layout=[self.path[0], self.path[-1]],
-            optimization_level=0,
+            self.circuit, num_shots=self.num_shots, initial_layout=self.path, optimization_level=0
         )
 
     def __str__(self):

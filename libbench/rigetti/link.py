@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod, abstractproperty
 from libbench.link import VendorLink, VendorJob, ThinPromise
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Dict
 
 import pyquil as pq
 
@@ -133,7 +133,7 @@ class RigettiCloudLink(VendorLink):
                 pass
         return devices
 
-    def get_device_topology(self, name) -> List[Tuple[int, int]]:
+    def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
         # .qubit_topology() returns a networkx graph
         return list(self.get_device(name).device.qubit_topology().edges())
 
