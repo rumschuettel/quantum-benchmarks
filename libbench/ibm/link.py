@@ -45,10 +45,12 @@ class IBMJob(VendorJob):
     def run(self, device):
         device = device.device
         self.device_info = {}
-        if device.configuration() is not None:
-            self.device_info["configuration"] = device.configuration().to_dict()
-        if device.properties() is not None:
-            self.device_info["properties"] = device.configuration().to_dict()
+        cfg = device.configuration()
+        if cfg is not None:
+            self.device_info["configuration"] = cfg.to_dict()
+        prop = device.properties()
+        if prop is not None:
+            self.device_info["properties"] = prop.to_dict()
 
     def serialize(self):
         info = super().serialize()
