@@ -37,7 +37,7 @@ class RigettiQVM(RigettiDevice):
         return self.device.device.get_specs().to_dict()
 
     def _run_and_measure(
-        self, program: pq.Program, num_shots: int, measure_qubits: list, optimize, active_reset=True
+        self, program: pq.Program, num_shots: int, measure_qubits: list, optimize, active_reset=False
     ):
         program = program.copy()
         qubits = measure_qubits if measure_qubits is not None else program.get_qubits()
@@ -122,7 +122,7 @@ class RigettiJob(VendorJob):
 class RigettiLinkBase(VendorLink):
     def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
         device = self.get_device(name).device.device
-        edges = device.edges()
+        edges = [(a, b) for a, b in device.qubit_topology().edges()]
         params = device.get_specs().to_dict()
 
         def edge2tuple(edge: str):

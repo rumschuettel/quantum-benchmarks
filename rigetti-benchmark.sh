@@ -13,5 +13,11 @@ echo "QPU engaged: $ENGAGED_QPU"
 echo "starting benchmark..."
 
 # run
-./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Schroedinger-Microscope -ps 1 -p 32 -s 1024
-./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Mandelbrot -ps 1 -p 32 -s 1024
+#time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Schroedinger-Microscope -ps 1 -p 32 -s 4096
+#time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Mandelbrot -ps 1 -p 32 -s 4096
+#time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Line-Drawing -n 4 -s 4096 -r 128
+time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Bell-Test --num_shots=8192
+
+#time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Schroedinger-Microscope -ps 2 -p 32 -s 4096
+#time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Mandelbrot -ps 2 -p 32 -s 4096
+#time ./runner.py benchmark rigetti cloud "$ENGAGED_QPU" Line-Drawing -n 16 -s 4096 -r 128
