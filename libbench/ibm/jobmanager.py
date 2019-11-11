@@ -33,30 +33,32 @@ class IBMJobManager(VendorJobManager):
         # this does not mean that the job is broken;
         # it could e.g. be a network issue. We let that error propagate
         status = promise.status()
-
-        if status in [JobStatus.QUEUED, JobStatus.DONE]:
+        print("The job is reported to be in status: \""+ str(status)+"\"")
+        
+        if status in [JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.DONE]:
             return True
 
         elif status in [JobStatus.ERROR, JobStatus.CANCELLED]:
             return False
 
         # check whether status has been like this before
-        if "first_running_status_time" in meta:
-            then = meta["first_running_status_time"]
+        if "first_running_status_time_of_"+str(status) in meta:
+            then = meta["first_running_status_time_of_"+str(status)]
         # otherwise mark status to be in this state for the first time
         else:
-            then = meta["first_running_status_time"] = utc_timestamp()
+            then = meta["first_running_status_time_of_"+str(status)] = utc_timestamp()
 
         # calculate time difference; if below threshold all is ok
         age = time_elapsed(then)
 
         if age <= self.MAX_JOB_AGE:
             return True
-
+        
         # otherwise try to cancel old job
+        print("The job seems stuck is status: \""+ str(status) +"\" for more than "+ str(age.seconds) +" seconds, trying to cancel it.")
         try:
             promise.cancel()
-            del meta["first_running_status_time"]
+            del meta["first_running_status_time_of_"+str(status)]
         except ApiError as e:
             print_stderr(e)
         finally:
