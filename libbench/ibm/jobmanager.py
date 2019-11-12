@@ -27,13 +27,28 @@ class IBMJobManager(VendorJobManager):
 
     def job_alive(self, promise, meta: dict):
         """
-            check whether we consider the job behind the promise alive on an IBM backend
+            check whether we consider the job behind the promise alive on an IBM backend; however we should also check whether job_id is successful
+            since only that makes a call to the cloud backend
         """
+        try:
+            id = promise.job_id()
+
+        except ApiError as e:
+            message = e.message.rstrip("\n .")
+            if message.endswith("QUEUE_DISABLED"):
+                print("The queue for this device is disabled.")
+                return False
+            elif message.endswith("NOT_CREDITS_AVALIABLES"):
+                print("You don't have enough credits to run this job.")
+                return False
+
+            raise
+
         # note that if this fails due to e.g. a TimeoutError
         # this does not mean that the job is broken;
         # it could e.g. be a network issue. We let that error propagate
         status = promise.status()
-        print("The job is reported to be in status: \""+ str(status)+"\"")
+        print("The job with IBM ID "+str(id)+" is reported to be in status: \""+ str(status)+"\"")
         
         if status in [JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.DONE]:
             return True
@@ -55,7 +70,7 @@ class IBMJobManager(VendorJobManager):
             return True
         
         # otherwise try to cancel old job
-        print("The job seems stuck is status: \""+ str(status) +"\" for more than "+ str(age.seconds) +" seconds, trying to cancel it.")
+        print("The job with IBM ID "+str(id)+" seems stuck in status: \""+ str(status) +"\" for more than "+ str(age.seconds) +" seconds, trying to cancel it.")
         try:
             promise.cancel()
             del meta["first_running_status_time_of_"+str(status)]
@@ -67,25 +82,10 @@ class IBMJobManager(VendorJobManager):
     def queued_successfully(self, promise, meta: dict):
         """
             check whether we consider the job behind the promise queued, or more than queued, on an IBM backend;
-            this happens to coincide with self.job_alive; however we should also check whether job_id is successful
-            since only that makes a call to the cloud backend
+            this happens to coincide with self.job_alive
         """
         if not self.job_alive(promise, meta):
             return False
-
-        try:
-            promise.job_id()
-
-        except ApiError as e:
-            message = e.message.rstrip("\n .")
-            if message.endswith("QUEUE_DISABLED"):
-                print("The queue for this device is disabled.")
-                return False
-            elif message.endswith("NOT_CREDITS_AVALIABLES"):
-                print("You don't have enough credits to run this job.")
-                return False
-
-            raise
 
         return True
 

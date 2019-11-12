@@ -13,7 +13,7 @@ class VendorJobManager(ABC):
     COLLATED_FILENAME = "collated.pickle"
     VISUALIZED_FILENAME = "visualized.pickle"
     JOBS_FOLDER = "jobs"
-    MAX_FAILURE_COUNT = 3
+    MAX_FAILURE_COUNT = 1
 
     def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark
@@ -42,7 +42,7 @@ class VendorJobManager(ABC):
                 continue
 
             response = job.run(device)
-            promise = response["result"]
+            promise = response["result"]                                             
             job.transpiled_circuit = response["transpiled_circuit"]
 
             # TODO remove
@@ -62,6 +62,7 @@ class VendorJobManager(ABC):
 
         # try to obtain more results
         new_queued = {}
+        re_scheduled = []
         for job in self.queued:
             promise = self.queued[job]
 
@@ -82,13 +83,15 @@ class VendorJobManager(ABC):
 
             # 2. if that failed, check whether job is alive and if not reschedule
             elif not self.job_alive(promise, job.meta):
-                self.scheduled.append(job)
+                re_scheduled.append(job)
+                print("The job "+str(job)+" has been rescheduled")
 
             # 3. otherwise the job simply wasn't done, put back to queue
             else:
                 new_queued[job] = promise
 
         self.queued = new_queued
+        self.scheduled = re_scheduled + self.scheduled
 
         # store jobmanager for reuse
         if store_jobmanager:
