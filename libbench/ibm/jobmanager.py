@@ -36,10 +36,10 @@ class IBMJobManager(VendorJobManager):
         except ApiError as e:
             message = e.message.rstrip("\n .")
             if message.endswith("QUEUE_DISABLED"):
-                print("The queue for this device is disabled.")
+                print_stderr("The queue for this device is disabled.")
                 return False
             elif message.endswith("NOT_CREDITS_AVALIABLES"):
-                print("You don't have enough credits to run this job.")
+                print_stderr("You don't have enough credits to run this job.")
                 return False
 
             raise
@@ -48,7 +48,7 @@ class IBMJobManager(VendorJobManager):
         # this does not mean that the job is broken;
         # it could e.g. be a network issue. We let that error propagate
         status = promise.status()
-        print("The job with IBM ID "+str(id)+" is reported to be in status: \""+ str(status)+"\"")
+        print(f"The job with IBM ID {id} is reported to be in status: {status}")
         
         if status in [JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.DONE]:
             return True
@@ -57,23 +57,23 @@ class IBMJobManager(VendorJobManager):
             return False
 
         # check whether status has been like this before
-        if "first_running_status_time_of_"+str(status) in meta:
-            then = meta["first_running_status_time_of_"+str(status)]
+        key = f"first_running_status_time_of_{status}"
+        if key in meta:
+            then = meta[key]
         # otherwise mark status to be in this state for the first time
         else:
-            then = meta["first_running_status_time_of_"+str(status)] = utc_timestamp()
+            then = meta[key] = utc_timestamp()
 
         # calculate time difference; if below threshold all is ok
         age = time_elapsed(then)
-
         if age <= self.MAX_JOB_AGE:
             return True
         
         # otherwise try to cancel old job
-        print("The job with IBM ID "+str(id)+" seems stuck in status: \""+ str(status) +"\" for more than "+ str(age.seconds) +" seconds, trying to cancel it.")
+        print(f"The job with IBM ID {id}seems stuck in status: {status} for more than {age.ago} seconds, trying to cancel it.")
         try:
             promise.cancel()
-            del meta["first_running_status_time_of_"+str(status)]
+            del meta[key]
         except ApiError as e:
             print_stderr(e)
         finally:
