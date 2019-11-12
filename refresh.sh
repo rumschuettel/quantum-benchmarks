@@ -32,7 +32,7 @@ function check() {
             if (( $todo > 0 || $scheduled > 0 )); then
                 if [[ "$mode" == "Cloud" ]]; then
                     echo "resuming $path on $device"
-                    cmd="./runner.py resume \"$path\""
+                    cmd="timeout 2m ./runner.py resume \"$path\""
                     echo "$cmd"
                     eval $cmd
                     return
