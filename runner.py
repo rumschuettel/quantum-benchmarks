@@ -187,10 +187,13 @@ def new_benchmark(args):
 
 
 def _get_job_ids(run_folder):
+    # sort directories increasingly with respect to ctime
+    dirs = list(filter(os.path.isdir, glob.glob(f"{run_folder}/*")))
+    dirs.sort(key=lambda x: os.path.getctime(x))
     return [
         os.path.basename(folder)
-        for folder in glob.glob(f"{run_folder}/*")
-        if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
+        for folder in dirs
+        if not os.path.basename(folder) == "__pycache__"
     ]
 
 

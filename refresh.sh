@@ -51,6 +51,7 @@ trap 'on_ctrl_c' SIGINT
 
 # check forever
 while :; do
+    date
     check
     sleep 30
 done
