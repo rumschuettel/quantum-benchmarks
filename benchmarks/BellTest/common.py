@@ -40,7 +40,7 @@ class BellTestBenchmarkMixin:
         # graph
         graph = nx.DiGraph()
         for edge in self.topology:
-            graph.add_edge(*edge, weight=self.topology[edge])
+            graph.add_edge(*edge, weight=1 - self.topology[edge])
 
         self.qubit_pairs_to_test = []
         for a in graph.nodes:
@@ -138,7 +138,7 @@ class BellTestBenchmarkMixin:
                 d["bell"] = None
         edges, weights = zip(*nx.get_edge_attributes(G, "bell").items())
 
-        DIST = .3
+        DIST = 0.3
         nx.draw(
             G,
             G_layout,

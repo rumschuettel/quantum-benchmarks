@@ -42,7 +42,7 @@ class VendorJobManager(ABC):
                 continue
 
             response = job.run(device)
-            promise = response["result"]                                             
+            promise = response["result"]
             job.transpiled_circuit = response["transpiled_circuit"]
 
             # TODO remove
