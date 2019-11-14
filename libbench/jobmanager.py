@@ -62,18 +62,13 @@ class VendorJobManager(ABC):
 
         # try to obtain more results
         new_queued = {}
-        re_scheduled = []
         for job in self.queued:
             promise = self.queued[job]
-
-            # TODO remove
-            if not hasattr(job, "meta"):
-                job.meta = {}
 
             # 1. we try to get the result
             result = self.try_get_results(promise, device)
             if result is not None:
-                print(f"{str(job)} completed.")
+                print(f"{job} completed.")
                 self.results[job] = self.benchmark.parse_result(job, result)
 
                 # store job results separately in addition
@@ -83,15 +78,14 @@ class VendorJobManager(ABC):
 
             # 2. if that failed, check whether job is alive and if not reschedule
             elif not self.job_alive(promise, job.meta):
-                re_scheduled.append(job)
-                print("The job "+str(job)+" has been rescheduled")
+                self.scheduled = [job] + self.scheduled
+                print(f"The job {job} has been rescheduled")
 
             # 3. otherwise the job simply wasn't done, put back to queue
             else:
                 new_queued[job] = promise
 
         self.queued = new_queued
-        self.scheduled = re_scheduled + self.scheduled
 
         # store jobmanager for reuse
         if store_jobmanager:

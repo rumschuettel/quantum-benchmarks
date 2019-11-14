@@ -116,14 +116,14 @@ class BellTestBenchmarkMixin:
             return figpath1
 
         # GRAPH
-        fig = plt.figure(figsize=(12, 8))
+        fig = plt.figure(figsize=(9, 8))
         plt.title(
             f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15
         )
 
         qubit_edges = [e for e in self.topology]
         G = nx.DiGraph(qubit_edges)
-        G_layout = nx.spectral_layout(G)
+        G_layout = nx.circular_layout(G)
 
         edges = {
             (a, b): collated_result["bell"][a][b]
@@ -138,11 +138,11 @@ class BellTestBenchmarkMixin:
                 d["bell"] = None
         edges, weights = zip(*nx.get_edge_attributes(G, "bell").items())
 
-        DIST = 0.25
+        DIST = .3
         nx.draw(
             G,
             G_layout,
-            connectionstyle=f"bar, armA=0, armB=0, fraction={DIST}",
+            connectionstyle=f"arc3,rad={DIST}",
             arrowsize=20,
             width=3.0,
             node_color="black",
