@@ -125,7 +125,7 @@ class BellTestBenchmarkMixin:
 
         qubit_edges = [e for e in self.topology]
         G = nx.DiGraph(qubit_edges)
-        G_layout = nx.circular_layout(G)
+        G_layout = nx.spring_layout(G)
 
         edges = {
             (a, b): collated_result["bell"][a][b]

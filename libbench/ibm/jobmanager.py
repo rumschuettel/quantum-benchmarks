@@ -57,12 +57,12 @@ class IBMJobManager(VendorJobManager):
             return False
 
         # check whether status has been like this before
-        if not "last-status" in meta or meta["last-status"].status != status:
+        if not "last-status" in meta or meta["last-status"]["status"] != status:
             meta["last-status"] = {"status": status, "time": utc_timestamp()}
             return True
 
         # calculate time difference; if below threshold all is ok
-        age = time_elapsed(meta["last-status"].time)
+        age = time_elapsed(meta["last-status"]["time"])
         if age <= self.MAX_JOB_AGE:
             return True
 
