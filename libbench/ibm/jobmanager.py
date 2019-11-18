@@ -70,7 +70,7 @@ class IBMJobManager(VendorJobManager):
             return True
         
         # otherwise try to cancel old job
-        print(f"The job with IBM ID {id}seems stuck in status: {status} for more than {age.ago} seconds, trying to cancel it.")
+        print(f"The job with IBM ID {id}seems stuck in status: {status} for more than {age.seconds} seconds, trying to cancel it.")
         try:
             promise.cancel()
             del meta[key]
