@@ -49,7 +49,7 @@ class IBMJobManager(VendorJobManager):
         # it could e.g. be a network issue. We let that error propagate
         status = promise.status()
         print(f"The job with IBM ID {id} is reported to be in status: {status}")
-        
+
         if status in [JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.DONE]:
             return True
 
@@ -57,23 +57,22 @@ class IBMJobManager(VendorJobManager):
             return False
 
         # check whether status has been like this before
-        key = f"first_running_status_time_of_{status}"
-        if key in meta:
-            then = meta[key]
-        # otherwise mark status to be in this state for the first time
-        else:
-            then = meta[key] = utc_timestamp()
+        if not "last-status" in meta or meta["last-status"]["status"] != status:
+            meta["last-status"] = {"status": status, "time": utc_timestamp()}
+            return True
 
         # calculate time difference; if below threshold all is ok
-        age = time_elapsed(then)
+        age = time_elapsed(meta["last-status"]["time"])
         if age <= self.MAX_JOB_AGE:
             return True
-        
+
         # otherwise try to cancel old job
-        print(f"The job with IBM ID {id}seems stuck in status: {status} for more than {age.seconds} seconds, trying to cancel it.")
+        print(
+            f"The job with IBM ID {id} seems stuck in status: {status} for more than {age}, trying to cancel it."
+        )
         try:
             promise.cancel()
-            del meta[key]
+            del meta["last-status"]
         except ApiError as e:
             print_stderr(e)
         finally:

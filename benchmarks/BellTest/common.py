@@ -40,7 +40,9 @@ class BellTestBenchmarkMixin:
         # graph
         graph = nx.DiGraph()
         for edge in self.topology:
-            graph.add_edge(*edge, weight=self.topology[edge])
+            # we want the lowest-weight path, and topology gives fidelities
+            # dijkstra_path does only like positive numbers, so add a safety offset
+            graph.add_edge(*edge, weight=100. - self.topology[edge])
 
         self.qubit_pairs_to_test = []
         for a in graph.nodes:
@@ -123,7 +125,7 @@ class BellTestBenchmarkMixin:
 
         qubit_edges = [e for e in self.topology]
         G = nx.DiGraph(qubit_edges)
-        G_layout = nx.circular_layout(G)
+        G_layout = nx.spring_layout(G)
 
         edges = {
             (a, b): collated_result["bell"][a][b]
@@ -138,7 +140,7 @@ class BellTestBenchmarkMixin:
                 d["bell"] = None
         edges, weights = zip(*nx.get_edge_attributes(G, "bell").items())
 
-        DIST = .3
+        DIST = 0.3
         nx.draw(
             G,
             G_layout,

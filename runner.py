@@ -191,9 +191,7 @@ def _get_job_ids(run_folder):
     dirs = list(filter(os.path.isdir, glob.glob(f"{run_folder}/*")))
     dirs.sort(key=lambda x: os.path.getctime(x))
     return [
-        os.path.basename(folder)
-        for folder in dirs
-        if not os.path.basename(folder) == "__pycache__"
+        os.path.basename(folder) for folder in dirs if not os.path.basename(folder) == "__pycache__"
     ]
 
 

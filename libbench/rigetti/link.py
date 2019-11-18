@@ -37,7 +37,12 @@ class RigettiQVM(RigettiDevice):
         return self.device.device.get_specs().to_dict()
 
     def _run_and_measure(
-        self, program: pq.Program, num_shots: int, measure_qubits: list, optimize, active_reset=False
+        self,
+        program: pq.Program,
+        num_shots: int,
+        measure_qubits: list,
+        optimize,
+        active_reset=False,
     ):
         program = program.copy()
         qubits = measure_qubits if measure_qubits is not None else program.get_qubits()
