@@ -28,8 +28,8 @@ class IBMDevice:
             optimization_level=optimization_level,
             backend=self.device,
         )
-        print_hl(cirquit, color="grey")
-        print_hl(experiment, color="grey")
+        print_hl(cirquit, color="white")
+        print_hl(experiment, color="white")
         qobj = qiskit.compiler.assemble(
             experiment, shots=num_shots, max_credits=15, backend=self.device
         )
@@ -70,8 +70,10 @@ class IBMThinPromise(ThinPromise):
 class IBMLinkBase(VendorLink):
     def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:
         device = self.get_device(name).device
-        edges = [tuple(e) for e in device.configuration().coupling_map]
+        if device.configuration().coupling_map is None:
+            return None
 
+        edges = [tuple(e) for e in device.configuration().coupling_map]
         topology = {}
 
         if device.properties() is not None:

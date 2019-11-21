@@ -87,8 +87,8 @@ def argparser(toadd, **argparse_options):
     parser.add_argument(
         "-s", "--num_shots", type=int, help="Number of shots per pixel", default=1024
     )
-    parser.add_argument("--xmin", type=int, help="Minimal x-value", default=-2)
-    parser.add_argument("--xmax", type=int, help="Maximal x-value", default=2)
-    parser.add_argument("--ymin", type=int, help="Minimal y-value", default=-2)
-    parser.add_argument("--ymax", type=int, help="Maximal y-value", default=2)
+    parser.add_argument("--xmin", type=float, help="Minimal x-value", default=-2)
+    parser.add_argument("--xmax", type=float, help="Maximal x-value", default=2)
+    parser.add_argument("--ymin", type=float, help="Minimal y-value", default=-2)
+    parser.add_argument("--ymax", type=float, help="Maximal y-value", default=2)
     return parser

@@ -14,6 +14,7 @@ class VendorJobManager(ABC):
     VISUALIZED_FILENAME = "visualized.pickle"
     JOBS_FOLDER = "jobs"
     MAX_FAILURE_COUNT = 1
+    MAX_QUEUE_COUNT = 15
 
     def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark
@@ -37,7 +38,7 @@ class VendorJobManager(ABC):
         failure_counter = 0
 
         for job in self.scheduled:
-            if failure_counter >= self.MAX_FAILURE_COUNT:
+            if failure_counter >= self.MAX_FAILURE_COUNT or len(self.queued) > self.MAX_QUEUE_COUNT:
                 new_scheduled.append(job)
                 continue
 
@@ -71,7 +72,6 @@ class VendorJobManager(ABC):
                     print_stderr("New message:")
                     print_stderr(message)
                     raise
-
 
         self.scheduled = new_scheduled
 

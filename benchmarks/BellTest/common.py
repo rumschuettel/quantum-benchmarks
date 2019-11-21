@@ -42,7 +42,7 @@ class BellTestBenchmarkMixin:
         for edge in self.topology:
             # we want the lowest-weight path, and topology gives fidelities
             # dijkstra_path does only like positive numbers, so add a safety offset
-            graph.add_edge(*edge, weight=100. - self.topology[edge])
+            graph.add_edge(*edge, weight=100.0 - self.topology[edge])
 
         self.qubit_pairs_to_test = []
         for a in graph.nodes:
