@@ -4,7 +4,7 @@ from .benchmark import IBMBenchmark
 from .link import IBMDevice
 
 from qiskit.providers import JobStatus
-from qiskit.providers.ibmq.api.exceptions import RequestsApiError
+from qiskit.exceptions import QiskitError
 
 import datetime, dateutil
 
@@ -33,15 +33,14 @@ class IBMJobManager(VendorJobManager):
         try:
             id = promise.job_id()
 
-        # The following code is outdated and refers to earlier qisikt version error messages
-        except RequestsApiError as e:
+        except QiskitError as e:
             message = e.message.rstrip("\n .")
             if message.endswith("QUEUE_DISABLED"):
                 print_stderr("The queue for this device is disabled.")
                 return False
-            elif message.endswith("NOT_CREDITS_AVALIABLES"):
+            elif message.endswith("NOT_CREDITS_AVALIABLES") or message.endswith("Error code: 3458"):
                 print_stderr("You don't have enough credits to run this job.")
-                return False               
+                return False
 
             raise
 
@@ -74,7 +73,7 @@ class IBMJobManager(VendorJobManager):
         try:
             promise.cancel()
             del meta["last-status"]
-        except RequestsApiError as e:
+        except QiskitError as e:
             print_stderr(e)
         finally:
             return False

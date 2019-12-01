@@ -43,35 +43,18 @@ class VendorJobManager(ABC):
                 continue
 
             # try to obtain result
-            try:
-                response = job.run(device)
-                promise = response["result"]
-                job.transpiled_circuit = response["transpiled_circuit"]
+            response = job.run(device)
+            promise = response["result"]
+            job.transpiled_circuit = response["transpiled_circuit"]
 
-                # TODO remove
-                if not hasattr(job, "meta"):
-                    job.meta = {}
-
-                if self.queued_successfully(promise, job.meta):
-                    print(f"{str(job)} successfully queued.")
-                    self.queued[job] = promise
-                    failure_counter = 0
-                else:
-                    print(f"Could not queue {str(job)}.")
-                    new_scheduled.append(job)
-                    failure_counter += 1                
-
-            # this is really ugly, we probably shoud not have IBM specific code here like I added in the following
-            except Exception as e:
-                message = e.message.rstrip(".\'")
-                if message.endswith("Error code: 3458"):
-                    print(f"Could not queue {str(job)}.")
-                    new_scheduled.append(job)
-                    failure_counter += 1                       
-                else:         
-                    print_stderr("New message:")
-                    print_stderr(message)
-                    raise
+            if self.queued_successfully(promise, job.meta):
+                print(f"{str(job)} successfully queued.")
+                self.queued[job] = promise
+                failure_counter = 0
+            else:
+                print(f"Could not queue {str(job)}.")
+                new_scheduled.append(job)
+                failure_counter += 1
 
         self.scheduled = new_scheduled
 

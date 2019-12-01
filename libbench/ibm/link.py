@@ -5,6 +5,7 @@ import functools
 from qiskit.providers import JobStatus
 import qiskit
 from typing import Union, Tuple, List, Dict
+from libbench import print_stderr
 
 IBM_KNOWN_STATEVECTOR_DEVICES = ["statevector_simulator"]
 
@@ -33,6 +34,7 @@ class IBMDevice:
         qobj = qiskit.compiler.assemble(
             experiment, shots=num_shots, max_credits=15, backend=self.device
         )
+
         return {"result": self.device.run(qobj), "transpiled_circuit": experiment}
 
 
