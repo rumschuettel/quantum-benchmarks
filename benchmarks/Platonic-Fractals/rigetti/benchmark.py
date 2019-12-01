@@ -17,9 +17,8 @@ class RigettiPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, Riget
             self.body,
             self.strength,
             self.num_steps,
-            self.num_dirs_change,
             self.num_shots,
-            self.random_seed,
+            self.shots_multiplier,
             self.add_measurements,
         )
 

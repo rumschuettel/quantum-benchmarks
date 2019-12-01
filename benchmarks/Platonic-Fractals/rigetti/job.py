@@ -21,12 +21,10 @@ class RigettiPlatonicFractalsJob(RigettiJob):
     ):
         random.seed(random_seed)
 
-        for _ in range(num_dirs_change):
-            dirs = []
-            for _ in range(num_steps):
-                dirs.append(random.randrange(1, 4))
-            yield RigettiPlatonicFractalsJob(body, strength, dirs, 2, num_shots, add_measurements)
-            yield RigettiPlatonicFractalsJob(body, strength, dirs, 3, num_shots, add_measurements)
+        for m_idx in range(shots_multiplier):
+            for dirs in it.product(*[range(1,4)] * num_steps):
+                yield RigettiPlatonicFractalsJob(body, strength, dirs, 2, num_shots, m_idx, add_measurements)
+                yield RigettiPlatonicFractalsJob(body, strength, dirs, 3, num_shots, m_idx, add_measurements)
 
     def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
         super().__init__()
@@ -78,4 +76,4 @@ class RigettiPlatonicFractalsJob(RigettiJob):
         return device.execute(self.program, num_shots=self.shots)
 
     def __str__(self):
-        return f"RigettiPlatonicFractalsJob-{self.strength}-{self.meas_dirs}-{self.final_meas_dir}"
+        return f"RigettiPlatonicFractalsJob--{self.strength}-{self.meas_dirs}-{self.final_meas_dir}-{self.m_idx}"

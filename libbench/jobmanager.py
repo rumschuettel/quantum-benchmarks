@@ -14,7 +14,7 @@ class VendorJobManager(ABC):
     VISUALIZED_FILENAME = "visualized.pickle"
     JOBS_FOLDER = "jobs"
     MAX_FAILURE_COUNT = 1
-    MAX_QUEUE_COUNT = 15
+    MAX_QUEUE_COUNT = 10**6
 
     def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark

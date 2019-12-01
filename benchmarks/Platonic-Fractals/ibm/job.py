@@ -15,18 +15,14 @@ from .. import PlatonicFractalsBenchmarkMixin
 class IBMPlatonicFractalsJob(IBMJob):
     @staticmethod
     def job_factory(
-        body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
+        body, strength, num_steps, num_shots, shots_multiplier, add_measurements
     ):
-        random.seed(random_seed)
+        for m_idx in range(shots_multiplier):
+            for dirs in it.product(*[range(1,4)] * num_steps):
+                yield IBMPlatonicFractalsJob(body, strength, dirs, 2, num_shots, m_idx, add_measurements)
+                yield IBMPlatonicFractalsJob(body, strength, dirs, 3, num_shots, m_idx, add_measurements)
 
-        for _ in range(num_dirs_change):
-            dirs = []
-            for _ in range(num_steps):
-                dirs.append(random.randrange(1, 4))
-            yield IBMPlatonicFractalsJob(body, strength, dirs, 2, num_shots, add_measurements)
-            yield IBMPlatonicFractalsJob(body, strength, dirs, 3, num_shots, add_measurements)
-
-    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
+    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, m_idx, add_measurements):
         super().__init__()
 
         self.body = body
@@ -34,6 +30,7 @@ class IBMPlatonicFractalsJob(IBMJob):
         self.meas_dirs = meas_dirs
         self.final_meas_dir = final_meas_dir
         self.shots = shots
+        self.m_idx = m_idx
         self.add_measurements = add_measurements
 
         if not body == 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
@@ -41,7 +38,7 @@ class IBMPlatonicFractalsJob(IBMJob):
 
         # Calculate some parameters
         angle1 = arccos(sqrt((1 + strength) / 2))
-        angle2 = arccos(sqrt((1 - strength) / 2))
+        #angle2 = arccos(sqrt((1 - strength) / 2))
 
         # Build the circuit
         circuit = (
@@ -83,4 +80,4 @@ class IBMPlatonicFractalsJob(IBMJob):
         return device.execute(self.circuit, num_shots=self.shots)
 
     def __str__(self):
-        return f"IBMPlatonicFractalsJob-{self.strength}-{self.meas_dirs}-{self.final_meas_dir}"
+        return f"IBMPlatonicFractalsJob--{self.strength}-{self.meas_dirs}-{self.final_meas_dir}-{self.m_idx}"

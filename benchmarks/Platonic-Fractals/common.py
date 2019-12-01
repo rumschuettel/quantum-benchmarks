@@ -14,17 +14,14 @@ from libbench import VendorJob
 class PlatonicFractalsBenchmarkMixin:
     BODY_OCTA = 0
 
-    def __init__(self, body, strength, num_steps, num_dirs_change, num_shots, random_seed, **_):
+    def __init__(self, body, strength, num_steps, num_shots, shots_multiplier, **_):
         super().__init__()
 
         self.body = body
         self.strength = strength
         self.num_steps = num_steps
-        self.num_dirs_change = num_dirs_change
         self.num_shots = num_shots
-        self.random_seed = random_seed
-
-        print("Random seed: " + str(random_seed))
+        self.shots_multiplier = shots_multiplier
 
     def collate_results(self, results: Dict[VendorJob, object], path: Path, threshold=300):
         dirStats = {}
@@ -32,8 +29,7 @@ class PlatonicFractalsBenchmarkMixin:
         # fill in with values from jobs
         for job in results:
             result = results[job]
-            dirs = str(result["dirs"]).strip("[]")
-            del result["dirs"]
+            dirs = result["dirs"]
             if not dirs in dirStats:
                 dirStats[dirs] = result
             if "ymeascounts" in result:
@@ -87,12 +83,6 @@ class PlatonicFractalsBenchmarkMixin:
                                 [dirStats[dirs]["ystates"][meas], dirStats[dirs]["zstates"][meas]]
                             ]
 
-        import datetime
-
-        # fig= default_visualization(points)
-        # fig.savefig("test_"+str(datetime.datetime.now())+".png") # save the figure to file
-        # plt.close(fig)
-
         return points
 
     def visualize(self, collated_result: object, path: Path) -> Path:
@@ -120,9 +110,7 @@ class PlatonicFractalsBenchmarkMixin:
                 "body": self.body,
                 "strength": self.strength,
                 "num_steps": self.num_steps,
-                "num_dirs_change": self.num_dirs_change,
-                "num_shots": self.num_shots,
-                "random_seed": self.random_seed,
+                "num_shots": self.num_shots
             }
         )
 
@@ -138,23 +126,12 @@ def argparser(toadd, **argparse_options):
         "-e", "--strength", type=float, help="The strength of the mesurements", default=0.93
     )
     parser.add_argument(
-        "-t", "--num_steps", type=int, help="Number of steps of the process", default=2
+        "-t", "--num_steps", type=int, help="Depth of fractal", default=2
     )
     parser.add_argument(
-        "-d",
-        "--num_dirs_change",
-        type=int,
-        help="Number of different random measurement oritentations used",
-        default=42,
+        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=1024
     )
     parser.add_argument(
-        "-s", "--num_shots", type=int, help="Number of shots per random orientations", default=1024
-    )
-    parser.add_argument(
-        "-r",
-        "--random_seed",
-        type=int,
-        help="The random seed used for generatic the random orienations; random if not specified",
-        default=random.randint(1, 100000000),
+        "-m", "--shots_multiplier", type=int, help="Multiplier for shots per orientation", default=10
     )
     return parser
