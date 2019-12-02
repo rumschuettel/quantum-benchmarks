@@ -19,7 +19,8 @@ class IBMLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, IBMBenchmark):
             self.num_shots,
             self.add_measurements,
             self.state_preparation_method,
-            self.num_repetitions,
+            self.tomography_method,
+            self.num_repetitions
         )
 
     def __str__(self):

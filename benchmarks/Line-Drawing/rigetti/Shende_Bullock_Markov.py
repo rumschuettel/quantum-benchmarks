@@ -7,8 +7,9 @@ def normalize_and_remove_phase(v):
 
 
 def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
+    state = np.array(state, dtype = np.complex64)
     assert len(state) == 2 ** len(qubits)
-    assert abs(np.linalg.norm(state) - 1.0) < 1e-8
+    assert abs(np.linalg.norm(state) - 1.0) < 1e-7
 
     program = pq.Program()
 
@@ -57,7 +58,7 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
 
 def prepare_multiplexed(states, control_qubits, target_qubit, GRAY_CODE=True, REVERSE_ZS=True):
     assert len(states) == 2 ** len(control_qubits)
-    assert all(abs(np.linalg.norm(state) - 1.0) < 1e-8 for state in states)
+    assert all(abs(np.linalg.norm(state) - 1.0) < 1e-6 for state in states)
     n = len(control_qubits)
 
     thetas = [2 * np.arccos(state[0].real) / np.pi for state in states]
@@ -149,34 +150,27 @@ def prepare_multiplexed(states, control_qubits, target_qubit, GRAY_CODE=True, RE
 if __name__ == "__main__":
     from pyquil.quil import Pragma
 
-    num_qubits = 2
-    N = 2 ** num_qubits
-    # points = np.exp(2.j * np.pi * np.arange(N) / N) / np.sqrt(N)
-    points = normalize_and_remove_phase(np.random.rand(N) + 1.0j * np.random.rand(N))
-    # points = np.array([0,0,0,0.70710678+0.70710678j])
-    # points = np.array([0.45621777+0.j, 0.17273829+0.12513561j, 0.59497154+0.22042816j, 0.57531933+0.11311881j])
-    np.set_printoptions(linewidth=200)
-    print("State to prepare:", points)
-
-    # Set up program
-    n = int(np.log2(len(points)))
+    n = 2
+    state = normalize_and_remove_phase(np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n))
+    state /= np.linalg.norm(state)
     qubits = list(range(n))
     program = pq.Program()
     program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
-    program += Shende_Bullock_Markov(points, qubits)
-    print(program)
-
-    # Simulate
+    program += Shende_Bullock_Markov(state, qubits)
     psi = pq.api.WavefunctionSimulator().wavefunction(program).amplitudes
     result = psi[: 2 ** n] / np.exp(1.0j * np.angle(psi[0]))
-    corrected_result = np.empty(result.shape, dtype=np.complex_)
+
+    # Revert the ordering of the qubits
+    corrected_result = np.empty(result.shape, dtype=np.complex64)
     for i, r in enumerate(result):
         corrected_result[int("".join(reversed(f"{i:0{n}b}")), 2)] = r
-    print(corrected_result)
-    print(np.abs(corrected_result) - np.abs(points))
-    print(np.angle(corrected_result) - np.angle(points))
 
-    # Check resulting state
+    # Statistics
+    np.set_printoptions(linewidth=200)
+    print("State to prepare:", np.round(state,4))
+    print("Norm:", np.linalg.norm(state))
+    print("Program:")
+    print(program)
+    print("State that was prepared:", np.round(corrected_result,4))
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
-    print("Maximum absolute error:", np.max(np.abs(corrected_result - points)))
-    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * points)) - 1.0))
+    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0))

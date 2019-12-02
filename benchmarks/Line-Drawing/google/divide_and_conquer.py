@@ -89,43 +89,22 @@ def divide_and_conquer(points, qubits, ancilla_qubits, ctrl=None):
 
 
 if __name__ == "__main__":
-    num_qubits = 2
-    N = 2 ** num_qubits
-    # points = np.exp(2.j * np.pi * np.arange(N) / N) / np.sqrt(N)
-    # points = normalize_and_remove_phase(np.random.rand(N) + 1.j * np.random.rand(N))
-    # points = np.array([0,0,0,0.70710678+0.70710678j])
-    points = np.array(
-        [
-            0.45621777 + 0.0j,
-            0.17273829 + 0.12513561j,
-            0.59497154 + 0.22042816j,
-            0.57531933 + 0.11311881j,
-        ]
-    )
-    np.set_printoptions(linewidth=200)
-    print("State to prepare:", points)
 
-    # Set up circuit
-    n = int(np.log2(len(points)))
+    n = 2
+    state = np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n)
+    state /= np.linalg.norm(state)
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     ancilla_qubits = [cirq.GridQubit(1, i) for i in range(n - 2)]
-    circuit = divide_and_conquer(points, qubits, ancilla_qubits)
-    print(circuit)
-
-    # Simulate
-    all_qubits = qubits + ancilla_qubits
-    # for i in range(len(circuit)+1):
-    #     tmp_circuit = cirq.Circuit()
-    #     tmp_circuit._moments = circuit._moments[:i]
-    #     psi = cirq.Simulator().simulate(tmp_circuit, qubit_order = all_qubits).final_state
-    #     result = psi[::2**len(ancilla_qubits)] / np.exp(1.j * np.angle(psi[0]))
-    #     print(np.round(result,3))
-
-    psi = cirq.Simulator().simulate(circuit, qubit_order=all_qubits).final_state
+    circuit = divide_and_conquer(state, qubits, ancilla_qubits)
+    psi = cirq.Simulator().simulate(circuit, qubit_order = qubits + ancilla_qubits).final_state
     result = psi[:: 2 ** len(ancilla_qubits)] / np.exp(1.0j * np.angle(psi[0]))
-    print(result)
 
-    # Check resulting state
+    # Statistics
+    np.set_printoptions(linewidth=200)
+    print("State to prepare:", np.round(state,4))
+    print("Norm:", np.linalg.norm(state))
+    print("Circuit:")
+    print(circuit)
+    print("State that was prepared:", np.round(result,4))
     print("Norm of the resulting vector:", np.linalg.norm(result))
-    print("Maximum absolute error:", np.max(np.abs(result - points)))
-    print("Inner product error:", abs(abs(np.sum(np.conj(result) * points)) - 1.0))
+    print("Inner product error:", abs(abs(np.sum(np.conj(result) * state)) - 1.0))

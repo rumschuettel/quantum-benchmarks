@@ -7,58 +7,36 @@ def normalize_and_remove_phase(v):
 
 
 def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
+    state = np.array(state, dtype = np.complex64)
     assert len(state) == 2 ** len(qubits)
-    assert abs(np.linalg.norm(state) - 1.0) < 1e-8
+    assert abs(np.linalg.norm(state) - 1.0) < 1e-7
 
     circuit = cirq.Circuit()
     n = len(qubits)
     for i in range(n):
         states = [
             normalize_and_remove_phase(
-                np.array(
-                    [
-                        np.exp(
-                            1.0j
-                            * np.mean(
-                                np.angle(
-                                    state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
-                                )
-                            )
-                        )
-                        * np.linalg.norm(
-                            state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
-                        ),
-                        np.exp(
-                            1.0j
-                            * np.mean(
-                                np.angle(
-                                    state[
-                                        (2 * j + 1)
-                                        * 2 ** (n - i - 1) : (2 * j + 2)
-                                        * 2 ** (n - i - 1)
-                                    ]
-                                )
-                            )
-                        )
-                        * np.linalg.norm(
-                            state[(2 * j + 1) * 2 ** (n - i - 1) : (2 * j + 2) * 2 ** (n - i - 1)]
-                        ),
-                    ]
+                np.array([
+                            np.exp(1.0j * np.mean(np.angle(state[2*j * 2**(n-i-1) : (2*j+1) * 2**(n-i-1)])))
+                                * np.linalg.norm(state[2*j * 2**(n-i-1) : (2*j+1) * 2**(n-i-1)]),
+                            np.exp(1.0j * np.mean(np.angle(state[(2*j+1) * 2**(n-i-1) : (2*j+2) * 2**(n-i-1)])))
+                                * np.linalg.norm(state[(2*j+1) * 2**(n-i-1) : (2*j+2) * 2**(n-i-1)])
+                         ], dtype = np.complex64
                 )
-            )
-            for j in range(2 ** i)
+            ) for j in range(2**i)
         ]
         circuit.append(
             prepare_multiplexed(
                 states, qubits[:i], qubits[i], GRAY_CODE=GRAY_CODE, REVERSE_ZS=REVERSE_ZS
             )
         )
+
     return circuit
 
 
 def prepare_multiplexed(states, control_qubits, target_qubit, GRAY_CODE=True, REVERSE_ZS=True):
     assert len(states) == 2 ** len(control_qubits)
-    assert all(abs(np.linalg.norm(state) - 1.0) < 1e-8 for state in states)
+    assert all(abs(np.linalg.norm(state) - 1.0) < 1e-6 for state in states)
     n = len(control_qubits)
 
     thetas = [2 * np.arccos(state[0].real) / np.pi for state in states]
@@ -146,11 +124,20 @@ def prepare_multiplexed(states, control_qubits, target_qubit, GRAY_CODE=True, RE
 
 
 if __name__ == "__main__":
-    n = 3
-    state = normalize_and_remove_phase(np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n))
+
+    n = 2
+    state = np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n)
+    state /= np.linalg.norm(state)
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     circuit = Shende_Bullock_Markov(state, qubits, True, True)
+    result = cirq.Simulator().simulate(circuit, qubit_order=qubits).final_state
+
+    # Statistics
+    np.set_printoptions(linewidth=200)
+    print("State to prepare:", np.round(state,4))
+    print("Norm:", np.linalg.norm(state))
+    print("Circuit:")
     print(circuit)
-    final_state = cirq.Simulator().simulate(circuit, qubit_order=qubits).final_state
-    inp = np.sum(np.conj(final_state.T) * state)
-    print(abs(abs(inp) - 1.0))
+    print("State that was prepared:", np.round(result,4))
+    print("Norm of the resulting vector:", np.linalg.norm(result))
+    print("Inner product error:", abs(abs(np.sum(np.conj(result) * state)) - 1.0))

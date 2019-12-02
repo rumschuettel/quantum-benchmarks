@@ -14,42 +14,17 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class GoogleLineDrawingJob(GoogleJob):
     @staticmethod
-    def job_factory(points, num_shots, add_measurements, state_preparation_method, num_repetitions):
+    def job_factory(points, num_shots, add_measurements, state_preparation_method, tomography_method, num_repetitions):
+        assert tomography_method in ["custom", "GKKT"]
+
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
-            yield GoogleLineDrawingJob(
-                points, num_shots, add_measurements, state_preparation_method, j
-            )
-            for i in range(n):
-                yield GoogleLineDrawingJob(
-                    points,
-                    num_shots,
-                    add_measurements,
-                    state_preparation_method,
-                    j,
-                    Hadamard_qubit=i,
-                )
-                yield GoogleLineDrawingJob(
-                    points,
-                    num_shots,
-                    add_measurements,
-                    state_preparation_method,
-                    j,
-                    Hadamard_qubit=i,
-                    S_qubit=i,
-                )
+            for pauli_string in it.product(['X','Y','Z'], repeat = n):
+                if tomography_method == 'custom' and pauli_string.count('Z') < n-1: continue
+                yield GoogleLineDrawingJob(points, num_shots, add_measurements, state_preparation_method, j, pauli_string)
 
-    def __init__(
-        self,
-        points,
-        num_shots,
-        add_measurements,
-        state_preparation_method,
-        repetition,
-        Hadamard_qubit=None,
-        S_qubit=None,
-    ):
+    def __init__(self, points, num_shots, add_measurements, state_preparation_method, repetition, pauli_string):
         super().__init__()
 
         self.points = points
@@ -57,8 +32,7 @@ class GoogleLineDrawingJob(GoogleJob):
         self.add_measurements = add_measurements
         self.state_preparation_method = state_preparation_method
         self.repetition = repetition
-        self.Hadamard_qubit = Hadamard_qubit
-        self.S_qubit = S_qubit
+        self.pauli_string = pauli_string
 
         n = int(np.log2(len(points)))
 
@@ -70,12 +44,13 @@ class GoogleLineDrawingJob(GoogleJob):
         circuit.append(self.QFT(qubits))
         # NOTE: qubits is now reversed
 
-        if S_qubit is not None:
-            circuit.append(cirq.S(qubits[S_qubit]))
-        if Hadamard_qubit is not None:
-            circuit.append(cirq.H(qubits[Hadamard_qubit]))
-        if add_measurements:
-            circuit.append(cirq.measure(*qubits, key="result"))
+        for p,q in zip(pauli_string, qubits):
+            if p == 'X': circuit.append(cirq.H(q))
+            elif p == 'Y':
+                circuit.append(cirq.inverse(cirq.S(q)))
+                circuit.append(cirq.H(q))
+        if self.add_measurements:
+            circuit.append(cirq.measure(*qubits, key = 'result'))
 
         # store the resulting circuit
         self.qubits = qubits
@@ -86,21 +61,21 @@ class GoogleLineDrawingJob(GoogleJob):
         print(" - No. single qubit gates:", qubit_ops.count(1))
         print(" - No. two qubit gates:", qubit_ops.count(2))
 
-    def prepare_state(self, state, qubits, method):
-        assert method in ["DC", "SBM", "SBM+GC", "BVMS"]
+    def prepare_state(self, state, qubits, state_preparation_method):
+        assert state_preparation_method in ["DC", "SBM", "SBM+GC", "BVMS"]
 
         n = int(np.log2(len(state)))
 
         qubits = [cirq.GridQubit(0, i) for i in range(n)]
         circuit = cirq.Circuit()
-        if method == "DC":
+        if state_preparation_method == "DC":
             ancilla_qubits = [cirq.GridQubit(1, i) for i in range(n - 2)]
             circuit.append(divide_and_conquer(state, qubits, ancilla_qubits))
-        elif method == "SBM":
+        elif state_preparation_method == "SBM":
             circuit.append(Shende_Bullock_Markov(state, qubits, False, True))
-        elif method == "SBM+GC":
+        elif state_preparation_method == "SBM+GC":
             circuit.append(Shende_Bullock_Markov(state, qubits, True, True))
-        elif method == "BVMS":
+        elif state_preparation_method == "BVMS":
             circuit.append(Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits))
         return circuit
 
@@ -127,5 +102,5 @@ class GoogleLineDrawingJob(GoogleJob):
 
     def __str__(self):
         if not self.add_measurements:
-            return f"GoogleLineDrawingJob-{self.Hadamard_qubit}-{self.S_qubit}"
-        return f"GoogleLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"
+            return f"GoogleLineDrawingJob-{''.join(self.pauli_string)}"
+        return f"GoogleLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"

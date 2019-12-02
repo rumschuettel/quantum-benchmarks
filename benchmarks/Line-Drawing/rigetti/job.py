@@ -13,42 +13,17 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class RigettiLineDrawingJob(RigettiJob):
     @staticmethod
-    def job_factory(points, num_shots, add_measurements, state_preparation_method, num_repetitions):
+    def job_factory(points, num_shots, add_measurements, state_preparation_method, tomography_method, num_repetitions):
+        assert tomography_method in ["custom", "GKKT"]
+
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
-            yield RigettiLineDrawingJob(
-                points, num_shots, add_measurements, state_preparation_method, j
-            )
-            for i in range(n):
-                yield RigettiLineDrawingJob(
-                    points,
-                    num_shots,
-                    add_measurements,
-                    state_preparation_method,
-                    j,
-                    Hadamard_qubit=i,
-                )
-                yield RigettiLineDrawingJob(
-                    points,
-                    num_shots,
-                    add_measurements,
-                    state_preparation_method,
-                    j,
-                    Hadamard_qubit=i,
-                    S_qubit=i,
-                )
+            for pauli_string in it.product(['X','Y','Z'], repeat = n):
+                if tomography_method == 'custom' and pauli_string.count('Z') < n-1: continue
+                yield RigettiLineDrawingJob(points, num_shots, add_measurements, state_preparation_method, j, pauli_string)
 
-    def __init__(
-        self,
-        points,
-        num_shots,
-        add_measurements,
-        state_preparation_method,
-        repetition,
-        Hadamard_qubit=None,
-        S_qubit=None,
-    ):
+    def __init__(self, points, num_shots, add_measurements, state_preparation_method, repetition, pauli_string):
         super().__init__()
 
         self.points = points
@@ -56,8 +31,7 @@ class RigettiLineDrawingJob(RigettiJob):
         self.add_measurements = add_measurements
         self.state_preparation_method = state_preparation_method
         self.repetition = repetition
-        self.Hadamard_qubit = Hadamard_qubit
-        self.S_qubit = S_qubit
+        self.pauli_string = pauli_string
 
         n = int(np.log2(len(points)))
 
@@ -71,10 +45,12 @@ class RigettiLineDrawingJob(RigettiJob):
         program += self.QFT(list(range(n)))
         # NOTE: qubits is now reversed
 
-        if S_qubit is not None:
-            program += pq.gates.S(n - 1 - S_qubit)
-        if Hadamard_qubit is not None:
-            program += pq.gates.H(n - 1 - Hadamard_qubit)
+        for i,p in enumerate(pauli_string):
+            if p == 'X':
+                program += pq.gates.H(n-1-i)
+            elif p == 'Y':
+                program += pq.gates.S(n-1-i).dagger()
+                program += pq.gates.H(n-1-i)
 
         # store the resulting program
         self.program = program
@@ -112,5 +88,5 @@ class RigettiLineDrawingJob(RigettiJob):
 
     def __str__(self):
         if not self.add_measurements:
-            return f"RigettiLineDrawingJob-{self.Hadamard_qubit}-{self.S_qubit}"
-        return f"RigettiLineDrawingJob-{self.repetition}-{self.Hadamard_qubit}-{self.S_qubit}"
+            return f"RigettiLineDrawingJob-{''.join(self.pauli_string)}"
+        return f"RigettiLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"

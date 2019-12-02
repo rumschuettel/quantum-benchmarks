@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 
 import numpy as np
+import itertools as it
 
 np.set_printoptions(linewidth=200)
 import matplotlib.pyplot as plt
@@ -13,7 +14,7 @@ from .shapes import SHAPE_FUNCTIONS
 
 
 class LineDrawingBenchmarkMixin:
-    def __init__(self, shape, method, num_points, num_shots, num_repetitions, **_):
+    def __init__(self, shape, state_preparation_method, tomography_method, num_points, num_shots, num_repetitions, **_):
         super().__init__()
         assert is_power_of_2(num_points), "number of points needs to be power of 2"
         assert shape in SHAPE_FUNCTIONS, f"{shape} not one of {SHAPE_FUNCTIONS.keys()}"
@@ -24,7 +25,8 @@ class LineDrawingBenchmarkMixin:
         ]
         self.points = np.array(points) / np.linalg.norm(points)
 
-        self.state_preparation_method = method
+        self.state_preparation_method = state_preparation_method
+        self.tomography_method = tomography_method
         self.num_shots = num_shots
         self.num_repetitions = num_repetitions
         self.shape = shape
@@ -38,57 +40,75 @@ class LineDrawingBenchmarkMixin:
         # Retrieve the amplitude estimates
         curves = []
         for j in range(self.num_repetitions):
-            for job in results:
-                if job.repetition == j and job.Hadamard_qubit is None and job.S_qubit is None:
-                    prob_hist = results[job]
-                    estimates = {k: np.sqrt(v) for k, v in prob_hist.items()}
-                    break
-            else:
-                raise AssertionError(
-                    f"The probability job with repetition {j} was not found in the results data structure."
-                )
+            prob_hists = {}
+            for pauli_string in it.product(['X','Y','Z'], repeat = n):
+                if self.tomography_method == "custom" and pauli_string.count('Z') < n-1: continue
 
-            # Retrieve the relative phase estimates
-            for k in range(n - 1, -1, -1):
+                # Retrieve the measurement statistics
                 for job in results:
-                    if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit is None:
-                        cos_hist = results[job]
+                    if job.repetition == j and job.pauli_string == pauli_string:
+                        prob_hists[''.join(pauli_string)] = results[job]
                         break
                 else:
-                    raise AssertionError(
-                        f"The job with repetition {j}, Hadamard qubit {k} and S qubit None is missing."
-                    )
+                    raise AssertionError(f"The probability job with repetition {j} was not found in the results data structure.")
 
-                for job in results:
-                    if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit == k:
-                        sin_hist = results[job]
-                        break
-                else:
-                    raise AssertionError(
-                        f"The job with repetition {j}, Hadamard qubit {k} and S qubit {k} is missing."
-                    )
+            if self.tomography_method == "custom":
+                estimates = {k : np.sqrt(v) for k,v in prob_hists['Z'*n].items()}
+                for k in range(n - 1, -1, -1):
+                    cos_hist = prob_hists['Z'*k + 'X' + 'Z'*(n-k-1)]
+                    sin_hist = prob_hists['Z'*k + 'Y' + 'Z'*(n-k-1)]
 
-                its = [["0"]] * (k + 1) + [["0", "1"]] * (n - 1 - k)
-                for j0 in it.product(*its):
-                    j0 = "".join(j0)
-                    j1 = j0[:k] + "1" + j0[(k + 1) :]
-                    fact = abs(estimates[j0] * estimates[j1])
-                    if fact == 0:
-                        continue
-                    cos_phase_diff = (cos_hist[j0] - cos_hist[j1]) / (2 * fact)
-                    sin_phase_diff = (sin_hist[j0] - sin_hist[j1]) / (2 * fact)
-                    phase_diff = np.arctan2(sin_phase_diff, cos_phase_diff)
+                    its = [["0"]] * (k + 1) + [["0", "1"]] * (n - 1 - k)
+                    for j0 in it.product(*its):
+                        j0 = "".join(j0)
+                        j1 = j0[:k] + "1" + j0[(k + 1) :]
+                        fact = abs(estimates[j0] * estimates[j1])
+                        if fact == 0:
+                            continue
+                        cos_phase_diff = (cos_hist[j0] - cos_hist[j1]) / (2 * fact)
+                        sin_phase_diff = (sin_hist[j0] - sin_hist[j1]) / (2 * fact)
+                        phase_diff = np.arctan2(sin_phase_diff, cos_phase_diff)
 
-                    # Iterate over the part of the Hamming cube that is influenced
-                    new_its = [["0", "1"]] * k + [["1"]] + [[j0[i]] for i in range(k + 1, n)]
-                    for j1 in it.product(*new_its):
-                        j1 = "".join(j1)
-                        estimates[j1] *= np.exp(-1.0j * phase_diff)
+                        # Iterate over the part of the Hamming cube that is influenced
+                        new_its = [["0", "1"]] * k + [["1"]] + [[j0[i]] for i in range(k + 1, n)]
+                        for j1 in it.product(*new_its):
+                            j1 = "".join(j1)
+                            estimates[j1] *= np.exp(-1.0j * phase_diff)
 
-            curve = np.array([v for k, v in sorted(estimates.items())]) * np.exp(
-                1.0j * self.correction_angle
-            )
-            curves.append(curve)
+                curve = np.array([v for k, v in sorted(estimates.items())])
+
+            else: #self.tomography_method == "GKKT"
+
+                # eigenstates of the paulis
+                eigenstates = {
+                    'X0' : np.array([1,1], dtype = np.complex64) / np.sqrt(2),
+                    'X1' : np.array([1,-1], dtype = np.complex64) / np.sqrt(2),
+                    'Y0' : np.array([1,1.j], dtype = np.complex64) / np.sqrt(2),
+                    'Y1' : np.array([1,-1.j], dtype = np.complex64) / np.sqrt(2),
+                    'Z0' : np.array([1,0], dtype = np.complex64),
+                    'Z1' : np.array([0,1], dtype = np.complex64)
+                }
+
+                approx = np.zeros((2**n, 2**n), dtype = np.complex64)
+                for pauli_string in it.product(['X', 'Y', 'Z'], repeat=n):
+                    for o,f in prob_hists[''.join(pauli_string)].items():
+                        m = np.array([1], dtype = np.complex64)
+                        for pi,oi in zip(pauli_string, o):
+                            basis_state = eigenstates[pi+oi]
+                            tensor = np.conj(basis_state.T)[np.newaxis,:] * basis_state[:,np.newaxis] - np.eye(2) / 3
+                            m = np.kron(m, tensor)
+                        m *= f
+                        approx += m / (3**n)
+
+                # Obtain the largest eigenvector
+                w,v = np.linalg.eigh(approx)
+                idx = w.argsort()[::-1]
+                w = w[idx]
+                v = v[:,idx]
+                curve = v[:,0] / np.exp(1.j * np.angle(v[0,0]))
+
+            corrected_curve = curve * np.exp(1.j * self.correction_angle)
+            curves.append(corrected_curve)
         return curves
 
     def visualize(self, collated_result: object, path: Path) -> Path:
@@ -165,7 +185,8 @@ def argparser(toadd, **argparse_options):
         help=f"The shape to draw, one of {SHAPE_FUNCTIONS.keys()}",
         default="heart",
     )
-    parser.add_argument("-m", "--method", type=str, help="State preparation method", default="BVMS")
+    parser.add_argument("-sm", "--state_preparation_method", type=str, help="State preparation method", default="BVMS")
+    parser.add_argument("-tm", "--tomography_method", type=str, help="Tomography method", default="GKKT")
     parser.add_argument(
         "-n",
         "--num_points",

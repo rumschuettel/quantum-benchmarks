@@ -39,14 +39,20 @@ def Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits):
 
 
 if __name__ == "__main__":
-    n = 3
-    state = normalize_and_remove_phase(np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n))
+
+    n = 2
+    state = np.random.rand(2 ** n) + 1.0j * np.random.rand(2 ** n)
+    state /= np.linalg.norm(state)
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     circuit = Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits)
-    print(circuit)
-    final_state = cirq.Simulator().simulate(circuit, qubit_order=qubits).final_state
-    inp = np.sum(np.conj(final_state.T) * state)
+    result = cirq.Simulator().simulate(circuit, qubit_order=qubits).final_state
 
-    print("State to construct:", np.round(state, 3))
-    print("Constructed state:", np.round(final_state, 3))
-    print("Inner product error:", abs(abs(inp) - 1.0))
+    # Statistics
+    np.set_printoptions(linewidth=200)
+    print("State to prepare:", np.round(state,4))
+    print("Norm:", np.linalg.norm(state))
+    print("Circuit:")
+    print(circuit)
+    print("State that was prepared:", np.round(result,4))
+    print("Norm of the resulting vector:", np.linalg.norm(result))
+    print("Inner product error:", abs(abs(np.sum(np.conj(result) * state)) - 1.0))
