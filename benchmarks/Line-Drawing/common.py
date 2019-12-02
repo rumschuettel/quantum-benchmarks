@@ -173,6 +173,7 @@ class LineDrawingBenchmarkMixin:
                 "num_points": len(self.points),
                 "num_repetitions": self.num_repetitions,
                 "state_preparation_method": self.state_preparation_method,
+                "tomography_method": self.tomography_method
             }
         )
 
