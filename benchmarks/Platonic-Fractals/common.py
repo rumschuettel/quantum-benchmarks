@@ -110,7 +110,7 @@ class PlatonicFractalsBenchmarkMixin:
                 "body": self.body,
                 "strength": self.strength,
                 "num_steps": self.num_steps,
-                "num_shots": self.num_shots
+                "num_shots": self.num_shots,
             }
         )
 
@@ -125,13 +125,15 @@ def argparser(toadd, **argparse_options):
     parser.add_argument(
         "-e", "--strength", type=float, help="The strength of the mesurements", default=0.93
     )
-    parser.add_argument(
-        "-t", "--num_steps", type=int, help="Depth of fractal", default=2
-    )
+    parser.add_argument("-t", "--num_steps", type=int, help="Depth of fractal", default=2)
     parser.add_argument(
         "-s", "--num_shots", type=int, help="Number of shots per orientation", default=1024
     )
     parser.add_argument(
-        "-m", "--shots_multiplier", type=int, help="Multiplier for shots per orientation", default=10
+        "-m",
+        "--shots_multiplier",
+        type=int,
+        help="Multiplier for shots per orientation",
+        default=10,
     )
     return parser

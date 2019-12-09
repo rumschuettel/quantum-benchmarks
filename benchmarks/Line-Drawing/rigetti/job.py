@@ -13,17 +13,35 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class RigettiLineDrawingJob(RigettiJob):
     @staticmethod
-    def job_factory(points, num_shots, add_measurements, state_preparation_method, tomography_method, num_repetitions):
+    def job_factory(
+        points,
+        num_shots,
+        add_measurements,
+        state_preparation_method,
+        tomography_method,
+        num_repetitions,
+    ):
         assert tomography_method in ["custom", "GKKT"]
 
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
-            for pauli_string in it.product(['X','Y','Z'], repeat = n):
-                if tomography_method == 'custom' and pauli_string.count('Z') < n-1: continue
-                yield RigettiLineDrawingJob(points, num_shots, add_measurements, state_preparation_method, j, pauli_string)
+            for pauli_string in it.product(["X", "Y", "Z"], repeat=n):
+                if tomography_method == "custom" and pauli_string.count("Z") < n - 1:
+                    continue
+                yield RigettiLineDrawingJob(
+                    points, num_shots, add_measurements, state_preparation_method, j, pauli_string
+                )
 
-    def __init__(self, points, num_shots, add_measurements, state_preparation_method, repetition, pauli_string):
+    def __init__(
+        self,
+        points,
+        num_shots,
+        add_measurements,
+        state_preparation_method,
+        repetition,
+        pauli_string,
+    ):
         super().__init__()
 
         self.points = points
@@ -45,12 +63,12 @@ class RigettiLineDrawingJob(RigettiJob):
         program += self.QFT(list(range(n)))
         # NOTE: qubits is now reversed
 
-        for i,p in enumerate(pauli_string):
-            if p == 'X':
-                program += pq.gates.H(n-1-i)
-            elif p == 'Y':
-                program += pq.gates.S(n-1-i).dagger()
-                program += pq.gates.H(n-1-i)
+        for i, p in enumerate(pauli_string):
+            if p == "X":
+                program += pq.gates.H(n - 1 - i)
+            elif p == "Y":
+                program += pq.gates.S(n - 1 - i).dagger()
+                program += pq.gates.H(n - 1 - i)
 
         # store the resulting program
         self.program = program

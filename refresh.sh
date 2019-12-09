@@ -32,7 +32,7 @@ function check() {
             if (( $todo > 0 || $scheduled > 0 )); then
                 if [[ "$mode" == "Cloud" ]]; then
                     echo "resuming $path on $device"
-                    cmd="timeout 5m ./runner.py resume \"$path\""                    
+                    cmd="./runner.py resume \"$path\""                    
                     echo "$cmd"
                     eval $cmd
                     return
@@ -51,7 +51,7 @@ trap 'on_ctrl_c' SIGINT
 
 # check forever
 while :; do
-    date
+#    date
     check
     sleep 30
 done

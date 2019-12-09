@@ -22,9 +22,13 @@ class RigettiPlatonicFractalsJob(RigettiJob):
         random.seed(random_seed)
 
         for m_idx in range(shots_multiplier):
-            for dirs in it.product(*[range(1,4)] * num_steps):
-                yield RigettiPlatonicFractalsJob(body, strength, dirs, 2, num_shots, m_idx, add_measurements)
-                yield RigettiPlatonicFractalsJob(body, strength, dirs, 3, num_shots, m_idx, add_measurements)
+            for dirs in it.product(*[range(1, 4)] * num_steps):
+                yield RigettiPlatonicFractalsJob(
+                    body, strength, dirs, 2, num_shots, m_idx, add_measurements
+                )
+                yield RigettiPlatonicFractalsJob(
+                    body, strength, dirs, 3, num_shots, m_idx, add_measurements
+                )
 
     def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
         super().__init__()

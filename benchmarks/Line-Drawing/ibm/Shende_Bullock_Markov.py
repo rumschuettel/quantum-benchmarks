@@ -6,7 +6,7 @@ def normalize_and_remove_phase(v):
 
 
 def Shende_Bullock_Markov(circuit, qubits, state, GRAY_CODE=True, REVERSE_ZS=True):
-    state = np.array(state, dtype = np.complex64)
+    state = np.array(state, dtype=np.complex64)
     assert len(state) == 2 ** len(qubits)
     assert abs(np.linalg.norm(state) - 1.0) < 1e-8
 
@@ -164,10 +164,10 @@ if __name__ == "__main__":
 
     # Statistics
     np.set_printoptions(linewidth=200)
-    print("State to prepare:", np.round(state,4))
+    print("State to prepare:", np.round(state, 4))
     print("Norm:", np.linalg.norm(state))
     print("Circuit:")
     print(circuit)
-    print("State that was prepared:", np.round(corrected_result,4))
+    print("State that was prepared:", np.round(corrected_result, 4))
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
     print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0))

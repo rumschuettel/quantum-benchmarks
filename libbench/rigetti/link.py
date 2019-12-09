@@ -102,7 +102,10 @@ class RigettiStatevectorSimulator(RigettiDevice):
         return None
 
     def execute(self, program: pq.Program, **_):
-        return {"result" : ThinPromise(self.device.wavefunction, program), "transpiled_circuit" : None}
+        return {
+            "result": ThinPromise(self.device.wavefunction, program),
+            "transpiled_circuit": None,
+        }
 
 
 # with rigetti we can have any kind of qvm we want, and also other topologies etc

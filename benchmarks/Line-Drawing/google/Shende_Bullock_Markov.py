@@ -7,7 +7,7 @@ def normalize_and_remove_phase(v):
 
 
 def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
-    state = np.array(state, dtype = np.complex64)
+    state = np.array(state, dtype=np.complex64)
     assert len(state) == 2 ** len(qubits)
     assert abs(np.linalg.norm(state) - 1.0) < 1e-7
 
@@ -16,14 +16,39 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
     for i in range(n):
         states = [
             normalize_and_remove_phase(
-                np.array([
-                            np.exp(1.0j * np.mean(np.angle(state[2*j * 2**(n-i-1) : (2*j+1) * 2**(n-i-1)])))
-                                * np.linalg.norm(state[2*j * 2**(n-i-1) : (2*j+1) * 2**(n-i-1)]),
-                            np.exp(1.0j * np.mean(np.angle(state[(2*j+1) * 2**(n-i-1) : (2*j+2) * 2**(n-i-1)])))
-                                * np.linalg.norm(state[(2*j+1) * 2**(n-i-1) : (2*j+2) * 2**(n-i-1)])
-                         ], dtype = np.complex64
+                np.array(
+                    [
+                        np.exp(
+                            1.0j
+                            * np.mean(
+                                np.angle(
+                                    state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
+                                )
+                            )
+                        )
+                        * np.linalg.norm(
+                            state[2 * j * 2 ** (n - i - 1) : (2 * j + 1) * 2 ** (n - i - 1)]
+                        ),
+                        np.exp(
+                            1.0j
+                            * np.mean(
+                                np.angle(
+                                    state[
+                                        (2 * j + 1)
+                                        * 2 ** (n - i - 1) : (2 * j + 2)
+                                        * 2 ** (n - i - 1)
+                                    ]
+                                )
+                            )
+                        )
+                        * np.linalg.norm(
+                            state[(2 * j + 1) * 2 ** (n - i - 1) : (2 * j + 2) * 2 ** (n - i - 1)]
+                        ),
+                    ],
+                    dtype=np.complex64,
                 )
-            ) for j in range(2**i)
+            )
+            for j in range(2 ** i)
         ]
         circuit.append(
             prepare_multiplexed(
@@ -134,10 +159,10 @@ if __name__ == "__main__":
 
     # Statistics
     np.set_printoptions(linewidth=200)
-    print("State to prepare:", np.round(state,4))
+    print("State to prepare:", np.round(state, 4))
     print("Norm:", np.linalg.norm(state))
     print("Circuit:")
     print(circuit)
-    print("State that was prepared:", np.round(result,4))
+    print("State that was prepared:", np.round(result, 4))
     print("Norm of the resulting vector:", np.linalg.norm(result))
     print("Inner product error:", abs(abs(np.sum(np.conj(result) * state)) - 1.0))

@@ -14,13 +14,15 @@ from .. import PlatonicFractalsBenchmarkMixin
 
 class IBMPlatonicFractalsJob(IBMJob):
     @staticmethod
-    def job_factory(
-        body, strength, num_steps, num_shots, shots_multiplier, add_measurements
-    ):
+    def job_factory(body, strength, num_steps, num_shots, shots_multiplier, add_measurements):
         for m_idx in range(shots_multiplier):
-            for dirs in it.product(*[range(1,4)] * num_steps):
-                yield IBMPlatonicFractalsJob(body, strength, dirs, 2, num_shots, m_idx, add_measurements)
-                yield IBMPlatonicFractalsJob(body, strength, dirs, 3, num_shots, m_idx, add_measurements)
+            for dirs in it.product(*[range(1, 4)] * num_steps):
+                yield IBMPlatonicFractalsJob(
+                    body, strength, dirs, 2, num_shots, m_idx, add_measurements
+                )
+                yield IBMPlatonicFractalsJob(
+                    body, strength, dirs, 3, num_shots, m_idx, add_measurements
+                )
 
     def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, m_idx, add_measurements):
         super().__init__()
@@ -38,7 +40,7 @@ class IBMPlatonicFractalsJob(IBMJob):
 
         # Calculate some parameters
         angle1 = arccos(sqrt((1 + strength) / 2))
-        #angle2 = arccos(sqrt((1 - strength) / 2))
+        # angle2 = arccos(sqrt((1 - strength) / 2))
 
         # Build the circuit
         circuit = (

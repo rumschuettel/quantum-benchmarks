@@ -20,7 +20,7 @@ class RigettiLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, RigettiBenchmar
             self.add_measurements,
             self.state_preparation_method,
             self.tomography_method,
-            self.num_repetitions
+            self.num_repetitions,
         )
 
     def __str__(self):

@@ -6,6 +6,7 @@ from qiskit.providers import JobStatus
 import qiskit
 from typing import Union, Tuple, List, Dict
 from libbench import print_stderr
+from qiskit.exceptions import QiskitError
 
 IBM_KNOWN_STATEVECTOR_DEVICES = ["statevector_simulator"]
 
@@ -35,7 +36,15 @@ class IBMDevice:
             experiment, shots=num_shots, max_credits=15, backend=self.device
         )
 
-        return {"result": self.device.run(qobj), "transpiled_circuit": experiment}
+        try:
+            return {"result": self.device.run(qobj), "transpiled_circuit": experiment}
+        except QiskitError as e:
+            message = e.message.rstrip("\n .")
+            if message.endswith("Error code: 3458"):
+                print_stderr("You don't have enough credits to run this job.")
+                return {"result": ThinPromise(lambda: None), "transpiled_circuit": None}
+
+            raise
 
 
 class IBMJob(VendorJob):

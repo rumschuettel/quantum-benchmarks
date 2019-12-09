@@ -96,15 +96,15 @@ if __name__ == "__main__":
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     ancilla_qubits = [cirq.GridQubit(1, i) for i in range(n - 2)]
     circuit = divide_and_conquer(state, qubits, ancilla_qubits)
-    psi = cirq.Simulator().simulate(circuit, qubit_order = qubits + ancilla_qubits).final_state
+    psi = cirq.Simulator().simulate(circuit, qubit_order=qubits + ancilla_qubits).final_state
     result = psi[:: 2 ** len(ancilla_qubits)] / np.exp(1.0j * np.angle(psi[0]))
 
     # Statistics
     np.set_printoptions(linewidth=200)
-    print("State to prepare:", np.round(state,4))
+    print("State to prepare:", np.round(state, 4))
     print("Norm:", np.linalg.norm(state))
     print("Circuit:")
     print(circuit)
-    print("State that was prepared:", np.round(result,4))
+    print("State that was prepared:", np.round(result, 4))
     print("Norm of the resulting vector:", np.linalg.norm(result))
     print("Inner product error:", abs(abs(np.sum(np.conj(result) * state)) - 1.0))

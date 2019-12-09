@@ -14,17 +14,35 @@ from .Bergholm_Vartiainen_Mottonen_Salomaa import Bergholm_Vartiainen_Mottonen_S
 
 class GoogleLineDrawingJob(GoogleJob):
     @staticmethod
-    def job_factory(points, num_shots, add_measurements, state_preparation_method, tomography_method, num_repetitions):
+    def job_factory(
+        points,
+        num_shots,
+        add_measurements,
+        state_preparation_method,
+        tomography_method,
+        num_repetitions,
+    ):
         assert tomography_method in ["custom", "GKKT"]
 
         n = int(np.log2(len(points)))
 
         for j in range(num_repetitions):
-            for pauli_string in it.product(['X','Y','Z'], repeat = n):
-                if tomography_method == 'custom' and pauli_string.count('Z') < n-1: continue
-                yield GoogleLineDrawingJob(points, num_shots, add_measurements, state_preparation_method, j, pauli_string)
+            for pauli_string in it.product(["X", "Y", "Z"], repeat=n):
+                if tomography_method == "custom" and pauli_string.count("Z") < n - 1:
+                    continue
+                yield GoogleLineDrawingJob(
+                    points, num_shots, add_measurements, state_preparation_method, j, pauli_string
+                )
 
-    def __init__(self, points, num_shots, add_measurements, state_preparation_method, repetition, pauli_string):
+    def __init__(
+        self,
+        points,
+        num_shots,
+        add_measurements,
+        state_preparation_method,
+        repetition,
+        pauli_string,
+    ):
         super().__init__()
 
         self.points = points
@@ -44,13 +62,14 @@ class GoogleLineDrawingJob(GoogleJob):
         circuit.append(self.QFT(qubits))
         # NOTE: qubits is now reversed
 
-        for p,q in zip(pauli_string, qubits):
-            if p == 'X': circuit.append(cirq.H(q))
-            elif p == 'Y':
+        for p, q in zip(pauli_string, qubits):
+            if p == "X":
+                circuit.append(cirq.H(q))
+            elif p == "Y":
                 circuit.append(cirq.inverse(cirq.S(q)))
                 circuit.append(cirq.H(q))
         if self.add_measurements:
-            circuit.append(cirq.measure(*qubits, key = 'result'))
+            circuit.append(cirq.measure(*qubits, key="result"))
 
         # store the resulting circuit
         self.qubits = qubits
