@@ -100,6 +100,12 @@ class VendorJobManager(ABC):
         self.print_status()
         return False
 
+    def collate_results(self):
+        return self.benchmark.collate_results(self.results)
+    def visualize_results(self, collated_result):
+        path = Path(self.RUN_FOLDER) / self.ID
+        return self.benchmark.visualize(collated_result, path)
+
     def finalize(
         self,
         figure_callback=lambda *_: None,
@@ -109,16 +115,15 @@ class VendorJobManager(ABC):
         """
             collate results, visualize, and call visualization callback
         """
-        path = Path(self.RUN_FOLDER) / self.ID
 
-        collated_result = self.benchmark.collate_results(self.results, path)
+        collated_result = self.collate_results()
         print("Collated.")
 
         if backup_collated_result:
             self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
             print(f"Backup written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
 
-        visualized_result = self.benchmark.visualize(collated_result, path)
+        visualized_result = self.visualize_results(collated_result)
         figure_callback(visualized_result)
         print("Visualized.")
 

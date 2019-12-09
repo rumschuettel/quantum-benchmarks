@@ -43,7 +43,7 @@ class LineDrawingBenchmarkMixin:
         # correction angle as reference to re-orient final drawing
         self.correction_angle = np.angle(points[0])
 
-    def collate_results(self, results: Dict[VendorJob, object], path: Path):
+    def collate_results(self, results: Dict[VendorJob, object]):
         n = int(np.log2(len(self.points)))
 
         # Retrieve the amplitude estimates

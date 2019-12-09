@@ -11,7 +11,7 @@ DEFAULT_MPL_BACKEND = matplotlib.get_backend()
 matplotlib.use("Cairo")  # backend without X server requirements
 import matplotlib.pyplot as plt
 
-from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl
+from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl, print_stderr
 
 
 """
@@ -58,6 +58,11 @@ def import_argparser(name, toadd, **argparse_options):
     benchmark_module = importlib.import_module(f"benchmarks.{name}")
     argparser = getattr(benchmark_module, "argparser")
     return argparser(toadd, **argparse_options)
+
+
+def import_scorer(name):
+    benchmark_module = importlib.import_module(f"benchmarks.{name}")
+    return getattr(benchmark_module, "score")
 
 
 def obtain_jobmanager(job_id, run_folder, recreate_device):
@@ -210,6 +215,30 @@ def refresh(args):
         else:
             print("not done yet.")
 
+"""
+    SCORE
+"""
+def score(args):
+    RUN_FOLDER = args.run_folder
+    BENCHMARK_ID = args.benchmark
+    REFERENCE_ID = args.reference
+    jobmanager_bench, _, slug_bench = obtain_jobmanager(BENCHMARK_ID, RUN_FOLDER, recreate_device=False)
+    jobmanager_ref, _, slug_ref = obtain_jobmanager(REFERENCE_ID, RUN_FOLDER, recreate_device=False)
+
+    if not jobmanager_bench.done:
+        print_stderr("benchmark not done yet")
+        return
+    if not jobmanager_ref.done:
+        print_stderr("reference not done yet")
+        return
+
+    BENCHMARK = slug_bench["additional_stored_info"]["benchmark"]
+    if slug_ref["additional_stored_info"]["benchmark"] != BENCHMARK:
+        print_stderr("benchmark and reference are not the same test")
+        return
+        
+    scorer = import_scorer(BENCHMARK)
+    scorer(jobmanager_bench.collate_results(), jobmanager_ref.collate_results())
 
 """
     STATUS
@@ -326,6 +355,31 @@ if __name__ == "__main__":
         "--run_folder",
         default=VendorJobManager.RUN_FOLDER,
         help=f"run folder within which to refresh runs",
+    )
+
+    # print benchmark scores
+    parser_SC = subparsers.add_parser(
+        "score",
+        help="Score benchmark",
+        **argparse_options
+    )
+    parser_SC.set_defaults(func=score)
+    parser_SC.add_argument(
+        "benchmark", 
+        metavar="BENCHMARK", 
+        type=str, 
+        help=f"benchmark id; subfolder name in {VendorJobManager.RUN_FOLDER}",
+    )
+    parser_SC.add_argument(
+        "--reference", 
+        metavar="REFERENCE", 
+        type=str, 
+        help=f"reference benchmark id; subfolder name in {VendorJobManager.RUN_FOLDER}",
+    )
+    parser_SC.add_argument(
+        "--run_folder",
+        default=VendorJobManager.RUN_FOLDER,
+        help=f"folder to store benchmark jobs in; created if it does not exist",
     )
 
     # benchmark status

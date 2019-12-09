@@ -23,13 +23,13 @@ class PlatonicFractalsBenchmarkMixin:
         self.num_shots = num_shots
         self.shots_multiplier = shots_multiplier
 
-    def collate_results(self, results: Dict[VendorJob, object], path: Path, threshold=300):
+    def collate_results(self, results: Dict[VendorJob, object], threshold=300):
         dirStats = {}
 
         # fill in with values from jobs
         for job in results:
             result = results[job]
-            dirs = result["dirs"]
+            dirs = tuple(result["dirs"])
             if not dirs in dirStats:
                 dirStats[dirs] = result
             if "ymeascounts" in result:

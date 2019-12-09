@@ -19,7 +19,7 @@ class MandelbrotBenchmarkMixin:
         self.ymin = ymin
         self.ymax = ymax
 
-    def collate_results(self, results: Dict[VendorJob, object], path: Path):
+    def collate_results(self, results: Dict[VendorJob, object]):
         # get array dimensions right
         xs = np.linspace(self.xmin, self.xmax, self.num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])

@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from libbench import VendorJob
+from libbench import VendorJob, print_hl
 
 
 class SchroedingerMicroscopeBenchmarkMixin:
@@ -19,7 +19,7 @@ class SchroedingerMicroscopeBenchmarkMixin:
         self.ymin = ymin
         self.ymax = ymax
 
-    def collate_results(self, results: Dict[VendorJob, object], path: Path):
+    def collate_results(self, results: Dict[VendorJob, object]):
         # get array dimensions right
         xs = np.linspace(self.xmin, self.xmax, self.num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -76,6 +76,15 @@ class SchroedingerMicroscopeBenchmarkMixin:
                 "num_shots": self.num_shots,
             }
         )
+
+
+def score(benchmark_data: object, reference_data: object):
+    zs, _ = benchmark_data
+    zs_ref, _ = reference_data
+    
+    mse = ((zs - zs_ref)**2).mean(axis=None)
+    print_hl("MSE", color="white", end=" ")
+    print_hl(mse, color="red")
 
 
 def argparser(toadd, **argparse_options):

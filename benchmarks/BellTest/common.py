@@ -59,7 +59,7 @@ class BellTestBenchmarkMixin:
         for p in self.qubit_pairs_to_test:
             print(p)
 
-    def collate_results(self, results: Dict[VendorJob, object], path: Path):
+    def collate_results(self, results: Dict[VendorJob, object]):
         per_qubit_bell = {}
 
         for job in results:
