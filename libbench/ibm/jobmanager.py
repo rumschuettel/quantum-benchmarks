@@ -53,7 +53,7 @@ class IBMJobManager(VendorJobManager):
         if status in [JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.DONE]:
             return True
 
-        elif status in [JobStatus.ERROR, JobStatus.CANCELLED]:
+        elif status in [JobStatus.ERROR, JobStatus.CANCELLED, "FAILURE"]:
             return False
 
         # check whether status has been like this before
