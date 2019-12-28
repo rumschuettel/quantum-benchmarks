@@ -111,4 +111,8 @@ class IBMJobManager(VendorJobManager):
         """
             load job by job_id
         """
-        return device.device.retrieve_job(job_id)
+        try:
+            return device.device.retrieve_job(job_id)
+        except QiskitError as e:
+            print_stderr(e)
+            return None
