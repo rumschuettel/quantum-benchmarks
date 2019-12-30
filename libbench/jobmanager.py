@@ -197,8 +197,16 @@ class VendorJobManager(ABC):
 
     def thaw(self, device):
         # thaw queued promises
-        for job in self.queued:
-            self.queued[job] = self.thaw_promise(self.queued[job], device)
+        for job in list(self.queued):
+            thawed_promise = self.thaw_promise(self.queued[job], device)
+            if thawed_promise is None:
+                print_stderr(f"could not thaw job {job}; rescheduling")
+                self.scheduled.append(job)
+                del self.queued[job]
+
+            else:   
+                self.queued[job] = self.thaw_promise(self.queued[job], device)
+
 
     @abstractmethod
     def queued_successfully(self, promise, meta: dict) -> bool:
