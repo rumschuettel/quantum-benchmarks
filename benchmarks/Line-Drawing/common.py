@@ -122,13 +122,31 @@ class LineDrawingBenchmarkMixin:
                 v = v[:, idx]
                 curve = v[:, 0] / np.exp(1.0j * np.angle(v[0, 0]))
 
-            corrected_curve = curve * np.exp(1.0j * self.correction_angle)
+            # Correct the curve
+            # Two methods are available
+
+            # 1. This was the old version, based on fixed rotation angle:
+            # corrected_curve = curve * np.exp(1.0j * self.correction_angle)
+
+            # 2. This is the new version, based on SVD
+            noisy_points = np.row_stack([np.real(curve),np.imag(curve)])
+            points = np.row_stack([np.real(self.points),np.imag(self.points)])
+            center_noisy_points = np.mean(noisy_points, axis = 1)
+            center_points = np.mean(points, axis = 1)
+            moved_noisy_points = noisy_points - center_noisy_points[:,np.newaxis]
+            moved_points = points - center_points[:,np.newaxis]
+            U,S,V = np.linalg.svd(moved_noisy_points @ moved_points.T, full_matrices = True)
+            R = U.T @ V
+            corrected_points = R.T @ moved_noisy_points + center_points[:,np.newaxis]
+            corrected_curve = np.array([complex(*x) for x in corrected_points.T])
+
+            # Add the curve to the resulting curves
             curves.append(corrected_curve)
         return curves
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # Set up the figure
-        fig = plt.figure(figsize=(8, 8))
+        fig = plt.figure(figsize = (8,8))
         ax = fig.gca()
 
         # Plot the contours
