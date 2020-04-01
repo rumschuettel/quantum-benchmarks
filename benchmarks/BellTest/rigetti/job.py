@@ -56,7 +56,7 @@ class RigettiBellTestJob(RigettiJob):
         angle_a, angle_b = test_type.value
         if angle_a != 0:
             program += pq.gates.RZ(angle_a, qubit_a)
-        if angle_b != 1:
+        if angle_b != 0:
             program += pq.gates.RZ(angle_b, qubit_b)
 
         # final hadamards

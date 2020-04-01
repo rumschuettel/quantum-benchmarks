@@ -63,7 +63,7 @@ class IBMBellTestJob(IBMJob):
         angle_a, angle_b = test_type.value
         if angle_a != 0:
             circuit.rz(angle_a, _qubit_a)
-        if angle_b != 1:
+        if angle_b != 0:
             circuit.rz(angle_b, _qubit_b)
 
         # final hadamards
