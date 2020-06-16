@@ -43,8 +43,8 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         qubits = [cirq.GridQubit(0, i) for i in range(2 ** num_post_selections)]
         circuit = cirq.Circuit()
         for k in range(2 ** num_post_selections):
-            circuit.append(cirq.Ry(theta)(qubits[k]))
-            circuit.append(cirq.Rz(-phi)(qubits[k]))
+            circuit.append(cirq.Y(qubits[k]) ** (theta / np.pi))
+            circuit.append(cirq.Z(qubits[k]) ** (-phi / np.pi))
         for k in range(num_post_selections):
             for l in range(0, 2 ** num_post_selections, 2 ** (k + 1)):
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** k]))
