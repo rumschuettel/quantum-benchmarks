@@ -15,11 +15,11 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, IBMBenchmark):
     def get_jobs(self):
         yield from HHLJob.job_factory(
             self.block_encoding,
-            self.num_qubits,    
+            self.num_qubits,
             self.num_ancillas,
             self.qsvt_poly,
             self.num_shots,
-            self.shots_multiplier,  
+            self.shots_multiplier,
             self.add_measurements,
         )
 
@@ -62,4 +62,16 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
     def __init__(self, *args, **kwargs):
         kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
-        raise NotImplementedError()
+
+    def parse_result(self, job, result):
+        psi = result.get_statevector()
+
+        histogram = []
+        for i in range(2**job.num_qubits):
+            j = int(format(i, f'0{2*job.num_qubits}b')[::-1],2)
+            histogram.append(np.abs(psi[j])**2)
+
+        return {
+            "basis_vec" : job.basis_vec,
+            "histogram" : histogram,
+        }
