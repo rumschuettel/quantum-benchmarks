@@ -243,13 +243,15 @@ def score(args):
 """
     STATUS
 """
+import random
 
 
 def status(args):
     RUN_FOLDER = args.run_folder
     VendorJobManager.print_legend()
 
-    for job_id in _get_job_ids(RUN_FOLDER):
+    job_ids = _get_job_ids(RUN_FOLDER)
+    for job_id in random.sample(job_ids, len(job_ids)):
         jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER, recreate_device=False)
         jobmanager.print_status(tail=slug["additional_stored_info"])
 
