@@ -151,7 +151,7 @@ class RigettiLinkBase(VendorLink):
 
             return 1.0
 
-        return {e: cnot_fid(*e) for a, b in edges for e in [(a, b), (b, a)]}
+        return {e: max(0, cnot_fid(*e)) for a, b in edges for e in [(a, b), (b, a)]}
 
 
 class RigettiCloudLink(RigettiLinkBase):
