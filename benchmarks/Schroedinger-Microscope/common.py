@@ -50,7 +50,13 @@ class SchroedingerMicroscopeBenchmarkMixin:
         ax_sps = fig.add_subplot(1, 2, 2)
 
         # Draw the postselection probabilities
-        ax_psps.imshow(psps ** (1 / (2 ** self.num_post_selections - 1)), cmap="gray", extent=extent, vmin=0, vmax=1)
+        ax_psps.imshow(
+            psps ** (1 / (2 ** self.num_post_selections - 1)),
+            cmap="gray",
+            extent=extent,
+            vmin=0,
+            vmax=1,
+        )
         ax_psps.set_title(f"PSP({self.num_post_selections},{self.num_pixels},{self.num_shots})")
         ax_psps.set_xlabel("Re(z)")
         ax_psps.set_ylabel("Im(z)")
@@ -82,7 +88,7 @@ def score(benchmark_data: object, reference_data: object):
     zs, _ = benchmark_data
     zs_ref, _ = reference_data
 
-    mse = ((zs - zs_ref)**2).mean(axis=None)
+    mse = ((zs - zs_ref) ** 2).mean(axis=None)
     print_hl("MSE", color="white", end=" ")
     print_hl(mse, color="red")
 

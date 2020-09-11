@@ -27,43 +27,56 @@ class HHLJob(RigettiJob):
 
             # Quanutm Singular Value Transformation
             qsvt_circuit += pq.gates.H(0)
-            for i in range(0,len(angles)):
+            for i in range(0, len(angles)):
                 if i % 2 == 0:
-                    qsvt_circuit += block_encoding   # Not at the correct qubits!
+                    qsvt_circuit += block_encoding  # Not at the correct qubits!
                 else:
-                    qsvt_circuit += block_encoding_inv   # Not at the correct qubits!
+                    qsvt_circuit += block_encoding_inv  # Not at the correct qubits!
                 qsvt_circuit += pq.gates.X(1)
-                qsvt_circuit += pq.gates.CNOT(1,0)
-                qsvt_circuit += pq.gates.RZ(-2*angles[i],0)
+                qsvt_circuit += pq.gates.CNOT(1, 0)
+                qsvt_circuit += pq.gates.RZ(-2 * angles[i], 0)
                 # For debugging purposes to get the global phase right replace the above line with the following:
                 # qsvt_circuit.u1(-angles[i],0)
                 # qsvt_circuit.x(0)
                 # qsvt_circuit.u1(angles[i],0)
                 # qsvt_circuit.x(0)
-                qsvt_circuit += pq.gates.CNOT(1,0)
+                qsvt_circuit += pq.gates.CNOT(1, 0)
                 qsvt_circuit += pq.gates.X(1)
             qsvt_circuit += pq.gates.H(0)
 
             return qsvt_circuit
 
-
     @staticmethod
-    def job_factory(block_encoding, num_qubits, num_ancillas, qsvt_poly, num_shots, shots_multiplier, add_measurements):
+    def job_factory(
+        block_encoding,
+        num_qubits,
+        num_ancillas,
+        qsvt_poly,
+        num_shots,
+        shots_multiplier,
+        add_measurements,
+    ):
         if num_ancillas != 1 or not (qsvt_poly is None):
             raise NotImplementedError("The general HHL circuit generations is not yet implemented!")
-        elif (qsvt_poly is None):
+        elif qsvt_poly is None:
             # Build block-encoding of A
             block_encoding = pq.Program()
 
             if num_qubits == 1:
-                block_encoding += pq.gates.SWAP(1,2) ** 0.5
-                block_encoding += pq.gates.RY(-pi/4, 1)
-                block_encoding += pq.gates.RX(-pi/3, 2)
+                block_encoding += pq.gates.SWAP(1, 2) ** 0.5
+                block_encoding += pq.gates.RY(-pi / 4, 1)
+                block_encoding += pq.gates.RX(-pi / 3, 2)
 
                 # Angles describing the polynomial inverting A
-                angles= (-2.279330633470087101821688078684, -2.27933063347008710182168807868, -7.05851428429600138350129876836)
+                angles = (
+                    -2.279330633470087101821688078684,
+                    -2.27933063347008710182168807868,
+                    -7.05851428429600138350129876836,
+                )
 
-                qsvt_circuit = HHLJob.create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding.dagger(), angles)
+                qsvt_circuit = HHLJob.create_qsvt_circuit(
+                    num_qubits, num_ancillas, add_measurements, block_encoding.dagger(), angles
+                )
 
                 # For debug purposes
                 # reorder = QuantumCircuit(num_qubits+num_ancillas+1)
@@ -71,26 +84,26 @@ class HHLJob(RigettiJob):
 
             elif num_qubits == 2:
                 # This is moved one qubit down compared to the IBM implementation, because we cannot do this shifting later on
-                block_encoding += pq.gates.RY(-pi/8,1)
-                block_encoding += pq.gates.RX(-pi/4,2)
-                block_encoding += pq.gates.RZ(-pi/2,3)
+                block_encoding += pq.gates.RY(-pi / 8, 1)
+                block_encoding += pq.gates.RX(-pi / 4, 2)
+                block_encoding += pq.gates.RZ(-pi / 2, 3)
                 block_encoding += pq.gates.CNOT(2, 1)
                 block_encoding += pq.gates.Z(3)
                 block_encoding += pq.gates.X(1)
                 block_encoding += pq.gates.CNOT(3, 2)
-                block_encoding += pq.gates.RX(-pi/2,1)
-                block_encoding += pq.gates.RY(-pi/4,2)
-                block_encoding += pq.gates.RZ(-pi/8,3)
+                block_encoding += pq.gates.RX(-pi / 2, 1)
+                block_encoding += pq.gates.RY(-pi / 4, 2)
+                block_encoding += pq.gates.RZ(-pi / 8, 3)
                 block_encoding += pq.gates.CNOT(2, 1)
                 block_encoding += pq.gates.Z(3)
-                block_encoding += pq.gates.RY(-pi/8,1)
-                block_encoding += pq.gates.RX(-pi/4,2)
-                block_encoding += pq.gates.RY(-pi/2,3)
+                block_encoding += pq.gates.RY(-pi / 8, 1)
+                block_encoding += pq.gates.RX(-pi / 4, 2)
+                block_encoding += pq.gates.RY(-pi / 2, 3)
                 block_encoding += pq.gates.Z(1)
                 block_encoding += pq.gates.CNOT(3, 2)
-                block_encoding += pq.gates.RY(-pi/2,1)
-                block_encoding += pq.gates.RZ(-pi/4,2)
-                block_encoding += pq.gates.RX(-pi/8,3)
+                block_encoding += pq.gates.RY(-pi / 2, 1)
+                block_encoding += pq.gates.RZ(-pi / 4, 2)
+                block_encoding += pq.gates.RX(-pi / 8, 3)
                 block_encoding += pq.gates.CNOT(2, 1)
                 block_encoding += pq.gates.X(3)
                 # Just global phase for debugging
@@ -100,11 +113,22 @@ class HHLJob(RigettiJob):
                 # block_encoding.x(0)
 
                 # Angles describing the polynomial inverting A
-                angles=(-1.2329906360794255512184231493, -1.45745010323350887868278909, -1.5025688694325865597661246, -1.78673547240229808944153, \
-                        -1.7867354724022980894415, -1.502568869432586559766, -1.45745010323350887868, -1.2329906360794255512, 0.8088518475393644255)
+                angles = (
+                    -1.2329906360794255512184231493,
+                    -1.45745010323350887868278909,
+                    -1.5025688694325865597661246,
+                    -1.78673547240229808944153,
+                    -1.7867354724022980894415,
+                    -1.502568869432586559766,
+                    -1.45745010323350887868,
+                    -1.2329906360794255512,
+                    0.8088518475393644255,
+                )
 
                 # Quanutm Singular Value Transformation
-                qsvt_circuit = HHLJob.create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding.dagger(), angles)
+                qsvt_circuit = HHLJob.create_qsvt_circuit(
+                    num_qubits, num_ancillas, add_measurements, block_encoding.dagger(), angles
+                )
 
                 # For debug purposes
                 # reorder = QuantumCircuit(num_qubits+num_ancillas+1)
@@ -112,7 +136,9 @@ class HHLJob(RigettiJob):
                 # reorder.swap(1,2)
 
             else:
-                raise NotImplementedError("The general HHL circuit generations is not yet implemented!")
+                raise NotImplementedError(
+                    "The general HHL circuit generations is not yet implemented!"
+                )
 
             # Debugging the circuit
             # print(block_encoding)
@@ -129,21 +155,29 @@ class HHLJob(RigettiJob):
             # print(job.result().get_unitary(print_unitary, decimals=2))
 
         for m_idx in range(shots_multiplier):
-            for basis_vec in range(0, 2**num_qubits):
+            for basis_vec in range(0, 2 ** num_qubits):
                 instance_circuit = pq.Program()
 
                 if basis_vec % 2 == 1:
-                    instance_circuit += pq.gates.X(num_qubits+num_ancillas)
+                    instance_circuit += pq.gates.X(num_qubits + num_ancillas)
                 if basis_vec % 4 >= 2 and num_qubits > 1:
-                    instance_circuit += pq.gates.X(num_qubits+num_ancillas-1)
+                    instance_circuit += pq.gates.X(num_qubits + num_ancillas - 1)
 
                 instance_circuit += qsvt_circuit
 
                 yield HHLJob(
-                    instance_circuit, num_qubits, num_ancillas, basis_vec, num_shots, m_idx, add_measurements
+                    instance_circuit,
+                    num_qubits,
+                    num_ancillas,
+                    basis_vec,
+                    num_shots,
+                    m_idx,
+                    add_measurements,
                 )
 
-    def __init__(self, circuit, num_qubits, num_ancillas, basis_vec, shots, m_idx, add_measurements):
+    def __init__(
+        self, circuit, num_qubits, num_ancillas, basis_vec, shots, m_idx, add_measurements
+    ):
         super().__init__()
 
         self.circuit = circuit

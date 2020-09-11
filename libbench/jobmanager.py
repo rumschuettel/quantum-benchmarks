@@ -31,6 +31,7 @@ class VendorJobManager(ABC):
         figure_callback: Callable[[Path], None] = lambda *_: None,
         store_job_and_results=True,
         store_jobmanager=True,
+        store_additional_info=True,
         display_status=True,
     ) -> Optional[object]:
         # try to queue more jobs
@@ -89,6 +90,9 @@ class VendorJobManager(ABC):
         if store_jobmanager:
             self.save(additional_stored_info)
 
+        if store_additional_info:
+            self.save_additional_info_files(additional_stored_info)
+
         # if all are done, we can finalize the result
         if len(self.scheduled) == 0 and len(self.queued) == 0:
             print_hl(f"benchmark {self.ID} completed.")
@@ -102,6 +106,7 @@ class VendorJobManager(ABC):
 
     def collate_results(self):
         return self.benchmark.collate_results(self.results)
+
     def visualize_results(self, collated_result):
         path = Path(self.RUN_FOLDER) / self.ID
         return self.benchmark.visualize(collated_result, path)
@@ -179,7 +184,11 @@ class VendorJobManager(ABC):
         # restore queue
         self.queued = old_queued
 
-    def _save_in_run_folder(self, filename: str, obj: object):
+    def save_additional_info_files(self, additional_stored_info):
+        for key, what in additional_stored_info.items():
+            self._save_in_run_folder(f"{what}.{key}")
+
+    def _save_in_run_folder(self, filename: str, obj: object = None):
         full_filename = f"{self.RUN_FOLDER}/{self.ID}/{filename}"
         full_folder = os.path.dirname(full_filename)
         if not os.path.exists(full_folder):
@@ -204,9 +213,8 @@ class VendorJobManager(ABC):
                 self.scheduled.append(job)
                 del self.queued[job]
 
-            else:   
+            else:
                 self.queued[job] = self.thaw_promise(self.queued[job], device)
-
 
     @abstractmethod
     def queued_successfully(self, promise, meta: dict) -> bool:

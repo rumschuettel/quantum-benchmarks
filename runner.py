@@ -77,6 +77,7 @@ def obtain_jobmanager(job_id, run_folder, recreate_device):
         slug["additional_stored_info"]["mode"],
     )
 
+    # recreate device if demanded to do so
     device = None
     if recreate_device:
         link = import_link(VENDOR, MODE)()
@@ -196,7 +197,9 @@ def _get_job_ids(run_folder):
     dirs = list(filter(os.path.isdir, glob.glob(f"{run_folder}/*")))
     dirs.sort(key=lambda x: os.path.getctime(x))
     return [
-        os.path.basename(folder) for folder in dirs if not os.path.basename(folder) == "__pycache__"
+        os.path.basename(folder)
+        for folder in dirs
+        if not os.path.basename(folder) in {"__pycache__", "obsolete"}
     ]
 
 
@@ -215,14 +218,19 @@ def refresh(args):
         else:
             print("not done yet.")
 
+
 """
     SCORE
 """
+
+
 def score(args):
     RUN_FOLDER = args.run_folder
     BENCHMARK_ID = args.benchmark
     REFERENCE_ID = args.reference
-    jobmanager_bench, _, slug_bench = obtain_jobmanager(BENCHMARK_ID, RUN_FOLDER, recreate_device=False)
+    jobmanager_bench, _, slug_bench = obtain_jobmanager(
+        BENCHMARK_ID, RUN_FOLDER, recreate_device=False
+    )
     jobmanager_ref, _, slug_ref = obtain_jobmanager(REFERENCE_ID, RUN_FOLDER, recreate_device=False)
 
     if not jobmanager_bench.done:
@@ -236,9 +244,10 @@ def score(args):
     if slug_ref["additional_stored_info"]["benchmark"] != BENCHMARK:
         print_stderr("benchmark and reference are not the same test")
         return
-        
+
     scorer = import_scorer(BENCHMARK)
     scorer(jobmanager_bench.collate_results(), jobmanager_ref.collate_results())
+
 
 """
     STATUS
@@ -254,6 +263,7 @@ def status(args):
     for job_id in random.sample(job_ids, len(job_ids)):
         jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER, recreate_device=False)
         jobmanager.print_status(tail=slug["additional_stored_info"])
+        jobmanager.save_additional_info_files(slug["additional_stored_info"])
 
 
 if __name__ == "__main__":
@@ -360,22 +370,18 @@ if __name__ == "__main__":
     )
 
     # print benchmark scores
-    parser_SC = subparsers.add_parser(
-        "score",
-        help="Score benchmark",
-        **argparse_options
-    )
+    parser_SC = subparsers.add_parser("score", help="Score benchmark", **argparse_options)
     parser_SC.set_defaults(func=score)
     parser_SC.add_argument(
-        "benchmark", 
-        metavar="BENCHMARK", 
-        type=str, 
+        "benchmark",
+        metavar="BENCHMARK",
+        type=str,
         help=f"benchmark id; subfolder name in {VendorJobManager.RUN_FOLDER}",
     )
     parser_SC.add_argument(
-        "--reference", 
-        metavar="REFERENCE", 
-        type=str, 
+        "--reference",
+        metavar="REFERENCE",
+        type=str,
         help=f"reference benchmark id; subfolder name in {VendorJobManager.RUN_FOLDER}",
     )
     parser_SC.add_argument(

@@ -34,7 +34,7 @@ class GoogleMandelbrotJob(GoogleJob):
         self.j = j
 
         # Calculate the required circuit parameters
-        r2 = abs(z) * np.sqrt(.5 * (1 + np.sqrt(1 + 4 / abs(z) ** 2)))
+        r2 = abs(z) * np.sqrt(0.5 * (1 + np.sqrt(1 + 4 / abs(z) ** 2)))
         r1 = 1 / r2
         phi = np.angle(z)
         r1rot = 2 * np.arccos(1 / np.sqrt(1.0 + r1 ** 2))
@@ -55,8 +55,10 @@ class GoogleMandelbrotJob(GoogleJob):
 
                 # Controlled r1-rotation
                 circuit.append(cirq.CZ(qubits[l], qubits[l + 2 ** (k - 1)]))
-                circuit.append((cirq.Y(qubits[l + 2 ** (k - 1)]) ** (r1rot / np.pi)).controlled_by(qubits[l]))
-                circuit.append(cirq.Z(qubits[l]) ** (-.5 * r1rot / np.pi))
+                circuit.append(
+                    (cirq.Y(qubits[l + 2 ** (k - 1)]) ** (r1rot / np.pi)).controlled_by(qubits[l])
+                )
+                circuit.append(cirq.Z(qubits[l]) ** (-0.5 * r1rot / np.pi))
 
                 # Z gates
                 circuit.append(cirq.Z(qubits[l]) ** (phi / np.pi))
@@ -67,8 +69,10 @@ class GoogleMandelbrotJob(GoogleJob):
 
                 # Controlled r2-rotation
                 circuit.append(cirq.CZ(qubits[l], qubits[l + 2 ** (k - 1)]))
-                circuit.append((cirq.Y(qubits[l]) ** (r2rot / np.pi)).controlled_by(qubits[l + 2 ** (k - 1)]))
-                circuit.append(cirq.Z(qubits[l + 2 ** (k - 1)]) ** (-.5 * r2rot / np.pi))
+                circuit.append(
+                    (cirq.Y(qubits[l]) ** (r2rot / np.pi)).controlled_by(qubits[l + 2 ** (k - 1)])
+                )
+                circuit.append(cirq.Z(qubits[l + 2 ** (k - 1)]) ** (-0.5 * r2rot / np.pi))
 
                 # CNOT gate
                 circuit.append(cirq.CNOT(qubits[l], qubits[l + 2 ** (k - 1)]))
