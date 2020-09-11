@@ -22,6 +22,7 @@ for path in Path(RUN_FOLDER_BASE).rglob("visualize.pdf"):
         device = list(Path(folder).glob("*.device"))[0].stem
         benchmark = list(Path(folder).glob("*.benchmark"))[0].stem
         date = re.search("\d\d\d\d-\d\d-\d\d", run).group()
+        id = run[-4:]
     except:
         print("ERROR", folder)
         continue
@@ -37,15 +38,20 @@ for path in Path(RUN_FOLDER_BASE).rglob("visualize.pdf"):
             "device": device,
             "benchmark": benchmark,
             "date": date,
+            "id": id,
+            "date+id": f"{date} {id}"
         },
         ignore_index=True,
     )
 
 for mode in set(table["mode"]):
     print(mode)
-    _table = table[table["mode"] == mode].drop(["mode", "vendor"], axis="columns")
-    print(
-        _table.groupby(["device", "benchmark"]).aggregate(
-            lambda tdf: tdf.unique().tolist()
+    print("=" * len(mode))
+    _table = table[table["mode"] == mode]
+    _table = _table.drop(["mode", "vendor", "date", "id"], axis="columns")
+    with pd.option_context("display.max_rows", None, "display.max_columns", None, "display.max_colwidth", -1):
+        print(
+            _table.groupby(["device", "benchmark"]).aggregate(
+                lambda tdf: tdf.unique().tolist()
+            )
         )
-    )
