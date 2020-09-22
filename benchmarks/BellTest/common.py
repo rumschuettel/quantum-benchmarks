@@ -85,6 +85,39 @@ class BellTestBenchmarkMixin:
         # HEATMAP
         data = pd.DataFrame(collated_result["bell"])
         data = data.sort_index(axis=0).sort_index(axis=1)
+
+        # combine them and build a new colormap
+        colors1 = matplotlib.cm.get_cmap("Greys")(np.linspace(0.2, 0.8, 200))
+        colors2 = matplotlib.cm.get_cmap("inferno")(np.linspace(0.8, 0.2, 100))
+        colors = np.vstack((colors1, colors2))
+        mymap = mcolors.LinearSegmentedColormap.from_list("bell_map", colors)
+
+        # rudimentary figure for device page
+        fig = plt.figure(figsize=(0.8*len(data), 0.8*len(data)))
+
+        ax = sns.heatmap(
+            data,
+            cmap=mymap,
+            linewidths=0,
+            vmin=0,
+            vmax=1.5,
+            square=True,
+            linecolor="white",
+            annot=True,
+            fmt=".2f",
+            cbar=False,
+            xticklabels=False,
+            yticklabels=False,
+        )
+
+        # save
+        plt.margins(0,0)
+        fig.savefig(path / "visualize-devpage.svg", transparent=True, bbox_inches="tight", pad_inches=0)
+        fig.savefig(path / "visualize-devpage.pdf", transparent=True, bbox_inches="tight", pad_inches=0)
+        plt.close()
+
+
+        # fancy one
         fig = plt.figure(figsize=(12, 8))
         plt.title(f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15)
 
@@ -172,6 +205,40 @@ class BellTestBenchmarkMixin:
         plt.close()
 
         return figpath2
+
+
+    def score(self, collated_result: object, *_):
+        # score by distance
+        scores = {}
+        for distance in sorted(list(set(map(len, self.qubit_pairs_to_test)))):
+            scores[distance] = []
+            for path in self.qubit_pairs_to_test:
+                if len(path) == distance:
+                    a, b = path[0], path[-1]
+                    scores[distance].append(collated_result["bell"][a][b])
+            scores[distance] = ( np.mean(scores[distance]), np.std(scores[distance]) )
+
+        # weighted score
+        weighted = sum( s / (d-1) for d, (s, _) in scores.items() ) / sum( 1/(d-1) for d in scores )
+        weighted_σ = np.sqrt(sum( σ**2  / (d-1) for d, (_, σ) in scores.items() )) / sum( 1/(d-1) for d in scores )
+
+        # directionality
+        matrix = pd.DataFrame(collated_result["bell"])
+        matrix = matrix.reindex(sorted(matrix.columns), axis=1).sort_index()
+        matrix = matrix.to_numpy()
+        matrix[np.isnan(matrix)] = 1.
+
+        skewness = np.linalg.norm(matrix - matrix.T, ord="fro") / len(matrix)**2
+
+        print("by distance:   ", end="")
+        for i, (d, (s, σ)) in enumerate(scores.items()):
+            print(f"{d}: {s:.2f}±{σ:.2f}", end="   ")
+            if i%5 == 4:
+                print("\n               ", end="")
+        print("")
+        print(f"weighted avg:  {weighted:.2f}±{weighted_σ:.2f}")
+        print(f"skewness:      {skewness:.2%}")
+    
 
     def __repr__(self):
         return str(

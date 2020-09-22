@@ -39,7 +39,7 @@ for path in Path(RUN_FOLDER_BASE).rglob("visualize.pdf"):
             "benchmark": benchmark,
             "date": date,
             "id": id,
-            "date+id": f"{date} {id}"
+            "date+id": f"{date} {id}",
         },
         ignore_index=True,
     )
@@ -49,7 +49,14 @@ for mode in set(table["mode"]):
     print("=" * len(mode))
     _table = table[table["mode"] == mode]
     _table = _table.drop(["mode", "vendor", "date", "id"], axis="columns")
-    with pd.option_context("display.max_rows", None, "display.max_columns", None, "display.max_colwidth", -1):
+    with pd.option_context(
+        "display.max_rows",
+        None,
+        "display.max_columns",
+        None,
+        "display.max_colwidth",
+        -1,
+    ):
         print(
             _table.groupby(["device", "benchmark"]).aggregate(
                 lambda tdf: tdf.unique().tolist()

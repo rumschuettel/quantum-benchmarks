@@ -4,10 +4,10 @@ from typing import Dict, Callable, Tuple, List, Union
 
 class ThinPromise(ABC):
     """
-        This is a thin promise that simply executes the given callback,
-        and otherwise mimics the IBM interface.
+    This is a thin promise that simply executes the given callback,
+    and otherwise mimics the IBM interface.
 
-        This can be used as a promise whenever the execution is immediate.
+    This can be used as a promise whenever the execution is immediate.
     """
 
     def __init__(self, result_callback: Callable, *args, **kwargs):

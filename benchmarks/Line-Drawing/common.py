@@ -191,7 +191,7 @@ class LineDrawingBenchmarkMixin:
             xs, ys = list(np.real(curve)), list(np.imag(curve))
             # print("X coordinates:", np.round(xs,3))
             # print("Y coordinates:", np.round(ys,3))
-            ax.plot(xs + [xs[0]], ys + [ys[0]], color="black", alpha=0.3)
+            ax.plot(xs + [xs[0]], ys + [ys[0]], color="red", alpha=0.3 / len(collated_result) * 25)
 
         # Plot an averaged contour
         from matplotlib.collections import LineCollection
@@ -217,14 +217,22 @@ class LineDrawingBenchmarkMixin:
 
         # Plot the ideal contour
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
-        ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color="yellow", linestyle="--")
+        ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color="black")
 
-        xmin, xmax, ymin, ymax = (min(ideal_xs), max(ideal_xs), min(ideal_ys), max(ideal_ys))
-        dx, dy = xmax - xmin, ymax - ymin
-        if dx < dy * 1.5:
-            dx = dy * 1.5
+        if True: # fixed axes
+            if len(self.points) == 4:
+                xmin, xmax, ymin, ymax = (-.6, .6, -.65, .35)
+            elif len(self.points) == 8 or True:
+                xmin, xmax, ymin, ymax = (-.5, .5, -.45, .45)
+            dx, dy = (xmax-xmin, ymax-ymin)
         else:
-            dy = dx / 1.5
+            xmin, xmax, ymin, ymax = (min(ideal_xs), max(ideal_xs), min(ideal_ys), max(ideal_ys))
+            dx, dy = xmax - xmin, ymax - ymin
+            if dx < dy * 1.5:
+                dx = dy * 1.5
+            else:
+                dy = dx / 1.5
+
 
         ax.set_xlim((xmin - 0.1 * dx, xmax + 0.1 * dx))
         ax.set_ylim((ymin - 0.1 * dy, ymax + 0.1 * dy))
@@ -233,8 +241,21 @@ class LineDrawingBenchmarkMixin:
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)
 
+        plt.margins(0,0)
+        plt.axis('off')
+        fig.savefig(path / "visualize-devpage.svg", transparent=True, bbox_inches="tight", pad_inches=0)
+        fig.savefig(path / "visualize-devpage.pdf", transparent=True, bbox_inches="tight", pad_inches=0)
+        plt.close()
+
         # default figure to display
         return figpath
+
+    def score(self, collated_result: object, *_):
+        distances = np.linalg.norm(collated_result - self.points, axis=1, ord=2)
+        avg = distances.mean() / len(self.points)
+        σ = distances.std() / len(self.points)
+
+        print(f"average distance: {10*avg:.2f}±{10*σ:.2f}")
 
     def __repr__(self):
         return str(

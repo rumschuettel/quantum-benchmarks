@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Tuple
 from pathlib import Path
 
 import numpy as np
@@ -7,9 +7,11 @@ from numpy import arccos, sqrt
 import random as random
 from pylab import rcParams
 from matplotlib import pyplot as plt
+import matplotlib
+import pandas as pd
 
 from libbench import VendorJob
-
+import itertools
 
 class PlatonicFractalsBenchmarkMixin:
     BODY_OCTA = 0
@@ -27,8 +29,7 @@ class PlatonicFractalsBenchmarkMixin:
         dirStats = {}
 
         # fill in with values from jobs
-        for job in results:
-            result = results[job]
+        for result in results.values():
             dirs = tuple(result["dirs"])
             if not dirs in dirStats:
                 dirStats[dirs] = result
@@ -69,7 +70,7 @@ class PlatonicFractalsBenchmarkMixin:
                             ) / total
                             dirStats[dirs]["zmeascounts"][meas] = total
 
-        points = []
+        points = {}
 
         for dirs in dirStats:
             if "ymeascounts" in dirStats[dirs] and "zmeascounts" in dirStats[dirs]:
@@ -79,30 +80,96 @@ class PlatonicFractalsBenchmarkMixin:
                             dirStats[dirs]["ymeascounts"][meas] > threshold
                             and dirStats[dirs]["zmeascounts"][meas] > threshold
                         ):
-                            points += [
-                                [dirStats[dirs]["ystates"][meas], dirStats[dirs]["zstates"][meas]]
-                            ]
+                            points[(dirs, meas)] = (
+                                dirStats[dirs]["ystates"][meas],
+                                dirStats[dirs]["zstates"][meas]
+                            )
 
         return points
+
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # def visualize(self, points, figName):
         rcParams["figure.figsize"] = 7, 7
 
+        points = collated_result.values()
+
         theta = np.arange(0, 2 * np.pi, 0.004)
 
-        fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
-        plt.plot(1 * np.cos(theta), 1 * np.sin(theta), color="#14498C")  #'#A3E3D9'#'#14498C'
-        plt.scatter(*zip(*collated_result), color="#A3E3D9")  #'#3ACC23'
-        ax.set_facecolor("xkcd:black")  #'xkcd:salmon'
+        fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure 1
+        plt.plot(1 * np.cos(theta), 1 * np.sin(theta), color="#14498C")
+        plt.scatter(*zip(*points), color="#A3E3D9")
+        ax.set_facecolor("black")
         ax.set_xlim([-1.1, 1.1])
         ax.set_ylim([-1.1, 1.1])
 
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)  # save the figure to file
 
+        pts_by_path = pd.DataFrame({
+            tuple(zip(dirs, meas)): pt for ((dirs, meas), pt) in collated_result.items()
+        }).sort_index(axis=1).T
+        
+        lines = []
+        widths = []
+        colors = []
+        def _iter_level(df: pd.DataFrame, level: int = 0) -> np.array:
+            mean = df.mean().to_numpy()
+            if len(df) > 1:
+                for _, ddff in df.groupby(level=-level-1):
+                    mean2 = _iter_level(ddff, level+1)
+                    STEP = .2
+                    for x in np.arange(0, 1, STEP):
+                        pt_a = (1-x)*mean + x*mean2
+                        pt_b = (1-(x+STEP))*mean + (x+STEP)*mean2
+                        lines.append([ tuple(pt_a), tuple(pt_b) ])
+                        widths.append(10 / (x+level+1))
+                        colors.append(1 / (x+level+1))
+            return mean
+
+        _iter_level(pts_by_path)
+        lines.reverse(), widths.reverse(), colors.reverse()       
+
+        lc = matplotlib.collections.LineCollection(
+                lines,
+                linewidths=widths,
+                cmap=plt.get_cmap("inferno"),
+                norm=plt.Normalize(vmin=-.1, vmax=1.5),
+                capstyle="round",
+            )
+        lc.set_array(np.array(colors))
+
+        fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure 2
+        ax.add_collection(lc)
+        ax.scatter(*zip(*points), color="#000000")
+        ax.set_xlim([-1, 1])
+        ax.set_ylim([-1, 1])
+        plt.margins(0,0)
+        plt.axis('off')
+        figpath = path / "visualize2.pdf"
+        fig.savefig(figpath, transparent=True, bbox_inches="tight", pad_inches=0)  # save the figure to file
+
         # default figure to display
         return figpath
+
+    def score(self, collated_result: object, *_):
+        distances = []
+
+        # we know that the center for all points for one dirs sequence like (1, 2, 2) should be (0, 0)
+        # so collect all measurement outcomes ignoring the 0/1 outcome of each
+        for _, df in pd.DataFrame(collated_result).T.groupby(level=0):
+            distances.append(np.linalg.norm(
+                df.mean().to_numpy(),  # should be at (0, 0)
+                ord=2
+            ))
+
+        # from this extract overall mean and standard deviation of this mean
+        mean = np.mean(distances, axis=0)
+        stddev_mean = np.std(distances, axis=0)
+
+        print(self.num_steps, "steps")
+        print(f"l2-dist from center: {mean:.3f}±{stddev_mean:.3f}")
+
 
     def __repr__(self):
         return str(

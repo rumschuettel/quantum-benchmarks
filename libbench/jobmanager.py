@@ -39,7 +39,10 @@ class VendorJobManager(ABC):
         failure_counter = 0
 
         for job in self.scheduled:
-            if failure_counter >= self.MAX_FAILURE_COUNT or len(self.queued) > self.MAX_QUEUE_COUNT:
+            if (
+                failure_counter >= self.MAX_FAILURE_COUNT
+                or len(self.queued) > self.MAX_QUEUE_COUNT
+            ):
                 new_scheduled.append(job)
                 continue
 
@@ -72,8 +75,15 @@ class VendorJobManager(ABC):
 
                 # store job results separately in addition
                 if store_job_and_results:
-                    self._save_in_run_folder(f"jobs/{str(job)}.pickle", self.results[job])
-                    self._save_in_run_folder(f"jobs/{str(job)}.circuit.pickle", job.serialize())
+                    self._save_in_run_folder(
+                        f"jobs/{str(job)}.raw-result.pickle", result
+                    )
+                    self._save_in_run_folder(
+                        f"jobs/{str(job)}.pickle", self.results[job]
+                    )
+                    self._save_in_run_folder(
+                        f"jobs/{str(job)}.circuit.pickle", job.serialize()
+                    )
 
             # 2. if that failed, check whether job is alive and if not reschedule
             elif not self.job_alive(promise, job.meta):
@@ -111,6 +121,9 @@ class VendorJobManager(ABC):
         path = Path(self.RUN_FOLDER) / self.ID
         return self.benchmark.visualize(collated_result, path)
 
+    def score(self, collated_result, reference_collated_result):
+        return self.benchmark.score(collated_result, reference_collated_result)
+
     def finalize(
         self,
         figure_callback=lambda *_: None,
@@ -118,7 +131,7 @@ class VendorJobManager(ABC):
         backup_visualized_result=False,
     ):
         """
-            collate results, visualize, and call visualization callback
+        collate results, visualize, and call visualization callback
         """
 
         collated_result = self.collate_results()
@@ -126,7 +139,9 @@ class VendorJobManager(ABC):
 
         if backup_collated_result:
             self._save_in_run_folder(self.COLLATED_FILENAME, collated_result)
-            print(f"Backup written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}.")
+            print(
+                f"Backup written to {self.RUN_FOLDER}/{self.ID}/{self.COLLATED_FILENAME}."
+            )
 
         visualized_result = self.visualize_results(collated_result)
         figure_callback(visualized_result)
@@ -134,7 +149,9 @@ class VendorJobManager(ABC):
 
         if backup_visualized_result:
             self._save_in_run_folder(self.VISUALIZED_FILENAME, visualized_result)
-            print(f"Backup  written to {self.RUN_FOLDER}/{self.ID}/{self.VISUALIZED_FILENAME}.")
+            print(
+                f"Backup  written to {self.RUN_FOLDER}/{self.ID}/{self.VISUALIZED_FILENAME}."
+            )
 
         return True
 
@@ -223,14 +240,14 @@ class VendorJobManager(ABC):
     @abstractmethod
     def freeze_promise(self, promise):
         """
-            transform promise into something we can pickle
+        transform promise into something we can pickle
         """
         pass
 
     @abstractmethod
     def thaw_promise(self, promise_id, device):
         """
-            restore promise from pickled object
+        restore promise from pickled object
         """
         pass
 
