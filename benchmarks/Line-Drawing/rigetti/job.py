@@ -57,7 +57,6 @@ class RigettiLineDrawingJob(RigettiJob):
         Fourier_coeffs = np.fft.fft(points, norm="ortho")
 
         program = pq.Program()
-        program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
         program += self.prepare_state(Fourier_coeffs, list(range(n)), state_preparation_method)
         program += self.QFT(list(range(n)))

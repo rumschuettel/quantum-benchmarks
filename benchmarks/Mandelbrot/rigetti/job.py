@@ -39,7 +39,6 @@ class RigettiMandelbrotJob(RigettiJob):
 
         # Build the circuit
         program = pq.Program()
-        program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
         qubits = 2 ** num_post_selections
         for k in range(2 ** num_post_selections):

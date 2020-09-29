@@ -92,7 +92,6 @@ if __name__ == "__main__":
     qubits = list(range(n))
     ancilla_qubits = list(range(n, 2 * n - 2))
     program = pq.Program()
-    program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
     program += divide_and_conquer(state, qubits, ancilla_qubits)
     psi = pq.api.WavefunctionSimulator().wavefunction(program).amplitudes
     result = psi[: 2 ** n] / np.exp(1.0j * np.angle(psi[0]))

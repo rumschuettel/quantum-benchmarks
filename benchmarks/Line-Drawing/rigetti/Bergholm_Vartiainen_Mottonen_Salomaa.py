@@ -46,7 +46,6 @@ if __name__ == "__main__":
     state /= np.linalg.norm(state)
     qubits = list(range(n))
     program = pq.Program()
-    program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
     program += Bergholm_Vartiainen_Mottonen_Salomaa(points, qubits)
     psi = pq.api.WavefunctionSimulator().wavefunction(program).amplitudes
     result = psi[: 2 ** n] / np.exp(1.0j * np.angle(psi[0]))

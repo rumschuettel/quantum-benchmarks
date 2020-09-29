@@ -50,7 +50,6 @@ if __name__ == "__main__":
     unitaries = [unitary_group.rvs(2) for _ in range(2 ** n)]
     qubits = list(range(n + 1))
     program = pq.Program()
-    program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
     UCC, R = generate_uniformly_controlled_circuit(unitaries, qubits[:n], qubits[-1])
     program += UCC
     print("program:")

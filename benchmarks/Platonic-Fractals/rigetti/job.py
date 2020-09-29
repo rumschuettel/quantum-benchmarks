@@ -48,7 +48,6 @@ class RigettiPlatonicFractalsJob(RigettiJob):
 
         # Build the circuit
         program = pq.Program()
-        program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
         program += pq.gates.H(0)
         for i in range(len(meas_dirs)):
