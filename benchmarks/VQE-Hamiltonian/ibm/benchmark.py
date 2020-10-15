@@ -9,9 +9,6 @@ class IBMVQEHamiltonianBenchmarkBase(VQEHamiltonianBenchmarkMixin, IBMBenchmark)
 
 
 class IBMVQEHamiltonianSimulatedBenchmark(IBMVQEHamiltonianBenchmarkBase):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def get_jobs(self):
         yield IBMVQEHamiltonianSimulatedJob(self.qubits, self.J1, self.J2, self.hamiltonian_type)
 

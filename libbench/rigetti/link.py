@@ -26,7 +26,7 @@ class RigettiDevice(ABC):
 
 class RigettiQVM(RigettiDevice):
     def __init__(self, device_name: str):
-        self.device = pq.get_qc(device_name, as_qvm=True)
+        self.device = pq.get_qc(device_name, as_qvm=True, noisy="noisy" in device_name)
 
     @property
     def name(self):
@@ -78,7 +78,11 @@ class RigettiQVM(RigettiDevice):
         }
 
     def execute(
-        self, program: pq.Program, num_shots: int, measure_qubits: list = None, optimize=True
+        self,
+        program: pq.Program,
+        num_shots: int,
+        measure_qubits: list = None,
+        optimize=True,
     ):
         return self._run_and_measure(program, num_shots, measure_qubits, optimize)
 
@@ -109,7 +113,9 @@ class RigettiStatevectorSimulator(RigettiDevice):
 
 
 # with rigetti we can have any kind of qvm we want, and also other topologies etc
-RIGETTI_EXTRA_QVMS = [nn for n in [2, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]]
+RIGETTI_EXTRA_QVMS = [
+    nn for n in [2, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]
+]
 
 
 class RigettiJob(VendorJob):
@@ -137,8 +143,13 @@ class RigettiLinkBase(VendorLink):
             edge = edge.split("-")
             return int(edge[0]), int(edge[1])
 
+        def edge2q_fid(edge: str):
+            fCZ = params["2Q"][edge]["fCZ"]
+            fXY = params["2Q"][edge]["fXY"]
+            return fCZ if fCZ is not None else fXY
+
         gates_1q = {int(q): 1.0 - params["1Q"][q]["f1QRB"] for q in params["1Q"]}
-        gates_2q = {edge2tuple(e): 1.0 - params["2Q"][e]["fCZ"] for e in params["2Q"]}
+        gates_2q = {edge2tuple(e): 1.0 - edge2q_fid(e) for e in params["2Q"]}
 
         def cnot_fid(a, b):
             if (a, b) in gates_2q:
@@ -155,37 +166,34 @@ class RigettiLinkBase(VendorLink):
 
 
 class RigettiCloudLink(RigettiLinkBase):
-    def __init__(self):
-        super().__init__()
-
     @functools.lru_cache()
     def get_devices(self):
         devices = {}
         for n in pq.list_quantum_computers(qpus=True, qvms=False):
             try:
                 devices[n] = RigettiQPU(n)
-            except RuntimeError:
+            except (RuntimeError, pq.api._errors.UserMessageError):
                 pass
         return devices
 
 
 class RigettiMeasureLocalLink(RigettiLinkBase):
-    def __init__(self):
-        super().__init__()
-
     @functools.lru_cache()
     def get_devices(self):
         # any qpu device can also be used as a qvm for rigetti, so we include both
-        return {
-            n: RigettiQVM(n)
-            for n in [*pq.list_quantum_computers(qpus=True, qvms=True), *RIGETTI_EXTRA_QVMS]
-        }
+        names = [
+            *[
+                n
+                for qc_n in pq.list_quantum_computers(qpus=True, qvms=False)
+                for n in [f"{qc_n}-qvm", f"{qc_n}-noisy-qvm"]
+            ],
+            *[n for n in pq.list_quantum_computers(qpus=False, qvms=True)],
+            *RIGETTI_EXTRA_QVMS,
+        ]
+        return {name: RigettiQVM(name) for name in names}
 
 
 class RigettiStatevectorLink(VendorLink):
-    def __init__(self):
-        super().__init__()
-
     def get_devices(self):
         return {"WavefunctionSimulator": RigettiStatevectorSimulator()}
 

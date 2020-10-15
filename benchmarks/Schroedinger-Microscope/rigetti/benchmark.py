@@ -11,9 +11,6 @@ from .. import SchroedingerMicroscopeBenchmarkMixin
 class RigettiSchroedingerMicroscopeBenchmarkBase(
     SchroedingerMicroscopeBenchmarkMixin, RigettiBenchmark
 ):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def get_jobs(self):
         yield from RigettiSchroedingerMicroscopeJob.job_factory(
             self.num_post_selections,
@@ -33,10 +30,6 @@ class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicrosc
     """
         Statevector simulator
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def parse_result(self, job, result):
         psi = result.amplitudes
 
@@ -50,10 +43,6 @@ class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchm
     """
         Measure and run
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def parse_result(self, job, result):
         """
         initially results are in the form qubit : measurement-outcomes

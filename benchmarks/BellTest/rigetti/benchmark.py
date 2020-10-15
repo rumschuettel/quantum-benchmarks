@@ -64,4 +64,4 @@ class RigettiBellTestSimulatedBenchmark(RigettiBellTestBenchmarkBase):
     def parse_result(self, job, result):
         psi = result.get_statevector()
 
-        return None
+        raise NotImplementedError()
