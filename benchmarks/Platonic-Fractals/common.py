@@ -161,18 +161,21 @@ class PlatonicFractalsBenchmarkMixin:
 
                 TODO: this is not currently correct; fix
             """
-            start = np.array([0., 0.])
             DIRS_LUT = {
-                (1, '0'): np.array([0., 0.]),
-                (2, '0'): np.array([1., 0.]),
-                (3, '0'): np.array([0., 1.]),
-                (1, '1'): -np.array([0., 0.]),
-                (2, '1'): -np.array([1., 0.]),
-                (3, '1'): -np.array([0., 1.])
+                (1, '0'): -np.array([0., 0., 1.]),
+                (2, '0'): np.array([1., 0., 0.]),
+                (3, '0'): np.array([0., 1., 0.]),
+                (1, '1'): np.array([0., 0., 1.]),
+                (2, '1'): -np.array([1., 0., 0.]),
+                (3, '1'): -np.array([0., 1., 0.])
             }
-            for i, step in enumerate(zip(directions, outcomes), start=1):
-                start += DIRS_LUT[step] * self.strength**i
-            return start
+            k = self.strength
+            r = np.array([1., 1., 1.]) / np.sqrt(3.)
+            for step in zip(directions, outcomes):
+                n = k * DIRS_LUT[step]
+                r = ((1-k**2)*r + 2*k*(1+k*n@r)*n) / (1 + k**2 + 2*k*n@r)
+                r /= np.linalg.norm(r, ord=2)
+            return r[:2]
 
         breakpoint()
         distances = []
