@@ -153,13 +153,34 @@ class PlatonicFractalsBenchmarkMixin:
         return figpath
 
     def score(self, collated_result: object, *_):
+        def _reference_for_point(directions: tuple, outcomes: str) -> np.array:
+            """
+                for a tuple of directions and outcomes like ((3, 1), '01'), calculate
+                where that point lies in the plot; i.e. in this case, go in +3 direction,
+                then in -1 direction, where the strength attenuates by self.strength
+
+                TODO: this is not currently correct; fix
+            """
+            start = np.array([0., 0.])
+            DIRS_LUT = {
+                (1, '0'): np.array([0., 0.]),
+                (2, '0'): np.array([1., 0.]),
+                (3, '0'): np.array([0., 1.]),
+                (1, '1'): -np.array([0., 0.]),
+                (2, '1'): -np.array([1., 0.]),
+                (3, '1'): -np.array([0., 1.])
+            }
+            for i, step in enumerate(zip(directions, outcomes), start=1):
+                start += DIRS_LUT[step] * self.strength**i
+            return start
+
+        breakpoint()
         distances = []
 
-        # we know that the center for all points for one dirs sequence like (1, 2, 2) should be (0, 0)
-        # so collect all measurement outcomes ignoring the 0/1 outcome of each
-        for _, df in pd.DataFrame(collated_result).T.groupby(level=0):
+        # for each point, add distance to reference point
+        for key, point in collated_result.items():
             distances.append(np.linalg.norm(
-                df.mean().to_numpy(),  # should be at (0, 0)
+                np.array(point) - _reference_for_point(*key),
                 ord=2
             ))
 
