@@ -17,10 +17,8 @@ from .. import PlatonicFractalsBenchmarkMixin
 class RigettiPlatonicFractalsJob(RigettiJob):
     @staticmethod
     def job_factory(
-        body, strength, num_steps, num_dirs_change, num_shots, random_seed, shots_multiplier, add_measurements
+        body, strength, num_steps, num_shots, shots_multiplier, add_measurements
     ):
-        random.seed(random_seed)
-
         for m_idx in range(shots_multiplier):
             for dirs in it.product(*[range(1, 4)] * num_steps):
                 yield RigettiPlatonicFractalsJob(
