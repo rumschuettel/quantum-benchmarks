@@ -202,6 +202,7 @@ class PlatonicFractalsBenchmarkMixin:
                 "strength": self.strength,
                 "num_steps": self.num_steps,
                 "num_shots": self.num_shots,
+                "shots_multiplier": self.shots_multiplier
             }
         )
 

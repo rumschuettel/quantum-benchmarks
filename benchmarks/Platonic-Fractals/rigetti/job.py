@@ -17,7 +17,7 @@ from .. import PlatonicFractalsBenchmarkMixin
 class RigettiPlatonicFractalsJob(RigettiJob):
     @staticmethod
     def job_factory(
-        body, strength, num_steps, num_dirs_change, num_shots, random_seed, add_measurements
+        body, strength, num_steps, num_dirs_change, num_shots, random_seed, shots_multiplier, add_measurements
     ):
         random.seed(random_seed)
 
@@ -30,7 +30,7 @@ class RigettiPlatonicFractalsJob(RigettiJob):
                     body, strength, dirs, 3, num_shots, m_idx, add_measurements
                 )
 
-    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, add_measurements):
+    def __init__(self, body, strength, meas_dirs, final_meas_dir, shots, m_idx, add_measurements):
         super().__init__()
 
         self.body = body
@@ -38,6 +38,7 @@ class RigettiPlatonicFractalsJob(RigettiJob):
         self.meas_dirs = meas_dirs
         self.final_meas_dir = final_meas_dir
         self.shots = shots
+        self.m_idx = m_idx
         self.add_measurements = add_measurements
 
         if not body == 0:  # PlatonicFractalsBenchmarkMixin.BODY_OCTA
