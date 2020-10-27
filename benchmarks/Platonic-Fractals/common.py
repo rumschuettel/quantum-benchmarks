@@ -25,7 +25,7 @@ class PlatonicFractalsBenchmarkMixin:
         self.num_shots = num_shots
         self.shots_multiplier = shots_multiplier
 
-    def collate_results(self, results: Dict[VendorJob, object], threshold=300):
+    def collate_results(self, results: Dict[VendorJob, object], threshold=1):
         dirStats = {}
 
         # fill in with values from jobs
@@ -152,38 +152,43 @@ class PlatonicFractalsBenchmarkMixin:
         # default figure to display
         return figpath
 
+
+    def _reference_for_point(self, directions: tuple, outcomes: str) -> np.array:
+        """
+            for a tuple of directions and outcomes like ((3, 1), '01'), calculate
+            where that point lies in the plot; i.e. in this case, go in +3 direction,
+            then in -1 direction, where the strength attenuates by self.strength
+
+            TODO: this is not currently correct; fix
+        """
+        DIRS_LUT = {
+            (1, '0'): -np.array([0., 0., 1.]),
+            (2, '0'): np.array([1., 0., 0.]),
+            (3, '0'): np.array([0., 1., 0.]),
+            (1, '1'): np.array([0., 0., 1.]),
+            (2, '1'): -np.array([1., 0., 0.]),
+            (3, '1'): -np.array([0., 1., 0.])
+        }
+        """
+            This k works for self.strength == 0.93. No clue how it emerges
+            generally though, this needs to be fixed!
+        """
+        assert self.strength == 0.93, "fix _reference_for_point!"
+        k = 0.68
+        r = -np.array([0., 0., 1.])
+        for step in zip(directions, outcomes):
+            n = k * DIRS_LUT[step]
+            r = ((1-k**2)*r + 2*(1+n@r)*n) / (1 + k**2 + 2*n@r)
+        return r[:2]
+
+
     def score(self, collated_result: object, *_):
-        def _reference_for_point(directions: tuple, outcomes: str) -> np.array:
-            """
-                for a tuple of directions and outcomes like ((3, 1), '01'), calculate
-                where that point lies in the plot; i.e. in this case, go in +3 direction,
-                then in -1 direction, where the strength attenuates by self.strength
-
-                TODO: this is not currently correct; fix
-            """
-            DIRS_LUT = {
-                (1, '0'): -np.array([0., 0., 1.]),
-                (2, '0'): np.array([1., 0., 0.]),
-                (3, '0'): np.array([0., 1., 0.]),
-                (1, '1'): np.array([0., 0., 1.]),
-                (2, '1'): -np.array([1., 0., 0.]),
-                (3, '1'): -np.array([0., 1., 0.])
-            }
-            k = self.strength
-            r = np.array([1., 1., 1.]) / np.sqrt(3.)
-            for step in zip(directions, outcomes):
-                n = k * DIRS_LUT[step]
-                r = ((1-k**2)*r + 2*k*(1+k*n@r)*n) / (1 + k**2 + 2*k*n@r)
-                r /= np.linalg.norm(r, ord=2)
-            return r[:2]
-
-        breakpoint()
         distances = []
 
         # for each point, add distance to reference point
         for key, point in collated_result.items():
             distances.append(np.linalg.norm(
-                np.array(point) - _reference_for_point(*key),
+                np.array(point) - self._reference_for_point(*key),
                 ord=2
             ))
 
@@ -192,7 +197,7 @@ class PlatonicFractalsBenchmarkMixin:
         stddev_mean = np.std(distances, axis=0)
 
         print(self.num_steps, "steps")
-        print(f"l2-dist from center: {mean:.3f}±{stddev_mean:.3f}")
+        print(f"avg l2 distance: {mean:.3f}±{stddev_mean:.3f}")
 
 
     def __repr__(self):
