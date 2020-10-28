@@ -29,9 +29,9 @@ class IBMLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, IBMBenchmark):
 
 class IBMLineDrawingBenchmark(IBMLineDrawingBenchmarkBase):
     """
-        Full Line Drawing Benchmark
+    Full Line Drawing Benchmark
 
-        Either a cloud device, or a qasm_simulator, potentially with simulated noise
+    Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
     def __init__(self, **kwargs):
@@ -52,9 +52,9 @@ class IBMLineDrawingBenchmark(IBMLineDrawingBenchmarkBase):
 
 class IBMLineDrawingSimulatedBenchmark(IBMLineDrawingBenchmarkBase):
     """
-        Simulated Line Drawing Benchmark
+    Simulated Line Drawing Benchmark
 
-        The device behaves like a statevector_simulator, i.e. without noise
+    The device behaves like a statevector_simulator, i.e. without noise
     """
 
     def __init__(self, **kwargs):

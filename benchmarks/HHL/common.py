@@ -10,10 +10,19 @@ from matplotlib import pyplot as plt
 
 from libbench import VendorJob
 
+from .matrices import MATRICES
+
 
 class HHLBenchmarkMixin:
     def __init__(
-        self, block_encoding, num_qubits, num_ancillas, qsvt_poly, num_shots, shots_multiplier, **_
+        self,
+        block_encoding,
+        num_qubits,
+        num_ancillas,
+        qsvt_poly,
+        num_shots,
+        shots_multiplier,
+        **_,
     ):
         super().__init__()
 
@@ -101,12 +110,24 @@ def argparser(toadd, **argparse_options):
         default=1,
     )
     parser.add_argument(
-        "-p", "--qsvt_poly", type=object, help="The polynomial used for QSVT", default=None
+        "-p",
+        "--qsvt_poly",
+        type=object,
+        help="The polynomial used for QSVT",
+        default=None,
     )
     parser.add_argument(
-        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=8096
+        "-s",
+        "--num_shots",
+        type=int,
+        help="Number of shots per orientation",
+        default=8096,
     )
     parser.add_argument(
-        "-m", "--shots_multiplier", type=int, help="Multiplier for shots per orientation", default=1
+        "-m",
+        "--shots_multiplier",
+        type=int,
+        help="Multiplier for shots per orientation",
+        default=1,
     )
     return parser

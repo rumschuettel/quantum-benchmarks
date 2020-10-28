@@ -28,8 +28,9 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(
 
 class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """
-        Statevector simulator
+    Statevector simulator
     """
+
     def parse_result(self, job, result):
         psi = result.amplitudes
 
@@ -41,8 +42,9 @@ class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicrosc
 
 class RigettiSchroedingerMicroscopeBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):
     """
-        Measure and run
+    Measure and run
     """
+
     def parse_result(self, job, result):
         """
         initially results are in the form qubit : measurement-outcomes

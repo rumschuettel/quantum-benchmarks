@@ -29,9 +29,9 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, RigettiBenchmark):
 
 class HHLBenchmark(HHLBenchmarkBase):
     """
-        Full Benchmark
+    Full Benchmark
 
-        Either a cloud device, or a qasm_simulator, potentially with simulated noise
+    Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
     def __init__(self, *args, **kwargs):
@@ -58,9 +58,9 @@ class HHLBenchmark(HHLBenchmarkBase):
 
 class HHLSimulatedBenchmark(HHLBenchmarkBase):
     """
-        Simulated HHL Benchmark
+    Simulated HHL Benchmark
 
-        The device behaves like a statevector_simulator, i.e. without noise
+    The device behaves like a statevector_simulator, i.e. without noise
     """
 
     def __init__(self, *args, **kwargs):

@@ -78,7 +78,11 @@ class HHLJob(IBMJob):
                 )
 
                 qsvt_circuit = HHLJob.create_qsvt_circuit(
-                    num_qubits, num_ancillas, add_measurements, block_encoding.inverse(), angles
+                    num_qubits,
+                    num_ancillas,
+                    add_measurements,
+                    block_encoding.inverse(),
+                    angles,
                 )
 
                 # For debug purposes
@@ -129,7 +133,11 @@ class HHLJob(IBMJob):
 
                 # Quanutm Singular Value Transformation
                 qsvt_circuit = HHLJob.create_qsvt_circuit(
-                    num_qubits, num_ancillas, add_measurements, block_encoding.inverse(), angles
+                    num_qubits,
+                    num_ancillas,
+                    add_measurements,
+                    block_encoding.inverse(),
+                    angles,
                 )
 
                 # For debug purposes
@@ -180,7 +188,14 @@ class HHLJob(IBMJob):
                 )
 
     def __init__(
-        self, circuit, num_qubits, num_ancillas, basis_vec, shots, m_idx, add_measurements
+        self,
+        circuit,
+        num_qubits,
+        num_ancillas,
+        basis_vec,
+        shots,
+        m_idx,
+        add_measurements,
     ):
         super().__init__()
 

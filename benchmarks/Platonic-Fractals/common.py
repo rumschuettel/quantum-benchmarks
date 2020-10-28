@@ -13,6 +13,7 @@ import pandas as pd
 from libbench import VendorJob
 import itertools
 
+
 class PlatonicFractalsBenchmarkMixin:
     BODY_OCTA = 0
 
@@ -82,11 +83,10 @@ class PlatonicFractalsBenchmarkMixin:
                         ):
                             points[(dirs, meas)] = (
                                 dirStats[dirs]["ystates"][meas],
-                                dirStats[dirs]["zstates"][meas]
+                                dirStats[dirs]["zstates"][meas],
                             )
 
         return points
-
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # def visualize(self, points, figName):
@@ -106,37 +106,42 @@ class PlatonicFractalsBenchmarkMixin:
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)  # save the figure to file
 
-        pts_by_path = pd.DataFrame({
-            tuple(zip(dirs, meas)): pt for ((dirs, meas), pt) in collated_result.items()
-        }).sort_index(axis=1).T
-        
+        pts_by_path = (
+            pd.DataFrame(
+                {tuple(zip(dirs, meas)): pt for ((dirs, meas), pt) in collated_result.items()}
+            )
+            .sort_index(axis=1)
+            .T
+        )
+
         lines = []
         widths = []
         colors = []
+
         def _iter_level(df: pd.DataFrame, level: int = 0) -> np.array:
             mean = df.mean().to_numpy()
             if len(df) > 1:
-                for _, ddff in df.groupby(level=-level-1):
-                    mean2 = _iter_level(ddff, level+1)
-                    STEP = .2
+                for _, ddff in df.groupby(level=-level - 1):
+                    mean2 = _iter_level(ddff, level + 1)
+                    STEP = 0.2
                     for x in np.arange(0, 1, STEP):
-                        pt_a = (1-x)*mean + x*mean2
-                        pt_b = (1-(x+STEP))*mean + (x+STEP)*mean2
-                        lines.append([ tuple(pt_a), tuple(pt_b) ])
-                        widths.append(10 / (x+level+1))
-                        colors.append(1 / (x+level+1))
+                        pt_a = (1 - x) * mean + x * mean2
+                        pt_b = (1 - (x + STEP)) * mean + (x + STEP) * mean2
+                        lines.append([tuple(pt_a), tuple(pt_b)])
+                        widths.append(10 / (x + level + 1))
+                        colors.append(1 / (x + level + 1))
             return mean
 
         _iter_level(pts_by_path)
-        lines.reverse(), widths.reverse(), colors.reverse()       
+        lines.reverse(), widths.reverse(), colors.reverse()
 
         lc = matplotlib.collections.LineCollection(
-                lines,
-                linewidths=widths,
-                cmap=plt.get_cmap("inferno"),
-                norm=plt.Normalize(vmin=-.1, vmax=1.5),
-                capstyle="round",
-            )
+            lines,
+            linewidths=widths,
+            cmap=plt.get_cmap("inferno"),
+            norm=plt.Normalize(vmin=-0.1, vmax=1.5),
+            capstyle="round",
+        )
         lc.set_array(np.array(colors))
 
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure 2
@@ -144,30 +149,31 @@ class PlatonicFractalsBenchmarkMixin:
         ax.scatter(*zip(*points), color="#000000")
         ax.set_xlim([-1, 1])
         ax.set_ylim([-1, 1])
-        plt.margins(0,0)
-        plt.axis('off')
+        plt.margins(0, 0)
+        plt.axis("off")
         figpath = path / "visualize2.pdf"
-        fig.savefig(figpath, transparent=True, bbox_inches="tight", pad_inches=0)  # save the figure to file
+        fig.savefig(
+            figpath, transparent=True, bbox_inches="tight", pad_inches=0
+        )  # save the figure to file
 
         # default figure to display
         return figpath
 
-
     def _reference_for_point(self, directions: tuple, outcomes: str) -> np.array:
         """
-            for a tuple of directions and outcomes like ((3, 1), '01'), calculate
-            where that point lies in the plot; i.e. in this case, go in +3 direction,
-            then in -1 direction, where the strength attenuates by self.strength
+        for a tuple of directions and outcomes like ((3, 1), '01'), calculate
+        where that point lies in the plot; i.e. in this case, go in +3 direction,
+        then in -1 direction, where the strength attenuates by self.strength
 
-            TODO: this is not currently correct; fix
+        TODO: this is not currently correct; fix
         """
         DIRS_LUT = {
-            (1, '0'): -np.array([0., 0., 1.]),
-            (2, '0'): np.array([1., 0., 0.]),
-            (3, '0'): np.array([0., 1., 0.]),
-            (1, '1'): np.array([0., 0., 1.]),
-            (2, '1'): -np.array([1., 0., 0.]),
-            (3, '1'): -np.array([0., 1., 0.])
+            (1, "0"): -np.array([0.0, 0.0, 1.0]),
+            (2, "0"): np.array([1.0, 0.0, 0.0]),
+            (3, "0"): np.array([0.0, 1.0, 0.0]),
+            (1, "1"): np.array([0.0, 0.0, 1.0]),
+            (2, "1"): -np.array([1.0, 0.0, 0.0]),
+            (3, "1"): -np.array([0.0, 1.0, 0.0]),
         }
         """
             This k works for self.strength == 0.93. No clue how it emerges
@@ -175,22 +181,20 @@ class PlatonicFractalsBenchmarkMixin:
         """
         assert self.strength == 0.93, "fix _reference_for_point!"
         k = 0.68
-        r = -np.array([0., 0., 1.])
+        r = -np.array([0.0, 0.0, 1.0])
         for step in zip(directions, outcomes):
             n = k * DIRS_LUT[step]
-            r = ((1-k**2)*r + 2*(1+n@r)*n) / (1 + k**2 + 2*n@r)
+            r = ((1 - k ** 2) * r + 2 * (1 + n @ r) * n) / (1 + k ** 2 + 2 * n @ r)
         return r[:2]
-
 
     def score(self, collated_result: object, *_):
         distances = []
 
         # for each point, add distance to reference point
         for key, point in collated_result.items():
-            distances.append(np.linalg.norm(
-                np.array(point) - self._reference_for_point(*key),
-                ord=2
-            ))
+            distances.append(
+                np.linalg.norm(np.array(point) - self._reference_for_point(*key), ord=2)
+            )
 
         # from this extract overall mean and standard deviation of this mean
         mean = np.mean(distances, axis=0)
@@ -199,7 +203,6 @@ class PlatonicFractalsBenchmarkMixin:
         print(self.num_steps, "steps")
         print(f"avg l2 distance: {mean:.3f}±{stddev_mean:.3f}")
 
-
     def __repr__(self):
         return str(
             {
@@ -207,7 +210,7 @@ class PlatonicFractalsBenchmarkMixin:
                 "strength": self.strength,
                 "num_steps": self.num_steps,
                 "num_shots": self.num_shots,
-                "shots_multiplier": self.shots_multiplier
+                "shots_multiplier": self.shots_multiplier,
             }
         )
 
@@ -217,14 +220,26 @@ def argparser(toadd, **argparse_options):
         "Platonic-Fractals", help="Platonic Fractals benchmark.", **argparse_options
     )
     parser.add_argument(
-        "-b", "--body", type=int, help="The type of the Platonic body; (0 -- Octahedron)", default=0
+        "-b",
+        "--body",
+        type=int,
+        help="The type of the Platonic body; (0 -- Octahedron)",
+        default=0,
     )
     parser.add_argument(
-        "-e", "--strength", type=float, help="The strength of the mesurements", default=0.93
+        "-e",
+        "--strength",
+        type=float,
+        help="The strength of the mesurements",
+        default=0.93,
     )
     parser.add_argument("-t", "--num_steps", type=int, help="Depth of fractal", default=2)
     parser.add_argument(
-        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=1024
+        "-s",
+        "--num_shots",
+        type=int,
+        help="Number of shots per orientation",
+        default=1024,
     )
     parser.add_argument(
         "-m",

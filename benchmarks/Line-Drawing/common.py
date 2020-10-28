@@ -46,7 +46,7 @@ class LineDrawingBenchmarkMixin:
     @staticmethod
     def corrected_curve(curve: np.array, reference_points: np.array) -> np.array:
         """
-            correct curve alignment based on SVD and reference points given
+        correct curve alignment based on SVD and reference points given
         """
         noisy_points = np.row_stack([np.real(curve), np.imag(curve)])
         points = np.row_stack([np.real(reference_points), np.imag(reference_points)])
@@ -191,14 +191,22 @@ class LineDrawingBenchmarkMixin:
             xs, ys = list(np.real(curve)), list(np.imag(curve))
             # print("X coordinates:", np.round(xs,3))
             # print("Y coordinates:", np.round(ys,3))
-            ax.plot(xs + [xs[0]], ys + [ys[0]], color="red", alpha=0.3 / len(collated_result) * 25)
+            ax.plot(
+                xs + [xs[0]],
+                ys + [ys[0]],
+                color="red",
+                alpha=0.3 / len(collated_result) * 25,
+            )
 
         # Plot an averaged contour
         from matplotlib.collections import LineCollection
 
         def interp(a, fac=100):
             return np.interp(
-                np.linspace(0, len(a) - 1 / fac, fac * len(a)), range(len(a)), a, period=len(a)
+                np.linspace(0, len(a) - 1 / fac, fac * len(a)),
+                range(len(a)),
+                a,
+                period=len(a),
             )
 
         all = np.array(collated_result)
@@ -219,20 +227,24 @@ class LineDrawingBenchmarkMixin:
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
         ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color="black")
 
-        if True: # fixed axes
+        if True:  # fixed axes
             if len(self.points) == 4:
-                xmin, xmax, ymin, ymax = (-.6, .6, -.65, .35)
+                xmin, xmax, ymin, ymax = (-0.6, 0.6, -0.65, 0.35)
             elif len(self.points) == 8 or True:
-                xmin, xmax, ymin, ymax = (-.5, .5, -.45, .45)
-            dx, dy = (xmax-xmin, ymax-ymin)
+                xmin, xmax, ymin, ymax = (-0.5, 0.5, -0.45, 0.45)
+            dx, dy = (xmax - xmin, ymax - ymin)
         else:
-            xmin, xmax, ymin, ymax = (min(ideal_xs), max(ideal_xs), min(ideal_ys), max(ideal_ys))
+            xmin, xmax, ymin, ymax = (
+                min(ideal_xs),
+                max(ideal_xs),
+                min(ideal_ys),
+                max(ideal_ys),
+            )
             dx, dy = xmax - xmin, ymax - ymin
             if dx < dy * 1.5:
                 dx = dy * 1.5
             else:
                 dy = dx / 1.5
-
 
         ax.set_xlim((xmin - 0.1 * dx, xmax + 0.1 * dx))
         ax.set_ylim((ymin - 0.1 * dy, ymax + 0.1 * dy))
@@ -241,10 +253,20 @@ class LineDrawingBenchmarkMixin:
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)
 
-        plt.margins(0,0)
-        plt.axis('off')
-        fig.savefig(path / "visualize-devpage.svg", transparent=True, bbox_inches="tight", pad_inches=0)
-        fig.savefig(path / "visualize-devpage.pdf", transparent=True, bbox_inches="tight", pad_inches=0)
+        plt.margins(0, 0)
+        plt.axis("off")
+        fig.savefig(
+            path / "visualize-devpage.svg",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
+        )
+        fig.savefig(
+            path / "visualize-devpage.pdf",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
+        )
         plt.close()
 
         # default figure to display
