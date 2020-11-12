@@ -78,6 +78,7 @@ class HHLJob(IBMJob):
                     num_ancillas,
                     add_measurements,
                     block_encoding.inverse(),
+                    block_encoding,
                     angles,
                 )
 
@@ -123,6 +124,7 @@ class HHLJob(IBMJob):
                     num_ancillas,
                     add_measurements,
                     block_encoding.inverse(),
+                    block_encoding,
                     angles,
                 )
 
