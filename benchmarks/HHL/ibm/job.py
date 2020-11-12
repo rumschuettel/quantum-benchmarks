@@ -25,7 +25,6 @@ class HHLJob(IBMJob):
         )
         if num_ancillas != 1:
             raise NotImplementedError("The general QSVT circuit generation is not yet implemented!")
-            block_encoding_inv = block_encoding.inverse()
             qubits = list(range(1, num_qubits + num_ancillas + 1))
 
             # Quanutm Singular Value Transformation
