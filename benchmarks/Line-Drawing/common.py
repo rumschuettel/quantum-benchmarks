@@ -43,32 +43,59 @@ class LineDrawingBenchmarkMixin:
         # correction angle as reference to re-orient final drawing
         self.correction_angle = np.angle(points[0])
 
+    @staticmethod
+    def corrected_curve(curve: np.array, reference_points: np.array) -> np.array:
+        """
+        correct curve alignment based on SVD and reference points given
+        """
+        noisy_points = np.row_stack([np.real(curve), np.imag(curve)])
+        points = np.row_stack([np.real(reference_points), np.imag(reference_points)])
+        center_noisy_points = np.mean(noisy_points, axis=1)
+        center_points = np.mean(points, axis=1)
+        moved_noisy_points = noisy_points - center_noisy_points[:, np.newaxis]
+        moved_points = points - center_points[:, np.newaxis]
+        U, _, V = np.linalg.svd(moved_noisy_points @ moved_points.T, full_matrices=True)
+        R = U.T @ V
+        corrected_points = R.T @ moved_noisy_points + center_points[:, np.newaxis]
+        corrected_curve = np.array([complex(*x) for x in corrected_points.T])
+
+        return corrected_curve
+
     def collate_results(self, results: Dict[VendorJob, object]):
-        n = int(np.log2(len(self.points)))
-
-        # Retrieve the amplitude estimates
-        curves = []
-        for j in range(self.num_repetitions):
-            prob_hists = {}
-            for pauli_string in it.product(["X", "Y", "Z"], repeat=n):
-                if self.tomography_method == "custom" and pauli_string.count("Z") < n - 1:
-                    continue
-
-                # Retrieve the measurement statistics
+        # PRE OUR OWN TOMOGRAPHY METHOD
+        if not hasattr(self, "tomography_method") or self.tomography_method == "custom":
+            n = int(np.log2(len(self.points)))
+            curves = []
+            for j in range(self.num_repetitions):
                 for job in results:
-                    if job.repetition == j and job.pauli_string == pauli_string:
-                        prob_hists["".join(pauli_string)] = results[job]
+                    if job.repetition == j and job.Hadamard_qubit is None and job.S_qubit is None:
+                        prob_hist = results[job]
+                        estimates = {k: np.sqrt(v) for k, v in prob_hist.items()}
                         break
                 else:
                     raise AssertionError(
                         f"The probability job with repetition {j} was not found in the results data structure."
                     )
 
-            if self.tomography_method == "custom":
-                estimates = {k: np.sqrt(v) for k, v in prob_hists["Z" * n].items()}
+                # Retrieve the relative phase estimates
                 for k in range(n - 1, -1, -1):
-                    cos_hist = prob_hists["Z" * k + "X" + "Z" * (n - k - 1)]
-                    sin_hist = prob_hists["Z" * k + "Y" + "Z" * (n - k - 1)]
+                    for job in results:
+                        if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit is None:
+                            cos_hist = results[job]
+                            break
+                    else:
+                        raise AssertionError(
+                            f"The job with repetition {j}, Hadamard qubit {k} and S qubit None is missing."
+                        )
+
+                    for job in results:
+                        if job.repetition == j and job.Hadamard_qubit == k and job.S_qubit == k:
+                            sin_hist = results[job]
+                            break
+                    else:
+                        raise AssertionError(
+                            f"The job with repetition {j}, Hadamard qubit {k} and S qubit {k} is missing."
+                        )
 
                     its = [["0"]] * (k + 1) + [["0", "1"]] * (n - 1 - k)
                     for j0 in it.product(*its):
@@ -89,64 +116,74 @@ class LineDrawingBenchmarkMixin:
 
                 curve = np.array([v for k, v in sorted(estimates.items())])
 
-            else:  # self.tomography_method == "GKKT"
+                # correct curve alignment
+                curve = self.corrected_curve(curve, self.points)
 
-                # eigenstates of the paulis
-                eigenstates = {
-                    "X0": np.array([1, 1], dtype=np.complex64) / np.sqrt(2),
-                    "X1": np.array([1, -1], dtype=np.complex64) / np.sqrt(2),
-                    "Y0": np.array([1, 1.0j], dtype=np.complex64) / np.sqrt(2),
-                    "Y1": np.array([1, -1.0j], dtype=np.complex64) / np.sqrt(2),
-                    "Z0": np.array([1, 0], dtype=np.complex64),
-                    "Z1": np.array([0, 1], dtype=np.complex64),
-                }
+                curves.append(curve)
 
-                approx = np.zeros((2 ** n, 2 ** n), dtype=np.complex64)
-                for pauli_string in it.product(["X", "Y", "Z"], repeat=n):
-                    for o, f in prob_hists["".join(pauli_string)].items():
-                        m = np.array([1], dtype=np.complex64)
-                        for pi, oi in zip(pauli_string, o):
-                            basis_state = eigenstates[pi + oi]
-                            tensor = (
-                                np.conj(basis_state.T)[np.newaxis, :] * basis_state[:, np.newaxis]
-                                - np.eye(2) / 3
-                            )
-                            m = np.kron(m, tensor)
-                        m *= f
-                        approx += m / (3 ** n)
+            return curves
 
-                # Obtain the largest eigenvector
-                w, v = np.linalg.eigh(approx)
-                idx = w.argsort()[::-1]
-                w = w[idx]
-                v = v[:, idx]
-                curve = v[:, 0] / np.exp(1.0j * np.angle(v[0, 0]))
+        ## OWN TOMOGRAPHY METHOD
+        assert self.tomography_method == "GKKT", "invalid tomography method given"
 
-            # Correct the curve
-            # Two methods are available
+        # Retrieve the amplitude estimates
+        n = int(np.log2(len(self.points)))
+        curves = []
+        for j in range(self.num_repetitions):
+            prob_hists = {}
+            for pauli_string in it.product(["X", "Y", "Z"], repeat=n):
 
-            # 1. This was the old version, based on fixed rotation angle:
-            # corrected_curve = curve * np.exp(1.0j * self.correction_angle)
+                # Retrieve the measurement statistics
+                for job in results:
+                    if job.repetition == j and job.pauli_string == pauli_string:
+                        prob_hists["".join(pauli_string)] = results[job]
+                        break
+                else:
+                    raise AssertionError(
+                        f"The probability job with repetition {j} was not found in the results data structure."
+                    )
 
-            # 2. This is the new version, based on SVD
-            noisy_points = np.row_stack([np.real(curve),np.imag(curve)])
-            points = np.row_stack([np.real(self.points),np.imag(self.points)])
-            center_noisy_points = np.mean(noisy_points, axis = 1)
-            center_points = np.mean(points, axis = 1)
-            moved_noisy_points = noisy_points - center_noisy_points[:,np.newaxis]
-            moved_points = points - center_points[:,np.newaxis]
-            U,S,V = np.linalg.svd(moved_noisy_points @ moved_points.T, full_matrices = True)
-            R = U.T @ V
-            corrected_points = R.T @ moved_noisy_points + center_points[:,np.newaxis]
-            corrected_curve = np.array([complex(*x) for x in corrected_points.T])
+            # eigenstates of the paulis
+            eigenstates = {
+                "X0": np.array([1, 1], dtype=np.complex64) / np.sqrt(2),
+                "X1": np.array([1, -1], dtype=np.complex64) / np.sqrt(2),
+                "Y0": np.array([1, 1.0j], dtype=np.complex64) / np.sqrt(2),
+                "Y1": np.array([1, -1.0j], dtype=np.complex64) / np.sqrt(2),
+                "Z0": np.array([1, 0], dtype=np.complex64),
+                "Z1": np.array([0, 1], dtype=np.complex64),
+            }
+
+            approx = np.zeros((2 ** n, 2 ** n), dtype=np.complex64)
+            for pauli_string in it.product(["X", "Y", "Z"], repeat=n):
+                for o, f in prob_hists["".join(pauli_string)].items():
+                    m = np.array([1], dtype=np.complex64)
+                    for pi, oi in zip(pauli_string, o):
+                        basis_state = eigenstates[pi + oi]
+                        tensor = (
+                            np.conj(basis_state.T)[np.newaxis, :] * basis_state[:, np.newaxis]
+                            - np.eye(2) / 3
+                        )
+                        m = np.kron(m, tensor)
+                    m *= f
+                    approx += m / (3 ** n)
+
+            # Obtain the largest eigenvector
+            w, v = np.linalg.eigh(approx)
+            idx = w.argsort()[::-1]
+            w = w[idx]
+            v = v[:, idx]
+            curve = v[:, 0] / np.exp(1.0j * np.angle(v[0, 0]))
+
+            # correct curve alignment
+            curve = self.corrected_curve(curve, self.points)
 
             # Add the curve to the resulting curves
-            curves.append(corrected_curve)
+            curves.append(curve)
         return curves
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # Set up the figure
-        fig = plt.figure(figsize = (8,8))
+        fig = plt.figure(figsize=(8, 8))
         ax = fig.gca()
 
         # Plot the contours
@@ -154,14 +191,22 @@ class LineDrawingBenchmarkMixin:
             xs, ys = list(np.real(curve)), list(np.imag(curve))
             # print("X coordinates:", np.round(xs,3))
             # print("Y coordinates:", np.round(ys,3))
-            ax.plot(xs + [xs[0]], ys + [ys[0]], color="black", alpha=0.3)
+            ax.plot(
+                xs + [xs[0]],
+                ys + [ys[0]],
+                color="red",
+                alpha=0.3 / len(collated_result) * 25,
+            )
 
         # Plot an averaged contour
         from matplotlib.collections import LineCollection
 
         def interp(a, fac=100):
             return np.interp(
-                np.linspace(0, len(a) - 1 / fac, fac * len(a)), range(len(a)), a, period=len(a)
+                np.linspace(0, len(a) - 1 / fac, fac * len(a)),
+                range(len(a)),
+                a,
+                period=len(a),
             )
 
         all = np.array(collated_result)
@@ -180,14 +225,26 @@ class LineDrawingBenchmarkMixin:
 
         # Plot the ideal contour
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
-        ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color="yellow", linestyle="--")
+        ax.plot(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color="black")
 
-        xmin, xmax, ymin, ymax = (min(ideal_xs), max(ideal_xs), min(ideal_ys), max(ideal_ys))
-        dx, dy = xmax - xmin, ymax - ymin
-        if dx < dy * 1.5:
-            dx = dy * 1.5
+        if True:  # fixed axes
+            if len(self.points) == 4:
+                xmin, xmax, ymin, ymax = (-0.6, 0.6, -0.65, 0.35)
+            elif len(self.points) == 8 or True:
+                xmin, xmax, ymin, ymax = (-0.5, 0.5, -0.45, 0.45)
+            dx, dy = (xmax - xmin, ymax - ymin)
         else:
-            dy = dx / 1.5
+            xmin, xmax, ymin, ymax = (
+                min(ideal_xs),
+                max(ideal_xs),
+                min(ideal_ys),
+                max(ideal_ys),
+            )
+            dx, dy = xmax - xmin, ymax - ymin
+            if dx < dy * 1.5:
+                dx = dy * 1.5
+            else:
+                dy = dx / 1.5
 
         ax.set_xlim((xmin - 0.1 * dx, xmax + 0.1 * dx))
         ax.set_ylim((ymin - 0.1 * dy, ymax + 0.1 * dy))
@@ -196,8 +253,31 @@ class LineDrawingBenchmarkMixin:
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)
 
+        plt.margins(0, 0)
+        plt.axis("off")
+        fig.savefig(
+            path / "visualize-devpage.svg",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
+        )
+        fig.savefig(
+            path / "visualize-devpage.pdf",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
+        )
+        plt.close()
+
         # default figure to display
         return figpath
+
+    def score(self, collated_result: object, *_):
+        distances = np.linalg.norm(collated_result - self.points, axis=1, ord=2)
+        avg = distances.mean() / len(self.points)
+        σ = distances.std() / len(self.points)
+
+        print(f"average distance: {10*avg:.2f}±{10*σ:.2f}")
 
     def __repr__(self):
         return str(
@@ -206,7 +286,9 @@ class LineDrawingBenchmarkMixin:
                 "num_points": len(self.points),
                 "num_repetitions": self.num_repetitions,
                 "state_preparation_method": self.state_preparation_method,
-                "tomography_method": self.tomography_method,
+                "tomography_method": self.tomography_method
+                if hasattr(self, "tomography_method")
+                else "custom (old)",
             }
         )
 

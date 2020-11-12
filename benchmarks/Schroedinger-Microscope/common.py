@@ -50,7 +50,13 @@ class SchroedingerMicroscopeBenchmarkMixin:
         ax_sps = fig.add_subplot(1, 2, 2)
 
         # Draw the postselection probabilities
-        ax_psps.imshow(psps, cmap="gray", extent=extent, vmin=0, vmax=1)
+        ax_psps.imshow(
+            psps ** (1 / (2 ** self.num_post_selections - 1)),
+            cmap="gray",
+            extent=extent,
+            vmin=0,
+            vmax=1,
+        )
         ax_psps.set_title(f"PSP({self.num_post_selections},{self.num_pixels},{self.num_shots})")
         ax_psps.set_xlabel("Re(z)")
         ax_psps.set_ylabel("Im(z)")
@@ -64,6 +70,32 @@ class SchroedingerMicroscopeBenchmarkMixin:
         # save figure
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)
+
+        # Set up the figure
+        fig = plt.figure(figsize=(4.2, 2))
+        fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0, wspace=0)
+        ax_psps = fig.add_subplot(1, 2, 1)
+        ax_sps = fig.add_subplot(1, 2, 2)
+
+        # Draw the postselection probabilities
+        ax_psps.imshow(
+            psps ** (1 / (2 ** self.num_post_selections - 1)),
+            cmap="gray",
+            extent=extent,
+            vmin=0,
+            vmax=1,
+        )
+        ax_psps.set_xticks([])
+        ax_psps.set_yticks([])
+
+        # Draw the success probabilities
+        ax_sps.imshow(zs, cmap="gray", extent=extent, vmin=0, vmax=1)
+        ax_sps.set_xticks([])
+        ax_sps.set_yticks([])
+
+        # save the figure for the overview page
+        devfigpath = path / "visualize-devpage.pdf"
+        fig.savefig(devfigpath)
 
         # default figure to display
         return figpath
@@ -81,18 +113,24 @@ class SchroedingerMicroscopeBenchmarkMixin:
 def score(benchmark_data: object, reference_data: object):
     zs, _ = benchmark_data
     zs_ref, _ = reference_data
-    
-    mse = ((zs - zs_ref)**2).mean(axis=None)
+
+    mse = ((zs - zs_ref) ** 2).mean(axis=None)
     print_hl("MSE", color="white", end=" ")
     print_hl(mse, color="red")
 
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "Schroedinger-Microscope", help="Schroedinger microscope benchmark.", **argparse_options
+        "Schroedinger-Microscope",
+        help="Schroedinger microscope benchmark.",
+        **argparse_options,
     )
     parser.add_argument(
-        "-ps", "--num_post_selections", type=int, help="Number of post selections rounds", default=1
+        "-ps",
+        "--num_post_selections",
+        type=int,
+        help="Number of post selections rounds",
+        default=1,
     )
     parser.add_argument("-p", "--num_pixels", type=int, help="Number of pixels", default=4)
     parser.add_argument(

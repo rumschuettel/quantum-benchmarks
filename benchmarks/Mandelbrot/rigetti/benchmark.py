@@ -9,9 +9,6 @@ from .. import MandelbrotBenchmarkMixin
 
 
 class RigettiMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, RigettiBenchmark):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def get_jobs(self):
         yield from RigettiMandelbrotJob.job_factory(
             self.num_post_selections,
@@ -29,11 +26,8 @@ class RigettiMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, RigettiBenchmark)
 
 class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):
     """
-        Statevector simulator
+    Statevector simulator
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
     def parse_result(self, job, result):
         psi = result.amplitudes
@@ -46,11 +40,8 @@ class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):
 
 class RigettiMandelbrotBenchmark(RigettiMandelbrotBenchmarkBase):
     """
-        Measure and run
+    Measure and run
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
     def parse_result(self, job, result):
         """

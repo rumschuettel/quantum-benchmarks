@@ -23,9 +23,9 @@ class GoogleBellTestBenchmarkBase(BellTestBenchmarkMixin, GoogleBenchmark):
 
 class GoogleBellTestBenchmark(GoogleBellTestBenchmarkBase):
     """
-        Full SM Benchmark
+    Full SM Benchmark
 
-        Either a cloud device, or a qasm_simulator, potentially with simulated noise
+    Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
     def __init__(self, **kwargs):
@@ -41,9 +41,9 @@ class GoogleBellTestBenchmark(GoogleBellTestBenchmarkBase):
 
 class GoogleBellTestSimulatedBenchmark(GoogleBellTestBenchmarkBase):
     """
-        Simulated SM Benchmark
+    Simulated SM Benchmark
 
-        The device behaves like a statevector_simulator, i.e. without noise
+    The device behaves like a statevector_simulator, i.e. without noise
     """
 
     def __init__(self, *args, **kwargs):

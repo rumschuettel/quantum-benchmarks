@@ -15,7 +15,10 @@ def Paulis_TIM_NN(N, Γ, J=0.5):
             list(
                 h
                 for h in [
-                    {"label": "I" * i + "ZZ" + "I" * (N - i - 2), "coeff": {"real": J, "imag": 0}}
+                    {
+                        "label": "I" * i + "ZZ" + "I" * (N - i - 2),
+                        "coeff": {"real": J, "imag": 0},
+                    }
                 ]
             )
             for i in range(0, N - 1)
@@ -24,7 +27,10 @@ def Paulis_TIM_NN(N, Γ, J=0.5):
             list(
                 h
                 for h in [
-                    {"label": "I" * i + "X" + "I" * (N - i - 1), "coeff": {"real": -Γ, "imag": 0}}
+                    {
+                        "label": "I" * i + "X" + "I" * (N - i - 1),
+                        "coeff": {"real": -Γ, "imag": 0},
+                    }
                 ]
             )
             for i in range(0, N)
@@ -41,9 +47,18 @@ def Paulis_Heisenberg_NNN(N, J2, J1=1.0):
             list(
                 h
                 for h in [
-                    {"label": "I" * i + "XX" + "I" * (N - i - 2), "coeff": {"real": J1, "imag": 0}},
-                    {"label": "I" * i + "YY" + "I" * (N - i - 2), "coeff": {"real": J1, "imag": 0}},
-                    {"label": "I" * i + "ZZ" + "I" * (N - i - 2), "coeff": {"real": J1, "imag": 0}},
+                    {
+                        "label": "I" * i + "XX" + "I" * (N - i - 2),
+                        "coeff": {"real": J1, "imag": 0},
+                    },
+                    {
+                        "label": "I" * i + "YY" + "I" * (N - i - 2),
+                        "coeff": {"real": J1, "imag": 0},
+                    },
+                    {
+                        "label": "I" * i + "ZZ" + "I" * (N - i - 2),
+                        "coeff": {"real": J1, "imag": 0},
+                    },
                 ]
             )
             for i in range(0, N - 1)
@@ -101,7 +116,11 @@ class IBMVQEHamiltonianJob(IBMVQEHamiltonianSimulatedJob):
     def AquaCfgDict(depth, rounds, method="SLSQP", optimizer_rounds_name="maxiter"):
         return {
             "algorithm": {"name": "VQE", "operator_mode": "matrix"},
-            "variational_form": {"name": "RYRZ", "depth": rounds, "entanglement": "full"},
+            "variational_form": {
+                "name": "RYRZ",
+                "depth": rounds,
+                "entanglement": "full",
+            },
             "optimizer": {"name": method, optimizer_rounds_name: rounds},
             "backend": {"name": "statevector_simulator", "provider": "qiskit.BasicAer"},
         }

@@ -28,9 +28,9 @@ class GoogleLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, GoogleBenchmark)
 
 class GoogleLineDrawingBenchmark(GoogleLineDrawingBenchmarkBase):
     """
-        Full Line Drawing benchmark
+    Full Line Drawing benchmark
 
-        Either a cloud device, or a qasm_simulator, potentially with simulated noise
+    Either a cloud device, or a qasm_simulator, potentially with simulated noise
     """
 
     def __init__(self, **kwargs):
@@ -50,9 +50,9 @@ class GoogleLineDrawingBenchmark(GoogleLineDrawingBenchmarkBase):
 
 class GoogleLineDrawingSimulatedBenchmark(GoogleLineDrawingBenchmarkBase):
     """
-        Simulated Line Drawing benchmark
+    Simulated Line Drawing benchmark
 
-        The device behaves like a statevector_simulator, i.e. without noise
+    The device behaves like a statevector_simulator, i.e. without noise
     """
 
     def __init__(self, *args, **kwargs):

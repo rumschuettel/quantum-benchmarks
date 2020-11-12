@@ -31,7 +31,7 @@ class RigettiMandelbrotJob(RigettiJob):
         self.shots = shots
 
         # Calculate the required circuit parameters
-        r2 = abs(z) * np.sqrt(1 + 0.5 * np.sqrt(1 + 4 / abs(z) ** 2))
+        r2 = abs(z) * np.sqrt(0.5 * (1 + np.sqrt(1 + 4 / abs(z) ** 2)))
         r1 = 1 / r2
         phi = np.angle(z)
         r1rot = -2 * np.arccos(1 / np.sqrt(1.0 + r1 ** 2))
@@ -39,7 +39,6 @@ class RigettiMandelbrotJob(RigettiJob):
 
         # Build the circuit
         program = pq.Program()
-        program += Pragma("INITIAL_REWIRING", ['"GREEDY"'])
 
         qubits = 2 ** num_post_selections
         for k in range(2 ** num_post_selections):

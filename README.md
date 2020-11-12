@@ -42,3 +42,8 @@ Inside the QMI, run
     pip install pyquil
 
 as well as the requirements listed at the start.
+
+
+### IBM
+
+To work with run benchmarks from pre 2020 try to look at `iterate-all-ibm.sh`, which attempts to run a command using various conda environments; it appears for our runs three environments with `qiskit==>.20,.17,.14.1` seems to suffice.

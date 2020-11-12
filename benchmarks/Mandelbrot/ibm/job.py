@@ -10,7 +10,14 @@ from libbench.ibm import Job as IBMJob
 class IBMMandelbrotJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements
+        num_post_selections,
+        num_pixels,
+        num_shots,
+        xmin,
+        xmax,
+        ymin,
+        ymax,
+        add_measurements,
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -32,11 +39,11 @@ class IBMMandelbrotJob(IBMJob):
         self.num_shots = num_shots
 
         # Calculate the required circuit parameters
-        r2 = abs(z) * np.sqrt(1 + 0.5 * np.sqrt(1 + 4 / abs(z) ** 2))
+        r2 = abs(z) * np.sqrt(0.5 * (1 + np.sqrt(1 + 4 / abs(z) ** 2)))
         r1 = 1 / r2
         phi = np.angle(z)
-        r1rot = -2 * np.arccos(1 / np.sqrt(1.0 + r1 ** 2))
-        r2rot = -2 * np.arccos(1 / np.sqrt(1.0 + r2 ** 2))
+        r1rot = 2 * np.arccos(1 / np.sqrt(1.0 + r1 ** 2))
+        r2rot = 2 * np.arccos(1 / np.sqrt(1.0 + r2 ** 2))
 
         # Set up the circuit
         circuit = (
@@ -50,18 +57,19 @@ class IBMMandelbrotJob(IBMJob):
             for l in range(0, 2 ** num_post_selections, 2 ** k):
                 circuit.cx(l, l + 2 ** (k - 1))
                 circuit.ch(l + 2 ** (k - 1), l)
-                circuit.cu3(r1rot, 0, 0, l, l + 2 ** (k - 1))  # cu3(theta,0,0) == cry(theta)
                 circuit.cz(l, l + 2 ** (k - 1))
+                circuit.cu3(r1rot, 0, 0, l, l + 2 ** (k - 1))  # cu3(theta,0,0) == cry(theta)
                 circuit.rz(phi, l)
                 circuit.rz(-phi, l + 2 ** (k - 1))
                 circuit.x(l + 2 ** (k - 1))
-                circuit.cu3(r2rot, 0, 0, l + 2 ** (k - 1), l)
                 circuit.cz(l, l + 2 ** (k - 1))
+                circuit.cu3(r2rot, 0, 0, l + 2 ** (k - 1), l)
                 circuit.cx(l, l + 2 ** (k - 1))
                 circuit.x(l + 2 ** (k - 1))
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections))
+                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)),
             )
 
         # store the resulting circuit

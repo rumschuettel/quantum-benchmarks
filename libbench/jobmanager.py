@@ -31,6 +31,7 @@ class VendorJobManager(ABC):
         figure_callback: Callable[[Path], None] = lambda *_: None,
         store_job_and_results=True,
         store_jobmanager=True,
+        store_additional_info=True,
         display_status=True,
     ) -> Optional[object]:
         # try to queue more jobs
@@ -71,6 +72,7 @@ class VendorJobManager(ABC):
 
                 # store job results separately in addition
                 if store_job_and_results:
+                    self._save_in_run_folder(f"jobs/{str(job)}.raw-result.pickle", result)
                     self._save_in_run_folder(f"jobs/{str(job)}.pickle", self.results[job])
                     self._save_in_run_folder(f"jobs/{str(job)}.circuit.pickle", job.serialize())
 
@@ -89,6 +91,9 @@ class VendorJobManager(ABC):
         if store_jobmanager:
             self.save(additional_stored_info)
 
+        if store_additional_info:
+            self.save_additional_info_files(additional_stored_info)
+
         # if all are done, we can finalize the result
         if len(self.scheduled) == 0 and len(self.queued) == 0:
             print_hl(f"benchmark {self.ID} completed.")
@@ -102,9 +107,13 @@ class VendorJobManager(ABC):
 
     def collate_results(self):
         return self.benchmark.collate_results(self.results)
+
     def visualize_results(self, collated_result):
         path = Path(self.RUN_FOLDER) / self.ID
         return self.benchmark.visualize(collated_result, path)
+
+    def score(self, collated_result, reference_collated_result):
+        return self.benchmark.score(collated_result, reference_collated_result)
 
     def finalize(
         self,
@@ -113,7 +122,7 @@ class VendorJobManager(ABC):
         backup_visualized_result=False,
     ):
         """
-            collate results, visualize, and call visualization callback
+        collate results, visualize, and call visualization callback
         """
 
         collated_result = self.collate_results()
@@ -179,7 +188,11 @@ class VendorJobManager(ABC):
         # restore queue
         self.queued = old_queued
 
-    def _save_in_run_folder(self, filename: str, obj: object):
+    def save_additional_info_files(self, additional_stored_info):
+        for key, what in additional_stored_info.items():
+            self._save_in_run_folder(f"{what}.{key}")
+
+    def _save_in_run_folder(self, filename: str, obj: object = None):
         full_filename = f"{self.RUN_FOLDER}/{self.ID}/{filename}"
         full_folder = os.path.dirname(full_filename)
         if not os.path.exists(full_folder):
@@ -204,9 +217,8 @@ class VendorJobManager(ABC):
                 self.scheduled.append(job)
                 del self.queued[job]
 
-            else:   
+            else:
                 self.queued[job] = self.thaw_promise(self.queued[job], device)
-
 
     @abstractmethod
     def queued_successfully(self, promise, meta: dict) -> bool:
@@ -215,14 +227,14 @@ class VendorJobManager(ABC):
     @abstractmethod
     def freeze_promise(self, promise):
         """
-            transform promise into something we can pickle
+        transform promise into something we can pickle
         """
         pass
 
     @abstractmethod
     def thaw_promise(self, promise_id, device):
         """
-            restore promise from pickled object
+        restore promise from pickled object
         """
         pass
 

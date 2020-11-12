@@ -11,7 +11,13 @@ DEFAULT_MPL_BACKEND = matplotlib.get_backend()
 matplotlib.use("Cairo")  # backend without X server requirements
 import matplotlib.pyplot as plt
 
-from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl, print_stderr
+from libbench import (
+    VendorBenchmark,
+    VendorLink,
+    VendorJobManager,
+    print_hl,
+    print_stderr,
+)
 
 
 """
@@ -30,7 +36,11 @@ VENDORS = [
     if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
 ]
 
-MODE_CLASS_NAMES = {"cloud": "Cloud", "measure_local": "MeasureLocal", "statevector": "Statevector"}
+MODE_CLASS_NAMES = {
+    "cloud": "Cloud",
+    "measure_local": "MeasureLocal",
+    "statevector": "Statevector",
+}
 MODES = list(MODE_CLASS_NAMES.keys())
 
 
@@ -60,11 +70,6 @@ def import_argparser(name, toadd, **argparse_options):
     return argparser(toadd, **argparse_options)
 
 
-def import_scorer(name):
-    benchmark_module = importlib.import_module(f"benchmarks.{name}")
-    return getattr(benchmark_module, "score")
-
-
 def obtain_jobmanager(job_id, run_folder, recreate_device):
     VendorJobManager.RUN_FOLDER = run_folder
     slug = VendorJobManager.load(job_id)
@@ -77,6 +82,7 @@ def obtain_jobmanager(job_id, run_folder, recreate_device):
         slug["additional_stored_info"]["mode"],
     )
 
+    # recreate device if demanded to do so
     device = None
     if recreate_device:
         link = import_link(VENDOR, MODE)()
@@ -196,7 +202,9 @@ def _get_job_ids(run_folder):
     dirs = list(filter(os.path.isdir, glob.glob(f"{run_folder}/*")))
     dirs.sort(key=lambda x: os.path.getctime(x))
     return [
-        os.path.basename(folder) for folder in dirs if not os.path.basename(folder) == "__pycache__"
+        os.path.basename(folder)
+        for folder in dirs
+        if not os.path.basename(folder) in {"__pycache__", "obsolete"}
     ]
 
 
@@ -215,43 +223,59 @@ def refresh(args):
         else:
             print("not done yet.")
 
+
 """
     SCORE
 """
+
+
 def score(args):
     RUN_FOLDER = args.run_folder
-    BENCHMARK_ID = args.benchmark
-    REFERENCE_ID = args.reference
-    jobmanager_bench, _, slug_bench = obtain_jobmanager(BENCHMARK_ID, RUN_FOLDER, recreate_device=False)
-    jobmanager_ref, _, slug_ref = obtain_jobmanager(REFERENCE_ID, RUN_FOLDER, recreate_device=False)
 
+    # benchmark to score
+    BENCHMARK_ID = args.benchmark
+    jobmanager_bench, _, slug_bench = obtain_jobmanager(
+        BENCHMARK_ID, RUN_FOLDER, recreate_device=False
+    )
     if not jobmanager_bench.done:
         print_stderr("benchmark not done yet")
         return
-    if not jobmanager_ref.done:
-        print_stderr("reference not done yet")
-        return
-
     BENCHMARK = slug_bench["additional_stored_info"]["benchmark"]
-    if slug_ref["additional_stored_info"]["benchmark"] != BENCHMARK:
-        print_stderr("benchmark and reference are not the same test")
-        return
-        
-    scorer = import_scorer(BENCHMARK)
-    scorer(jobmanager_bench.collate_results(), jobmanager_ref.collate_results())
+
+    # optional, a reference benchmark
+    REFERENCE_ID = args.reference
+    if REFERENCE_ID:
+        jobmanager_ref, _, slug_ref = obtain_jobmanager(
+            REFERENCE_ID, RUN_FOLDER, recreate_device=False
+        )
+        if not jobmanager_ref.done:
+            print_stderr("reference not done yet")
+            return
+        if slug_ref["additional_stored_info"]["benchmark"] != BENCHMARK:
+            print_stderr("benchmark and reference are not the same test")
+            return
+
+    jobmanager_bench.score(
+        jobmanager_bench.collate_results(),
+        jobmanager_ref.collate_results() if REFERENCE_ID else None,
+    )
+
 
 """
     STATUS
 """
+import random
 
 
 def status(args):
     RUN_FOLDER = args.run_folder
     VendorJobManager.print_legend()
 
-    for job_id in _get_job_ids(RUN_FOLDER):
+    job_ids = _get_job_ids(RUN_FOLDER)
+    for job_id in random.sample(job_ids, len(job_ids)):
         jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER, recreate_device=False)
         jobmanager.print_status(tail=slug["additional_stored_info"])
+        jobmanager.save_additional_info_files(slug["additional_stored_info"])
 
 
 if __name__ == "__main__":
@@ -266,7 +290,10 @@ if __name__ == "__main__":
     parser_A = subparsers.add_parser("benchmark", help="Run new benchmark", **argparse_options)
     parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
-        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
+        "vendor",
+        metavar="VENDOR",
+        type=str,
+        help=f"vendor to use; one of {', '.join(VENDORS)}",
     )
     parser_A.add_argument(
         "mode", metavar="MODE", type=str, help=f"mode to run; one of {', '.join(MODES)}"
@@ -358,22 +385,18 @@ if __name__ == "__main__":
     )
 
     # print benchmark scores
-    parser_SC = subparsers.add_parser(
-        "score",
-        help="Score benchmark",
-        **argparse_options
-    )
+    parser_SC = subparsers.add_parser("score", help="Score benchmark", **argparse_options)
     parser_SC.set_defaults(func=score)
     parser_SC.add_argument(
-        "benchmark", 
-        metavar="BENCHMARK", 
-        type=str, 
+        "benchmark",
+        metavar="BENCHMARK",
+        type=str,
         help=f"benchmark id; subfolder name in {VendorJobManager.RUN_FOLDER}",
     )
     parser_SC.add_argument(
-        "--reference", 
-        metavar="REFERENCE", 
-        type=str, 
+        "--reference",
+        metavar="REFERENCE",
+        type=str,
         help=f"reference benchmark id; subfolder name in {VendorJobManager.RUN_FOLDER}",
     )
     parser_SC.add_argument(

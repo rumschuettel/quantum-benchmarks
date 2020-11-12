@@ -77,7 +77,7 @@ class GoogleCloudLink(GoogleLinkBase):
     @functools.lru_cache()
     def get_devices(self):
         """
-            Retrieves the cloud services of Google.
+        Retrieves the cloud services of Google.
         """
         return GOOGLE_CLOUD_DEVICES
 
@@ -91,7 +91,7 @@ class GoogleMeasureLocalLink(GoogleLinkBase):
     @functools.lru_cache()
     def get_devices(self):
         """
-            Retrieves the measure local services of Google.
+        Retrieves the measure local services of Google.
         """
         return GOOGLE_MEASURE_LOCAL_DEVICES
 
@@ -105,6 +105,6 @@ class GoogleStatevectorLink(GoogleLinkBase):
     @functools.lru_cache()
     def get_devices(self):
         """
-            Retrieves the available statevector simulators in cirq.
+        Retrieves the available statevector simulators in cirq.
         """
         return GOOGLE_STATEVECTOR_DEVICES

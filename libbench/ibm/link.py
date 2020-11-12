@@ -40,7 +40,7 @@ class IBMDevice:
             return {"result": self.device.run(qobj), "transpiled_circuit": experiment}
         except QiskitError as e:
             message = e.message.rstrip("\n .")
-            message = e.message.rstrip(".\'")
+            message = e.message.rstrip(".'")
             if message.endswith("Error code: 3458"):
                 print_stderr("You don't have enough credits to run this job.")
                 return {"result": ThinPromise(lambda: None), "transpiled_circuit": None}
@@ -72,7 +72,7 @@ class IBMJob(VendorJob):
 
 class IBMThinPromise(ThinPromise):
     """
-        Override mock status report to work with IBMJobManager
+    Override mock status report to work with IBMJobManager
     """
 
     def status(self):

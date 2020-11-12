@@ -1,12 +1,12 @@
 import numpy as np
 
-from libbench.ibm import Benchmark as IBMBenchmark
+from libbench.rigetti import Benchmark as RigettiBenchmark
 
 from .job import HHLJob
 from .. import HHLBenchmarkMixin
 
 
-class HHLBenchmarkBase(HHLBenchmarkMixin, IBMBenchmark):
+class HHLBenchmarkBase(HHLBenchmarkMixin, RigettiBenchmark):
     def __init__(self, add_measurements, **kwargs):
         super().__init__(**kwargs)
 
@@ -24,7 +24,7 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, IBMBenchmark):
         )
 
     def __str__(self):
-        return "IBM-HHL"
+        return "Rigetti-HHL"
 
 
 class HHLBenchmark(HHLBenchmarkBase):
@@ -39,7 +39,14 @@ class HHLBenchmark(HHLBenchmarkBase):
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
-        counts = result.get_counts()
+        counts = {}
+        qubits = job.num_qubits + job.num_ancillas + 1
+        for measurement in np.vstack([result[k] for k in range(qubits)]).T:
+            key = "".join(["0" if b == 0 else "1" for b in measurement])
+            if key in counts:
+                counts[key] += 1
+            else:
+                counts[key] = 1
 
         histogram = [0] * 2 ** job.num_qubits
         for result in counts:
@@ -61,7 +68,7 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
-        psi = result.get_statevector()
+        psi = result.amplitudes
 
         histogram = []
         for i in range(2 ** job.num_qubits):
