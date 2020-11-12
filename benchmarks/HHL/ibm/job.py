@@ -50,24 +50,38 @@ class HHLJob(IBMJob):
             return qsvt_circuit
 
     @staticmethod
+    def list_to_circuit(circuit_list: list, circuit: QuantumCircuit) -> QuantumCircuit:
+
+        gate_lut = {
+            "X": lambda index: circuit.x(index),
+            "Y": lambda index: circuit.y(index),
+            "Z": lambda index: circuit.z(index),
+            "S": lambda index: circuit.s(index),
+            "T": lambda index: circuit.t(index),
+            "SX": lambda index: circuit.rx(np.pi / 2, index),  # TODO check that these are correct
+            "TX": lambda index: circuit.rx(np.pi / 4, index),
+            "SY": lambda index: circuit.ry(np.pi / 2, index),
+            "TY": lambda index: circuit.ry(np.pi / 4, index),
+            "CZ": lambda control, target: circuit.cz(control, target)
+        }
+
+        for gate, *indices in circuit_list:
+            gate_lut[gate](*[ idx - 1 for idx in indices ])
+
+        return circuit
+
+    @staticmethod
     def job_factory(
         matrix,
         num_shots,
         shots_multiplier,
         add_measurements,
     ):
+        # you would call the circuit function above like
         breakpoint()
-
-        gate_lut = {
-            "X": lambda circuit, index: circuit.x(index),
-            "Y": lambda circuit, index: circuit.y(index),
-            "Z": lambda circuit, index: circuit.z(index)
-        }
-
-
-        for gate, *indices in matrix["circuit"]:
-            if gate == "X":
-                cirquit.x(*indices)
+        my_circuit = QuantumCircuit(3)
+        HHLJob.list_to_circuit(matrix["circuit"], my_circuit)
+        my_circuit.draw()
 
         '''
         if num_ancillas != 1 or not (qsvt_poly is None):
