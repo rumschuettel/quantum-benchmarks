@@ -16,20 +16,14 @@ from .matrices import MATRICES
 class HHLBenchmarkMixin:
     def __init__(
         self,
-        block_encoding,
-        num_qubits,
-        num_ancillas,
-        qsvt_poly,
+        matrix,
         num_shots,
         shots_multiplier,
         **_,
     ):
         super().__init__()
 
-        self.block_encoding = block_encoding
-        self.num_qubits = num_qubits
-        self.num_ancillas = num_ancillas
-        self.qsvt_poly = qsvt_poly
+        self.matrix = MATRICES[matrix]
         self.num_shots = num_shots
         self.shots_multiplier = shots_multiplier
 
@@ -94,27 +88,10 @@ def argparser(toadd, **argparse_options):
     parser = toadd.add_parser("HHL", help="HHL QSVT benchmark.", **argparse_options)
     parser.add_argument(
         "-b",
-        "--block_encoding",
-        type=object,
-        help="The block-encoding of the matrix A",
-        default=None,
-    )
-    parser.add_argument(
-        "-q", "--num_qubits", type=int, help="The number of qubits used by A", default=2
-    )
-    parser.add_argument(
-        "-a",
-        "--num_ancillas",
-        type=int,
-        help="The number of ancillas used by the block-encoding",
-        default=1,
-    )
-    parser.add_argument(
-        "-p",
-        "--qsvt_poly",
-        type=object,
-        help="The polynomial used for QSVT",
-        default=None,
+        "--matrix",
+        type=str,
+        help=f"one of the precomputed matrices {', '.join(MATRICES.keys())}",
+        default=list(MATRICES.keys())[0],
     )
     parser.add_argument(
         "-s",

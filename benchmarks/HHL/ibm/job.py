@@ -7,12 +7,12 @@ from numpy import arccos, sqrt
 import random as random
 from qiskit import QuantumCircuit
 
-from qiskit import *
 from qiskit.circuit.library.standard_gates import *
 
 from libbench.ibm import Job as IBMJob
 
 from .. import HHLBenchmarkMixin
+from .. import matrices
 
 
 class HHLJob(IBMJob):
@@ -51,14 +51,25 @@ class HHLJob(IBMJob):
 
     @staticmethod
     def job_factory(
-        block_encoding,
-        num_qubits,
-        num_ancillas,
-        qsvt_poly,
+        matrix,
         num_shots,
         shots_multiplier,
         add_measurements,
     ):
+        breakpoint()
+
+        gate_lut = {
+            "X": lambda circuit, index: circuit.x(index),
+            "Y": lambda circuit, index: circuit.y(index),
+            "Z": lambda circuit, index: circuit.z(index)
+        }
+
+
+        for gate, *indices in matrix["circuit"]:
+            if gate == "X":
+                cirquit.x(*indices)
+
+        '''
         if num_ancillas != 1 or not (qsvt_poly is None):
             raise NotImplementedError("The general HHL circuit generations is not yet implemented!")
         elif qsvt_poly is None:
@@ -175,6 +186,7 @@ class HHLJob(IBMJob):
                     m_idx,
                     add_measurements,
                 )
+        '''
 
     def __init__(
         self,

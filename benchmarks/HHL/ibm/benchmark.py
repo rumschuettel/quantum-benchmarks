@@ -14,10 +14,7 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, IBMBenchmark):
 
     def get_jobs(self):
         yield from HHLJob.job_factory(
-            self.block_encoding,
-            self.num_qubits,
-            self.num_ancillas,
-            self.qsvt_poly,
+            self.matrix,
             self.num_shots,
             self.shots_multiplier,
             self.add_measurements,
