@@ -17,7 +17,7 @@ from .. import HHLBenchmarkMixin
 
 class HHLJob(IBMJob):
     @staticmethod
-    def create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding, angles):
+    def create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding, block_encoding_inv, angles):
         qsvt_circuit = (
             QuantumCircuit(num_qubits+num_ancillas+1, num_qubits+num_ancillas+1)
             if add_measurements
@@ -25,8 +25,7 @@ class HHLJob(IBMJob):
         )       
         if num_ancillas != 1:      
             raise NotImplementedError("The general QSVT circuit generation is not yet implemented!")
-        else:
-            block_encoding_inv=block_encoding.inverse()             
+        else:        
             qubits=list(range(1,num_qubits + num_ancillas + 1))
 
             # Quanutm Singular Value Transformation
@@ -64,9 +63,10 @@ class HHLJob(IBMJob):
                 block_encoding.rx(-pi/3,1)
 
                 # Angles describing the polynomial inverting A
-                angles= (-2.279330633470087101821688078684, -2.27933063347008710182168807868, -7.05851428429600138350129876836)
+                angles= (-2.27933, -2.27933, -7.0585142)
 
-                qsvt_circuit = HHLJob.create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding.inverse(), angles)
+                # Quanutm Singular Value Transformation
+                qsvt_circuit = HHLJob.create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding.inverse(), block_encoding, angles)
 
                 # For debug purposes
                 # reorder = QuantumCircuit(num_qubits+num_ancillas+1)   
@@ -102,11 +102,10 @@ class HHLJob(IBMJob):
                 # block_encoding.x(0) 
 
                 # Angles describing the polynomial inverting A
-                angles=(-1.2329906360794255512184231493, -1.45745010323350887868278909, -1.5025688694325865597661246, -1.78673547240229808944153, \
-                        -1.7867354724022980894415, -1.502568869432586559766, -1.45745010323350887868, -1.2329906360794255512, 0.8088518475393644255)         
+                angles=(-1.21234, -1.43476, -1.48212, -1.82369, -1.82369, -1.48212, -1.43476, -1.21234, 0.752993)         
 
                 # Quanutm Singular Value Transformation
-                qsvt_circuit = HHLJob.create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding.inverse(), angles)
+                qsvt_circuit = HHLJob.create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding.inverse(), block_encoding, angles)
 
                 # For debug purposes
                 # reorder = QuantumCircuit(num_qubits+num_ancillas+1)   
