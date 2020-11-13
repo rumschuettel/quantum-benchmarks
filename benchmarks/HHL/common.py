@@ -80,7 +80,7 @@ class HHLBenchmarkMixin:
         # Annotate with values
         for i in range(2 ** used_qubits):
             for j in range(2 ** used_qubits):
-                ax.text(j, i, str(round(histograms[i, j], 4)), ha="center", va="center", color="w")   
+                ax.text(j, i, str(round(histograms[i, j], 4)), ha="center", va="center", color="r")   
 
         # ax.imshow(histograms, cmap="nipy_spectral", extent=extent, vmin=0, vmax=1)
         ax.set_title(f"HHL({used_qubits})")
@@ -89,7 +89,7 @@ class HHLBenchmarkMixin:
         ax.set_xticklabels(range(2 ** used_qubits))
         ax.set_ylabel("Histogram")
         ax.set_yticks(range(2 ** used_qubits))
-        ax.set_yticklabels(reversed(range(2 ** used_qubits)))    
+        ax.set_yticklabels(range(2 ** used_qubits))    
 
         # save figure
         figpath = path / "visualize.pdf"
