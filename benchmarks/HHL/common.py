@@ -29,8 +29,10 @@ class HHLBenchmarkMixin:
 
     def collate_results(self, results: Dict[VendorJob, object]):
 
+        used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])
+
         # output arrays
-        histograms = np.zeros((2 ** self.num_qubits, 2 ** self.num_qubits), dtype=np.float64)
+        histograms = np.zeros((2 ** used_qubits, 2 ** used_qubits), dtype=np.float64)
 
         # fill in with values from jobs
         for job in results:
@@ -38,9 +40,9 @@ class HHLBenchmarkMixin:
             basis_vec = result["basis_vec"]
             histogram = result["histogram"]
             total = 0
-            for i in range(0, 2 ** self.num_qubits):
+            for i in range(2 ** used_qubits):
                 total += histogram[i]
-            for i in range(0, 2 ** self.num_qubits):
+            for i in range(2 ** used_qubits):
                 # histograms[i][basis_vec]+=histogram[i]/(self.num_shots*self.shots_multiplier)
                 histograms[i][basis_vec] += histogram[i] / total
 
@@ -51,18 +53,24 @@ class HHLBenchmarkMixin:
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # Unpack the collated result
+        used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])        
+        #histograms = np.flip(collated_result,0)     
         histograms = collated_result
-        extent = (0, 2 ** self.num_qubits, 0, 2 ** self.num_qubits)
+        #extent = (0, 2 ** used_qubits, 2 ** used_qubits, 0)
 
         # Set up the figure
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
 
-        # Draw the postselection probabilities
-        ax.imshow(histograms, cmap="gray", extent=extent, vmin=0, vmax=1)
+        # Draw the measurement probabilities
+        ax.imshow(histograms, cmap="gray", vmin=0, vmax=1, origin='lower')
         # ax.imshow(histograms, cmap="nipy_spectral", extent=extent, vmin=0, vmax=1)
-        ax.set_title(f"HHL({self.num_qubits})")
+        ax.set_title(f"HHL({used_qubits})")
         ax.set_xlabel("Input state")
+        ax.set_xticks(range(2 ** used_qubits))
+        ax.set_xticklabels(range(2 ** used_qubits))
         ax.set_ylabel("Histogram")
+        ax.set_yticks(range(2 ** used_qubits))
+        ax.set_yticklabels(reversed(range(2 ** used_qubits)))    
 
         # save figure
         figpath = path / "visualize.pdf"
@@ -74,10 +82,7 @@ class HHLBenchmarkMixin:
     def __repr__(self):
         return str(
             {
-                "block_encoding": self.block_encoding,
-                "num_qubits": self.num_qubits,
-                "num_ancillas": self.num_ancillas,
-                "qsvt_poly": self.qsvt_poly,
+                "matrix": self.matrix,
                 "num_shots": self.num_shots,
                 "shots_multiplier": self.shots_multiplier,
             }
@@ -87,7 +92,7 @@ class HHLBenchmarkMixin:
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser("HHL", help="HHL QSVT benchmark.", **argparse_options)
     parser.add_argument(
-        "-b",
+        "-c",
         "--matrix",
         type=str,
         help=f"one of the precomputed matrices {', '.join(MATRICES.keys())}",

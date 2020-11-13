@@ -5,7 +5,10 @@ import numpy as np
 from math import pi
 from numpy import arccos, sqrt
 import random as random
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, execute, BasicAer
+
+# For nice printing during debug
+from pandas import DataFrame
 
 from qiskit.circuit.library.standard_gates import *
 
@@ -19,14 +22,14 @@ class HHLJob(IBMJob):
     @staticmethod
     def create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding, block_encoding_inv, angles):
         qsvt_circuit = (
-            QuantumCircuit(num_qubits + num_ancillas + 1, num_qubits + num_ancillas + 1)
+            QuantumCircuit(num_qubits + 1, num_qubits + 1)
             if add_measurements
-            else QuantumCircuit(num_qubits + num_ancillas + 1)
+            else QuantumCircuit(num_qubits + 1)
         )
         if num_ancillas != 1:
             raise NotImplementedError("The general QSVT circuit generation is not yet implemented!")
         else:
-            qubits = list(range(1, num_qubits + num_ancillas + 1))
+            qubits = list(range(1, num_qubits + 1))
 
             # Quanutm Singular Value Transformation
             qsvt_circuit.h(0)
@@ -56,13 +59,19 @@ class HHLJob(IBMJob):
             "X": lambda index: circuit.x(index),
             "Y": lambda index: circuit.y(index),
             "Z": lambda index: circuit.z(index),
+            "R": lambda index: circuit.rz(2 * np.pi / 3, index),       
             "S": lambda index: circuit.s(index),
             "T": lambda index: circuit.t(index),
-            "SX": lambda index: circuit.rx(np.pi / 2, index),  # TODO check that these are correct
+            "TZ": lambda index: circuit.rz(np.pi / 4, index),   
+            "RX": lambda index: circuit.rx(2 * np.pi / 3, index), # TODO check that these are correct 
+            "SX": lambda index: circuit.rx(np.pi / 2, index),  
             "TX": lambda index: circuit.rx(np.pi / 4, index),
+            "RY": lambda index: circuit.ry(2 * np.pi / 3, index),              
             "SY": lambda index: circuit.ry(np.pi / 2, index),
             "TY": lambda index: circuit.ry(np.pi / 4, index),
-            "CZ": lambda control, target: circuit.cz(control, target)
+            "CX": lambda control, target: circuit.cx(control, target),
+            "CZ": lambda qubit1, qubit2: circuit.cz(qubit1, qubit2),       
+            "SQSWAP": lambda qubit1, qubit2: circuit.append(SwapGate().power(0.5), [qubit1, qubit2])   
         }
 
         for gate, *indices in circuit_list:
@@ -77,118 +86,66 @@ class HHLJob(IBMJob):
         shots_multiplier,
         add_measurements,
     ):
-        # you would call the circuit function above like
-        breakpoint()
-        my_circuit = QuantumCircuit(3)
-        HHLJob.list_to_circuit(matrix["circuit"], my_circuit)
-        my_circuit.draw()
+        if matrix is None:
+            raise NotImplementedError("The matrix is Not specified")
+        num_qubits = matrix["qubits"]
+        num_ancillas = matrix["ancillas"]
 
-        '''
-        if num_ancillas != 1 or not (qsvt_poly is None):
-            raise NotImplementedError("The general HHL circuit generations is not yet implemented!")
-        elif qsvt_poly is None:
-            # Build block-encoding of A
-            block_encoding = QuantumCircuit(num_qubits + num_ancillas)
-            if num_qubits == 1:
-                block_encoding.append(SwapGate().power(0.5), [0, 1])
-                block_encoding.ry(-pi / 4, 0)
-                block_encoding.rx(-pi / 3, 1)
+        if num_ancillas != 1:
+            raise NotImplementedError("The general HHL circuit generation is not yet implemented!")
 
-                # Angles describing the polynomial inverting A
+        # Build block-encoding of A
+        block_encoding = QuantumCircuit(num_qubits)
+        HHLJob.list_to_circuit(matrix["circuit"], block_encoding)
+        # block_encoding.draw()
 
-                angles= (-2.27933, -2.27933, -7.0585142)
+        # Angles describing the polynomial inverting A
+        angles= matrix["angles"]
 
-                # Quanutm Singular Value Transformation
-                qsvt_circuit = HHLJob.create_qsvt_circuit(
-                    num_qubits,
-                    num_ancillas,
-                    add_measurements,
-                    block_encoding.inverse(),
-                    block_encoding,
-                    angles,
-                )
+        # Quanutm Singular Value Transformation
+        qsvt_circuit = HHLJob.create_qsvt_circuit(
+            num_qubits,
+            num_ancillas,
+            add_measurements,
+            block_encoding.inverse(),
+            block_encoding,
+            angles,
+        )
 
-                # For debug purposes
-                # reorder = QuantumCircuit(num_qubits+num_ancillas+1)
-                # reorder.swap(0,2)
+        # For debug purposes
+        # reorder = QuantumCircuit(num_qubits+1)
+        # reorder.swap(0,3)
+        # reorder.swap(1,2)
 
-            elif num_qubits == 2:
-                block_encoding.ry(-pi / 8, 0)
-                block_encoding.rx(-pi / 4, 1)
-                block_encoding.rz(-pi / 2, 2)
-                block_encoding.cx(1, 0)
-                block_encoding.z(2)
-                block_encoding.x(0)
-                block_encoding.cx(2, 1)
-                block_encoding.rx(-pi / 2, 0)
-                block_encoding.ry(-pi / 4, 1)
-                block_encoding.rz(-pi / 8, 2)
-                block_encoding.cx(1, 0)
-                block_encoding.z(2)
-                block_encoding.ry(-pi / 8, 0)
-                block_encoding.rx(-pi / 4, 1)
-                block_encoding.ry(-pi / 2, 2)
-                block_encoding.z(0)
-                block_encoding.cx(2, 1)
-                block_encoding.ry(-pi / 2, 0)
-                block_encoding.rz(-pi / 4, 1)
-                block_encoding.rx(-pi / 8, 2)
-                block_encoding.cx(1, 0)
-                block_encoding.x(2)
-                # Just global phase for debugging
-                # block_encoding.u1(7* pi /16, 0)
-                # block_encoding.x(0)
-                # block_encoding.u1(7* pi /16, 0)
-                # block_encoding.x(0)
+        # Debugging the circuit
+        # print(block_encoding)
+        # print_unitary=reorder.compose(block_encoding,qubits=list(range(1,num_qubits + 1))).extend(reorder)
+        # #job execution and getting the unitary matrix of the circuit
+        # job = execute(print_unitary, BasicAer.get_backend('unitary_simulator'))
+        # print(DataFrame(job.result().get_unitary(print_unitary, decimals=2)))
 
-                # Angles describing the polynomial inverting
-                angles=(-1.21234, -1.43476, -1.48212, -1.82369, -1.82369, -1.48212, -1.43476, -1.21234, 0.752993)   
+        #raise NotImplementedError("Stop now")
 
-                # Quanutm Singular Value Transformation
-                qsvt_circuit = HHLJob.create_qsvt_circuit(
-                    num_qubits,
-                    num_ancillas,
-                    add_measurements,
-                    block_encoding.inverse(),
-                    block_encoding,
-                    angles,
-                )
+        # Debugging the circuit
+        # print(qsvt_circuit)
+        # print_unitary=reorder.combine(qsvt_circuit).extend(reorder)
+        # # job execution and getting the unitary matrix of the circuit
+        # job = execute(print_unitary, BasicAer.get_backend('unitary_simulator'))
+        # print(DataFrame(job.result().get_unitary(print_unitary, decimals=2)))
 
-                # For debug purposes
-                # reorder = QuantumCircuit(num_qubits+num_ancillas+1)
-                # reorder.swap(0,3)
-                # reorder.swap(1,2)
-
-            else:
-                raise NotImplementedError(
-                    "The general HHL circuit generations is not yet implemented!"
-                )
-
-            # Debugging the circuit
-            # print(block_encoding)
-            # print_unitary=reorder.compose(block_encoding,qubits=list(range(1,num_qubits + num_ancillas + 1))).extend(reorder)
-            # #job execution and getting the unitary matrix of the circuit
-            # job = execute(print_unitary, qiskit.Aer.get_backend('unitary_simulator'))
-            # print(job.result().get_unitary(print_unitary, decimals=2))
-
-            # Debugging the circuit
-            # print(qsvt_circuit)
-            # print_unitary=reorder.combine(qsvt_circuit).extend(reorder)
-            # # job execution and getting the unitary matrix of the circuit
-            # job = execute(print_unitary, qiskit.Aer.get_backend('unitary_simulator'))
-            # print(job.result().get_unitary(print_unitary, decimals=2))
+        used_qubits = num_qubits - num_ancillas
 
         for m_idx in range(shots_multiplier):
-            for basis_vec in range(0, 2 ** num_qubits):
+            for basis_vec in range(0, 2 ** used_qubits):
                 instance_circuit = (
-                    QuantumCircuit(num_qubits + num_ancillas + 1, num_qubits + num_ancillas + 1)
+                    QuantumCircuit(num_qubits + 1, num_qubits + 1)
                     if add_measurements
-                    else QuantumCircuit(num_qubits + num_ancillas + 1)
+                    else QuantumCircuit(num_qubits + 1)
                 )
                 if basis_vec % 2 == 1:
-                    instance_circuit.x(num_qubits + num_ancillas)
-                if basis_vec % 4 >= 2 and num_qubits > 1:
-                    instance_circuit.x(num_qubits + num_ancillas - 1)
+                    instance_circuit.x(num_qubits)
+                if basis_vec % 4 >= 2 and used_qubits > 1:
+                    instance_circuit.x(num_qubits - 1)
                 instance_circuit.extend(qsvt_circuit)
 
                 yield HHLJob(
@@ -200,7 +157,6 @@ class HHLJob(IBMJob):
                     m_idx,
                     add_measurements,
                 )
-        '''
 
     def __init__(
         self,
@@ -224,9 +180,9 @@ class HHLJob(IBMJob):
 
         if add_measurements:
             circuit.measure(
-                # list(range(num_qubits+num_ancillas+1)), list(range(num_qubits+num_ancillas+1))
-                list(range(num_qubits + num_ancillas + 1)),
-                list(reversed(range(num_qubits + num_ancillas + 1))),
+                # list(range(num_qubits+1)), list(range(num_qubits+1))
+                list(range(num_qubits + 1)),
+                list(reversed(range(num_qubits + 1))),
             )
 
     def run(self, device):
