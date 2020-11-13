@@ -38,12 +38,14 @@ class HHLBenchmark(HHLBenchmarkBase):
     def parse_result(self, job, result):
         counts = result.get_counts()
 
-        histogram = [0] * 2 ** job.num_qubits
+        total = 0
+        histogram = [0] * 2 ** (job.num_qubits-job.num_ancillas)
         for result in counts:
-            if int(result, 2) < 2 ** job.num_qubits:
-                histogram[int(result, 2)] = counts[result]
+            total += counts[result]
+            if result[0:2]=="01":
+                histogram[int(result[2:], 2)] = counts[result]           
 
-        return {"basis_vec": job.basis_vec, "histogram": histogram}
+        return {"basis_vec": job.basis_vec, "histogram": histogram, "total": total}
 
 
 class HHLSimulatedBenchmark(HHLBenchmarkBase):
@@ -60,9 +62,11 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
     def parse_result(self, job, result):
         psi = result.get_statevector()
 
+        used_qubits = (job.num_qubits-job.num_ancillas)        
+
         histogram = []
-        for i in range(2 ** job.num_qubits):
-            j = int(format(i, f"0{2*job.num_qubits}b")[::-1], 2)
+        for i in range(2 ** (used_qubits)):
+            j = i +  2**job.num_qubits - 2**used_qubits
             histogram.append(np.abs(psi[j]) ** 2)
 
-        return {"basis_vec": job.basis_vec, "histogram": histogram}
+        return {"basis_vec": job.basis_vec, "histogram": histogram, "total": 1}

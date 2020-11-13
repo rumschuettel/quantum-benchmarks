@@ -33,18 +33,21 @@ class HHLBenchmarkMixin:
 
         # output arrays
         histograms = np.zeros((2 ** used_qubits, 2 ** used_qubits), dtype=np.float64)
+        totals = [0] * 2 ** used_qubits        
+
+        # fill in with values from jobs
+        for job in results:
+            result = results[job]
+            totals[result["basis_vec"]] += result["total"]
 
         # fill in with values from jobs
         for job in results:
             result = results[job]
             basis_vec = result["basis_vec"]
             histogram = result["histogram"]
-            total = 0
-            for i in range(2 ** used_qubits):
-                total += histogram[i]
             for i in range(2 ** used_qubits):
                 # histograms[i][basis_vec]+=histogram[i]/(self.num_shots*self.shots_multiplier)
-                histograms[i][basis_vec] += histogram[i] / total
+                histograms[i][basis_vec] += histogram[i] / totals[basis_vec]               
 
         # Print histogram for debugging purposes
         print(histograms)
@@ -54,15 +57,31 @@ class HHLBenchmarkMixin:
     def visualize(self, collated_result: object, path: Path) -> Path:
         # Unpack the collated result
         used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])        
-        #histograms = np.flip(collated_result,0)     
+    
         histograms = collated_result
-        #extent = (0, 2 ** used_qubits, 2 ** used_qubits, 0)
+        postProbs = np.zeros( 2 ** used_qubits, dtype=np.float64)          
+        postHistograms = np.zeros((2 ** used_qubits, 2 ** used_qubits), dtype=np.float64)
+      
+        for i in range(len(histograms)):
+            for j in range(len(histograms[i])): 
+                postProbs[j]+=histograms[i][j]
+
+        for i in range(len(histograms)):
+            for j in range(len(histograms[i])): 
+                postHistograms[i][j]=-histograms[i][j]/postProbs[j]
 
         # Set up the figure
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
 
         # Draw the measurement probabilities
-        ax.imshow(histograms, cmap="gray", vmin=0, vmax=1, origin='lower')
+        # ax.imshow(histograms)          
+        ax.imshow(postHistograms, cmap="gray", vmin=-1, vmax=0)
+      
+        # Annotate with values
+        for i in range(2 ** used_qubits):
+            for j in range(2 ** used_qubits):
+                ax.text(j, i, str(round(histograms[i, j], 4)), ha="center", va="center", color="w")   
+
         # ax.imshow(histograms, cmap="nipy_spectral", extent=extent, vmin=0, vmax=1)
         ax.set_title(f"HHL({used_qubits})")
         ax.set_xlabel("Input state")

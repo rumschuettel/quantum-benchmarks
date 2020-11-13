@@ -38,7 +38,7 @@ class HHLJob(IBMJob):
                     qsvt_circuit.compose(block_encoding, qubits=qubits, inplace=True)
                 else:
                     qsvt_circuit.compose(block_encoding_inv, qubits=qubits, inplace=True)
-                qsvt_circuit.x(1)
+                # qsvt_circuit.x(1)
                 qsvt_circuit.cx(1, 0)
                 qsvt_circuit.rz(-2 * angles[i], 0)
                 # For debugging purposes to get the global phase right replace the above line with the following:
@@ -47,7 +47,7 @@ class HHLJob(IBMJob):
                 # qsvt_circuit.u1(angles[i],0)
                 # qsvt_circuit.x(0)
                 qsvt_circuit.cx(1, 0)
-                qsvt_circuit.x(1)
+                # qsvt_circuit.x(1)
             qsvt_circuit.h(0)
 
             return qsvt_circuit
@@ -142,6 +142,8 @@ class HHLJob(IBMJob):
                     if add_measurements
                     else QuantumCircuit(num_qubits + 1)
                 )
+                # Here we assume that there is a single ancilla
+                instance_circuit.x(1)
                 if basis_vec % 2 == 1:
                     instance_circuit.x(num_qubits)
                 if basis_vec % 4 >= 2 and used_qubits > 1:
@@ -182,8 +184,8 @@ class HHLJob(IBMJob):
             circuit.measure(
                 # list(range(num_qubits+1)), list(range(num_qubits+1))
                 list(range(num_qubits + 1)),
-                list(reversed(range(num_qubits + 1))),
-            )
+                list(reversed(range(num_qubits + 1))),    
+            )         
 
     def run(self, device):
         super().run(device)
