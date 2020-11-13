@@ -56,14 +56,14 @@ class HHLJob(IBMJob):
     def list_to_circuit(circuit_list: list, circuit: QuantumCircuit) -> QuantumCircuit:
 
         gate_lut = {
+            "H": lambda index: circuit.h(index),                 
             "X": lambda index: circuit.x(index),
             "Y": lambda index: circuit.y(index),
             "Z": lambda index: circuit.z(index),
             "R": lambda index: circuit.rz(2 * np.pi / 3, index),       
             "S": lambda index: circuit.s(index),
             "T": lambda index: circuit.t(index),
-            "TZ": lambda index: circuit.rz(np.pi / 4, index),   
-            "RX": lambda index: circuit.rx(2 * np.pi / 3, index), # TODO check that these are correct 
+            "RX": lambda index: circuit.rx(2 * np.pi / 3, index),  
             "SX": lambda index: circuit.rx(np.pi / 2, index),  
             "TX": lambda index: circuit.rx(np.pi / 4, index),
             "RY": lambda index: circuit.ry(2 * np.pi / 3, index),              
