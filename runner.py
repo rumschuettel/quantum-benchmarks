@@ -6,6 +6,7 @@ import importlib
 import os
 import pickle
 import matplotlib
+import numpy as np
 
 DEFAULT_MPL_BACKEND = matplotlib.get_backend()
 matplotlib.use("Cairo")  # backend without X server requirements
@@ -273,10 +274,74 @@ def status(args):
 
     job_ids = _get_job_ids(RUN_FOLDER)
     for job_id in random.sample(job_ids, len(job_ids)):
+        print(f"Obtaining status for {job_id}.")
         jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER, recreate_device=False)
         jobmanager.print_status(tail=slug["additional_stored_info"])
         jobmanager.save_additional_info_files(slug["additional_stored_info"])
 
+
+"""
+    TEX
+"""
+def make_tex(args):
+    results = {}
+    RUN_FOLDER = args.run_folder
+    for x in os.listdir(RUN_FOLDER):
+        print("Going into folder:", x)
+        job_ids = _get_job_ids(RUN_FOLDER + '/' + x)
+
+        for job_id in random.sample(job_ids, len(job_ids)):
+            print(f"Obtaining status for {job_id}.")
+            jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER + '/' + x, recreate_device=False)
+            benchmark = '-'.join(str(jobmanager.benchmark).split('-')[1:])
+            print("Benchmark:", benchmark)
+            if benchmark in ["Schroedinger-Microscope", "Mandelbrot"]:
+                if benchmark not in results: results[benchmark] = {}
+                vendor = slug['additional_stored_info']['vendor']
+                device = slug['additional_stored_info']['device']
+                if device.startswith('ibmq_'): device = device[5:]
+                print(f"  vendor: {vendor}.")
+                print(f"  device: {device}.")
+                if (vendor, device) not in results[benchmark]:
+                    results[benchmark][(vendor, device)] = {}
+                print(f"  #post-selections: {jobmanager.benchmark.num_post_selections}.")
+                print(f"  #pixels: {jobmanager.benchmark.num_pixels}.")
+                print(f"  #shots: {jobmanager.benchmark.num_shots}.")
+                results[benchmark][(vendor,device)][(
+                    jobmanager.benchmark.num_post_selections,
+                    jobmanager.benchmark.num_pixels,
+                    jobmanager.benchmark.num_shots
+                )] = (job_id, jobmanager.benchmark.score(jobmanager.collate_results(), None))
+            else:
+                print("Score not processed.")
+
+    for benchmark, res in sorted(results.items(), key = lambda x : ['Schroedinger-Microscope', 'Mandelbrot'].index(x[0])):
+        print()
+        print(f"TeX for {benchmark}:")
+        if benchmark in ['Schroedinger-Microscope', 'Mandelbrot']:
+            for i, ((vendor, device), r) in enumerate(sorted(res.items())):
+                if i%4 == 0:
+                    print()
+                    print("\\noindent")
+                job_id = list(r.values())[0][0]
+                year, month = job_id.split('--')[1].split('-')[:2]
+                date = '{} {}'.format(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][int(month)-1], year)
+                if (1,32,4096) in r and (2,32,4096) in r:
+                    avg_score = .25 * (r[(1,32,4096)][1][0][0] + r[(1,32,4096)][1][1][0] + r[(2,32,4096)][1][0][0] + r[(2,32,4096)][1][1][0])
+                    sigma_avg_score = .25 * np.linalg.norm([r[(1,32,4096)][1][0][1],r[(1,32,4096)][1][1][1],r[(2,32,4096)][1][0][1],r[(2,32,4096)][1][1][1]])
+                else:
+                    avg_score, sigma_avg_score = '?', '?'
+                print("\\{}SmallResultsCard{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}".format(
+                    'SM' if benchmark == 'Schroedinger-Microscope' else 'Mandelbrot',
+                    vendor,
+                    device if not device.startswith('ibmq_') else device[5:],
+                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][0]) if (1,32,4096) in r else '?',
+                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][1]) if (1,32,4096) in r else '?',
+                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][0]) if (1,32,4096) in r else '?',
+                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][1]) if (1,32,4096) in r else '?',
+                    date,
+                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(avg_score, sigma_avg_score)
+                ))
 
 if __name__ == "__main__":
     print_hl("qυanтυм вencнмarĸιng ѕυιтe\n", color="cyan")
@@ -414,6 +479,16 @@ if __name__ == "__main__":
         "--run_folder",
         default=VendorJobManager.RUN_FOLDER,
         help=f"folder to store benchmark jobs in; created if it does not exist",
+    )
+
+    parser_T = subparsers.add_parser(
+        "tex", help="Generate the TeX to be put in the paper.", **argparse_options
+    )
+    parser_T.set_defaults(func=make_tex)
+    parser_T.add_argument(
+        "--run_folder",
+        default=VendorJobManager.RUN_FOLDER,
+        help=f"folder where the benchmark jobs are stored."
     )
 
     args = parser.parse_args()
