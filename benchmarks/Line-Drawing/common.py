@@ -274,10 +274,10 @@ class LineDrawingBenchmarkMixin:
 
     def score(self, collated_result: object, *_):
         distances = np.linalg.norm(collated_result - self.points, axis=1, ord=2)
-        avg = distances.mean() / len(self.points)
-        σ = distances.std() / len(self.points)
+        avg = distances.mean()
+        σ = distances.std()
 
-        print(f"average distance: {10*avg:.2f}±{10*σ:.2f}")
+        print(f"average distance: {avg:.2f}±{σ:.2f}")
 
     def __repr__(self):
         return str(
