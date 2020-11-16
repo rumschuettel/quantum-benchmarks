@@ -173,6 +173,7 @@ class PlatonicFractalsBenchmarkMixin:
             (2, "1"): -np.array([1.0, 0.0, 0.0]),
             (3, "1"): -np.array([0.0, 1.0, 0.0]),
         }
+        #TODO: double check that this formula is indeed correct
         k = (1-np.sqrt(1-self.strength**2)) / self.strength
         r = -np.array([0.0, 0.0, 1.0])
         for step in zip(directions, outcomes):

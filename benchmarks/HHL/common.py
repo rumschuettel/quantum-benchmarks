@@ -55,6 +55,7 @@ class HHLBenchmarkMixin:
         return histograms
 
     def visualize(self, collated_result: object, path: Path) -> Path:
+
         # Unpack the collated result
         used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])        
     
@@ -66,16 +67,22 @@ class HHLBenchmarkMixin:
             for j in range(len(histograms[i])): 
                 postProbs[j]+=histograms[i][j]
 
+        for j in range(len(histograms)):
+            if postProbs[j]==0:
+                postProbs[j]=1                
+
         for i in range(len(histograms)):
             for j in range(len(histograms[i])): 
                 postHistograms[i][j]=-histograms[i][j]/postProbs[j]
+
+        min_value=np.min(postHistograms)               
 
         # Set up the figure
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
 
         # Draw the measurement probabilities
         # ax.imshow(histograms)          
-        ax.imshow(postHistograms, cmap="gray", vmin=-1, vmax=0)
+        ax.imshow(postHistograms, cmap="gray", vmin=min_value, vmax=0)
       
         # Annotate with values for debug purposes
         #for i in range(2 ** used_qubits):
@@ -83,7 +90,7 @@ class HHLBenchmarkMixin:
         #        ax.text(j, i, str(round(histograms[i, j], 4)), ha="center", va="center", color="r")   
 
         # ax.imshow(histograms, cmap="nipy_spectral", extent=extent, vmin=0, vmax=1)
-        ax.set_title(f"HHL({used_qubits})")
+        ax.set_title(f"HHL(2^{used_qubits})")
         ax.set_xlabel("Input state")
         ax.set_xticks(range(2 ** used_qubits))
         ax.set_xticklabels(range(2 ** used_qubits))
