@@ -74,8 +74,8 @@ class SchroedingerMicroscopeBenchmarkMixin:
         fig.savefig(figpath)
 
         # Set up the figure
-        fig = plt.figure(figsize=(4.2,2))
-        fig.subplots_adjust(left = 0, right = 1, bottom = 0, top = 1, hspace = 0, wspace = 0)
+        fig = plt.figure(figsize=(4.2, 2))
+        fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0, wspace=0)
         ax_psps = fig.add_subplot(1, 2, 1)
         ax_sps = fig.add_subplot(1, 2, 2)
 
@@ -140,10 +140,16 @@ class SchroedingerMicroscopeBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "Schroedinger-Microscope", help="Schroedinger microscope benchmark.", **argparse_options
+        "Schroedinger-Microscope",
+        help="Schroedinger microscope benchmark.",
+        **argparse_options,
     )
     parser.add_argument(
-        "-ps", "--num_post_selections", type=int, help="Number of post selections rounds", default=1
+        "-ps",
+        "--num_post_selections",
+        type=int,
+        help="Number of post selections rounds",
+        default=1,
     )
     parser.add_argument("-p", "--num_pixels", type=int, help="Number of pixels", default=4)
     parser.add_argument(

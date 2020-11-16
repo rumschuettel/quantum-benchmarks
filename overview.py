@@ -57,8 +57,4 @@ for mode in set(table["mode"]):
         "display.max_colwidth",
         -1,
     ):
-        print(
-            _table.groupby(["device", "benchmark"]).aggregate(
-                lambda tdf: tdf.unique().tolist()
-            )
-        )
+        print(_table.groupby(["device", "benchmark"]).aggregate(lambda tdf: tdf.unique().tolist()))

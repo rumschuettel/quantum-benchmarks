@@ -27,8 +27,8 @@ class IBMJobManager(VendorJobManager):
 
     def job_alive(self, promise, meta: dict):
         """
-            check whether we consider the job behind the promise alive on an IBM backend; however we should also check whether job_id is successful
-            since only that makes a call to the cloud backend
+        check whether we consider the job behind the promise alive on an IBM backend; however we should also check whether job_id is successful
+        since only that makes a call to the cloud backend
         """
         try:
             id = promise.job_id()
@@ -80,8 +80,8 @@ class IBMJobManager(VendorJobManager):
 
     def queued_successfully(self, promise, meta: dict):
         """
-            check whether we consider the job behind the promise queued, or more than queued, on an IBM backend;
-            this happens to coincide with self.job_alive
+        check whether we consider the job behind the promise queued, or more than queued, on an IBM backend;
+        this happens to coincide with self.job_alive
         """
         if not self.job_alive(promise, meta):
             return False
@@ -90,7 +90,7 @@ class IBMJobManager(VendorJobManager):
 
     def try_get_results(self, promise, device: IBMDevice):
         """
-            obtain job results when done
+        obtain job results when done
         """
         if device.device.name() in ["statevector_simulator", "qasm_simulator"]:
             return promise.result()
@@ -102,14 +102,14 @@ class IBMJobManager(VendorJobManager):
 
     def freeze_promise(self, promise):
         """
-            transform promise into something pickleable.
-            we know this is called after queued_success was True, so job_id exists
+        transform promise into something pickleable.
+        we know this is called after queued_success was True, so job_id exists
         """
         return promise.job_id()
 
     def thaw_promise(self, job_id, device: IBMDevice):
         """
-            load job by job_id
+        load job by job_id
         """
         try:
             return device.device.retrieve_job(job_id)

@@ -4,9 +4,9 @@ import cirq
 
 class GooglePromiseBase(ABC):
     """
-        As the simulators in cirq do not return any promise, we write our own
-        promise class. This should be a very thin wrapper around the existing
-        promise structure provided by google which we conjecture to exist.
+    As the simulators in cirq do not return any promise, we write our own
+    promise class. This should be a very thin wrapper around the existing
+    promise structure provided by google which we conjecture to exist.
     """
 
     @abstractmethod
@@ -32,7 +32,7 @@ class GooglePromiseBase(ABC):
 
 class GoogleCloudPromise(GooglePromiseBase):
     """
-        Do not use - we don't know what the interface looks like yet
+    Do not use - we don't know what the interface looks like yet
     """
 
     def __init__(self):
@@ -41,8 +41,8 @@ class GoogleCloudPromise(GooglePromiseBase):
 
 class GoogleLocalPromise(GooglePromiseBase):
     """
-        As the simulators in cirq do not return any promise, but just return
-        the result directly, we emulate this behavior here.
+    As the simulators in cirq do not return any promise, but just return
+    the result directly, we emulate this behavior here.
     """
 
     def __init__(self, circuit: cirq.Circuit, device):
@@ -54,29 +54,29 @@ class GoogleLocalPromise(GooglePromiseBase):
 
     def job_id(self):
         """
-            Return a job id.
-            Will have to be updated to match the Google API at some point.
+        Return a job id.
+        Will have to be updated to match the Google API at some point.
         """
         return id(self)
 
     def status(self):
         """
-            Return the status.
-            Will have to be updated to match the Google API at some point.
+        Return the status.
+        Will have to be updated to match the Google API at some point.
         """
         return "PENDING" if self._result is None else "DONE"
 
     def freeze(self):
         """
-            Since promises that resolve immediately will never be pickled, we can just pass self.
-            The real promise can return a separate frozen instance if necessary.
+        Since promises that resolve immediately will never be pickled, we can just pass self.
+        The real promise can return a separate frozen instance if necessary.
         """
         return self
 
     def thaw(self):
         """
-            No thawing necessary.
-            The real promise should probably have this method in the frozen instance class.
+        No thawing necessary.
+        The real promise should probably have this method in the frozen instance class.
         """
         return self
 

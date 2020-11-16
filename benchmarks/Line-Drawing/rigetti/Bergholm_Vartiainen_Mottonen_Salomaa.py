@@ -63,4 +63,7 @@ if __name__ == "__main__":
     print(program)
     print("State that was prepared:", np.round(corrected_result, 4))
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
-    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0))
+    print(
+        "Inner product error:",
+        abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0),
+    )

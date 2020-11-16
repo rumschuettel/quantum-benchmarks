@@ -64,14 +64,22 @@ def divide_and_conquer(circuit, qubits, ancilla_qubits, points, ctrl=None):
                 new_ctrl = qubits[0]
                 new_ancilla_qubits = ancilla_qubits
             divide_and_conquer(
-                circuit, new_qubits, new_ancilla_qubits, points[2 ** (n - 1) :], new_ctrl
+                circuit,
+                new_qubits,
+                new_ancilla_qubits,
+                points[2 ** (n - 1) :],
+                new_ctrl,
             )
             if ctrl is not None:
                 circuit.cx(ctrl, new_ctrl)
             else:
                 circuit.x(new_ctrl)
             divide_and_conquer(
-                circuit, new_qubits, new_ancilla_qubits, points[: 2 ** (n - 1)], new_ctrl
+                circuit,
+                new_qubits,
+                new_ancilla_qubits,
+                points[: 2 ** (n - 1)],
+                new_ctrl,
             )
             if ctrl is not None:
                 circuit.cx(ctrl, new_ctrl)
@@ -111,4 +119,7 @@ if __name__ == "__main__":
     print(circuit)
     print("State that was prepared:", np.round(corrected_result, 4))
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
-    print("Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0))
+    print(
+        "Inner product error:",
+        abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0),
+    )

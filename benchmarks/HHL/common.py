@@ -10,36 +10,44 @@ from matplotlib import pyplot as plt
 
 from libbench import VendorJob
 
+from .matrices import MATRICES
+
 
 class HHLBenchmarkMixin:
     def __init__(
-        self, block_encoding, num_qubits, num_ancillas, qsvt_poly, num_shots, shots_multiplier, **_
+        self,
+        matrix,
+        num_shots,
+        shots_multiplier,
+        **_,
     ):
         super().__init__()
 
-        self.block_encoding = block_encoding
-        self.num_qubits = num_qubits
-        self.num_ancillas = num_ancillas
-        self.qsvt_poly = qsvt_poly
+        self.matrix = MATRICES[matrix]
         self.num_shots = num_shots
         self.shots_multiplier = shots_multiplier
 
     def collate_results(self, results: Dict[VendorJob, object]):
 
+        used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])
+
         # output arrays
-        histograms = np.zeros((2 ** self.num_qubits, 2 ** self.num_qubits), dtype=np.float64)
+        histograms = np.zeros((2 ** used_qubits, 2 ** used_qubits), dtype=np.float64)
+        totals = [0] * 2 ** used_qubits        
+
+        # fill in with values from jobs
+        for job in results:
+            result = results[job]
+            totals[result["basis_vec"]] += result["total"]
 
         # fill in with values from jobs
         for job in results:
             result = results[job]
             basis_vec = result["basis_vec"]
             histogram = result["histogram"]
-            total = 0
-            for i in range(0, 2 ** self.num_qubits):
-                total += histogram[i]
-            for i in range(0, 2 ** self.num_qubits):
+            for i in range(2 ** used_qubits):
                 # histograms[i][basis_vec]+=histogram[i]/(self.num_shots*self.shots_multiplier)
-                histograms[i][basis_vec] += histogram[i] / total
+                histograms[i][basis_vec] += histogram[i] / totals[basis_vec]               
 
         # Print histogram for debugging purposes
         print(histograms)
@@ -48,18 +56,40 @@ class HHLBenchmarkMixin:
 
     def visualize(self, collated_result: object, path: Path) -> Path:
         # Unpack the collated result
+        used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])        
+    
         histograms = collated_result
-        extent = (0, 2 ** self.num_qubits, 0, 2 ** self.num_qubits)
+        postProbs = np.zeros( 2 ** used_qubits, dtype=np.float64)          
+        postHistograms = np.zeros((2 ** used_qubits, 2 ** used_qubits), dtype=np.float64)
+      
+        for i in range(len(histograms)):
+            for j in range(len(histograms[i])): 
+                postProbs[j]+=histograms[i][j]
+
+        for i in range(len(histograms)):
+            for j in range(len(histograms[i])): 
+                postHistograms[i][j]=-histograms[i][j]/postProbs[j]
 
         # Set up the figure
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
 
-        # Draw the postselection probabilities
-        ax.imshow(histograms, cmap="gray", extent=extent, vmin=0, vmax=1)
+        # Draw the measurement probabilities
+        # ax.imshow(histograms)          
+        ax.imshow(postHistograms, cmap="gray", vmin=-1, vmax=0)
+      
+        # Annotate with values for debug purposes
+        #for i in range(2 ** used_qubits):
+        #    for j in range(2 ** used_qubits):
+        #        ax.text(j, i, str(round(histograms[i, j], 4)), ha="center", va="center", color="r")   
+
         # ax.imshow(histograms, cmap="nipy_spectral", extent=extent, vmin=0, vmax=1)
-        ax.set_title(f"HHL({self.num_qubits})")
+        ax.set_title(f"HHL({used_qubits})")
         ax.set_xlabel("Input state")
+        ax.set_xticks(range(2 ** used_qubits))
+        ax.set_xticklabels(range(2 ** used_qubits))
         ax.set_ylabel("Histogram")
+        ax.set_yticks(range(2 ** used_qubits))
+        ax.set_yticklabels(range(2 ** used_qubits))    
 
         # save figure
         figpath = path / "visualize.pdf"
@@ -71,10 +101,7 @@ class HHLBenchmarkMixin:
     def __repr__(self):
         return str(
             {
-                "block_encoding": self.block_encoding,
-                "num_qubits": self.num_qubits,
-                "num_ancillas": self.num_ancillas,
-                "qsvt_poly": self.qsvt_poly,
+                "matrix": self.matrix,
                 "num_shots": self.num_shots,
                 "shots_multiplier": self.shots_multiplier,
             }
@@ -84,29 +111,24 @@ class HHLBenchmarkMixin:
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser("HHL", help="HHL QSVT benchmark.", **argparse_options)
     parser.add_argument(
-        "-b",
-        "--block_encoding",
-        type=object,
-        help="The block-encoding of the matrix A",
-        default=None,
+        "-c",
+        "--matrix",
+        type=str,
+        help=f"one of the precomputed matrices {', '.join(MATRICES.keys())}",
+        default=list(MATRICES.keys())[0],
     )
     parser.add_argument(
-        "-q", "--num_qubits", type=int, help="The number of qubits used by A", default=2
-    )
-    parser.add_argument(
-        "-a",
-        "--num_ancillas",
+        "-s",
+        "--num_shots",
         type=int,
-        help="The number of ancillas used by the block-encoding",
+        help="Number of shots per orientation",
+        default=8096,
+    )
+    parser.add_argument(
+        "-m",
+        "--shots_multiplier",
+        type=int,
+        help="Multiplier for shots per orientation",
         default=1,
-    )
-    parser.add_argument(
-        "-p", "--qsvt_poly", type=object, help="The polynomial used for QSVT", default=None
-    )
-    parser.add_argument(
-        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=8096
-    )
-    parser.add_argument(
-        "-m", "--shots_multiplier", type=int, help="Multiplier for shots per orientation", default=1
     )
     return parser

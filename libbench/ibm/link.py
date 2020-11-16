@@ -72,7 +72,7 @@ class IBMJob(VendorJob):
 
 class IBMThinPromise(ThinPromise):
     """
-        Override mock status report to work with IBMJobManager
+    Override mock status report to work with IBMJobManager
     """
 
     def status(self):

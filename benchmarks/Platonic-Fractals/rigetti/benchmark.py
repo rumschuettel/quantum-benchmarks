@@ -28,7 +28,7 @@ class RigettiPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, Riget
 
 class RigettiPlatonicFractalsBenchmark(RigettiPlatonicFractalsBenchmarkBase):
     """
-        Full Benchmark
+    Full Benchmark
     """
 
     def __init__(self, *args, **kwargs):
@@ -38,7 +38,7 @@ class RigettiPlatonicFractalsBenchmark(RigettiPlatonicFractalsBenchmarkBase):
     def parse_result(self, job, result):
         """
         initially results are in the form qubit : measurement-outcomes
-        {   
+        {
             0: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0]),
             1: array([1, 0, 1, 1, 1, 0, 1, 0, 1, 0]),
             2: array([1, 0, 0, 1, 1, 1, 1, 0, 1, 0])
@@ -84,9 +84,9 @@ class RigettiPlatonicFractalsBenchmark(RigettiPlatonicFractalsBenchmarkBase):
 
 class RigettiPlatonicFractalsSimulatedBenchmark(RigettiPlatonicFractalsBenchmarkBase):
     """
-        Simulated Benchmark
+    Simulated Benchmark
 
-        The device behaves like a statevector_simulator, i.e. without noise
+    The device behaves like a statevector_simulator, i.e. without noise
     """
 
     def __init__(self, *args, **kwargs):

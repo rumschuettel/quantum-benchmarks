@@ -26,8 +26,9 @@ class RigettiMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, RigettiBenchmark)
 
 class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):
     """
-        Statevector simulator
+    Statevector simulator
     """
+
     def parse_result(self, job, result):
         psi = result.amplitudes
 
@@ -39,8 +40,9 @@ class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):
 
 class RigettiMandelbrotBenchmark(RigettiMandelbrotBenchmarkBase):
     """
-        Measure and run
+    Measure and run
     """
+
     def parse_result(self, job, result):
         """
         initially results are in the form qubit : measurement-outcomes
