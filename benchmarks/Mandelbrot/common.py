@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 
 from libbench import VendorJob
 
+from .analytics import make_pictures
+
 
 class MandelbrotBenchmarkMixin:
     def __init__(self, num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, **_):
@@ -99,6 +101,23 @@ class MandelbrotBenchmarkMixin:
 
         # default figure to display
         return figpath
+
+    def score(self, collated_result: object, *_):
+        zs, psps = collated_result
+        Epsps, Ezs = make_pictures(self.num_post_selections, self.num_pixels)
+
+        zs_error = np.sqrt(np.mean((zs.flatten() - Ezs.flatten())**2))
+        zs_sigma = np.sqrt(np.sum(((zs - Ezs)**2 * 1.96**2 * (zs * (1 - zs)) / (self.num_shots * psps)).flatten())) / (self.num_pixels**2 * zs_error)
+
+        psps = psps ** (1 / (2 ** self.num_post_selections - 1))
+        Epsps = Epsps ** (1 / (2 ** self.num_post_selections - 1))
+        psps_error = np.sqrt(np.mean((psps.flatten() - Epsps.flatten())**2))
+        psps_sigma = np.sqrt(np.sum((((psps - Epsps) / ((2**self.num_post_selections - 1) * psps ** (2**self.num_post_selections - 2)))**2 * 1.96**2 * (psps ** (2**self.num_post_selections - 1) * (1 - psps ** (2**self.num_post_selections - 1))) / self.num_shots).flatten())) / (self.num_pixels**2 * psps_error)
+
+        print(f"Post-selection probability error: {psps_error:.4f}±{psps_sigma:.4f}.")
+        print(f"Success probability error: {zs_error:.4f}±{zs_sigma:.4f}.")
+
+        return (psps_error, psps_sigma), (zs_error, zs_sigma)
 
     def __repr__(self):
         return str(
