@@ -279,6 +279,8 @@ class LineDrawingBenchmarkMixin:
 
         print(f"average distance: {avg:.2f}±{σ:.2f}")
 
+        return avg, σ
+
     def __repr__(self):
         return str(
             {

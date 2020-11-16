@@ -293,19 +293,19 @@ def make_tex(args):
         for job_id in random.sample(job_ids, len(job_ids)):
             print(f"Obtaining status for {job_id}.")
             jobmanager, _, slug = obtain_jobmanager(job_id, RUN_FOLDER + '/' + x, recreate_device=False)
-            benchmark = '-'.join(str(jobmanager.benchmark).split('-')[1:])
+            benchmark = '-'.join(str(jobmanager.benchmark).split('--')[0].split('-')[1:])
             print("Benchmark:", benchmark)
+            if benchmark not in results: results[benchmark] = {}
+            vendor = slug['additional_stored_info']['vendor']
+            device = slug['additional_stored_info']['device']
+            if device.startswith('ibmq_'): device = device[5:]
+            if device.startswith('Aspen'): device = '-'.join(device.split('-')[:2]).lower()
+            if device.startswith('16_'): device = device[3:]
+            print(f"  vendor: {vendor}.")
+            print(f"  device: {device}.")
+            if (vendor, device) not in results[benchmark]:
+                results[benchmark][(vendor, device)] = {}
             if benchmark in ["Schroedinger-Microscope", "Mandelbrot"]:
-                if benchmark not in results: results[benchmark] = {}
-                vendor = slug['additional_stored_info']['vendor']
-                device = slug['additional_stored_info']['device']
-                if device.startswith('ibmq_'): device = device[5:]
-                if device.startswith('Aspen'): device = '-'.join(device.split('-')[:2]).lower()
-                if device.startswith('16_'): device = device[3:]
-                print(f"  vendor: {vendor}.")
-                print(f"  device: {device}.")
-                if (vendor, device) not in results[benchmark]:
-                    results[benchmark][(vendor, device)] = {}
                 print(f"  #post-selections: {jobmanager.benchmark.num_post_selections}.")
                 print(f"  #pixels: {jobmanager.benchmark.num_pixels}.")
                 print(f"  #shots: {jobmanager.benchmark.num_shots}.")
@@ -314,10 +314,19 @@ def make_tex(args):
                     jobmanager.benchmark.num_pixels,
                     jobmanager.benchmark.num_shots
                 )] = (job_id, jobmanager.benchmark.score(jobmanager.collate_results(), None))
+            elif benchmark == 'Line-Drawing':
+                print(f"  #points: {len(jobmanager.benchmark.points)}")
+                print(f"  #shots: {jobmanager.benchmark.num_shots}")
+                print(f"  #repetitions: {jobmanager.benchmark.num_repetitions}")
+                results[benchmark][(vendor,device)][(
+                    len(jobmanager.benchmark.points),
+                    jobmanager.benchmark.num_shots,
+                    jobmanager.benchmark.num_repetitions
+                )] = (job_id, jobmanager.benchmark.score(jobmanager.collate_results(), None))
             else:
                 print("Score not processed.")
 
-    for benchmark, res in sorted(results.items(), key = lambda x : ['Schroedinger-Microscope', 'Mandelbrot'].index(x[0])):
+    for benchmark, res in sorted(results.items(), key = lambda x : ['Schroedinger-Microscope', 'Mandelbrot', 'Line-Drawing'].index(x[0])):
         print()
         print(f"TeX for {benchmark}:")
         if benchmark in ['Schroedinger-Microscope', 'Mandelbrot']:
@@ -359,6 +368,39 @@ def make_tex(args):
                         date,
                         '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(avg_score, sigma_avg_score) if avg_score != '?' and sigma_avg_score != '?' else '?'
                     ))
+        if benchmark == 'Line-Drawing':
+            for i, ((vendor, device), r) in enumerate(sorted(res.items())):
+                if i%4 == 0:
+                    print()
+                    print("\\noindent")
+                job_id = list(r.values())[0][0]
+                year, month = job_id.split('--')[2].split('-')[:2]
+                date = '{} {}'.format(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][int(month)-1], year)
+                avg_score = (r[(4,4096,25)][1][0] + r[(8,4096,25)][1][0]) / 2 if (4,4096,25) in r and (8,4096,25) in r else \
+                    (r[(4,4096,128)][1][0] + r[(8,4096,32)][1][0]) / 2 if (4,4096,128) in r and (8,4096,32) in r else \
+                    (r[(4,8096,25)][1][0] + r[(8,8096,25)][1][0]) / 2 if (4,8096,25) in r and (8,8096,25) in r else \
+                    (r[(4,8192,25)][1][0] + r[(8,8192,25)][1][0]) / 2 if (4,8192,25) in r and (8,8192,25) in r else '?'
+                sigma_avg = np.linalg.norm([r[(4,4096,25)][1][1],r[(8,4096,25)][1][1]]) / 2 if (4,4096,25) in r and (8,4096,25) in r else \
+                    np.linalg.norm([r[(4,4096,128)][1][1],r[(8,4096,32)][1][1]]) / 2 if (4,4096,128) in r and (8,4096,32) in r else \
+                    np.linalg.norm([r[(4,8096,25)][1][1],r[(8,8096,25)][1][1]]) / 2 if (4,8096,25) in r and (8,8096,25) in r else \
+                    np.linalg.norm([r[(4,8192,25)][1][1],r[(8,8192,25)][1][1]]) / 2 if (4,8192,25) in r and (8,8192,25) in r else '?'
+                print("\\lineResultsCard{{{}}}{{{}}}{{{}}}{{{}}}[{}][{}][{}]".format(
+                    vendor,
+                    device,
+                    '{:.2f}+{:.2f}'.format(avg_score, sigma_avg) if avg_score != '?' and sigma_avg != '?' else '?',
+                    date,
+                    '{:.2f}+{:.2f}'.format(*r[(4,4096,25)][1]) if (4,4096,25) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(4,4096,128)][1]) if (4,4096,128) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(4,8096,25)][1]) if (4,8096,25) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(4,8192,25)][1]) if (4,8192,25) in r else '?',
+                    '{:.2f}+{:.2f}'.format(*r[(8,4096,25)][1]) if (8,4096,25) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(8,4096,32)][1]) if (8,4096,32) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(8,8096,25)][1]) if (8,8096,25) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(8,8192,25)][1]) if (8,8192,25) in r else '?',
+                    '{:.2f}+{:.2f}'.format(*r[(16,4096,25)][1]) if (16,4096,25) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(16,8096,25)][1]) if (16,8096,25) in r else \
+                    '{:.2f}+{:.2f}'.format(*r[(16,8192,25)][1]) if (16,8192,25) in r else '?',
+                ))
 
 if __name__ == "__main__":
     print_hl("qυanтυм вencнмarĸιng ѕυιтe\n", color="cyan")
