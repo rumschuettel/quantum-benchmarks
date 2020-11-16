@@ -106,13 +106,37 @@ class SchroedingerMicroscopeBenchmarkMixin:
         zs, psps = collated_result
         Epsps, Ezs = make_pictures(self.num_post_selections, self.num_pixels)
 
-        zs_error = np.sqrt(np.mean((zs.flatten() - Ezs.flatten())**2))
-        zs_sigma = np.sqrt(np.sum(((zs - Ezs)**2 * 1.96**2 * (zs * (1 - zs)) / (self.num_shots * psps)).flatten())) / (self.num_pixels**2 * zs_error)
+        # Calculate the post-selection score
+        scaled_psps = (psps ** (1 / (2 ** self.num_post_selections - 1))).flatten()
+        scaled_Epsps = (Epsps ** (1 / (2 ** self.num_post_selections - 1))).flatten()
+        # psps_error = np.sqrt(np.mean((scaled_psps.flatten() - scaled_Epsps.flatten())**2))
+        # psps_sigma = np.sqrt(np.sum((((scaled_psps - scaled_Epsps) / ((2**self.num_post_selections - 1) * scaled_psps ** (2**self.num_post_selections - 2)))**2 * 1.96**2 * (scaled_psps ** (2**self.num_post_selections - 1) * (1 - scaled_psps ** (2**self.num_post_selections - 1))) / self.num_shots).flatten())) / (self.num_pixels**2 * psps_error)
 
-        psps = psps ** (1 / (2 ** self.num_post_selections - 1))
-        Epsps = Epsps ** (1 / (2 ** self.num_post_selections - 1))
-        psps_error = np.sqrt(np.mean((psps.flatten() - Epsps.flatten())**2))
-        psps_sigma = np.sqrt(np.sum((((psps - Epsps) / ((2**self.num_post_selections - 1) * psps ** (2**self.num_post_selections - 2)))**2 * 1.96**2 * (psps ** (2**self.num_post_selections - 1) * (1 - psps ** (2**self.num_post_selections - 1))) / self.num_shots).flatten())) / (self.num_pixels**2 * psps_error)
+        psps_error = np.sqrt(np.mean(np.square(scaled_psps - scaled_Epsps)))
+        upsps = 1.96 * np.sqrt(psps.flatten() * (1 - psps.flatten()) / self.num_shots)
+        scaled_upsps = np.maximum(
+            np.abs(np.maximum(psps.flatten() - upsps, 0)) ** (1 / (2**self.num_post_selections-1)) - scaled_psps,
+            np.abs(np.minimum(psps.flatten() + upsps, 1) ** (1 / (2**self.num_post_selections-1))) - scaled_psps
+        )
+        psps_sigma = np.sqrt(np.sum(np.square((scaled_psps - scaled_Epsps) * scaled_upsps))) / (self.num_pixels**2 * psps_error)
+        # psps_sigma = 1.96 * np.sqrt(
+        #     np.sum(
+        #         (scaled_psps - scaled_Epsps)**2
+        #         * scaled_psps ** (3 - 2**self.num_post_selections) * (1 - scaled_psps ** (2**self.num_post_selections - 1))
+        #         / self.num_shots
+        #     )
+        # ) / (self.num_pixels**2 * psps_error * (2**self.num_post_selections - 1))
+
+        # Check if more than 10% of the pixels did never pass the post-selection round
+        zs_corrected = ((psps > 1e-8) * zs).flatten()
+        Ezs_corrected = Ezs.flatten()
+        uzs = 1.96 * ((psps > 1e-8) * np.sqrt(zs * (1 - zs) / (self.num_shots * ((psps > 1e-8) * psps + (psps <= 1e-8)))) + (psps <= 1e-8)).flatten()
+
+        zs_error = np.sqrt(np.mean(np.square(zs_corrected - Ezs_corrected)))
+        zs_sigma = np.sqrt(np.sum(np.square((zs_corrected - Ezs_corrected) * uzs))) / (self.num_pixels**2 * zs_error)
+
+        # zs_error = np.sqrt(np.mean((zs.flatten() - Ezs.flatten())**2))
+        # zs_sigma = np.sqrt(np.sum(((zs - Ezs)**2 * 1.96**2 * (zs * (1 - zs)) / (self.num_shots * psps)).flatten())) / (self.num_pixels**2 * zs_error)
 
         print(f"Post-selection probability error: {psps_error:.4f}±{psps_sigma:.4f}.")
         print(f"Success probability error: {zs_error:.4f}±{zs_sigma:.4f}.")
@@ -127,15 +151,6 @@ class SchroedingerMicroscopeBenchmarkMixin:
                 "num_shots": self.num_shots,
             }
         )
-
-
-# def score(benchmark_data: object, reference_data: object):
-#     zs, _ = benchmark_data
-#     zs_ref, _ = reference_data
-#
-#     mse = ((zs - zs_ref) ** 2).mean(axis=None)
-#     print_hl("MSE", color="white", end=" ")
-#     print_hl(mse, color="red")
 
 
 def argparser(toadd, **argparse_options):
