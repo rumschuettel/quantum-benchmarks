@@ -164,8 +164,6 @@ class PlatonicFractalsBenchmarkMixin:
         for a tuple of directions and outcomes like ((3, 1), '01'), calculate
         where that point lies in the plot; i.e. in this case, go in +3 direction,
         then in -1 direction, where the strength attenuates by self.strength
-
-        TODO: this is not currently correct; fix
         """
         DIRS_LUT = {
             (1, "0"): -np.array([0.0, 0.0, 1.0]),
@@ -175,12 +173,7 @@ class PlatonicFractalsBenchmarkMixin:
             (2, "1"): -np.array([1.0, 0.0, 0.0]),
             (3, "1"): -np.array([0.0, 1.0, 0.0]),
         }
-        """
-            This k works for self.strength == 0.93. No clue how it emerges
-            generally though, this needs to be fixed!
-        """
-        assert self.strength == 0.93, "fix _reference_for_point!"
-        k = 0.68
+        k = (1-np.sqrt(1-self.strength**2)) / self.strength
         r = -np.array([0.0, 0.0, 1.0])
         for step in zip(directions, outcomes):
             n = k * DIRS_LUT[step]
