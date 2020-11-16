@@ -300,6 +300,8 @@ def make_tex(args):
                 vendor = slug['additional_stored_info']['vendor']
                 device = slug['additional_stored_info']['device']
                 if device.startswith('ibmq_'): device = device[5:]
+                if device.startswith('Aspen'): device = '-'.join(device.split('-')[:2]).lower()
+                if device.startswith('16_'): device = device[3:]
                 print(f"  vendor: {vendor}.")
                 print(f"  device: {device}.")
                 if (vendor, device) not in results[benchmark]:
@@ -319,7 +321,7 @@ def make_tex(args):
         print()
         print(f"TeX for {benchmark}:")
         if benchmark in ['Schroedinger-Microscope', 'Mandelbrot']:
-            for i, ((vendor, device), r) in enumerate(sorted(res.items())):
+            for i, ((vendor, device), r) in enumerate(sorted(res.items(), key = lambda x : ((3,32,8192) in x[1], x))):
                 if i%4 == 0:
                     print()
                     print("\\noindent")
@@ -331,17 +333,32 @@ def make_tex(args):
                     sigma_avg_score = .25 * np.linalg.norm([r[(1,32,4096)][1][0][1],r[(1,32,4096)][1][1][1],r[(2,32,4096)][1][0][1],r[(2,32,4096)][1][1][1]])
                 else:
                     avg_score, sigma_avg_score = '?', '?'
-                print("\\{}SmallResultsCard{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}".format(
-                    'SM' if benchmark == 'Schroedinger-Microscope' else 'Mandelbrot',
-                    vendor,
-                    device if not device.startswith('ibmq_') else device[5:],
-                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][0]) if (1,32,4096) in r else '?',
-                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][1]) if (1,32,4096) in r else '?',
-                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][0]) if (1,32,4096) in r else '?',
-                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][1]) if (1,32,4096) in r else '?',
-                    date,
-                    '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(avg_score, sigma_avg_score)
-                ))
+                if (3,32,8192) in r:
+                    print("\\{}LargeResultsCard{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}".format(
+                        'SM' if benchmark == 'Schroedinger-Microscope' else 'Mandelbrot',
+                        vendor,
+                        device,
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][0]) if (1,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][1]) if (1,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][0]) if (2,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][1]) if (2,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(3,32,8192)][1][0]) if (3,32,8192) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(3,32,8192)][1][1]) if (3,32,8192) in r else '?',
+                        date,
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(avg_score, sigma_avg_score) if avg_score != '?' and sigma_avg_score != '?' else '?'
+                    ))
+                else:
+                    print("\\{}SmallResultsCard{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}{{{}}}".format(
+                        'SM' if benchmark == 'Schroedinger-Microscope' else 'Mandelbrot',
+                        vendor,
+                        device,
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][0]) if (1,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(1,32,4096)][1][1]) if (1,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][0]) if (2,32,4096) in r else '?',
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(*r[(2,32,4096)][1][1]) if (2,32,4096) in r else '?',
+                        date,
+                        '{:.4f} {{\\color{{gray}}{{\pm {:.4f}}}}}'.format(avg_score, sigma_avg_score) if avg_score != '?' and sigma_avg_score != '?' else '?'
+                    ))
 
 if __name__ == "__main__":
     print_hl("qυanтυм вencнмarĸιng ѕυιтe\n", color="cyan")
