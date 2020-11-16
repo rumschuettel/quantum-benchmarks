@@ -144,10 +144,9 @@ class HHLJob(IBMJob):
                 )
                 # Here we assume that there is a single ancilla
                 instance_circuit.x(1)
-                if basis_vec % 2 == 1:
-                    instance_circuit.x(num_qubits)
-                if basis_vec % 4 >= 2 and used_qubits > 1:
-                    instance_circuit.x(num_qubits - 1)
+                for i in range(used_qubits):
+                    if basis_vec % 2 ** (i+1) >= 2 ** i:
+                        instance_circuit.x(num_qubits-i)
                 instance_circuit.extend(qsvt_circuit)
 
                 yield HHLJob(
@@ -192,4 +191,4 @@ class HHLJob(IBMJob):
         return device.execute(self.circuit, num_shots=self.shots)
 
     def __str__(self):
-        return f"IBMHHLJob--{self.num_qubits}-{self.basis_vec}-{self.shots}-{self.m_idx}"
+        return f"IBMHHLJob--{self.num_qubits-self.num_ancillas}-{self.basis_vec}-{self.shots}-{self.m_idx}"
