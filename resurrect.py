@@ -51,7 +51,7 @@ sys.modules["qiskit.circuit.register"].__dict__["Register"].name = old_register_
 sys.modules["qiskit.circuit.register"].__dict__["Register"].size = old_register_size
 sys.modules["qiskit.circuit.register"].__dict__["Register"].__hash__ = old_register_hash
 
-TYPES_TO_SKIP = (str, int, float, bool, datetime.timedelta, np.complex128)
+TYPES_TO_SKIP = (str, int, float, bool, datetime.timedelta, np.complex128, np.ndarray)
 
 
 def iterate_obj(o):
