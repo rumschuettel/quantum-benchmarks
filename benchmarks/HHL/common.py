@@ -108,7 +108,7 @@ class HHLBenchmarkMixin:
     def __repr__(self):
         return str(
             {
-                "matrix": self.matrix,
+                "matrix": { key: self.matrix[key] for key in {"qubits", "ancillas"} },
                 "num_shots": self.num_shots,
                 "shots_multiplier": self.shots_multiplier,
             }
