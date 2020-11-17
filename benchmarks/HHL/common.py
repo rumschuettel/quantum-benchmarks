@@ -129,13 +129,13 @@ def argparser(toadd, **argparse_options):
         "--num_shots",
         type=int,
         help="Number of shots per orientation",
-        default=8096,
+        default=8192,
     )
     parser.add_argument(
         "-m",
         "--shots_multiplier",
         type=int,
-        help="Multiplier for shots per orientation",
+        help="Multiplier for shots",
         default=1,
     )
     return parser
