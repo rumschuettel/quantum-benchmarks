@@ -7,25 +7,18 @@ from .. import HHLBenchmarkMixin
 
 
 class HHLBenchmarkBase(HHLBenchmarkMixin, RigettiBenchmark):
-    def __init__(self, add_measurements, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        self.add_measurements = add_measurements
 
     def get_jobs(self):
         yield from HHLJob.job_factory(
-            self.block_encoding,
-            self.num_qubits,
-            self.num_ancillas,
-            self.qsvt_poly,
+            self.matrix,
             self.num_shots,
             self.shots_multiplier,
-            self.add_measurements,
         )
 
     def __str__(self):
         return "Rigetti-HHL"
-
 
 class HHLBenchmark(HHLBenchmarkBase):
     """
@@ -35,12 +28,11 @@ class HHLBenchmark(HHLBenchmarkBase):
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.update({"add_measurements": True})
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
         counts = {}
-        qubits = job.num_qubits + job.num_ancillas + 1
+        qubits = job.num_qubits + 1
         for measurement in np.vstack([result[k] for k in range(qubits)]).T:
             key = "".join(["0" if b == 0 else "1" for b in measurement])
             if key in counts:
@@ -48,13 +40,14 @@ class HHLBenchmark(HHLBenchmarkBase):
             else:
                 counts[key] = 1
 
-        histogram = [0] * 2 ** job.num_qubits
+        total = 0
+        histogram = [0] * 2 ** (job.num_qubits-job.num_ancillas)
         for result in counts:
-            if int(result, 2) < 2 ** job.num_qubits:
-                histogram[int(result, 2)] = counts[result]
+            total += counts[result]
+            if result[0:2]=="01":
+                histogram[int(result[2:], 2)] = counts[result]   
 
-        return {"basis_vec": job.basis_vec, "histogram": histogram}
-
+        return {"basis_vec": job.basis_vec, "histogram": histogram, "total": total}
 
 class HHLSimulatedBenchmark(HHLBenchmarkBase):
     """
@@ -64,15 +57,16 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.update({"add_measurements": False})
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
         psi = result.amplitudes
 
+        used_qubits = (job.num_qubits-job.num_ancillas)  
+
         histogram = []
-        for i in range(2 ** job.num_qubits):
-            j = int(format(i, f"0{2*job.num_qubits}b")[::-1], 2)
+        for i in range(2 ** used_qubits):
+            j = i +  2**job.num_qubits - 2**used_qubits
             histogram.append(np.abs(psi[j]) ** 2)
 
-        return {"basis_vec": job.basis_vec, "histogram": histogram}
+        return {"basis_vec": job.basis_vec, "histogram": histogram, "total": 1}    

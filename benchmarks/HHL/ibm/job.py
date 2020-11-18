@@ -5,11 +5,11 @@ import numpy as np
 from math import pi
 from numpy import arccos, sqrt
 import random as random
-from qiskit import QuantumCircuit, execute, BasicAer
 
 # For nice printing during debug
 from pandas import DataFrame
 
+from qiskit import QuantumCircuit, execute, BasicAer
 from qiskit.circuit.library.standard_gates import *
 
 from libbench.ibm import Job as IBMJob
