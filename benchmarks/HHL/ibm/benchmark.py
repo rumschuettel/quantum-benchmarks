@@ -65,7 +65,7 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
         used_qubits = (job.num_qubits-job.num_ancillas)        
 
         histogram = []
-        for i in range(2 ** (used_qubits)):
+        for i in range(2 ** used_qubits):
             j = i +  2**job.num_qubits - 2**used_qubits
             histogram.append(np.abs(psi[j]) ** 2)
 

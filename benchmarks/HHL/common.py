@@ -8,6 +8,9 @@ import random as random
 from pylab import rcParams
 from matplotlib import pyplot as plt
 
+# For nice printing during debug
+from pandas import DataFrame
+
 from libbench import VendorJob
 
 from .matrices import MATRICES
@@ -49,9 +52,25 @@ class HHLBenchmarkMixin:
                 # histograms[i][basis_vec]+=histogram[i]/(self.num_shots*self.shots_multiplier)
                 histograms[i][basis_vec] += histogram[i] / totals[basis_vec]               
 
-        # Print histogram for debugging purposes
-        print(histograms)
+        ideal_stats=self.matrix["histogram"]
 
+        # Print histogram for debugging purposes
+        # print(histograms)
+        # print(ideal_stats)
+
+        tv=0
+        sigma=0
+        for i in range(len(histograms)):
+            for j in range(len(histograms[0])):
+                p=histograms[i][j]*totals[j]/self.num_shots/self.shots_multiplier
+                tv += abs(p-ideal_stats[i][j])/2
+                sigma += sqrt( p * (1 - p) / (self.num_shots * self.shots_multiplier - 1) )/2
+
+        tv=tv/len(histograms[0])
+        print("Average total variation distance: "+str(tv))
+        sigma=sigma/len(histograms[0])
+        print("Standard deviation: "+str(sigma))        
+        
         return histograms
 
     def visualize(self, collated_result: object, path: Path) -> Path:

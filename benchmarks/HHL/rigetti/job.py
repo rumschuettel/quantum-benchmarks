@@ -64,7 +64,7 @@ class HHLJob(RigettiJob):
         }
 
         for gate, *indices in circuit_list:
-            circuit += gate_lut[gate](*[ idx - 1 for idx in indices ])
+            circuit += gate_lut[gate](*[ idx for idx in indices ])
 
         return circuit
 
@@ -102,7 +102,7 @@ class HHLJob(RigettiJob):
         used_qubits = num_qubits - num_ancillas
 
         for m_idx in range(shots_multiplier):
-            for basis_vec in range(0, 2 ** num_qubits):
+            for basis_vec in range(2 ** used_qubits):
                 instance_circuit = pq.Program()
 
                 instance_circuit += pq.gates.X(1)
