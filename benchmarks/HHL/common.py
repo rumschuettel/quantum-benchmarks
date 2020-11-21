@@ -9,7 +9,7 @@ from pylab import rcParams
 from matplotlib import pyplot as plt
 
 # For nice printing during debug
-from pandas import DataFrame
+import pandas as pandas
 
 from libbench import VendorJob
 
@@ -58,27 +58,48 @@ class HHLBenchmarkMixin:
         # print(histograms)
         # print(ideal_stats)
 
+        totals2 = [0] * 2 ** used_qubits 
+        total2sum=0
+        for i in range(len(histograms)):
+            for j in range(len(histograms[0])):
+                p=histograms[i][j]*totals[j]/self.num_shots/self.shots_multiplier
+                totals2[j] += p + ideal_stats[i][j]   
+                total2sum += p + ideal_stats[i][j]  
+
         tv=0
         sigma=0
         for i in range(len(histograms)):
             for j in range(len(histograms[0])):
                 p=histograms[i][j]*totals[j]/self.num_shots/self.shots_multiplier
-                tv += abs(p-ideal_stats[i][j])/2
-                sigma += sqrt( p * (1 - p) / (self.num_shots * self.shots_multiplier - 1) )/2
+                # Unweighted
+                #tv += abs(p-ideal_stats[i][j])/2
+                #sigma += sqrt( p * (1 - p) / (self.num_shots * self.shots_multiplier - 1) )/2
+                # Weighing with total probability
+                tv += abs(p-ideal_stats[i][j])
+                sigma += sqrt( p * (1 - p) / (self.num_shots * self.shots_multiplier - 1) )
 
-        tv=tv/len(histograms[0])
-        print("Average total variation distance: "+str(tv))
-        sigma=sigma/len(histograms[0])
-        print("Standard deviation: "+str(sigma))        
-        
-        return histograms
+        # Unweighted
+        #tv=tv/len(histograms[0])
+        # print("Average total variation distance: "+str(tv))
+        #sigma=sigma/len(histograms[0])
+        # print("Standard deviation: "+str(sigma))      
+        tv=tv/total2sum
+        sigma=sigma/total2sum
+
+        # For debugging
+        #pandas.set_option("max_columns", 8)
+        #pandas.set_option("max_rows", 8)        
+        #print(pandas.DataFrame(ideal_stats))
+        #print(pandas.DataFrame(histograms))          
+
+        return histograms, (tv, sigma)
 
     def visualize(self, collated_result: object, path: Path) -> Path:
 
         # Unpack the collated result
         used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])        
     
-        histograms = collated_result
+        histograms, _ = collated_result
         postProbs = np.zeros( 2 ** used_qubits, dtype=np.float64)          
         postHistograms = np.zeros((2 ** used_qubits, 2 ** used_qubits), dtype=np.float64)
       
@@ -121,8 +142,35 @@ class HHLBenchmarkMixin:
         figpath = path / "visualize.pdf"
         fig.savefig(figpath)
 
+        # Set up the figure
+        fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis
+        fig.subplots_adjust(left=-0, right= 1, bottom=0, top=1, hspace=0, wspace=0)  
+        fig.set_size_inches(3,3)      
+        
+        # Draw the measurement probabilities
+        ax.imshow(postHistograms, cmap="gray", vmin=min_value, vmax=0, aspect='auto')
+
+        # Clear axes
+        ax.set_xticks(range(0))
+        ax.set_xticklabels(range(0))
+        ax.set_yticks(range(0))
+        ax.set_yticklabels(range(0))            
+
+        # save the figure for the overview page
+        devfigpath = path / "visualize-devpage.pdf"
+        fig.savefig(devfigpath)        
+
         # default figure to display
         return figpath
+
+    def score(self, collated_result: object, *_):    
+        _, score = collated_result        
+
+        used_qubits = (self.matrix["qubits"]-self.matrix["ancillas"])      
+
+        print(f"Average (subnormalized) total-variation distance (and estimated error): {score[0]:.3f}+{score[1]:.3f}. (Used qubits: {used_qubits:1d})")
+
+        return (score[0], score[1])
 
     def __repr__(self):
         return str(
