@@ -326,7 +326,7 @@ def make_tex(args):
             else:
                 print("Score not processed.")
 
-    for benchmark, res in sorted(results.items(), key = lambda x : ['Schroedinger-Microscope', 'Mandelbrot', 'Line-Drawing'].index(x[0])):
+    for benchmark, res in sorted(results.items(), key = lambda x : ['Schroedinger-Microscope', 'Mandelbrot', 'Line-Drawing', 'Platonic-Fractals'].index(x[0])):
         print()
         print(f"TeX for {benchmark}:")
         if benchmark in ['Schroedinger-Microscope', 'Mandelbrot']:
