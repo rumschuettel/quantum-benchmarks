@@ -167,6 +167,9 @@ class LineDrawingBenchmarkMixin:
                     m *= f
                     approx += m / (3 ** n)
 
+            # trace 1
+            approx /= approx.trace()
+
             # Obtain the largest eigenvector
             w, v = np.linalg.eigh(approx)
             idx = w.argsort()[::-1]
@@ -177,6 +180,9 @@ class LineDrawingBenchmarkMixin:
             # correct curve alignment
             curve = self.corrected_curve(curve, self.points)
 
+            # rescale to represent mixedness
+            curve *= np.sqrt(np.abs(w[0]))
+
             # Add the curve to the resulting curves
             curves.append(curve)
         return curves
@@ -186,17 +192,10 @@ class LineDrawingBenchmarkMixin:
         fig = plt.figure(figsize=(8, 8))
         ax = fig.gca()
 
-        # Plot the contours
-        for curve in collated_result:
-            xs, ys = list(np.real(curve)), list(np.imag(curve))
-            # print("X coordinates:", np.round(xs,3))
-            # print("Y coordinates:", np.round(ys,3))
-            ax.plot(
-                xs + [xs[0]],
-                ys + [ys[0]],
-                color="red",
-                alpha=0.3 / len(collated_result) * 25,
-            )
+        # shade percentile areas
+        for f in [1., .75, .5, .25]:
+            ideal_xs, ideal_ys = list(f*np.real(self.points)), list(f*np.imag(self.points))
+            ax.fill(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color=str(1-f/10))
 
         # Plot an averaged contour
         from matplotlib.collections import LineCollection
@@ -220,8 +219,20 @@ class LineDrawingBenchmarkMixin:
         widths *= 72.0 * axes_scale / fig.dpi
         avg_segments = np.concatenate([avg_pts[:-1], avg_pts[1:]], axis=1)
         ax.add_collection(
-            LineCollection(avg_segments, linewidths=widths, color="red", capstyle="round")
+            LineCollection(avg_segments, linewidths=widths, color="red", capstyle="round", alpha=1)
         )
+
+        # Plot the contours
+        for curve in collated_result:
+            xs, ys = list(np.real(curve)), list(np.imag(curve))
+            # print("X coordinates:", np.round(xs,3))
+            # print("Y coordinates:", np.round(ys,3))
+            ax.plot(
+                xs + [xs[0]],
+                ys + [ys[0]],
+                color="red",
+                alpha=0.3 / len(collated_result) * 25,
+            )
 
         # Plot the ideal contour
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
@@ -229,9 +240,9 @@ class LineDrawingBenchmarkMixin:
 
         if True:  # fixed axes
             if len(self.points) == 4:
-                xmin, xmax, ymin, ymax = (-0.6, 0.6, -0.65, 0.35)
+                xmin, xmax, ymin, ymax = (-0.65, 0.65, -0.55, 0.35)
             elif len(self.points) == 8 or True:
-                xmin, xmax, ymin, ymax = (-0.5, 0.5, -0.45, 0.45)
+                xmin, xmax, ymin, ymax = (-0.45, 0.45, -0.45, 0.35)
             dx, dy = (xmax - xmin, ymax - ymin)
         else:
             xmin, xmax, ymin, ymax = (

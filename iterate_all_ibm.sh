@@ -13,7 +13,7 @@ for condaenv in qiskit qiskit-17 qiskit-old; do
 done
 echo ""
 
-find $FOLDER -type d -name 'IBM*Platonic*' ! -path '*obsolete*' -print0 | 
+find $FOLDER -type d -name 'IBM*Line-Drawing*' ! -path '*obsolete*' -print0 | 
     while IFS= read -r -d '' folder; do 
         run_folder=`echo $folder | rev | cut -d/ -f2- | rev`
         run=`echo $folder | rev | cut -d/ -f1 | rev`
