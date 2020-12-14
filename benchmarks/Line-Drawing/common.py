@@ -180,20 +180,24 @@ class LineDrawingBenchmarkMixin:
             # correct curve alignment
             curve = self.corrected_curve(curve, self.points)
 
-            # shift the eigenvalues as described in GKKT, up to precision 2^{-32} 
-            wmax = w[0]                            
-            x = 0 
-            for i in range(1,31):
-                currtr = 0 
-                for r in w:
-                    if r - wmax * (x + pow(2,-i)) > 0:
-                        currtr += r - wmax * (x + pow(2,-i))
-                if currtr > 1:
-                    x += pow(2,-i)
-            wmax -= wmax * x              
+            # find projected eigenvalue shift as described in GKKT, III. B
+            def tr(x):
+                return sum([
+                    ww - x for ww in w if ww - x > 0
+                ])
+            left, right = 0., 1.
+            assert tr(left) >= 1 >= tr(right), "traces not bracketing 1 for GKKT shift"
+
+            for _ in range(32):
+                midpt = (left + right) / 2
+                if tr(midpt) >= 1:
+                    left = midpt
+                else:
+                    right = midpt
+            x0 = midpt          
 
             # rescale to represent mixedness
-            curve *= np.sqrt(wmax)
+            curve *= np.sqrt(w[0] - x0)
 
             # Add the curve to the resulting curves
             curves.append(curve)
