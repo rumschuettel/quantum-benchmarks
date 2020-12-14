@@ -185,8 +185,7 @@ class LineDrawingBenchmarkMixin:
                 return sum([
                     ww - x for ww in w if ww - x > 0
                 ])
-            left, right = 0., 1.
-            assert tr(left) >= 1 >= tr(right), "traces not bracketing 1 for GKKT shift"
+            left, right = 0., w[0]
 
             for _ in range(32):
                 midpt = (left + right) / 2
