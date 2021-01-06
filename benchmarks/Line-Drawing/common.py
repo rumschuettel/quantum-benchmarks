@@ -298,10 +298,18 @@ class LineDrawingBenchmarkMixin:
         # default figure to display
         return figpath
 
-    def score(self, collated_result: object, *_):
-        distances = np.linalg.norm(collated_result - self.points, axis=1, ord=2)
+    def score(self, collated_result: list, *_):
+        # old method: distances = np.linalg.norm(collated_result - self.points, axis=1, ord=2)
+        # new method: distance = (1 - norm) + norm * (distance between normalized curves)
+        distances = []
+        for curve in collated_result:       
+            norm = np.linalg.norm(curve, ord=2)     
+            distance = (1-norm)+norm*np.linalg.norm(curve/norm - self.points, ord=2)             
+            distances.append(distance)         
+
+        distances=np.asarray(distances)
         avg = distances.mean()
-        σ = distances.std()
+        σ = distances.std()            
 
         print(f"average distance: {avg:.2f}±{σ:.2f}")
 
