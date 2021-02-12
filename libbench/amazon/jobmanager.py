@@ -1,6 +1,6 @@
 from libbench import VendorJobManager
 
-class GoogleJobManager(VendorJobManager):
+class AmazonJobManager(VendorJobManager):
     def job_alive(self, promise, meta: dict):
         """
         Check whether the job is alive.
