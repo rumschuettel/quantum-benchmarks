@@ -26,7 +26,7 @@ class GoogleJobManager(VendorJobManager):
         """
         return promise.freeze()
 
-    def thaw_promise(self, promise):
+    def thaw_promise(self, promise, _):
         """
         Thaw a promise.
         """

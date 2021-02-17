@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from libbench.lib import print_hl
 from libbench.link import VendorLink, VendorJob
 
-from .promise import AmazonMeasureLocalPromise
+from .promise import AmazonMeasureLocalPromise, AmazonCloudPromise
 
 import braket, braket.circuits, braket.devices
 import functools
@@ -11,6 +11,18 @@ class AmazonDevice(ABC):
     @abstractmethod
     def execute(self, circuit: braket.circuits.Circuit, num_shots: int):
         pass
+
+class CloudDevice(AmazonDevice):
+    def __init__(self, name: str, address: str):
+        self.name = name
+        self.address = address
+
+    def execute(self, circuit, num_shots: int, **kwargs):
+        return {
+            "result": AmazonCloudPromise(circuit, braket.aws.AwsDevice(self.address), num_shots),
+            "transpiled_circuit": None,
+        }
+
 
 class LocalSimulatorMeasureLocal(AmazonDevice):
     def __init__(self):
@@ -29,7 +41,7 @@ class LocalSimulatorStatevector(AmazonDevice):
 
 AMAZON_STATEVECTOR_DEVICES = {}
 AMAZON_MEASURE_LOCAL_DEVICES = { "LocalSimulator": LocalSimulatorMeasureLocal() }
-AMAZON_CLOUD_DEVICES = {}
+AMAZON_CLOUD_DEVICES = { "SV1": CloudDevice(name="SV1", address="arn:aws:braket:::device/quantum-simulator/amazon/sv1") }
 
 
 class AmazonJob(VendorJob):
