@@ -16,6 +16,9 @@ from libbench.amazon import Job as AmazonJob
 from .. import HHLBenchmarkMixin
 from .. import matrices
 
+from .utils_circuit import adjoint
+Circuit.adjoint = adjoint
+
 
 class HHLJob(AmazonJob):
     @staticmethod
@@ -30,9 +33,9 @@ class HHLJob(AmazonJob):
             qsvt_circuit.h(0)
             for i in range(0, len(angles)):
                 if i % 2 == 0:
-                    qsvt_circuit.add_circuit(block_encoding, qubits=qubits)
+                    qsvt_circuit.add_circuit(block_encoding, target=qubits)
                 else:
-                    qsvt_circuit.add_circuit(block_encoding_inv, qubits=qubits)
+                    qsvt_circuit.add_circuit(block_encoding_inv, target=qubits)
                 # qsvt_circuit.x(1)
                 qsvt_circuit.cnot(1, 0)
                 qsvt_circuit.rz(0, -2 * angles[i])

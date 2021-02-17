@@ -4,7 +4,7 @@ from libbench.link import VendorLink, VendorJob
 
 from .promise import AmazonMeasureLocalPromise
 
-import braket, braket.circuits
+import braket, braket.circuits, braket.devices
 import functools
 
 class AmazonDevice(ABC):
@@ -28,7 +28,7 @@ class LocalSimulatorStatevector(AmazonDevice):
 
 
 AMAZON_STATEVECTOR_DEVICES = {}
-AMAZON_MEASURE_LOCAL_DEVICES = {"LocalSimulator"}
+AMAZON_MEASURE_LOCAL_DEVICES = { "LocalSimulator": LocalSimulatorMeasureLocal() }
 AMAZON_CLOUD_DEVICES = {}
 
 
