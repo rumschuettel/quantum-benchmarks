@@ -41,8 +41,8 @@ class AmazonCloudPromise(AmazonPromiseBase):
         device,
         num_shots: int,
         *,
-        s3_bucket: str = "quantum-bench",
-        s3_bucket_folder: str = ""
+        s3_bucket: str = "arn:aws:s3:::quantum-bench",
+        s3_bucket_folder: str = "benchmarks"
     ):
         super().__init__()
 
