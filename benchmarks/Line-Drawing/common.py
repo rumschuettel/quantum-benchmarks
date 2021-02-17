@@ -311,7 +311,9 @@ class LineDrawingBenchmarkMixin:
         avg = distances.mean()
         σ = distances.std()            
 
+        print(f"More precise average distance: {avg:.4f}±{σ:.4f}")
         print(f"average distance: {avg:.2f}±{σ:.2f}")
+
 
         return avg, σ
 

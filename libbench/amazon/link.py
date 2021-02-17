@@ -12,13 +12,7 @@ class AmazonDevice(ABC):
     def execute(self, circuit: braket.circuits.Circuit, num_shots: int):
         pass
 
-
 class LocalSimulatorMeasureLocal(AmazonDevice):
-    def __init__(self):
-        raise NotImplementedError()
-
-
-class LocalSimulatorStatevector(AmazonDevice):
     def __init__(self):
         self.name = "LocalSimulator"
 
@@ -28,13 +22,13 @@ class LocalSimulatorStatevector(AmazonDevice):
             "transpiled_circuit": None,
         }
 
+class LocalSimulatorStatevector(AmazonDevice):
+    def __init__(self):
+        raise NotImplementedError()    
 
-AMAZON_STATEVECTOR_DEVICES = {
-    "LocalSimulator": LocalSimulatorStatevector()
-    # support for the density matrix simulator can be added later if necessary
-}
 
-AMAZON_MEASURE_LOCAL_DEVICES = {}
+AMAZON_STATEVECTOR_DEVICES = {}
+AMAZON_MEASURE_LOCAL_DEVICES = {"LocalSimulator"}
 AMAZON_CLOUD_DEVICES = {}
 
 
