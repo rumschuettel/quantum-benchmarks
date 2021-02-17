@@ -4,7 +4,7 @@ from libbench.link import VendorLink, VendorJob
 
 from .promise import AmazonMeasureLocalPromise, AmazonCloudPromise
 
-import braket, braket.circuits, braket.devices
+import braket, braket.circuits, braket.devices, braket.aws
 import functools
 
 class AmazonDevice(ABC):
