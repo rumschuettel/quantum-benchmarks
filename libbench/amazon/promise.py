@@ -74,7 +74,8 @@ class AmazonCloudPromise(AmazonPromiseBase):
         No thawing necessary.
         The real promise should probably have this method in the frozen instance class.
         """
-        self.task = braket.aws.AwsQuantumTask(arn=self.task)
+        from braket.aws import AwsQuantumTask
+        self.task = AwsQuantumTask(arn=self.task)
         return self
 
     def result(self):
