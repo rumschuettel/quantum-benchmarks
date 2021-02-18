@@ -59,14 +59,21 @@ class AmazonCloudPromise(AmazonPromiseBase):
         """
         Return the status.
         """
-        return "DONE" if self.task.state() == "COMPLETED" else "FAILURE"
+        state = self.task.state()
+        if state == "COMPLETED":
+            return "DONE"
+        elif state == "CREATED" or state == "QUEUED" or state == "RUNNING":
+            return "PENDING"
+        else:
+            return "FAILURE"
 
     def freeze(self):
         """
         Since promises that resolve immediately will never be pickled, we can just pass self.
         The real promise can return a separate frozen instance if necessary.
         """
-        self.task = self.job_id()
+        if not isinstance(self.task, str):
+            self.task = self.job_id()
         return self
 
     def thaw(self):
@@ -75,11 +82,16 @@ class AmazonCloudPromise(AmazonPromiseBase):
         The real promise should probably have this method in the frozen instance class.
         """
         from braket.aws import AwsQuantumTask
-        self.task = AwsQuantumTask(arn=self.task)
+        if isinstance(self.task, str):
+            self.task = AwsQuantumTask(arn=self.task)
         return self
 
     def result(self):
-        return self.task.result()
+        if self.status() == "DONE":
+            return self.task.result()
+        else:
+            return None
+
 
 
 class AmazonMeasureLocalPromise(AmazonPromiseBase):
@@ -102,7 +114,13 @@ class AmazonMeasureLocalPromise(AmazonPromiseBase):
         """
         Return the status.
         """
-        return "DONE" if self.task.state() == "COMPLETED" else "FAILURE"
+        state = self.task.state()
+        if state == "COMPLETED":
+            return "DONE"
+        elif state == "CREATED" or state == "QUEUED" or state == "RUNNING":
+            return "PENDING"
+        else:
+            return "FAILURE"
 
     def freeze(self):
         """
@@ -119,4 +137,7 @@ class AmazonMeasureLocalPromise(AmazonPromiseBase):
         return self
 
     def result(self):
-        return self.task.result()
+        if self.status() == "DONE":
+            return self.task.result()
+        else:
+            return None

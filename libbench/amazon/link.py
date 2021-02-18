@@ -41,7 +41,9 @@ class LocalSimulatorStatevector(AmazonDevice):
 
 AMAZON_STATEVECTOR_DEVICES = {}
 AMAZON_MEASURE_LOCAL_DEVICES = { "LocalSimulator": LocalSimulatorMeasureLocal() }
-AMAZON_CLOUD_DEVICES = { "SV1": CloudDevice(name="SV1", address="arn:aws:braket:::device/quantum-simulator/amazon/sv1") }
+AMAZON_CLOUD_DEVICES = {    "SV1": CloudDevice(name="SV1", address="arn:aws:braket:::device/quantum-simulator/amazon/sv1"), 
+                            "Aspen-9": CloudDevice(name="Aspen-9", address="arn:aws:braket:::device/qpu/rigetti/Aspen-9"),
+                            "IonQ": CloudDevice(name="IonQ", address="arn:aws:braket:::device/qpu/ionq/ionQdevice") }                            
 
 
 class AmazonJob(VendorJob):
