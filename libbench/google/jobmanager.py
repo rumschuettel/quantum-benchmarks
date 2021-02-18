@@ -1,5 +1,6 @@
 from libbench import VendorJobManager
 
+
 class GoogleJobManager(VendorJobManager):
     def job_alive(self, promise, meta: dict):
         """

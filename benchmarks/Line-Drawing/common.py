@@ -182,10 +182,9 @@ class LineDrawingBenchmarkMixin:
 
             # find projected eigenvalue shift as described in GKKT, III. B
             def tr(x):
-                return sum([
-                    ww - x for ww in w if ww - x > 0
-                ])
-            left, right = 0., w[0]
+                return sum([ww - x for ww in w if ww - x > 0])
+
+            left, right = 0.0, w[0]
 
             for _ in range(32):
                 midpt = (left + right) / 2
@@ -193,7 +192,7 @@ class LineDrawingBenchmarkMixin:
                     left = midpt
                 else:
                     right = midpt
-            x0 = midpt          
+            x0 = midpt
 
             # rescale to represent mixedness
             curve *= np.sqrt(w[0] - x0)
@@ -208,9 +207,9 @@ class LineDrawingBenchmarkMixin:
         ax = fig.gca()
 
         # shade percentile areas
-        for f in [1., .75, .5, .25]:
-            ideal_xs, ideal_ys = list(f*np.real(self.points)), list(f*np.imag(self.points))
-            ax.fill(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color=str(1-f/10))
+        for f in [1.0, 0.75, 0.5, 0.25]:
+            ideal_xs, ideal_ys = list(f * np.real(self.points)), list(f * np.imag(self.points))
+            ax.fill(ideal_xs + [ideal_xs[0]], ideal_ys + [ideal_ys[0]], color=str(1 - f / 10))
 
         # Plot an averaged contour
         from matplotlib.collections import LineCollection
@@ -302,18 +301,17 @@ class LineDrawingBenchmarkMixin:
         # old method: distances = np.linalg.norm(collated_result - self.points, axis=1, ord=2)
         # new method: distance = (1 - norm) + norm * (distance between normalized curves)
         distances = []
-        for curve in collated_result:       
-            norm = np.linalg.norm(curve, ord=2)     
-            distance = (1-norm)+norm*np.linalg.norm(curve/norm - self.points, ord=2)             
-            distances.append(distance)         
+        for curve in collated_result:
+            norm = np.linalg.norm(curve, ord=2)
+            distance = (1 - norm) + norm * np.linalg.norm(curve / norm - self.points, ord=2)
+            distances.append(distance)
 
-        distances=np.asarray(distances)
+        distances = np.asarray(distances)
         avg = distances.mean()
-        σ = distances.std()            
+        σ = distances.std()
 
         print(f"More precise average distance: {avg:.4f}±{σ:.4f}")
         print(f"average distance: {avg:.2f}±{σ:.2f}")
-
 
         return avg, σ
 

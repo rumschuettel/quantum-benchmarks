@@ -14,7 +14,7 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, RigettiBenchmark):
         yield from HHLJob.job_factory(
             self.matrix,
             self.num_shots,
-            self.shots_multiplier,          
+            self.shots_multiplier,
         )
 
     def __str__(self):
@@ -41,10 +41,10 @@ class HHLBenchmark(HHLBenchmarkBase):
         }
         so each column represents one joint measurement outcome; selecting only a subset of the qubits
         effectively means measuring only a subset, ignoring the rest
-        """        
+        """
         counts = {}
         qubits = job.num_qubits + 1
-                  
+
         for measurement in np.vstack([result[k] for k in range(qubits)]).T:
             key = "".join(["0" if b == 0 else "1" for b in measurement])
             if key in counts:
@@ -53,13 +53,14 @@ class HHLBenchmark(HHLBenchmarkBase):
                 counts[key] = 1
 
         total = 0
-        histogram = [0] * 2 ** (job.num_qubits-job.num_ancillas)
+        histogram = [0] * 2 ** (job.num_qubits - job.num_ancillas)
         for result in counts:
             total += counts[result]
-            if result[0:2]=="01":
-                histogram[int(result[2:], 2)] = counts[result]   
+            if result[0:2] == "01":
+                histogram[int(result[2:], 2)] = counts[result]
 
         return {"basis_vec": job.basis_vec, "histogram": histogram, "total": total}
+
 
 class HHLSimulatedBenchmark(HHLBenchmarkBase):
     """
@@ -68,17 +69,17 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
     The device behaves like a statevector_simulator, i.e. without noise
     """
 
-    def __init__(self, *args, **kwargs):     
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def parse_result(self, job, result):
         psi = result.amplitudes
 
-        used_qubits = (job.num_qubits-job.num_ancillas)  
+        used_qubits = job.num_qubits - job.num_ancillas
 
         histogram = []
         for i in range(2 ** used_qubits):
-            j = i +  2**job.num_qubits - 2**used_qubits
+            j = i + 2 ** job.num_qubits - 2 ** used_qubits
             histogram.append(np.abs(psi[j]) ** 2)
 
-        return {"basis_vec": job.basis_vec, "histogram": histogram, "total": 1}    
+        return {"basis_vec": job.basis_vec, "histogram": histogram, "total": 1}

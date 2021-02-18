@@ -17,12 +17,15 @@ from .. import HHLBenchmarkMixin
 from .. import matrices
 
 from .utils_circuit import adjoint
+
 Circuit.adjoint = adjoint
 
 
 class HHLJob(AmazonJob):
     @staticmethod
-    def create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding, block_encoding_inv, angles):
+    def create_qsvt_circuit(
+        num_qubits, num_ancillas, add_measurements, block_encoding, block_encoding_inv, angles
+    ):
         qsvt_circuit = Circuit()
         if num_ancillas != 1:
             raise NotImplementedError("The general QSVT circuit generation is not yet implemented!")
@@ -54,17 +57,17 @@ class HHLJob(AmazonJob):
     def list_to_circuit(circuit_list: list, circuit: Circuit) -> Circuit:
 
         gate_lut = {
-            "H": lambda index: circuit.h(index),                 
+            "H": lambda index: circuit.h(index),
             "X": lambda index: circuit.x(index),
             "Y": lambda index: circuit.y(index),
             "Z": lambda index: circuit.z(index),
-            "R": lambda index: circuit.rz(index, 2 * np.pi / 3),       
+            "R": lambda index: circuit.rz(index, 2 * np.pi / 3),
             "S": lambda index: circuit.s(index),
             "T": lambda index: circuit.t(index),
-            "RX": lambda index: circuit.rx(index, 2 * np.pi / 3),  
-            "SX": lambda index: circuit.rx(index, np.pi / 2),  
+            "RX": lambda index: circuit.rx(index, 2 * np.pi / 3),
+            "SX": lambda index: circuit.rx(index, np.pi / 2),
             "TX": lambda index: circuit.rx(index, np.pi / 4),
-            "RY": lambda index: circuit.ry(index, 2 * np.pi / 3),              
+            "RY": lambda index: circuit.ry(index, 2 * np.pi / 3),
             "SY": lambda index: circuit.ry(index, np.pi / 2),
             "TY": lambda index: circuit.ry(index, np.pi / 4),
             "CX": lambda control, target: circuit.cnot(control, target),
@@ -77,7 +80,7 @@ class HHLJob(AmazonJob):
         }
 
         for gate, *indices in circuit_list:
-            gate_lut[gate](*[ idx - 1 for idx in indices ])
+            gate_lut[gate](*[idx - 1 for idx in indices])
 
         return circuit
 
@@ -102,7 +105,7 @@ class HHLJob(AmazonJob):
         # block_encoding.draw()
 
         # Angles describing the polynomial inverting A
-        angles= matrix["angles"]
+        angles = matrix["angles"]
 
         # Quanutm Singular Value Transformation
         qsvt_circuit = HHLJob.create_qsvt_circuit(
@@ -126,7 +129,7 @@ class HHLJob(AmazonJob):
         # job = execute(print_unitary, BasicAer.get_backend('unitary_simulator'))
         # print(DataFrame(job.result().get_unitary(print_unitary, decimals=2)))
 
-        #raise NotImplementedError("Stop now")
+        # raise NotImplementedError("Stop now")
 
         # Debugging the circuit
         # print(qsvt_circuit)
@@ -143,8 +146,8 @@ class HHLJob(AmazonJob):
                 # Here we assume that there is a single ancilla
                 instance_circuit.x(1)
                 for i in range(used_qubits):
-                    if basis_vec % 2 ** (i+1) >= 2 ** i:
-                        instance_circuit.x(num_qubits-i)
+                    if basis_vec % 2 ** (i + 1) >= 2 ** i:
+                        instance_circuit.x(num_qubits - i)
                 instance_circuit.add_circuit(qsvt_circuit)
 
                 yield HHLJob(
@@ -175,7 +178,7 @@ class HHLJob(AmazonJob):
         self.basis_vec = basis_vec
         self.shots = shots
         self.m_idx = m_idx
-        self.add_measurements = add_measurements     
+        self.add_measurements = add_measurements
 
     def run(self, device):
         super().run(device)

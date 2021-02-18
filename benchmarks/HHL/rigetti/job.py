@@ -44,17 +44,17 @@ class HHLJob(RigettiJob):
     def list_to_circuit(circuit_list: list, circuit: Program) -> Program:
 
         gate_lut = {
-            "H": lambda index: pq.gates.H(index),                 
+            "H": lambda index: pq.gates.H(index),
             "X": lambda index: pq.gates.X(index),
             "Y": lambda index: pq.gates.Y(index),
             "Z": lambda index: pq.gates.Z(index),
-            "R": lambda index: pq.gates.RZ(2 * np.pi / 3, index),       
+            "R": lambda index: pq.gates.RZ(2 * np.pi / 3, index),
             "S": lambda index: pq.gates.S(index),
             "T": lambda index: pq.gates.T(index),
-            "RX": lambda index: pq.gates.RX(2 * np.pi / 3, index),  
-            "SX": lambda index: pq.gates.RX(np.pi / 2, index),  
+            "RX": lambda index: pq.gates.RX(2 * np.pi / 3, index),
+            "SX": lambda index: pq.gates.RX(np.pi / 2, index),
             "TX": lambda index: pq.gates.RX(np.pi / 4, index),
-            "RY": lambda index: pq.gates.RY(2 * np.pi / 3, index),              
+            "RY": lambda index: pq.gates.RY(2 * np.pi / 3, index),
             "SY": lambda index: pq.gates.RY(np.pi / 2, index),
             "TY": lambda index: pq.gates.RY(np.pi / 4, index),
             "CX": lambda control, target: pq.gates.CNOT(control, target),
@@ -64,7 +64,7 @@ class HHLJob(RigettiJob):
         }
 
         for gate, *indices in circuit_list:
-            circuit += gate_lut[gate](*[ idx for idx in indices ])
+            circuit += gate_lut[gate](*[idx for idx in indices])
 
         return circuit
 
@@ -83,12 +83,12 @@ class HHLJob(RigettiJob):
             raise NotImplementedError("The general HHL circuit generation is not yet implemented!")
 
         # Build block-encoding of A
-        block_encoding = pq.Program() 
+        block_encoding = pq.Program()
         HHLJob.list_to_circuit(matrix["circuit"], block_encoding)
         # block_encoding.draw()
 
         # Angles describing the polynomial inverting A
-        angles= matrix["angles"]
+        angles = matrix["angles"]
 
         # Quanutm Singular Value Transformation
         qsvt_circuit = HHLJob.create_qsvt_circuit(
@@ -107,8 +107,8 @@ class HHLJob(RigettiJob):
 
                 instance_circuit += pq.gates.X(1)
                 for i in range(used_qubits):
-                    if basis_vec % 2 ** (i+1) >= 2 ** i:
-                        instance_circuit += pq.gates.X(num_qubits-i)
+                    if basis_vec % 2 ** (i + 1) >= 2 ** i:
+                        instance_circuit += pq.gates.X(num_qubits - i)
 
                 instance_circuit += qsvt_circuit
 
