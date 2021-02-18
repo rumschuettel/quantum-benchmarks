@@ -66,7 +66,7 @@ class AmazonJob(VendorJob):
         return info
 
     def run(self, device):
-        self.device_info = device.properties
+        self.device_info = device.properties if hasattr(device, "properties") else None
 
 
 class AmazonLinkBase(VendorLink):
