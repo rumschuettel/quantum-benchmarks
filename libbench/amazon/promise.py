@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-import braket, braket.circuits
+import os, braket, braket.circuits
 
 
 class AmazonPromiseBase(ABC):
@@ -41,7 +41,7 @@ class AmazonCloudPromise(AmazonPromiseBase):
         device,
         num_shots: int,
         *,
-        s3_bucket: str = "arn:aws:s3:::quantum-bench",
+        s3_bucket: str = open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r").read().strip(),
         s3_bucket_folder: str = "benchmarks"
     ):
         super().__init__()
