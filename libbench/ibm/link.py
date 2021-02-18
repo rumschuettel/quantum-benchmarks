@@ -19,18 +19,18 @@ class IBMDevice:
 
     def execute(
         self,
-        cirquit: qiskit.QuantumCircuit,
+        circuit: qiskit.QuantumCircuit,
         num_shots=1024,
         initial_layout=None,
         optimization_level=3,
     ):
         experiment = qiskit.compiler.transpile(
-            cirquit,
+            circuit,
             initial_layout=initial_layout,
             optimization_level=optimization_level,
             backend=self.device,
         )
-        print_hl(cirquit, color="white")
+        print_hl(circuit, color="white")
         print_hl(experiment, color="white")
         qobj = qiskit.compiler.assemble(
             experiment, shots=num_shots, max_credits=15, backend=self.device

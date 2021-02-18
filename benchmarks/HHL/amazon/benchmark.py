@@ -39,11 +39,11 @@ class HHLBenchmark(HHLBenchmarkBase):
         counts = result.measurement_counts
 
         total = 0
-        histogram = [0] * 2 ** (job.num_qubits-job.num_ancillas)
+        histogram = [0] * 2 ** (job.num_qubits - job.num_ancillas)
         for result in counts.keys():
             total += counts.get(result)
-            if result[0:2]=="01":
-                histogram[int(result[2:], 2)] = counts.get(result)    
+            if result[0:2] == "01":
+                histogram[int(result[2:], 2)] = counts.get(result)
 
         return {"basis_vec": job.basis_vec, "histogram": histogram, "total": total}
 
@@ -55,4 +55,5 @@ class HHLSimulatedBenchmark(HHLBenchmarkBase):
     The device behaves like a statevector_simulator, i.e. without noise
     """
 
-#TODO not implemented
+
+# TODO not implemented

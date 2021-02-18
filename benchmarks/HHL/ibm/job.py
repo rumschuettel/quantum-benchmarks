@@ -20,7 +20,9 @@ from .. import matrices
 
 class HHLJob(IBMJob):
     @staticmethod
-    def create_qsvt_circuit(num_qubits, num_ancillas, add_measurements, block_encoding, block_encoding_inv, angles):
+    def create_qsvt_circuit(
+        num_qubits, num_ancillas, add_measurements, block_encoding, block_encoding_inv, angles
+    ):
         qsvt_circuit = (
             QuantumCircuit(num_qubits + 1, num_qubits + 1)
             if add_measurements
@@ -56,26 +58,28 @@ class HHLJob(IBMJob):
     def list_to_circuit(circuit_list: list, circuit: QuantumCircuit) -> QuantumCircuit:
 
         gate_lut = {
-            "H": lambda index: circuit.h(index),                 
+            "H": lambda index: circuit.h(index),
             "X": lambda index: circuit.x(index),
             "Y": lambda index: circuit.y(index),
             "Z": lambda index: circuit.z(index),
-            "R": lambda index: circuit.rz(2 * np.pi / 3, index),       
+            "R": lambda index: circuit.rz(2 * np.pi / 3, index),
             "S": lambda index: circuit.s(index),
             "T": lambda index: circuit.t(index),
-            "RX": lambda index: circuit.rx(2 * np.pi / 3, index),  
-            "SX": lambda index: circuit.rx(np.pi / 2, index),  
+            "RX": lambda index: circuit.rx(2 * np.pi / 3, index),
+            "SX": lambda index: circuit.rx(np.pi / 2, index),
             "TX": lambda index: circuit.rx(np.pi / 4, index),
-            "RY": lambda index: circuit.ry(2 * np.pi / 3, index),              
+            "RY": lambda index: circuit.ry(2 * np.pi / 3, index),
             "SY": lambda index: circuit.ry(np.pi / 2, index),
             "TY": lambda index: circuit.ry(np.pi / 4, index),
             "CX": lambda control, target: circuit.cx(control, target),
-            "CZ": lambda qubit1, qubit2: circuit.cz(qubit1, qubit2),       
-            "SQSWAP": lambda qubit1, qubit2: circuit.append(SwapGate().power(0.5), [qubit1, qubit2])   
+            "CZ": lambda qubit1, qubit2: circuit.cz(qubit1, qubit2),
+            "SQSWAP": lambda qubit1, qubit2: circuit.append(
+                SwapGate().power(0.5), [qubit1, qubit2]
+            ),
         }
 
         for gate, *indices in circuit_list:
-            gate_lut[gate](*[ idx - 1 for idx in indices ])
+            gate_lut[gate](*[idx - 1 for idx in indices])
 
         return circuit
 
@@ -100,7 +104,7 @@ class HHLJob(IBMJob):
         # block_encoding.draw()
 
         # Angles describing the polynomial inverting A
-        angles= matrix["angles"]
+        angles = matrix["angles"]
 
         # Quanutm Singular Value Transformation
         qsvt_circuit = HHLJob.create_qsvt_circuit(
@@ -124,7 +128,7 @@ class HHLJob(IBMJob):
         # job = execute(print_unitary, BasicAer.get_backend('unitary_simulator'))
         # print(DataFrame(job.result().get_unitary(print_unitary, decimals=2)))
 
-        #raise NotImplementedError("Stop now")
+        # raise NotImplementedError("Stop now")
 
         # Debugging the circuit
         # print(qsvt_circuit)
@@ -145,8 +149,8 @@ class HHLJob(IBMJob):
                 # Here we assume that there is a single ancilla
                 instance_circuit.x(1)
                 for i in range(used_qubits):
-                    if basis_vec % 2 ** (i+1) >= 2 ** i:
-                        instance_circuit.x(num_qubits-i)
+                    if basis_vec % 2 ** (i + 1) >= 2 ** i:
+                        instance_circuit.x(num_qubits - i)
                 instance_circuit.extend(qsvt_circuit)
 
                 yield HHLJob(
@@ -183,8 +187,8 @@ class HHLJob(IBMJob):
             circuit.measure(
                 # list(range(num_qubits+1)), list(range(num_qubits+1))
                 list(range(num_qubits + 1)),
-                list(reversed(range(num_qubits + 1))),    
-            )         
+                list(reversed(range(num_qubits + 1))),
+            )
 
     def run(self, device):
         super().run(device)

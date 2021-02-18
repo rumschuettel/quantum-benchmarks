@@ -41,13 +41,17 @@ class AmazonCloudPromise(AmazonPromiseBase):
         device,
         num_shots: int,
         *,
-        s3_bucket: str = open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r").read().strip(),
+        s3_bucket: str = open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r")
+        .read()
+        .strip(),
         s3_bucket_folder: str = "benchmarks"
     ):
         super().__init__()
 
         self.s3_path = (s3_bucket, s3_bucket_folder)
-        self.task = device.run(circuit, self.s3_path, shots=num_shots, poll_timeout_seconds=5*24*60*60)
+        self.task = device.run(
+            circuit, self.s3_path, shots=num_shots, poll_timeout_seconds=5 * 24 * 60 * 60
+        )
 
     def job_id(self):
         """
@@ -82,6 +86,7 @@ class AmazonCloudPromise(AmazonPromiseBase):
         The real promise should probably have this method in the frozen instance class.
         """
         from braket.aws import AwsQuantumTask
+
         if isinstance(self.task, str):
             self.task = AwsQuantumTask(arn=self.task)
         return self
@@ -91,7 +96,6 @@ class AmazonCloudPromise(AmazonPromiseBase):
             return self.task.result()
         else:
             return None
-
 
 
 class AmazonMeasureLocalPromise(AmazonPromiseBase):

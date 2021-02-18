@@ -7,10 +7,12 @@ from .promise import AmazonMeasureLocalPromise, AmazonCloudPromise
 import braket, braket.circuits, braket.devices, braket.aws
 import functools
 
+
 class AmazonDevice(ABC):
     @abstractmethod
     def execute(self, circuit: braket.circuits.Circuit, num_shots: int):
         pass
+
 
 class CloudDevice(AmazonDevice):
     def __init__(self, name: str, address: str):
@@ -18,6 +20,7 @@ class CloudDevice(AmazonDevice):
         self.address = address
 
     def execute(self, circuit, num_shots: int, **kwargs):
+        print_hl(circuit, color="white")
         return {
             "result": AmazonCloudPromise(circuit, braket.aws.AwsDevice(self.address), num_shots),
             "transpiled_circuit": None,
@@ -30,20 +33,25 @@ class LocalSimulatorMeasureLocal(AmazonDevice):
 
     def execute(self, circuit, num_shots: int, **kwargs):
         return {
-            "result": AmazonMeasureLocalPromise(circuit, braket.devices.LocalSimulator(), num_shots),
+            "result": AmazonMeasureLocalPromise(
+                circuit, braket.devices.LocalSimulator(), num_shots
+            ),
             "transpiled_circuit": None,
         }
 
+
 class LocalSimulatorStatevector(AmazonDevice):
     def __init__(self):
-        raise NotImplementedError()    
+        raise NotImplementedError()
 
 
 AMAZON_STATEVECTOR_DEVICES = {}
-AMAZON_MEASURE_LOCAL_DEVICES = { "LocalSimulator": LocalSimulatorMeasureLocal() }
-AMAZON_CLOUD_DEVICES = {    "SV1": CloudDevice(name="SV1", address="arn:aws:braket:::device/quantum-simulator/amazon/sv1"), 
-                            "Aspen-9": CloudDevice(name="Aspen-9", address="arn:aws:braket:::device/qpu/rigetti/Aspen-9"),
-                            "IonQ": CloudDevice(name="IonQ", address="arn:aws:braket:::device/qpu/ionq/ionQdevice") }                            
+AMAZON_MEASURE_LOCAL_DEVICES = {"LocalSimulator": LocalSimulatorMeasureLocal()}
+AMAZON_CLOUD_DEVICES = {
+    "SV1": CloudDevice(name="SV1", address="arn:aws:braket:::device/quantum-simulator/amazon/sv1"),
+    "Aspen-9": CloudDevice(name="Aspen-9", address="arn:aws:braket:::device/qpu/rigetti/Aspen-9"),
+    "IonQ": CloudDevice(name="IonQ", address="arn:aws:braket:::device/qpu/ionq/ionQdevice"),
+}
 
 
 class AmazonJob(VendorJob):
@@ -58,7 +66,7 @@ class AmazonJob(VendorJob):
         return info
 
     def run(self, device):
-        self.device_info = None
+        self.device_info = device.properties
 
 
 class AmazonLinkBase(VendorLink):

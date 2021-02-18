@@ -115,10 +115,17 @@ class SchroedingerMicroscopeBenchmarkMixin:
         psps_error = np.sqrt(np.mean(np.square(scaled_psps - scaled_Epsps)))
         upsps = np.sqrt(psps.flatten() * (1 - psps.flatten()) / self.num_shots)
         scaled_upsps = np.maximum(
-            np.abs(np.maximum(psps.flatten() - upsps, 0)) ** (1 / (2**self.num_post_selections-1)) - scaled_psps,
-            np.abs(np.minimum(psps.flatten() + upsps, 1) ** (1 / (2**self.num_post_selections-1))) - scaled_psps
+            np.abs(np.maximum(psps.flatten() - upsps, 0))
+            ** (1 / (2 ** self.num_post_selections - 1))
+            - scaled_psps,
+            np.abs(
+                np.minimum(psps.flatten() + upsps, 1) ** (1 / (2 ** self.num_post_selections - 1))
+            )
+            - scaled_psps,
         )
-        psps_sigma = np.sqrt(np.sum(np.square((scaled_psps - scaled_Epsps) * scaled_upsps))) / (self.num_pixels**2 * psps_error)
+        psps_sigma = np.sqrt(np.sum(np.square((scaled_psps - scaled_Epsps) * scaled_upsps))) / (
+            self.num_pixels ** 2 * psps_error
+        )
         # psps_sigma = 1.96 * np.sqrt(
         #     np.sum(
         #         (scaled_psps - scaled_Epsps)**2
@@ -130,10 +137,16 @@ class SchroedingerMicroscopeBenchmarkMixin:
         # Check if more than 10% of the pixels did never pass the post-selection round
         zs_corrected = ((psps > 1e-8) * zs).flatten()
         Ezs_corrected = Ezs.flatten()
-        uzs = ((psps > 1e-8) * np.sqrt(zs * (1 - zs) / (self.num_shots * ((psps > 1e-8) * psps + (psps <= 1e-8)))) + (psps <= 1e-8)).flatten()
+        uzs = (
+            (psps > 1e-8)
+            * np.sqrt(zs * (1 - zs) / (self.num_shots * ((psps > 1e-8) * psps + (psps <= 1e-8))))
+            + (psps <= 1e-8)
+        ).flatten()
 
         zs_error = np.sqrt(np.mean(np.square(zs_corrected - Ezs_corrected)))
-        zs_sigma = np.sqrt(np.sum(np.square((zs_corrected - Ezs_corrected) * uzs))) / (self.num_pixels**2 * zs_error)
+        zs_sigma = np.sqrt(np.sum(np.square((zs_corrected - Ezs_corrected) * uzs))) / (
+            self.num_pixels ** 2 * zs_error
+        )
 
         # zs_error = np.sqrt(np.mean((zs.flatten() - Ezs.flatten())**2))
         # zs_sigma = np.sqrt(np.sum(((zs - Ezs)**2 * 1.96**2 * (zs * (1 - zs)) / (self.num_shots * psps)).flatten())) / (self.num_pixels**2 * zs_error)
