@@ -74,7 +74,7 @@ class HHLJob(AmazonJob):
             # Old method
             "CZ": lambda qubit1, qubit2: circuit.cz(qubit1, qubit2),               
             # Needed for IonQ
-            #"CZ": lambda qubit1, qubit2: circuit.h(qubit2).cnot(qubit1, qubit2).h(qubit2),
+            # "CZ": lambda qubit1, qubit2: circuit.h(qubit2).cnot(qubit1, qubit2).h(qubit2),
             # TODO: Define the gate below   
             # "SQSWAP": lambda qubit1, qubit2: circuit.append(SwapGate().power(0.5), [qubit1, qubit2])   
         }
