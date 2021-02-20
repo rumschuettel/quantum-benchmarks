@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    289410,       6020]
-NotebookOptionsPosition[    280462,       5870]
-NotebookOutlinePosition[    280877,       5887]
-CellTagsIndexPosition[    280834,       5884]
+NotebookDataLength[    376188,       7293]
+NotebookOptionsPosition[    366902,       7143]
+NotebookOutlinePosition[    367317,       7160]
+CellTagsIndexPosition[    367274,       7157]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1244,8 +1244,8 @@ Cell[BoxData[
    3.814292521319804*^9}, 3.814292566653219*^9, 3.814294150878949*^9, {
    3.814295236507451*^9, 3.814295236798512*^9}, {3.8143898339579782`*^9, 
    3.814389834303179*^9}, {3.814517696353959*^9, 3.814517696792357*^9}, 
-   3.822756759472982*^9},
- CellLabel->"Out[22]=",ExpressionUUID->"46dcb939-6b14-47b3-88c8-06bed0e8a0a1"]
+   3.822756759472982*^9, 3.8227619655497026`*^9},
+ CellLabel->"Out[22]=",ExpressionUUID->"4421640a-352f-4601-aefa-122fadb972ff"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1528,9 +1528,8 @@ Cell[BoxData[
    3.822757523208239*^9, 3.822757523336973*^9}, {3.8227583841749*^9, 
    3.822758498235936*^9}, 3.822758539365643*^9, {3.822758645653036*^9, 
    3.8227586990789213`*^9}, 3.822758921504319*^9, {3.8227590034287987`*^9, 
-   3.8227590125561113`*^9}, 
-   3.822759181773465*^9},ExpressionUUID->"78909daa-8a3c-4f17-a001-\
-5620c7918049"],
+   3.8227590125561113`*^9}, 3.822759181773465*^9},
+ CellLabel->"In[23]:=",ExpressionUUID->"78909daa-8a3c-4f17-a001-5620c7918049"],
 
 Cell[CellGroupData[{
 
@@ -1660,7 +1659,7 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"{", "\[IndentingNewLine]", 
        RowBox[{"theVQE", ",", "\[IndentingNewLine]", 
-        RowBox[{"lowerRightBlockSize", "=", "32"}]}], 
+        RowBox[{"lowerRightBlockSize", "=", "64"}]}], 
        RowBox[{"(*", " ", "dimension", " ", "*)"}], "\[IndentingNewLine]", 
        "}"}], ",", "\[IndentingNewLine]", "\[IndentingNewLine]", 
       RowBox[{
@@ -1668,11 +1667,11 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"{", "\[IndentingNewLine]", 
           RowBox[{
-           RowBox[{"width", "=", "6"}], ",", "  ", 
+           RowBox[{"width", "=", "7"}], ",", "  ", 
            RowBox[{"(*", " ", 
             RowBox[{"number", " ", "of", " ", "overall", " ", "qubits"}], " ",
              "*)"}], "\[IndentingNewLine]", 
-           RowBox[{"depth", "=", "4"}], ",", "  ", 
+           RowBox[{"depth", "=", "6"}], ",", "  ", 
            RowBox[{"(*", " ", 
             RowBox[{"ansatz", " ", "depth"}], " ", "*)"}], 
            "\[IndentingNewLine]", 
@@ -1688,7 +1687,7 @@ Cell[BoxData[{
              RowBox[{"lowerRightBlockSize", ",", ".007", ",", 
               RowBox[{
                RowBox[{"2", "^", "20"}], "-", "100"}], ",", "2", ",", "2", 
-              ",", "0.2"}], "]"}]}]}], " ", 
+              ",", "0.1"}], "]"}]}]}], " ", 
           RowBox[{"(*", " ", 
            RowBox[{
            "play", " ", "with", " ", "the", " ", "two", " ", "threshold", " ",
@@ -1803,55 +1802,321 @@ Cell[BoxData[{
    3.822758710137927*^9, 3.822758715575235*^9}, {3.822758761239881*^9, 
    3.8227587646974382`*^9}, 3.822759104139999*^9, 3.822759198925435*^9, 
    3.8227593523311663`*^9, {3.8227593863504477`*^9, 3.822759390364781*^9}, 
-   3.8227599306822453`*^9},
- CellLabel->"",ExpressionUUID->"2d401271-a148-4a02-a195-aef8d3dfc4b6"],
+   3.8227599306822453`*^9, {3.822761949412702*^9, 3.8227619555083838`*^9}, {
+   3.822762026026368*^9, 3.822762037598968*^9}},
+ CellLabel->"In[53]:=",ExpressionUUID->"2d401271-a148-4a02-a195-aef8d3dfc4b6"],
 
 Cell[BoxData[
- RowBox[{"143", "+", "\<\"Match found after \"\>", 
-  "+", "\<\" trials\"\>"}]], "Print",
- CellChangeTimes->{{3.822759111563799*^9, 3.822759137594061*^9}, {
-  3.822759203183303*^9, 3.822759221458235*^9}, {3.822759295882341*^9, 
-  3.822759303264002*^9}, {3.822759355351644*^9, 3.822759496795636*^9}, {
-  3.8227596337932653`*^9, 3.822759644405744*^9}, {3.822759741585195*^9, 
-  3.822759817525206*^9}},
+ TemplateBox[{
+  "Power", "infy", 
+   "\"Infinite expression \\!\\(\\*FractionBox[\\\"1\\\", \\\"0\\\"]\\) \
+encountered.\"", 2, 53, 11, 28790431446018641013, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762050048306*^9}},
  CellLabel->
   "During evaluation of \
-In[1993]:=",ExpressionUUID->"d1a90364-10b7-4dca-8ca9-41e1f629e5aa"],
+In[53]:=",ExpressionUUID->"b0699777-3b5d-4d21-9557-d337e7e4e664"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Infinity", "indet", 
+   "\"Indeterminate expression \\!\\(\\*RowBox[{\\\"0\\\", \\\" \\\", \
+\\\"ComplexInfinity\\\"}]\\) encountered.\"", 2, 53, 12, 28790431446018641013,
+    "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.8227620500546627`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"cbfcf1ab-1f36-4dce-94c6-81ec0e96dd98"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Power", "infy", 
+   "\"Infinite expression \\!\\(\\*FractionBox[\\\"1\\\", \\\"0\\\"]\\) \
+encountered.\"", 2, 53, 13, 28790431446018641013, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762051138733*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"4b3633aa-ea86-4830-be81-3191fbf38eb5"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Infinity", "indet", 
+   "\"Indeterminate expression \\!\\(\\*RowBox[{\\\"0\\\", \\\" \\\", \
+\\\"ComplexInfinity\\\"}]\\) encountered.\"", 2, 53, 14, 28790431446018641013,
+    "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762051200984*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"ebc8da0b-cd2a-428a-a48c-5cdf9d270c8c"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Power", "infy", 
+   "\"Infinite expression \\!\\(\\*FractionBox[\\\"1\\\", \\\"0\\\"]\\) \
+encountered.\"", 2, 53, 15, 28790431446018641013, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762052685514*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"5cf09c17-1f7e-4d87-b9c8-801b2d979ea1"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Power\\\", \\\"::\\\", \
+\\\"infy\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 53, 16, 28790431446018641013, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762052766979*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"8ca9a078-821d-44e9-afd5-cbf761223ebb"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Infinity", "indet", 
+   "\"Indeterminate expression \\!\\(\\*RowBox[{\\\"0\\\", \\\" \\\", \
+\\\"ComplexInfinity\\\"}]\\) encountered.\"", 2, 53, 17, 28790431446018641013,
+    "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762052798336*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"7fdbaf1b-86a9-4665-b322-ce90198d950f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Infinity\\\", \
+\\\"::\\\", \\\"indet\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 53, 18, 28790431446018641013, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.8227619688826513`*^9, {3.822762035220972*^9, 3.822762052806821*^9}},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"4fd3fd48-b9ce-4988-a119-9f223b623b53"],
+
+Cell[BoxData[
+ RowBox[{"176", "+", "\<\"Match found after \"\>", 
+  "+", "\<\" trials\"\>"}]], "Print",
+ CellChangeTimes->{3.822762073104714*^9},
+ CellLabel->
+  "During evaluation of \
+In[53]:=",ExpressionUUID->"4406020f-ac42-496a-aa1a-72dd5b09df6c"],
 
 Cell[BoxData[
  GraphicsBox[RasterBox[CompressedData["
-1:eJytmU1oXGUUhic/k7hzl+zEQiGJihIQU+vAJaOrqvmzEd1pa43Qortamyat
-8xuzSSOiUrDggDWVGlOo2EUpsYsgQSEUKe1duXGpbtRNRQX93hvmyZyeb6qF
-rp8z5z33vO/5suvAG1OHOnO53P3h/5PDg18fvTdNpm/80rH3RJqUPn5ptfDR
-zeSRK6eST15Ok/4rFw8svpAmHa8lvx6+72Yy8OOuzUe/u5Us/P7Bu1ff2UoO
-/jw/PFtKkz3f/pQ/UUmTz764XTs/myZ/jDTW/iynydLB35ZmHk+T+vzRL9eP
-3Eh6juw9fPHpW8nap6XzX92+lpBfcfiDgV+K5J8O/Grg5wO/EfhT144/9eHu
-77M6cv/8SwvVUMeeb9YG3no7TfpCHZ8fOz587M00GQp1PLb7iUPvvZpmdUzs
-e3HmTO92HdPpQz8UTm7XMTe7cvXB19OsD8+15K8XagZ/NfDVhxGHv9/hs9/U
-Q5x66Lf06Ap6sN/Uoxf91jyUgh6x/MXAVx9ykXzpfSnwlzGP//Z7M9N7GnpQ
-b+mhPrDfnAf2m/MgvvQej+T3GXzOg8cXR1zVoTkUR1zpoTkUR79bdaguccRV
-HapL/InALzfxN3bwhwz+iMFfAr8XfM2Z6tAc1kMdmnPVUQtzqD5ozlSH5lB1
-aM7UhwthDjM9DH6mA/j1Nvk18M+CX23q91ZBdTwT9BBHc9gPPdhv6tEdOPOh
-35wHiz9h8DkPFl/z2OPw1e/s+w96FEMd0lu+1x30UB/Yb+pxLvRbc7cAPai3
-+KOBX4LenZgHj78GfgX8WP9cgH+fjfRv7mv1sdKmfy8a/k1+1eDrO9b+kK7c
-12P/i39fL5Th3/3ID4P/MT9Iz+fbzA/kx/q39tZp+Cf7PWr4d+Uu80Pe4C8i
-Pzwc+EWDv4D8oDzp+af2Rh7+udTk3xtZfmCeZF6jHuNOfrD4zflhK+NzHled
-/NKuf3Ofq9/63ZWmfX55h38PRPr3pMHPw7/F39+Sn8t5/Hb9u4F9Sv/WHKqO
-Duxr7nOPXwV/zcgPRYcvvU8F/gP4/i3/7HX8szkvbhY4D8yLVn4YN/ID8+Kd
-+dv5YTLwh5z8EuvfmruS4d91+LfqWITe1MPja97uCXzmOSs/SIdy4KsPXeBr
-Lv+aafZH5Uz6aw37nve15kV98/zduu9rbfJL4F+I5Fv3tfqgvVKEv+v74j6e
-Rz7gPue+5z6mX0y15G8VSg5f80I/I1+ck8Z9zTxHf9V3cQb+rDn1/J15rB98
-5gvyezBvzKsen3mI86C9pn5Pwl/V724jHzBPUg+L39/EX8nmbQL8OYOvPkw6
-+cLzR+5z7nvvvvfyhfe+oN851pK/UuB93x3J13fA+5r72rrPpQf94Bz82fN3
-Kx8MgV8EX9+FvjP14VKbfPabevA9SHXsC3p497WXL7x8UIHefB/Ig78cydd3
-WMF9n4M/Um/qQb1533v+XoHe8mGPrz7wPYl50eNb930j0j/pF3wvpn+XDf/m
-3wf0u16J5Hca7wve+4B1X3cZ/sl70buvua93vDc77wux+cHij7XMD9vvA+K8
-D/8sR/rnAPRmnuTfkyz/5n0f69/e+0IdfM7DnHNfe+/7cf59Pes373PrfX45
-ku+9L0hv7Y9nMQ/efe29r3vv86N3zA/rO/y73fxAvyC/CL9o9pONAv2zgXsv
-1r9VR8XID7zP1Qe+L7SbH3jPWXzmlyq+f8+/eZ9LD+++rsK/qcfd5ocR8OPy
-w/oOPu97zoPnn9Z93xfp35cNfqx/8+9BnZH5Rfy/AYmJlZY=
-   "], {{0, 0}, {32, 32}}, {
-   0, 0.4143456675253212}],
+1:eJyFnAdQVWfXhbEnii2aKPYSYw0qlljQ1y62xBILiCgW7B2MLcYaUQETE2Mi
+drCABbHGqLEX7AURURQp9yCiicZe//d+2eub+dbM+5/MZJjhcs899zzPWnuf
+q1Jx4NjuQ3K6uLi0kP+L3j3ZyWeipT5K7xnZN1+GOvpd7q/edrXU9ULLz878
+1lJb4kvm+WSGpSKLRKavmmCpVqsqxpy66VD3mz/fN3mapQqvLPywyXRL7Wpa
+yTskn6XOnytdIPCDuyrP18t/Wu1vqT9OPG2XrH8u/nH1nOMfO1S9oKvDVKCl
+pq74ollZfdyWY2Z23NrMUq5rO87JlXxZFdt4vM36CQ618lFnzw1TLBU7clOD
+1vrnqtTtXumCfp0P/lyXvHa4pY5FN638UJ9f2E8zD5TQX/P16XH3q8aWKlRu
+4bUlB9PU6N79ckWMttSJAaEBZfVxCrQPn32hh0Pl7f1s181hlqqW683OLP28
+z47t29VhhH6fRRd/7PsmVe2J6LpyXE1LLanSqHaSfr3kX2ZFFtav73Fv/j/u
+4y0V7eWTdfSUQ5W4nukor9/XzKSmyy5PttTPV/Kv+b2VQxVxaT8ob+c4Ffbm
+xfzSHvrxkNX//KqfN77+k5mfrEtXzQtufb63g6UiakUHD9Cvf6Tl2UZ7xllq
+w4f5Gr0dk67GeOY66drOUsMWDGjZVT8+ql/jH5ror126uTev3tJSzYZPW59R
+I119s9G7RPBY/X5/WuE/S59n4N30j0aX0O9jT32/5Rl31ZnEEQmBQ/TP7+7e
+ZJp+furqlE8OfGWpi+saVH481VL+w1Y9baLfV1HhDg/AHR6AOzwAd3iwU7jD
+A3CHB9eEOzwAd3jwoXCHB+BeXDwAd3gA7vAgr3CHB6OEOzwAd3gA7vBgq3Cv
+Kh6A+27xANzhAbhvFg/AHR4sFu5/v2/3Hw8ChTs8AHclHoA7PAD30eJBZ+EO
+D8C9uXgQJNzhQZxw3ywegDs8APdL4gHnuyXlG14UNvSDXb4LiRc7xJOz1A92
++W4lXhQVTz6ifgDX/IZ8h1I/FBQv4IldvtEP8GQ39QO4ThTOivINL5aIJ/AC
+noArOCvK92HxYqOhH+zyXVi8CDL0gynfrcWDYjb9cNUm35gL8CC3cD8jHtjl
+264f7PJt6gd4YMo3PNgh3D8z9MNEQ77R80uoH8KoH+zyHW3oB3hw15BveBBo
+0w+tKe/cB5x3eFBEvOC8cx+co7xzH3DeuQ+KU97RB/nEC847z3vOOzyAF5sp
+79wHnHfeF3iew4Nx4gX2AeQdHiwVLzjvPO8577wvXKK8cx9sEM7gzn3Aeec+
+4Lx/RH3Aeec+AHd4wH3Aeec+4LxzH3DeXakPOO/5qA/APUo84D7gvPO+sI7m
++QTqA3B3EQ94XwB3T/GgC/UB7wMbqQ94nvO8R89HiQfcB6Z8Yy/kfZ/7wZRv
+7IWmfoAnnG9wzSGc7frB1ZBvcLbrB973ed5vsemHkrzvC9efhLOpH+CJKd+b
+hHMLQz9gbkRTvgtRvnkf4H6wyzfv+9wPeWie76L7Ae6HeOoHu3zb9QPv+5xv
+7gfeFzjf22je877P/QDuroZ8877P+wLP8yjKN7hjTvC+wPOc7wfs+mH6iJ8v
+9M5MV3NL5dl2SXOtU6xR1iT9/dLzi7Q89qX2q0mxWdFl9fULCy26Uh9vfcCu
+yc8C9Hn3yLVrjmeqatErsEm9Mtq3tSN/+EU//jQ0ICVcPx7fIvV0yWqpOucJ
+N3c2T1Efbn03qIKfpeZU/XHTK3093/RIr1XkpUNZjYJPv29xW63ymDathrel
+cr2PmbZaPz4leu2JOekOFdTKv//bBIcKaL9n8iD9/bpNE9Y4elpqb1ipU81O
+31IVPDMvVBxlqcr59jZ5qc/79Oi4fZbmmlo87MjQWQ4VGufdenkVS83Kv8Hr
+sD6/txHLFnyur8edQbkO3/9Ge3tgwa7aWxxq7xc/hKzX1+fB7qibefXjvV+P
+LV9fX/cGky5lZfbR59XU6+8IfXzvUL9TrYMs9ayF2y9bgjJUyfP7R1RqpXN7
+O/5uc/14vdgpzY/r5w3tMqxuYKN0NdglasOJ7qmqwCc5m3oP1ddtxcFqkfo8
+Vj+s91vr8vp8x+f9pGALSy10HRLRwPn8WT88a6Bf/+7ksDuX9fu4X6NMz3tX
+HKrQlIYDuun3H1Rtwi9ZX+vrd2DoknW9bqlu7X798Vo3S708UmPRXP38Celn
+Z4bp3A756Icj5YtlqFv3M0MqPEhVM/pVKZdX+3zD45+vrzmvQ8O3EX1qaB7C
+fYZ4UEq4wwNwhwfDhTs8AHd4kCDcn4gH4H5ZPHgt3OEBuN8TDyYLd3gA7oHi
+wUHhDg/AHR6kCXd4AO4h4gG4wwNwPy0egDs8AHd4AO7wANzhAbjXFw/APUA8
+AHd4sEi4wwNwhwfgni0evBPugeIBuHcXD8AdHvyXu3jwRrjDA7t8fytezDH0
+wxVDvsG5JfUDvLgingQa8g3OGeLFSuoHeBJik29TP9wVT0z5fi6c7fphqE2+
+3agf4EWAeML5BtdnwjlOvFhk6IcbNvk29cNg8QTcN4sHAZRvcP/O0A/gfsmQ
+b+6HS8IdcwLc0fP7Kd/oB3jwDfUDuIca8s39kEr9YJdvcI8z9AO4Dzbk264f
+wB0evKB8g3ucoR/APdGQb3DvZugHcEavcx+AM7jPoD7gvPO8B+erwp33BZ7n
+PO857xm0L3DeuQ94H+A+4HnOfcB5j6M+AOdVwj2A+gCchwl33hfAGdyzqQ84
+76epD8AZ3K9TH/A+wH3Aeed5X5ryDu6YC5x3cIcHV2gf4D7YR3kH94niAe8D
+4H5bPOC8cx9w3rkPOO/cB5x37oNVlHee9+COvZD7gPPO857zzvvCW8o79wHn
+nfvALt92/fCU5jnnm/vhMvUD5zuN5j282G3oB853Rcq3XT/Y5RtevBBP6lM/
+1KN887y36we7fPM+wPvCROEaYMg390MS9QPney7dDww19AP2hSs0zznfdv1g
+yjfuC3kf4PsB3vc533b9YMo39j67fgigeQ7u8ID3AXAfIh7Y5dvl4P/fDwGG
+fON+gPcBcE8QDzJbNnz6rq5DPf2nhP/8yZrf3l8f3nF+Lnr10zZjNM8+HpvG
+b/F3qId/ZT/w0edZ3mfA8J8bW+rsux1feea+pJo0/G3/184+dK/XtJE+/85T
+lzfpqZ/v93DEvprt9ftqManJjoJ31W993ifs8bdU8fCI3zz1eXT6JGhPdj7t
+9fOwxS2K6/ftMbLzRP39zzOX56ymj1PpZeSNLZMsNXBa6UE721kqvMKmT3s4
+P7daunb87XGWunDofWLByelqcYF+nUpqLkuLhr2voJ83aOyv64rq49wf7X21
+2TuHqvPobA01b7MKOtRj7Vbt68zQs24+2ocmo6JDSj7MUH4ZVmjwwAzV1u/b
+Gw8DLbWpaIfrK/Xr+MT0LbOgt6WqxZb/LY/+WmLR4cXh+vtpPe+7XdQ/dzTp
+yuUBfTPUimNLykwZrrl7Dh3zQD++J7xtQGt9nUJfFEnx83WoeT97vZy6NF2t
+vH46p/94SwUvmjLXV/9c7crHml3y0vcZD7M/7LhYz7m0wK+r6OvoO+f9hrf6
+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
+FAxeqvl+nn/KnQkF09RFn0u7o2tZakJC2po7+rxyHe95zUM/P+PDZp2d/17C
+x3PRu8YNtfftdxfIr49/aHjH04f1cUq13PGo+w6Hys7944rkM4lq94tqUa5d
+9HkkhL0uMcRS0xe6Ft566a6a8Cp2bPbH+n778t97purjpx9/Me7qeEsNePBt
+ibYx6Sp8wJwW0R0tFZG1c/9g558Tjvnsrz/112KxUePe+VlqUPnDxUecyVDN
+z/Y+tV97cWLrF55T9ePLPStdmf2V5nIx7M2xx+nqcviL7HcTLPWxv/cKD339
+7rToXtUjI0NtDSgRkzXAUrN3tf/mlH7e5ip5fo/Ur193YcSIg5HpqmivYnsy
+O1hq2eNHA/z146XyhPzdUX8Nndy6eFIbSz3IWjK3i1+6epQ/xX2Uvp61fHJ/
+eFs/PjNHQLxLgKVOjvtiV/5aOkdnrj8d5czF8G6VvfTxD+Zqfv/O4nRlVZvR
+YLiXPt62r/b7OP98aNVXJ9820vvKXdeeW2ZeVCdcX0307O9Ql681KttVX+/r
+RUvN+URfp3YTvq/f+71DXR+zMKPSLykqa2Jw70jtR9HqPdYFOz8f8Lv945Hu
++rgZO68+K69zcu7KlFMTLVXlUdNVrfV1GuY427dnTIY6Xnp4rGs/ff9efPmX
+e/Tzagp3eADuF8QDcIcH4N5XPAB3eADuN8SDmcIdHoD7ePFgkHCHB+C+XDwA
+d3gA7vAA3OEBuCeJB+AOD8B9m3jgIdzhAbjDA3B3Ew/APVs8AHd4AO6nxANw
+hwfgDg/OCHd4AO7woC24iwfgniAegDs8APcQ8WC4cP9MPAB3eGCXb3gBTy5Q
+P4Drt4Z8cz+kUT9wvgdSvuGFv6EfwPW2Id/cD9epH5DvEOGcTfmGFx6GfgDX
+A8I5k/Jt1w+c7wTK91Hx4rGhH5DvkYZ8w4uW4kkI9YNdvu36YbpNvksb+iFD
+PDDle4B4MMDQD/Ag2Sbfdv2AfMODx8I9Szyoa9MPpnzDA1M/wIN2lO/7wj1R
+PAD3o4Z+GCrcqxjy3dLQD2HiAeed+4D3AXhQS7wYT3mHB7PFC94HuA8GU965
+Dzjv8ABzYxvlnfuA9wHug4eUdzfqA847PKgvXnDe4cEh8YLzzn2QRHnnPjhO
+eT9K+wLnHT2P3ue8877Aeec+4LxzH3DeZ1AfgPtt8YD3BXD3Fw+4Dzjv/tQH
+nHee9+CeIB5wH4D7ffGA+4DzzvsC5/1P6gPOO/fBf7mLB9wHnPdL1Aec92E0
+7znv3Ac8z8G1jnC26we7fJv6AXuhKd9DhDPvA9wPSTb55n0AXmBumPINzrzv
+8/3AaUO+vxPOvO+XFi/2iyecb+yBJ4Vzok0/8L7P8577AXNihHgC7uh5d8q3
+XT/sEe5ZhnyD+wRDP9jlG9wHGvoB3BMN+eZ+4H2B883znveBELofAPcThnxz
+PxygfuB836J8Yx9IMvQD55vvB8D9hHjA9wMl4/qs+b2ZQ807dWzofmdPBV+L
+TtM/H5n0x8m2Q7Wvh7pe2dbbUpUWrpixyrnPzs7/5Hmgpb7xqn1u6eAM5biz
+5/GDIEv90Ths56fah41DFzZsq8/L9/lXEckf6vc9bXDq9pmJKsPtituwzpaq
+XjDm+S7thdvMkPZRMQ61Yf+RDcFr9N6aGfBPDn0+alzEsljnfbdbsa1v+uo+
+zbsiqdMFh7paIi3Dc5qluq9v43e+h6W+fzrl6kcJN9XE2XvyJDs/lwua9eEL
+Z+4bnSh3XV/P4ePLxUZ961Bfry+b/ODQHfXN8mX5pvvq91Gyz9Rb+jjXbx5K
+b/XYoeLLVn552Xn/8mWZxsn6+cdSj79r6fz9HuXHFw12vo/BuUsd+tRS7aMb
+TD/g7K9Kk1y3DLNUp627H1RcnapC1sWN/lBzHbi4x0fe+vk/ZeXPXVdzzap9
+4U7UwnT1+8pJQ5o0TFDbGh7J0aO9pQJGrAjtrd+/e9ia2PDlDhUx0vfWu38y
+1KTh7u0Dnb3Up7n7OX2c3sNH73zlr8/nVs06AVkO5THozLJ9+rxj8+er8ouP
+nv9/3i5/P/22GvhN0JW/9fO2Py25xvnvW4Yll5p9RJ/n3KB+mSlVLFUwZ522
+DY9lqENL61wJ19d3aqETEQf08df3m1x4qs4RuLuJB+AOD8AdHkwS7vAA3OFB
+P+EOD8A9SzwoKdyriQfgvlE8AHd4AO6HxIMFwr2beADu8ADc4QG49xEPwB0e
+gDs8AHd4AO594YFwLyAegDs8uCfc4UGMcN8gHoA7PAD3deIBuMMDcD8qHsQL
+d3gA7vAA3OEBuMODSOEOD8oY8g3Odv3w2JBvcDb1Azw5RPkG15nCOdKmH3xs
+8h1o6Idh4gnnG1zbCWe7ftgtXGMM+bbrh6OGfCcIZ7t+KGSTb7t+APcyhnzb
+9QO4Oyjf8MCuH8AdPT+X8g3u68WD0tQP4N7DkG9wDzT0A7jDAy/Kt10/gPs2
+8aAO5duuHzjf4L5dPAD3tYZ+APfC4sF6yjf3wxzqB8479wHn3Y36AJxLCfcH
+1Aecd+4DcAZ37gPO+3rqA3BOEO4DqQ94H+A+4LxzH3DeuQ+GUN5/pz4A50zh
+zn2AvF8R7twHnPd11Aec9yLUB+A8T7hzH3DeuQ847+COucB5B/e/xANfyjv3
+wTTKO/cB5x3csTdy3sHdVzzgvHMftKO887znvHMf1Bbu8AB73nbxIJPyzn2Q
+SHkHd+x9nHfeF3ie87yfR3nnPuB887yHF5PFE74f4H2f8837APcDuJY25Nuu
+H8JpnnO+uR8GUD/Y5RtedDT0A89zzjfvA1F0P2CXb3iRJJ7w/QDPc843vIAn
+fD9gl+9AQz/AAz+bfJv6AR6Y8g0PeN/n+4ERwj2c8o37Abt+sMt3R0M/wINs
+m3zXpn2A9wVTvrH33aZ9H9yPiwc8zznfpn7A3tirYZdTtQamqrh+uX9aqT2Y
+fjqjSJQ+zqK9p3b6VdB+Xw9Pmv6lpRrGJ8YGOT8fc20Wc2iCpRYXrdpqTnq6
+6hqX0vOk9qJUn4yfyuvXfdxz6o23+vy6PHridfqlQ936akn5L1ulqRyrRhae
+qXkMOjnvm7+df2/rUnyDSXUslWtp0bE7emSoPjfScm/Vx4k52L3sb/p1fo7K
+MXJyL32f27NA7cYelhrZPNjL+fctft2a9iBbHyeowZb+133S1MZHeYb2HGSp
+Dkm/1Lmin7f0wJKXp/T7Hjui15mbefX9Ymp00ovgVDW1+Pe/d9D80is8HrVb
+H+d9ySJnq1a2VErvtx4D3qWpAXdvLjo6Rvu718e/lvNz0ZHDHj1rZqnzS+/e
+GN7XoZpnF6uqtF+vexUILtpI56DbsOidmy+oivtW56/bQb+P8W/q+unneb0p
+5T9Ze/CqQfUmh5anq+Ah27ePuuRQ7+P6927n/H0dRfIM/Uhfpxtnarpf0D/X
+dolr8WstHCp1cmyDOJ270QUWb0rXx7mdOOPpDM0jV99ET582llq1sMs+L2ef
+tKvdvcs4vU/4jcvq0ztdxdat0dzltUM9XB/VMpezj2Z3qfKr5n2m8pPasd4p
+anuRaxtnfpCilm+b6qjdz1L5InwH39PnsaL6B69rPnWo08LdVzwAd3gA7kvE
+gx+Ee7R4AO7dxANwhwfgDg/AHR54C/ec4gG4wwNwTxYPJgl3eADu8ADc4cEU
+4T5fPAB3eADu8ADc4QG4nxMP6gt3eADu8ADcO4gH4A4PwB0egHs78QDc4QG4
+w4N7wh0egPsO8eCccIcH4cIdHoQLd3jA+QZXcPa26Yd4Q75zCeduhn74Ev1A
++f5NuE4Qzi7ihbehH74XrlMo3y5u/3LeZOiHMeLJOUO+qwnnWzb9YJdv7gd4
+8VI84XwPEa4O4dzKph+2gSvlG5x3GPrhtHgC7vBgMeUb/eAjHoRQP7gI95vi
+QS7KN/dDZ+oHzncQ5RtzIYehH8A92JBv7odx1A+cb3fKd3+bfngn3Ocb8m3X
+D+Cek/IND+z6Ab0OD5YL97ziAffDGeoHcA4T7twH4AzuvtQHnPcb1AfgDO7c
+B+CMXk+mPgDnn4R7TuoDnufBNO95H+A+AOcywv0C9QE4nxfuqdQHnHfugw60
+D3AfoMct4Z6T+oDzzvsC5537AJzjhDvvC2GUd573vA9wH/A8B/fb4gHvA9wH
+nHfuA8477wucd/TBQvGA9wHuA+T9lXjAfcB55z7gvIP7AvHgBeWd+4DzzvOe
+8w7u8CCc8o4+2CkecN7Bfbt4wPMcXME5mvZ97ge7fA+kfrhJ/cDzPAfl264f
+wHWcId/cDwtpX+B5fpfyzfsA3w9wvitQvrkfFlA/2OWb933eF8D1giHf3A8x
+dD/A+Y6jfPM+wP3wpU2+Tf2QLB6Y8p1bPAD33wz9MMaQb3jA/YC5gPtCzje4
+p4sHJWkf4H54Y5NvUz9gTtjl20H7PvfDJUO+d4oHvO+De6x48HmzP48O87dU
+Us7vR7i9SVEhlSt6ReW11NZ8Ie8a6uPk6Vdur/P3GTwfev+7BcMttS58Z8XW
+/RwqK7lI3/b6OmTFH3dfoB/P3J3U6G533Qf5DsTEVMxQSxOelL04UXv9R87b
+aqrz74t0LN92qUMVSjh3P2y09jbpcNh7/bz3CzvFnxqgX6dTm4D46ymqfvWT
+6wvltlS/6LXjaurXX9z9UZ7azt/b9WrW5JbO3ydw/g+PNjX0Xni0+at45/1p
+5OXY5vrxMnvXRcTp93ci5EFEUF/toeuUFjH6+KOeVv32W+3TvsMXq77xylCx
+ZXME7+ypeZT7fedS5+c8E0IPv+psqdXbOpc7ezRRPT204egHOxyqz8SK3x1y
+fm456lihH/TPTSu1NGX015Zav2iEf5svMlTXwLl33PVxd3Tr81dh5149p9/+
+m28d6vi5nHO/nZWi1npf3e/V31JV+iYf7aMfz6xUd2rbQs69u39280n6ev5w
+o9Rn+rwbuzWo9Z9/dxu9pkdaTUu1fhXWrr9+n64L6yx0vu/XJaMinjl75H1U
+/xDt/xm3IwHtpjjU5h5rNxxz/h6Oq1OuntfHq9l7Yc9pFzKUy3/+O+45uU2p
+mwU+sdRF39EHX+jjhQZ82XdRJ4c6Mvi7xNba/+jo6h9l6uMmCnd4AO6h4gG4
+wwNwjxAPLOEOD8AdHoB7sngA7vAgt3CHB+AOD8AdHoA7PAB3eADu8GC/cB8p
+HoA7PIgU7tfEA3CHB+AOD8A9UjwAd3gA7vDgnnCHB+AOD8AdHoA7PAB3eBAt
+3M+KB9WFOzyYItz/9eC0Z5hwhwfgDg/A9Zkh33b9AK65DfnmfnhE/WCX73fi
+RU5DPyDffxjybdcPpnx3E87ohyhDP4DrPUO+uR9OUj9wvuMo33b9AK6LDPmG
+F7X+px8uecITU77Xiwc3Df0AD/LY5DvTph9M+f5UPHAx9EMD8QC9PoryvUM8
+sOsHzje4bxIPVtr0Q6ZNvpcY+gEemPKNnrfrh1CbfNf4f/vhtifnnec9591d
+PIAXnHfuA94HuA8479wHnHd4kEO84LyPpD7gvHMfRFDeuQ+eUN7hAeYGOD8T
+7twHR4TzGuHOfXCW8s59wHnnPuC8w4MQ8cJF/sM+AA8+Fy94nnMfcN6TqA/A
+vSDmOfUBuD8RD7gPeJ5zH3DeeV/geb6P5j3nnfsA3NH73Afg/kw8wBzAXOC8
+cx+A+wnxgPcFcEfvcx9w3rkPOO/cB/+b90ueNakPON887yNt+uEfm3yb+gFz
+g/P9ju4H7PrBLt+mfoAnpnxvFs6RtO9zP5yieQ6u6H3eB7gfTPk+IJwxB6IN
+/fAv18T/znNwRe+b+gGecL553oN7pKEfwP2pId+8D4A77gt5389J+Qb3yoZ+
+sMs398Mf1A88zzfQvO9q0w/I92nx4GfKN/cD3w9wvg9wvmkf4H6Y/D/5TvLk
+ec/9wPcD/weUJ7N+
+   "], {{0, 0}, {64, 64}}, {0, 0.7341660451608067}],
   Frame->Automatic,
   FrameLabel->{None, None},
   FrameTicks->{{None, None}, {None, None}},
@@ -1908,11 +2173,11 @@ w/oOPu97zoPnn9Z93xfp35cNfqx/8+9BnZH5Rfy/AYmJlZY=
    3.822759137661223*^9}, {3.822759203238885*^9, 3.8227592215247393`*^9}, {
    3.8227592959659853`*^9, 3.8227593033294067`*^9}, {3.822759355403677*^9, 
    3.822759496892705*^9}, {3.822759633807105*^9, 3.822759644448444*^9}, {
-   3.822759741623579*^9, 3.82275981761623*^9}},
- CellLabel->
-  "Out[1994]=",ExpressionUUID->"d8ad512e-3d56-4183-b4a0-cc2a06ac8748"],
+   3.822759741623579*^9, 3.82275981761623*^9}, {3.822762022933035*^9, 
+   3.822762035181307*^9}, 3.8227620733275023`*^9},
+ CellLabel->"Out[54]=",ExpressionUUID->"293f5f91-1d1a-47a1-b4af-3d379a30ff42"],
 
-Cell[BoxData["32"], "Output",
+Cell[BoxData["64"], "Output",
  CellChangeTimes->{{3.8142928012581053`*^9, 3.814292808610907*^9}, {
    3.8142936750939713`*^9, 3.8142937699410887`*^9}, {3.814293822744814*^9, 
    3.8142938394483967`*^9}, {3.81429416090294*^9, 3.8142943825955343`*^9}, {
@@ -1954,14 +2219,14 @@ Cell[BoxData["32"], "Output",
    3.822759137661223*^9}, {3.822759203238885*^9, 3.8227592215247393`*^9}, {
    3.8227592959659853`*^9, 3.8227593033294067`*^9}, {3.822759355403677*^9, 
    3.822759496892705*^9}, {3.822759633807105*^9, 3.822759644448444*^9}, {
-   3.822759741623579*^9, 3.822759817627613*^9}},
- CellLabel->
-  "Out[1996]=",ExpressionUUID->"541ed9d5-aa23-45c8-9996-60d68bf9fba0"],
+   3.822759741623579*^9, 3.82275981761623*^9}, {3.822762022933035*^9, 
+   3.822762035181307*^9}, 3.822762073331181*^9},
+ CellLabel->"Out[56]=",ExpressionUUID->"1cf7a7f0-5989-4b81-8196-0f3ee8d6164f"],
 
 Cell[BoxData[
  RowBox[{"{", 
-  RowBox[{"0.9659258262890676`", ",", "0.866025403784438`"}], "}"}]], "Output",\
-
+  RowBox[{"0.8226643880080353`", ",", "0.5685273121876934`"}], 
+  "}"}]], "Output",
  CellChangeTimes->{{3.8142928012581053`*^9, 3.814292808610907*^9}, {
    3.8142936750939713`*^9, 3.8142937699410887`*^9}, {3.814293822744814*^9, 
    3.8142938394483967`*^9}, {3.81429416090294*^9, 3.8142943825955343`*^9}, {
@@ -2003,29 +2268,35 @@ Cell[BoxData[
    3.822759137661223*^9}, {3.822759203238885*^9, 3.8227592215247393`*^9}, {
    3.8227592959659853`*^9, 3.8227593033294067`*^9}, {3.822759355403677*^9, 
    3.822759496892705*^9}, {3.822759633807105*^9, 3.822759644448444*^9}, {
-   3.822759741623579*^9, 3.82275981763839*^9}},
- CellLabel->
-  "Out[1997]=",ExpressionUUID->"ea6fae19-64d5-4264-8ccb-07fd139608f8"],
+   3.822759741623579*^9, 3.82275981761623*^9}, {3.822762022933035*^9, 
+   3.822762035181307*^9}, 3.822762073333488*^9},
+ CellLabel->"Out[57]=",ExpressionUUID->"c3ac2127-5c28-4372-b975-3d6343908e6d"],
 
 Cell[BoxData[
  RowBox[{"{", 
-  RowBox[{"\<\"SY 6\"\>", ",", "\<\"T 5\"\>", ",", "\<\"SX 4\"\>", 
-   ",", "\<\"T 3\"\>", ",", "\<\"S 2\"\>", ",", "\<\"S 1\"\>", 
+  RowBox[{"\<\"SX 7\"\>", ",", "\<\"SY 6\"\>", ",", "\<\"SY 5\"\>", 
+   ",", "\<\"Z 4\"\>", ",", "\<\"Z 3\"\>", ",", "\<\"RY 2\"\>", 
+   ",", "\<\"Y 1\"\>", ",", "\<\"CX 5 6\"\>", ",", "\<\"CX 3 4\"\>", 
+   ",", "\<\"CX 1 2\"\>", ",", "\<\"Y 7\"\>", ",", "\<\"Y 6\"\>", 
+   ",", "\<\"SY 5\"\>", ",", "\<\"Z 4\"\>", ",", "\<\"R 3\"\>", 
+   ",", "\<\"T 2\"\>", ",", "\<\"SY 1\"\>", ",", "\<\"CX 6 7\"\>", 
+   ",", "\<\"CX 4 5\"\>", ",", "\<\"CX 2 3\"\>", ",", "\<\"RX 7\"\>", 
+   ",", "\<\"SX 6\"\>", ",", "\<\"S 5\"\>", ",", "\<\"RX 4\"\>", 
+   ",", "\<\"Z 3\"\>", ",", "\<\"R 2\"\>", ",", "\<\"R 1\"\>", 
    ",", "\<\"CX 5 6\"\>", ",", "\<\"CX 3 4\"\>", ",", "\<\"CX 1 2\"\>", 
-   ",", "\<\"RY 6\"\>", ",", "\<\"TY 5\"\>", ",", "\<\"RY 4\"\>", 
-   ",", "\<\"T 3\"\>", ",", "\<\"T 2\"\>", ",", "\<\"RY 1\"\>", 
-   ",", "\<\"CX 4 5\"\>", ",", "\<\"CX 2 3\"\>", ",", "\<\"SY 6\"\>", 
-   ",", "\<\"I 5\"\>", ",", "\<\"X 4\"\>", ",", "\<\"S 3\"\>", 
-   ",", "\<\"R 2\"\>", ",", "\<\"TY 1\"\>", ",", "\<\"CX 5 6\"\>", 
-   ",", "\<\"CX 3 4\"\>", ",", "\<\"CX 1 2\"\>", ",", "\<\"X 6\"\>", 
-   ",", "\<\"X 5\"\>", ",", "\<\"Y 4\"\>", ",", "\<\"RY 3\"\>", 
-   ",", "\<\"I 2\"\>", ",", "\<\"S 1\"\>", ",", "\<\"CX 4 5\"\>", 
-   ",", "\<\"CX 2 3\"\>", ",", "\<\"TX 6\"\>", ",", "\<\"R 5\"\>", 
-   ",", "\<\"S 4\"\>", ",", "\<\"Z 3\"\>", ",", "\<\"SY 2\"\>", 
-   ",", "\<\"TX 1\"\>", ",", "\<\"CX 5 6\"\>", ",", "\<\"CX 3 4\"\>", 
-   ",", "\<\"CX 1 2\"\>", ",", "\<\"RY 6\"\>", ",", "\<\"SX 5\"\>", 
-   ",", "\<\"SY 4\"\>", ",", "\<\"TY 3\"\>", ",", "\<\"SX 2\"\>", 
-   ",", "\<\"X 1\"\>"}], "}"}]], "Output",
+   ",", "\<\"TX 7\"\>", ",", "\<\"S 6\"\>", ",", "\<\"R 5\"\>", 
+   ",", "\<\"TY 4\"\>", ",", "\<\"I 3\"\>", ",", "\<\"Z 2\"\>", 
+   ",", "\<\"TY 1\"\>", ",", "\<\"CX 6 7\"\>", ",", "\<\"CX 4 5\"\>", 
+   ",", "\<\"CX 2 3\"\>", ",", "\<\"RX 7\"\>", ",", "\<\"RX 6\"\>", 
+   ",", "\<\"TX 5\"\>", ",", "\<\"TY 4\"\>", ",", "\<\"I 3\"\>", 
+   ",", "\<\"X 2\"\>", ",", "\<\"SX 1\"\>", ",", "\<\"CX 5 6\"\>", 
+   ",", "\<\"CX 3 4\"\>", ",", "\<\"CX 1 2\"\>", ",", "\<\"SX 7\"\>", 
+   ",", "\<\"I 6\"\>", ",", "\<\"T 5\"\>", ",", "\<\"SY 4\"\>", 
+   ",", "\<\"S 3\"\>", ",", "\<\"T 2\"\>", ",", "\<\"SY 1\"\>", 
+   ",", "\<\"CX 6 7\"\>", ",", "\<\"CX 4 5\"\>", ",", "\<\"CX 2 3\"\>", 
+   ",", "\<\"R 7\"\>", ",", "\<\"I 6\"\>", ",", "\<\"R 5\"\>", 
+   ",", "\<\"Z 4\"\>", ",", "\<\"TY 3\"\>", ",", "\<\"TY 2\"\>", 
+   ",", "\<\"R 1\"\>"}], "}"}]], "Output",
  CellChangeTimes->{{3.8142928012581053`*^9, 3.814292808610907*^9}, {
    3.8142936750939713`*^9, 3.8142937699410887`*^9}, {3.814293822744814*^9, 
    3.8142938394483967`*^9}, {3.81429416090294*^9, 3.8142943825955343`*^9}, {
@@ -2067,9 +2338,9 @@ Cell[BoxData[
    3.822759137661223*^9}, {3.822759203238885*^9, 3.8227592215247393`*^9}, {
    3.8227592959659853`*^9, 3.8227593033294067`*^9}, {3.822759355403677*^9, 
    3.822759496892705*^9}, {3.822759633807105*^9, 3.822759644448444*^9}, {
-   3.822759741623579*^9, 3.822759817649694*^9}},
- CellLabel->
-  "Out[1998]=",ExpressionUUID->"574a3086-c69c-4e7f-844e-92e8736df1db"]
+   3.822759741623579*^9, 3.82275981761623*^9}, {3.822762022933035*^9, 
+   3.822762035181307*^9}, 3.822762073336076*^9},
+ CellLabel->"Out[58]=",ExpressionUUID->"be8b3654-b487-4fe4-8345-ff8ab4dd92cc"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2132,14 +2403,15 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"fitOddPoly", "[", "singularValues_", "]"}], ":=", 
      RowBox[{"fitOptimizedPoly", "[", 
-      RowBox[{"singularValues", ",", "0", ",", "1"}], "]"}]}], ";"}], "\n", 
+      RowBox[{"singularValues", ",", "0", ",", "1"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{
     "Optimise", " ", "the", " ", "magnitude", " ", "of", " ", "the", " ", 
      "polynomial", " ", 
      RowBox[{"on", "[", 
       RowBox[{
-       RowBox[{"-", "1"}], ",", "1"}], "]"}]}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"-", "1"}], ",", "1"}], "]"}]}], "*)"}], "\n", 
    RowBox[{
     RowBox[{
      RowBox[{"fitOptimizedPoly", "[", 
@@ -5366,8 +5638,7 @@ Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{"exportCandidate", "[", "theVQE", "]"}]], "Input",
- CellLabel->
-  "In[1999]:=",ExpressionUUID->"fb24f64a-2f74-41e5-befa-79d420f46938"],
+ CellLabel->"In[59]:=",ExpressionUUID->"fb24f64a-2f74-41e5-befa-79d420f46938"],
 
 Cell[CellGroupData[{
 
@@ -5380,12 +5651,12 @@ Cell[BoxData["MachinePrecision"], "Print",
    3.814556242183267*^9, 3.814556293473557*^9, 3.81455634388027*^9, 
    3.814556615475868*^9, 3.8145578095225677`*^9, 3.814558054364661*^9, 
    3.822757305744595*^9, 3.8227578436467867`*^9, 3.822759267774838*^9, 
-   3.82275988219315*^9},
+   3.82275988219315*^9, 3.8227621159772673`*^9},
  CellLabel->
   "During evaluation of \
-In[1999]:=",ExpressionUUID->"eb2af439-80c5-4ba9-82b0-cb16fcfb39b3"],
+In[59]:=",ExpressionUUID->"be8401e8-1e91-429d-925e-c91071195719"],
 
-Cell[BoxData["0.8325804020642762`"], "Print",
+Cell[BoxData["0.5682723383164143`"], "Print",
  CellChangeTimes->{
   3.81451812095612*^9, 3.814552309636161*^9, 3.8145526006741467`*^9, {
    3.8145530680687857`*^9, 3.814553074586933*^9}, 3.814554025459004*^9, 
@@ -5394,378 +5665,1431 @@ Cell[BoxData["0.8325804020642762`"], "Print",
    3.814556242183267*^9, 3.814556293473557*^9, 3.81455634388027*^9, 
    3.814556615475868*^9, 3.8145578095225677`*^9, 3.814558054364661*^9, 
    3.822757305744595*^9, 3.8227578436467867`*^9, 3.822759267774838*^9, 
-   3.822759882202474*^9},
+   3.82275988219315*^9, 3.822762115978702*^9},
  CellLabel->
   "During evaluation of \
-In[1999]:=",ExpressionUUID->"38dd1b8c-3cc1-4f51-9a0e-83e7203545a5"]
+In[59]:=",ExpressionUUID->"3a183886-b825-4245-91fc-2f29a6ed4131"]
 }, Open  ]],
 
-Cell[BoxData["\<\"{\\n    \\\"qubits\\\": 6,\\n    \\\"ancillas\\\": 1,\\n    \
-\\\"circuit\\\": [(\\\"SY\\\", 6), (\\\"T\\\", 5), (\\\"SX\\\", 4), \
-(\\\"T\\\", 3), (\\\"S\\\", 2), (\\\"S\\\", 1), (\\\"CX\\\", 5, 6), (\\\"CX\\\
-\", 3, 4), (\\\"CX\\\", 1, 2), (\\\"RY\\\", 6), (\\\"TY\\\", 5), (\\\"RY\\\", \
-4), (\\\"T\\\", 3), (\\\"T\\\", 2), (\\\"RY\\\", 1), (\\\"CX\\\", 4, 5), \
-(\\\"CX\\\", 2, 3), (\\\"SY\\\", 6), (\\\"X\\\", 4), (\\\"S\\\", 3), (\\\"R\\\
-\", 2), (\\\"TY\\\", 1), (\\\"CX\\\", 5, 6), (\\\"CX\\\", 3, 4), (\\\"CX\\\", \
-1, 2), (\\\"X\\\", 6), (\\\"X\\\", 5), (\\\"Y\\\", 4), (\\\"RY\\\", 3), \
-(\\\"S\\\", 1), (\\\"CX\\\", 4, 5), (\\\"CX\\\", 2, 3), (\\\"TX\\\", 6), \
-(\\\"R\\\", 5), (\\\"S\\\", 4), (\\\"Z\\\", 3), (\\\"SY\\\", 2), (\\\"TX\\\", \
-1), (\\\"CX\\\", 5, 6), (\\\"CX\\\", 3, 4), (\\\"CX\\\", 1, 2), (\\\"RY\\\", \
-6), (\\\"SX\\\", 5), (\\\"SY\\\", 4), (\\\"TY\\\", 3), (\\\"SX\\\", 2), \
-(\\\"X\\\", 1)],\\n    \\\"angles\\\": [3.87871, 3.87871, -0.852125],\\n    \
-\\\"histogram\\\": [\\t[0.1844155116771273, 0.013240438025506871, \
-0.044335002279092255, 0.0031831099493667726, 0.000027269568956214084, \
-0.00037981609842417836, 6.555828144979084e-6, 0.0000913109067460317, \
-0.10809496957047784, 0.00776086963862746, 0.025986917687575096, \
-0.0018657767450641393, 0.0014805564813188251, 0.02062149156571014, \
-0.00035593792722012486, 0.004957575787684863, 0.18441551167712691, \
-0.013240438025506871, 0.04433500227909226, 0.0031831099493667366, \
-0.000027269568956214796, 0.0003798160984241723, 6.555828144980154e-6, \
-0.00009131090674602689, 0.10809496957047796, 0.007760869638627473, \
-0.025986917687575068, 0.0018657767450641163, 0.0014805564813188282, \
-0.02062149156571012, 0.0003559379272201219, \
-0.004957575787684857],\\n\\t\\t\\t\\t\\t[0.013240438025506857, \
-0.0009506206799687005, 0.0031831099493667575, 0.00022853701204241387, \
-0.00037981609842416785, 0.005290155808982242, 0.00009131090674603605, \
-0.00127179686629946, 0.007760869638627415, 0.0005572053703063287, \
-0.001865776745064123, 0.000133956743322678, 0.020621491565710106, \
-0.28722032543862325, 0.004957575787684873, 0.06905012310036793, \
-0.013240438025506845, 0.0009506206799686939, 0.0031831099493667588, \
-0.0002285370120424175, 0.0003798160984241861, 0.005290155808982205, \
-0.00009131090674603006, 0.0012717968662994275, 0.007760869638627438, \
-0.0005572053703063251, 0.0018657767450641106, 0.00013395674332268462, \
-0.020621491565710123, 0.287220325438623, 0.004957575787684871, \
-0.06905012310036793],\\n\\t\\t\\t\\t\\t[0.044335002279092255, \
-0.003183109949366781, 0.18441551167712733, 0.013240438025506888, \
-6.555828144979354e-6, 0.00009131090674603118, 0.000027269568956213786, \
-0.0003798160984241759, 0.025986917687575085, 0.0018657767450641159, \
-0.10809496957047804, 0.007760869638627479, 0.00035593792722011147, \
-0.004957575787684871, 0.001480556481318839, 0.020621491565710068, \
-0.044335002279092234, 0.003183109949366768, 0.18441551167712722, \
-0.013240438025506842, 6.555828144978667e-6, 0.00009131090674603284, \
-0.000027269568956219394, 0.00037981609842416855, 0.025986917687575033, \
-0.0018657767450641124, 0.10809496957047803, 0.007760869638627441, \
-0.0003559379272201221, 0.004957575787684843, 0.0014805564813188195, \
-0.0206214915657101],\\n\\t\\t\\t\\t\\t[0.0031831099493667583, \
-0.00022853701204242314, 0.013240438025506902, 0.0009506206799687112, \
-0.00009131090674602771, 0.001271796866299434, 0.00037981609842417576, \
-0.005290155808982207, 0.0018657767450641263, 0.0001339567433226794, \
-0.007760869638627432, 0.0005572053703063231, 0.004957575787684924, \
-0.06905012310036784, 0.02062149156571006, 0.2872203254386231, \
-0.003183109949366769, 0.00022853701204242507, 0.01324043802550686, \
-0.0009506206799687082, 0.00009131090674603107, 0.0012717968662994484, \
-0.0003798160984241612, 0.005290155808982224, 0.0018657767450641148, \
-0.00013395674332268364, 0.007760869638627418, 0.0005572053703063232, \
-0.004957575787684874, 0.06905012310036795, 0.020621491565710123, \
-0.28722032543862297],\\n\\t\\t\\t\\t\\t[0.0009506206799687059, \
-0.013240438025506897, 0.00022853701204241954, 0.003183109949366765, \
-0.0052901558089822245, 0.00037981609842416855, 0.0012717968662994557, \
-0.00009131090674603136, 0.0005572053703063408, 0.007760869638627465, \
-0.00013395674332267567, 0.0018657767450641178, 0.28722032543862264, \
-0.02062149156571007, 0.06905012310036783, 0.004957575787684832, \
-0.0009506206799687288, 0.013240438025506845, 0.00022853701204241758, \
-0.003183109949366721, 0.005290155808982196, 0.00037981609842416806, \
-0.0012717968662994466, 0.0000913109067460316, 0.0005572053703063196, \
-0.007760869638627466, 0.0001339567433226819, 0.0018657767450641568, \
-0.287220325438623, 0.020621491565710148, 0.06905012310036805, \
-0.004957575787684902],\\n\\t\\t\\t\\t\\t[0.013240438025506852, \
-0.18441551167712755, 0.0031831099493667635, 0.044335002279092366, \
-0.0003798160984241834, 0.000027269568956214837, 0.00009131090674602973, \
-6.55582814497967e-6, 0.007760869638627493, 0.10809496957047794, \
-0.0018657767450641343, 0.025986917687575172, 0.020621491565710203, \
-0.0014805564813188034, 0.0049575757876848675, 0.0003559379272201302, \
-0.013240438025506833, 0.18441551167712714, 0.0031831099493667336, \
-0.044335002279092185, 0.0003798160984241779, 0.000027269568956216138, \
-0.00009131090674603026, 6.555828144979071e-6, 0.007760869638627453, \
-0.10809496957047808, 0.0018657767450641172, 0.025986917687575013, \
-0.02062149156571001, 0.0014805564813188197, 0.004957575787684854, \
-0.0003559379272201179],\\n\\t\\t\\t\\t\\t[0.00022853701204241937, \
-0.0031831099493667635, 0.0009506206799687089, 0.013240438025506946, \
-0.00127179686629943, 0.0000913109067460337, 0.005290155808982209, \
-0.0003798160984241803, 0.00013395674332267887, 0.0018657767450641317, \
-0.0005572053703063289, 0.007760869638627468, 0.06905012310036794, \
-0.004957575787684838, 0.28722032543862286, 0.020621491565710096, \
-0.00022853701204241772, 0.0031831099493667466, 0.0009506206799687107, \
-0.01324043802550683, 0.0012717968662994458, 0.00009131090674603231, \
-0.005290155808982229, 0.0003798160984241699, 0.00013395674332268136, \
-0.0018657767450641408, 0.000557205370306336, 0.007760869638627479, \
-0.06905012310036802, 0.004957575787684877, 0.287220325438623, \
-0.020621491565710057],\\n\\t\\t\\t\\t\\t[0.0031831099493667614, \
-0.044335002279092185, 0.013240438025506864, 0.1844155116771273, \
-0.00009131090674603103, 6.55582814497794e-6, 0.0003798160984241713, \
-0.000027269568956216273, 0.0018657767450641293, 0.025986917687575137, \
-0.007760869638627468, 0.10809496957047796, 0.0049575757876848476, \
-0.00035593792722012334, 0.02062149156571016, 0.0014805564813187987, \
-0.0031831099493667436, 0.04433500227909221, 0.013240438025506864, \
-0.18441551167712716, 0.00009131090674602393, 6.555828144979533e-6, \
-0.00037981609842417386, 0.00002726956895621092, 0.0018657767450641404, \
-0.025986917687575075, 0.0077608696386274965, 0.10809496957047805, \
-0.004957575787684848, 0.0003559379272201175, 0.020621491565710085, \
-0.0014805564813188273],\\n\\t\\t\\t\\t\\t[0.10809496957047804, \
-0.007760869638627487, 0.025986917687575162, 0.0018657767450641137, \
-0.0014805564813188243, 0.02062149156571013, 0.0003559379272201231, \
-0.00495757578768487, 0.18441551167712722, 0.013240438025506823, \
-0.04433500227909219, 0.003183109949366766, 0.00002726956895621511, \
-0.0003798160984241746, 6.555828144978396e-6, 0.00009131090674603122, \
-0.10809496957047804, 0.007760869638627434, 0.025986917687575162, \
-0.0018657767450641124, 0.0014805564813188323, 0.02062149156571013, \
-0.0003559379272201302, 0.004957575787684851, 0.18441551167712716, \
-0.013240438025506859, 0.04433500227909228, 0.0031831099493667353, \
-0.00002726956895621542, 0.0003798160984241676, 6.555828144979509e-6, \
-0.00009131090674602946],\\n\\t\\t\\t\\t\\t[0.00776086963862746, \
-0.0005572053703063196, 0.0018657767450641245, 0.0001339567433226809, \
-0.02062149156571006, 0.28722032543862314, 0.004957575787684869, \
-0.06905012310036815, 0.013240438025506857, 0.0009506206799686883, \
-0.003183109949366764, 0.00022853701204242919, 0.0003798160984241655, \
-0.005290155808982197, 0.00009131090674602557, 0.0012717968662994581, \
-0.007760869638627473, 0.0005572053703063122, 0.0018657767450641115, \
-0.00013395674332268302, 0.02062149156571014, 0.28722032543862325, \
-0.0049575757876848614, 0.06905012310036795, 0.013240438025506866, \
-0.0009506206799686914, 0.0031831099493667262, 0.00022853701204242867, \
-0.00037981609842418205, 0.005290155808982215, 0.00009131090674602851, \
-0.0012717968662994267],\\n\\t\\t\\t\\t\\t[0.025986917687575148, \
-0.0018657767450641568, 0.10809496957047784, 0.00776086963862745, \
-0.00035593792722012914, 0.004957575787684848, 0.001480556481318807, \
-0.020621491565710127, 0.04433500227909238, 0.0031831099493667575, \
-0.18441551167712722, 0.013240438025506864, 6.555828144980286e-6, \
-0.00009131090674603495, 0.000027269568956213827, 0.00037981609842417283, \
-0.02598691768757511, 0.0018657767450641263, 0.10809496957047815, \
-0.007760869638627436, 0.0003559379272201202, 0.004957575787684893, \
-0.001480556481318832, 0.020621491565710106, 0.044335002279092275, \
-0.0031831099493667696, 0.184415511677127, 0.013240438025506857, \
-6.55582814497806e-6, 0.00009131090674602732, 0.000027269568956216758, \
-0.0003798160984241688],\\n\\t\\t\\t\\t\\t[0.0018657767450641308, \
-0.00013395674332267882, 0.0077608696386275025, 0.0005572053703063182, \
-0.004957575787684866, 0.06905012310036789, 0.020621491565710047, \
-0.28722032543862286, 0.003183109949366763, 0.00022853701204242417, \
-0.013240438025506849, 0.0009506206799687029, 0.00009131090674603156, \
-0.001271796866299446, 0.0003798160984241608, 0.005290155808982223, \
-0.0018657767450641393, 0.00013395674332267998, 0.007760869638627448, \
-0.0005572053703063229, 0.004957575787684837, 0.06905012310036802, \
-0.020621491565710078, 0.28722032543862325, 0.003183109949366776, \
-0.00022853701204241485, 0.013240438025506939, 0.0009506206799687027, \
-0.00009131090674603002, 0.0012717968662994726, 0.0003798160984241741, \
-0.005290155808982227],\\n\\t\\t\\t\\t\\t[0.0005572053703063283, \
-0.007760869638627476, 0.00013395674332267892, 0.0018657767450641603, \
-0.28722032543862286, 0.020621491565710207, 0.0690501231003679, \
-0.004957575787684854, 0.0009506206799686997, 0.013240438025506911, \
-0.0002285370120424255, 0.003183109949366781, 0.005290155808982263, \
-0.0003798160984241801, 0.0012717968662994362, 0.0000913109067460303, \
-0.0005572053703063401, 0.007760869638627468, 0.00013395674332267613, \
-0.0018657767450641143, 0.2872203254386232, 0.02062149156571011, \
-0.06905012310036791, 0.004957575787684862, 0.0009506206799687242, \
-0.013240438025506932, 0.00022853701204242303, 0.003183109949366766, \
-0.005290155808982152, 0.00037981609842416606, 0.0012717968662994462, \
-0.00009131090674602929],\\n\\t\\t\\t\\t\\t[0.0077608696386274574, \
-0.10809496957047825, 0.0018657767450641404, 0.025986917687575144, \
-0.02062149156571015, 0.0014805564813188178, 0.004957575787684873, \
-0.0003559379272201221, 0.013240438025506888, 0.18441551167712744, \
-0.003183109949366762, 0.04433500227909224, 0.000379816098424166, \
-0.000027269568956215297, 0.00009131090674602811, 6.55582814497712e-6, \
-0.0077608696386274306, 0.10809496957047796, 0.0018657767450641067, \
-0.025986917687575155, 0.020621491565710092, 0.0014805564813188087, \
-0.004957575787684869, 0.00035593792722012215, 0.013240438025506823, \
-0.18441551167712725, 0.0031831099493667444, 0.044335002279092185, \
-0.0003798160984241721, 0.00002726956895621749, 0.0000913109067460337, \
-6.5558281449798625e-6],\\n\\t\\t\\t\\t\\t[0.00013395674332267892, \
-0.001865776745064133, 0.0005572053703063173, 0.007760869638627431, \
-0.06905012310036779, 0.00495757578768487, 0.28722032543862264, \
-0.020621491565710137, 0.00022853701204241292, 0.0031831099493667405, \
-0.000950620679968698, 0.01324043802550686, 0.0012717968662994646, \
-0.00009131090674602884, 0.0052901558089822436, 0.0003798160984241743, \
-0.00013395674332267846, 0.0018657767450641074, 0.0005572053703063049, \
-0.007760869638627463, 0.06905012310036787, 0.004957575787684896, \
-0.28722032543862275, 0.020621491565710224, 0.0002285370120424195, \
-0.0031831099493667327, 0.0009506206799686982, 0.013240438025506786, \
-0.001271796866299437, 0.00009131090674603487, 0.0052901558089822305, \
-0.00037981609842418265],\\n\\t\\t\\t\\t\\t[0.001865776745064127, \
-0.025986917687575186, 0.007760869638627434, 0.10809496957047794, \
-0.004957575787684863, 0.0003559379272201258, 0.02062149156571007, \
-0.0014805564813188171, 0.0031831099493667523, 0.04433500227909231, \
-0.013240438025506791, 0.18441551167712725, 0.00009131090674603167, \
-6.555828144978923e-6, 0.00037981609842416427, 0.000027269568956214376, \
-0.0018657767450641148, 0.0259869176875751, 0.007760869638627453, \
-0.108094969570478, 0.004957575787684862, 0.00035593792722011906, \
-0.020621491565710075, 0.0014805564813188171, 0.003183109949366742, \
-0.044335002279092366, 0.013240438025506803, 0.18441551167712722, \
-0.00009131090674603507, 6.555828144979026e-6, 0.00037981609842417283, \
-0.000027269568956216443],\\n\\t\\t\\t\\t\\t[0.0000272695689562151, \
-0.0003798160984241731, 6.555828144979329e-6, 0.00009131090674603151, \
-0.18441551167712725, 0.013240438025506897, 0.044335002279092414, \
-0.0031831099493667358, 0.0014805564813188071, 0.02062149156571, \
-0.0003559379272201241, 0.0049575757876848545, 0.10809496957047783, \
-0.007760869638627452, 0.025986917687575106, 0.0018657767450641221, \
-0.000027269568956215213, 0.00037981609842416633, 6.555828144979044e-6, \
-0.00009131090674603087, 0.1844155116771273, 0.013240438025506783, \
-0.044335002279092275, 0.003183109949366737, 0.0014805564813188303, \
-0.020621491565710037, 0.0003559379272201123, 0.004957575787684868, \
-0.1080949695704781, 0.007760869638627426, 0.025986917687575037, \
-0.0018657767450641152],\\n\\t\\t\\t\\t\\t[0.0003798160984241719, \
-0.005290155808982204, 0.00009131090674603151, 0.0012717968662994635, \
-0.013240438025506786, 0.0009506206799687004, 0.0031831099493667523, \
-0.0002285370120424179, 0.02062149156571007, 0.28722032543862286, \
-0.004957575787684898, 0.06905012310036789, 0.0077608696386274436, \
-0.0005572053703063272, 0.0018657767450641182, 0.0001339567433226783, \
-0.00037981609842417294, 0.005290155808982232, 0.00009131090674603065, \
-0.00127179686629944, 0.013240438025506849, 0.0009506206799687075, \
-0.0031831099493667583, 0.00022853701204242225, 0.02062149156571006, \
-0.28722032543862275, 0.004957575787684846, 0.06905012310036791, \
-0.007760869638627409, 0.0005572053703063327, 0.001865776745064098, \
-0.00013395674332267684],\\n\\t\\t\\t\\t\\t[6.555828144979372e-6, \
-0.00009131090674602839, 0.000027269568956211882, 0.00037981609842417365, \
-0.044335002279092234, 0.0031831099493667588, 0.18441551167712733, \
-0.01324043802550682, 0.00035593792722011364, 0.004957575787684859, \
-0.0014805564813188538, 0.02062149156571014, 0.02598691768757511, \
-0.0018657767450641356, 0.10809496957047815, 0.007760869638627453, \
-6.555828144979402e-6, 0.00009131090674603488, 0.000027269568956216578, \
-0.00037981609842416535, 0.04433500227909228, 0.003183109949366745, \
-0.1844155116771271, 0.013240438025506866, 0.000355937927220126, \
-0.004957575787684875, 0.0014805564813188353, 0.020621491565710144, \
-0.0259869176875751, 0.001865776745064103, 0.10809496957047818, \
-0.007760869638627399],\\n\\t\\t\\t\\t\\t[0.00009131090674603026, \
-0.0012717968662994458, 0.0003798160984241698, 0.005290155808982214, \
-0.0031831099493667483, 0.00022853701204241837, 0.013240438025506904, \
-0.0009506206799686869, 0.004957575787684885, 0.06905012310036787, \
-0.020621491565710134, 0.28722032543862314, 0.0018657767450641588, \
-0.0001339567433226829, 0.007760869638627484, 0.000557205370306326, \
-0.00009131090674603379, 0.0012717968662994449, 0.00037981609842418384, \
-0.005290155808982157, 0.0031831099493667588, 0.00022853701204242257, \
-0.013240438025506873, 0.0009506206799687102, 0.004957575787684867, \
-0.06905012310036777, 0.020621491565710127, 0.28722032543862336, \
-0.0018657767450641315, 0.00013395674332267873, 0.007760869638627497, \
-0.0005572053703063246],\\n\\t\\t\\t\\t\\t[0.005290155808982196, \
-0.000379816098424169, 0.001271796866299442, 0.00009131090674602962, \
-0.0009506206799686992, 0.013240438025506868, 0.0002285370120424175, \
-0.0031831099493667713, 0.2872203254386229, 0.02062149156571011, \
-0.06905012310036786, 0.004957575787684865, 0.0005572053703063202, \
-0.007760869638627468, 0.00013395674332267795, 0.0018657767450641395, \
-0.005290155808982255, 0.0003798160984241799, 0.001271796866299453, \
-0.00009131090674602923, 0.0009506206799686981, 0.013240438025506876, \
-0.00022853701204242905, 0.0031831099493667466, 0.28722032543862275, \
-0.020621491565710092, 0.0690501231003678, 0.004957575787684857, \
-0.0005572053703063235, 0.007760869638627441, 0.00013395674332268033, \
-0.001865776745064102],\\n\\t\\t\\t\\t\\t[0.00037981609842417235, \
-0.000027269568956212465, 0.0000913109067460319, 6.5558281449777695e-6, \
-0.013240438025506784, 0.18441551167712716, 0.0031831099493667622, \
-0.04433500227909221, 0.02062149156571008, 0.0014805564813188204, \
-0.004957575787684927, 0.0003559379272201146, 0.0077608696386274574, \
-0.10809496957047808, 0.0018657767450641182, 0.02598691768757502, \
-0.000379816098424175, 0.000027269568956216358, 0.00009131090674603296, \
-6.555828144979139e-6, 0.013240438025506871, 0.18441551167712722, \
-0.0031831099493667653, 0.04433500227909211, 0.020621491565710123, \
-0.0014805564813188373, 0.0049575757876848744, 0.0003559379272201136, \
-0.007760869638627456, 0.1080949695704779, 0.0018657767450641323, \
-0.025986917687575096],\\n\\t\\t\\t\\t\\t[0.0012717968662994468, \
-0.0000913109067460284, 0.005290155808982276, 0.00037981609842416394, \
-0.0002285370120424206, 0.0031831099493667557, 0.0009506206799687058, \
-0.013240438025506823, 0.06905012310036779, 0.0049575757876848285, \
-0.2872203254386227, 0.02062149156571015, 0.0001339567433226816, \
-0.0018657767450641232, 0.0005572053703063311, 0.007760869638627457, \
-0.0012717968662994458, 0.00009131090674602962, 0.00529015580898219, \
-0.0003798160984241747, 0.00022853701204241295, 0.0031831099493667466, \
-0.0009506206799687187, 0.013240438025506823, 0.06905012310036769, \
-0.00495757578768484, 0.2872203254386231, 0.020621491565710054, \
-0.00013395674332268567, 0.0018657767450641518, 0.0005572053703063354, \
-0.007760869638627442],\\n\\t\\t\\t\\t\\t[0.00009131090674603072, \
-6.5558281449795474e-6, 0.00037981609842416584, 0.000027269568956215677, \
-0.0031831099493667544, 0.04433500227909218, 0.013240438025506859, \
-0.18441551167712741, 0.004957575787684854, 0.0003559379272201243, \
-0.020621491565710127, 0.001480556481318798, 0.0018657767450641425, \
-0.02598691768757513, 0.007760869638627506, 0.10809496957047804, \
-0.00009131090674603151, 6.555828144978631e-6, 0.00037981609842418964, \
-0.00002726956895621531, 0.003183109949366759, 0.044335002279092116, \
-0.013240438025506871, 0.18441551167712733, 0.0049575757876848545, \
-0.00035593792722011727, 0.0206214915657101, 0.001480556481318814, \
-0.0018657767450641317, 0.025986917687575023, 0.007760869638627426, \
-0.10809496957047798],\\n\\t\\t\\t\\t\\t[0.0014805564813188217, \
-0.020621491565710092, 0.00035593792722011326, 0.004957575787684867, \
-0.108094969570478, 0.00776086963862749, 0.025986917687574992, \
-0.0018657767450641005, 0.000027269568956211262, 0.00037981609842416833, \
-6.5558281449811085e-6, 0.0000913109067460372, 0.18441551167712722, \
-0.013240438025506814, 0.04433500227909219, 0.0031831099493667466, \
-0.0014805564813188234, 0.020621491565710047, 0.00035593792722012275, \
-0.004957575787684908, 0.10809496957047812, 0.0077608696386274635, \
-0.025986917687575075, 0.0018657767450641462, 0.000027269568956214657, \
-0.0003798160984241577, 6.555828144979977e-6, 0.00009131090674602465, \
-0.1844155116771271, 0.013240438025506816, 0.04433500227909234, \
-0.003183109949366745],\\n\\t\\t\\t\\t\\t[0.020621491565710103, \
-0.28722032543862275, 0.004957575787684857, 0.06905012310036807, \
-0.007760869638627469, 0.0005572053703063356, 0.0018657767450641028, \
-0.00013395674332268307, 0.0003798160984241663, 0.0052901558089822175, \
-0.00009131090674602903, 0.0012717968662994327, 0.013240438025506908, \
-0.000950620679968697, 0.0031831099493667323, 0.00022853701204242574, \
-0.020621491565710092, 0.2872203254386227, 0.004957575787684828, \
-0.06905012310036791, 0.0077608696386274635, 0.0005572053703063335, \
-0.0018657767450641397, 0.00013395674332268128, 0.00037981609842416974, \
-0.005290155808982207, 0.00009131090674603468, 0.0012717968662994518, \
-0.013240438025506842, 0.0009506206799687001, 0.003183109949366751, \
-0.00022853701204241786],\\n\\t\\t\\t\\t\\t[0.00035593792722012275, \
-0.004957575787684856, 0.001480556481318824, 0.02062149156571003, \
-0.02598691768757503, 0.0018657767450641278, 0.10809496957047803, \
-0.007760869638627452, 6.555828144979126e-6, 0.00009131090674603502, \
-0.000027269568956216734, 0.0003798160984241771, 0.044335002279092234, \
-0.003183109949366749, 0.18441551167712714, 0.013240438025506859, \
-0.0003559379272201202, 0.004957575787684851, 0.001480556481318825, \
-0.02062149156571004, 0.025986917687575148, 0.001865776745064145, \
-0.10809496957047796, 0.0077608696386274635, 6.555828144979174e-6, \
-0.00009131090674603064, 0.000027269568956215155, 0.0003798160984241764, \
-0.044335002279092255, 0.003183109949366767, 0.18441551167712741, \
-0.013240438025506864],\\n\\t\\t\\t\\t\\t[0.004957575787684856, \
-0.069050123100368, 0.02062149156571004, 0.2872203254386231, \
-0.0018657767450641488, 0.00013395674332267838, 0.007760869638627465, \
-0.0005572053703063123, 0.00009131090674602937, 0.001271796866299452, \
-0.00037981609842417386, 0.0052901558089822175, 0.003183109949366764, \
-0.00022853701204242452, 0.013240438025506854, 0.0009506206799687159, \
-0.004957575787684836, 0.06905012310036793, 0.02062149156571017, \
-0.28722032543862297, 0.0018657767450641317, 0.00013395674332267597, \
-0.007760869638627417, 0.0005572053703063268, 0.00009131090674603139, \
-0.001271796866299443, 0.00037981609842416936, 0.005290155808982189, \
-0.003183109949366776, 0.0002285370120424222, 0.013240438025506797, \
-0.0009506206799687198],\\n\\t\\t\\t\\t\\t[0.2872203254386229, \
-0.020621491565710092, 0.0690501231003677, 0.004957575787684864, \
-0.0005572053703063305, 0.007760869638627438, 0.0001339567433226805, \
-0.0018657767450641221, 0.005290155808982219, 0.00037981609842416904, \
-0.0012717968662994455, 0.0000913109067460298, 0.0009506206799687152, \
-0.013240438025506857, 0.00022853701204242412, 0.003183109949366768, \
-0.2872203254386229, 0.020621491565710075, 0.06905012310036795, \
-0.004957575787684855, 0.0005572053703063296, 0.007760869638627429, \
-0.00013395674332267838, 0.001865776745064141, 0.005290155808982207, \
-0.00037981609842417636, 0.0012717968662994425, 0.00009131090674602762, \
-0.0009506206799687136, 0.013240438025506849, 0.00022853701204241533, \
-0.003183109949366737],\\n\\t\\t\\t\\t\\t[0.020621491565710116, \
-0.0014805564813187978, 0.004957575787684854, 0.0003559379272201167, \
-0.00776086963862745, 0.10809496957047794, 0.0018657767450641159, \
-0.02598691768757502, 0.0003798160984241847, 0.000027269568956214667, \
-0.00009131090674603014, 6.55582814498009e-6, 0.013240438025506786, \
-0.18441551167712733, 0.0031831099493667882, 0.04433500227909238, \
-0.020621491565710148, 0.001480556481318822, 0.004957575787684852, \
-0.0003559379272201226, 0.007760869638627459, 0.10809496957047787, \
-0.0018657767450641362, 0.02598691768757513, 0.0003798160984241726, \
-0.00002726956895621511, 0.00009131090674603143, 6.55582814497926e-6, \
-0.013240438025506868, 0.184415511677127, 0.0031831099493667215, \
-0.04433500227909221],\\n\\t\\t\\t\\t\\t[0.06905012310036787, \
-0.004957575787684867, 0.28722032543862236, 0.0206214915657101, \
-0.00013395674332267798, 0.0018657767450641332, 0.0005572053703063431, \
-0.007760869638627435, 0.0012717968662994568, 0.00009131090674602958, \
-0.005290155808982207, 0.0003798160984241799, 0.0002285370120424236, \
-0.003183109949366757, 0.0009506206799687029, 0.013240438025506859, \
-0.06905012310036784, 0.004957575787684857, 0.2872203254386231, \
-0.020621491565710078, 0.00013395674332268397, 0.0018657767450641325, \
-0.0005572053703063257, 0.0077608696386274635, 0.0012717968662994351, \
-0.00009131090674602893, 0.005290155808982219, 0.00037981609842417056, \
-0.00022853701204243257, 0.003183109949366763, 0.000950620679968711, \
-0.013240438025506828],\\n\\t\\t\\t\\t\\t[0.004957575787684863, \
-0.0003559379272201157, 0.020621491565710207, 0.0014805564813188117, \
-0.00186577674506412, 0.02598691768757511, 0.007760869638627503, \
-0.1080949695704779, 0.0000913109067460309, 6.555828144978609e-6, \
-0.00037981609842417923, 0.000027269568956215843, 0.003183109949366776, \
-0.04433500227909219, 0.013240438025506845, 0.18441551167712705, \
-0.004957575787684859, 0.0003559379272201154, 0.02062149156571013, \
-0.0014805564813188204, 0.00186577674506412, 0.025986917687575092, \
-0.0077608696386274574, 0.10809496957047812, 0.00009131090674603017, \
-6.5558281449773485e-6, 0.0003798160984241705, 0.000027269568956213946, \
-0.0031831099493667523, 0.044335002279092275, 0.013240438025506899, \
-0.18441551167712733]],\\n}\"\>"], "Output",
+Cell[BoxData["\<\"{\\n    \\\"qubits\\\": 7,\\n    \\\"ancillas\\\": 1,\\n    \
+\\\"circuit\\\": [(\\\"SX\\\", 7), (\\\"SY\\\", 6), (\\\"SY\\\", 5), (\\\"Z\\\
+\", 4), (\\\"Z\\\", 3), (\\\"RY\\\", 2), (\\\"Y\\\", 1), (\\\"CX\\\", 5, 6), \
+(\\\"CX\\\", 3, 4), (\\\"CX\\\", 1, 2), (\\\"Y\\\", 7), (\\\"Y\\\", 6), \
+(\\\"SY\\\", 5), (\\\"Z\\\", 4), (\\\"R\\\", 3), (\\\"T\\\", 2), (\\\"SY\\\", \
+1), (\\\"CX\\\", 6, 7), (\\\"CX\\\", 4, 5), (\\\"CX\\\", 2, 3), (\\\"RX\\\", \
+7), (\\\"SX\\\", 6), (\\\"S\\\", 5), (\\\"RX\\\", 4), (\\\"Z\\\", 3), \
+(\\\"R\\\", 2), (\\\"R\\\", 1), (\\\"CX\\\", 5, 6), (\\\"CX\\\", 3, 4), \
+(\\\"CX\\\", 1, 2), (\\\"TX\\\", 7), (\\\"S\\\", 6), (\\\"R\\\", 5), \
+(\\\"TY\\\", 4), (\\\"Z\\\", 2), (\\\"TY\\\", 1), (\\\"CX\\\", 6, 7), (\\\"CX\
+\\\", 4, 5), (\\\"CX\\\", 2, 3), (\\\"RX\\\", 7), (\\\"RX\\\", 6), \
+(\\\"TX\\\", 5), (\\\"TY\\\", 4), (\\\"X\\\", 2), (\\\"SX\\\", 1), \
+(\\\"CX\\\", 5, 6), (\\\"CX\\\", 3, 4), (\\\"CX\\\", 1, 2), (\\\"SX\\\", 7), \
+(\\\"T\\\", 5), (\\\"SY\\\", 4), (\\\"S\\\", 3), (\\\"T\\\", 2), (\\\"SY\\\", \
+1), (\\\"CX\\\", 6, 7), (\\\"CX\\\", 4, 5), (\\\"CX\\\", 2, 3), (\\\"R\\\", \
+7), (\\\"R\\\", 5), (\\\"Z\\\", 4), (\\\"TY\\\", 3), (\\\"TY\\\", 2), \
+(\\\"R\\\", 1)],\\n    \\\"angles\\\": [4.19379, 4.19379, -0.533589],\\n    \
+\\\"histogram\\\": [\\t[0.00008173544887050613, 0.004715765999816757, \
+0.06568214723187125, 0.001138427942986238, 0.00019747777274617146, \
+0.01139357499475275, 0.0008180218802369861, 0.000014178266175561464, \
+0.00041309586709186526, 0.023833764561357905, 0.001711187305879553, \
+0.000029658948843730965, 0.000011430786268473778, 0.0006595047067208551, \
+0.009185715586531295, 0.00015921031422914703, 0.00008351466587205952, \
+0.004818418779708043, 0.06711191601234964, 0.001163209238974614, \
+0.00005740814279756772, 0.003312190385670978, 0.00023780457040369134, \
+4.121719208748305e-6, 0.00002379680630768935, 0.0013729681752628505, \
+0.00009857467991839807, 1.7085338226512278e-6, 0.000027731137801858285, \
+0.001599961321426435, 0.02228458644540773, 0.000386244923111079, \
+0.00013955709192746597, 0.008051813481657335, 0.11214729454479554, \
+0.0019437795385920506, 0.00039835070459395274, 0.022983035325386314, \
+0.001650107694826588, 0.000028600293807321195, 0.001222200851795193, \
+0.07051546546191867, 0.005062782635784655, 0.00008775007311341335, \
+5.495023328055285e-6, 0.0003170380114960684, 0.004415769855839662, \
+0.00007653580166826371, 4.042171295380536e-6, 0.00023321501531592306, \
+0.0032482661296720406, 0.00005630018329364496, 0.00017833797309984176, \
+0.010289295056700015, 0.0007387381478132314, 0.000012804090387781501, \
+0.004109278092104474, 0.2370867742004912, 0.017022064531995052, \
+0.00029503289291272486, 0.000015047422181022042, 0.0008681682536371447, \
+0.012092023874731373, \
+0.00020958355422904723],\\n\\t\\t\\t\\t\\t[0.004715765999816769, \
+0.00008173544887050949, 0.0011384279429862332, 0.06568214723187128, \
+0.011393574994752752, 0.00019747777274616422, 0.000014178266175563187, \
+0.0008180218802369856, 0.023833764561357964, 0.00041309586709185485, \
+0.000029658948843735505, 0.0017111873058795483, 0.0006595047067208597, \
+0.000011430786268474873, 0.00015921031422915107, 0.009185715586531303, \
+0.00481841877970805, 0.00008351466587206123, 0.0011632092389746369, \
+0.06711191601234955, 0.003312190385671001, 0.000057408142797568315, \
+4.121719208748382e-6, 0.00023780457040368838, 0.0013729681752628526, \
+0.0000237968063076912, 1.7085338226511133e-6, 0.00009857467991840174, \
+0.0015999613214264575, 0.000027731137801859258, 0.0003862449231110833, \
+0.022284586445407754, 0.00805181348165736, 0.00013955709192747023, \
+0.0019437795385920688, 0.11214729454479544, 0.02298303532538634, \
+0.00039835070459395106, 0.000028600293807320226, 0.0016501076948265995, \
+0.07051546546191871, 0.0012222008517951699, 0.00008775007311341328, \
+0.005062782635784706, 0.0003170380114960693, 5.495023328055621e-6, \
+0.00007653580166826285, 0.0044157698558396664, 0.00023321501531592788, \
+4.04217129537997e-6, 0.00005630018329364245, 0.003248266129672049, \
+0.0102892950567, 0.00017833797309984437, 0.00001280409038778133, \
+0.0007387381478132329, 0.23708677420049126, 0.0041092780921044335, \
+0.00029503289291272437, 0.017022064531995052, 0.0008681682536371329, \
+0.000015047422181023297, 0.00020958355422903967, 0.012092023874731399],\\n\\t\
+\\t\\t\\t\\t[0.0001974777727461655, 0.011393574994752765, \
+0.0008180218802369784, 0.000014178266175562466, 0.00008173544887050679, \
+0.0047157659998167765, 0.06568214723187125, 0.0011384279429862494, \
+0.000011430786268475091, 0.0006595047067208688, 0.009185715586531336, \
+0.00015921031422915527, 0.0004130958670918531, 0.023833764561357936, \
+0.0017111873058795496, 0.000029658948843733872, 0.00005740814279756924, \
+0.0033121903856709912, 0.00023780457040369307, 4.121719208747723e-6, \
+0.0000835146658720599, 0.004818418779708017, 0.06711191601234962, \
+0.0011632092389746173, 0.00002773113780185941, 0.0015999613214264556, \
+0.022284586445407758, 0.00038624492311107884, 0.000023796806307689274, \
+0.0013729681752628446, 0.0000985746799183961, 1.7085338226514496e-6, \
+0.0003983507045939489, 0.022983035325386317, 0.0016501076948265995, \
+0.00002860029380732017, 0.00013955709192746792, 0.0080518134816573, \
+0.1121472945447955, 0.0019437795385920734, 5.495023328056083e-6, \
+0.00031703801149606984, 0.004415769855839689, 0.0000765358016682628, \
+0.0012222008517951846, 0.0705154654619188, 0.005062782635784678, \
+0.00008775007311341526, 0.00017833797309984027, 0.010289295056700024, \
+0.0007387381478132286, 0.000012804090387782662, 4.042171295380653e-6, \
+0.00023321501531593314, 0.0032482661296720744, 0.00005630018329364544, \
+0.000015047422181022982, 0.0008681682536371297, 0.012092023874731373, \
+0.0002095835542290487, 0.004109278092104438, 0.23708677420049143, \
+0.017022064531995035, \
+0.0002950328929127243],\\n\\t\\t\\t\\t\\t[0.0113935749947528, \
+0.00019747777274616742, 0.000014178266175562645, 0.0008180218802369807, \
+0.0047157659998167635, 0.00008173544887050805, 0.001138427942986228, \
+0.06568214723187125, 0.0006595047067208536, 0.000011430786268473671, \
+0.0001592103142291498, 0.009185715586531336, 0.023833764561358002, \
+0.00041309586709185555, 0.00002965894884373442, 0.0017111873058795503, \
+0.0033121903856709926, 0.0000574081427975679, 4.121719208748801e-6, \
+0.00023780457040368982, 0.004818418779708026, 0.00008351466587206282, \
+0.0011632092389746206, 0.06711191601234968, 0.0015999613214264469, \
+0.000027731137801861182, 0.00038624492311107694, 0.02228458644540772, \
+0.001372968175262858, 0.000023796806307688423, 1.7085338226514544e-6, \
+0.00009857467991840442, 0.02298303532538638, 0.00039835070459394954, \
+0.00002860029380731953, 0.001650107694826591, 0.008051813481657361, \
+0.00013955709192747326, 0.0019437795385920512, 0.11214729454479559, \
+0.00031703801149606924, 5.495023328056409e-6, 0.00007653580166826213, \
+0.004415769855839656, 0.07051546546191892, 0.0012222008517951853, \
+0.00008775007311341352, 0.005062782635784689, 0.010289295056699984, \
+0.0001783379730998409, 0.000012804090387781613, 0.0007387381478132247, \
+0.00023321501531593103, 4.0421712953803845e-6, 0.00005630018329364409, \
+0.0032482661296720765, 0.0008681682536371275, 0.00001504742218102278, \
+0.0002095835542290434, 0.012092023874731421, 0.23708677420049173, \
+0.0041092780921044925, 0.00029503289291271363, \
+0.017022064531994948],\\n\\t\\t\\t\\t\\t[0.0008180218802369837, \
+0.000014178266175561564, 0.00019747777274617238, 0.011393574994752692, \
+0.06568214723187124, 0.001138427942986241, 0.00008173544887050914, \
+0.004715765999816757, 0.009185715586531295, 0.0001592103142291529, \
+0.000011430786268475438, 0.0006595047067208395, 0.00171118730587956, \
+0.000029658948843733062, 0.00041309586709186515, 0.02383376456135801, \
+0.00023780457040369207, 4.121719208747583e-6, 0.000057408142797571764, \
+0.0033121903856709522, 0.06711191601234974, 0.0011632092389746089, \
+0.00008351466587205893, 0.004818418779708006, 0.02228458644540777, \
+0.00038624492311107374, 0.000027731137801859437, 0.001599961321426421, \
+0.00009857467991839831, 1.7085338226520709e-6, 0.000023796806307692093, \
+0.001372968175262846, 0.0016501076948265978, 0.000028600293807319647, \
+0.0003983507045939485, 0.02298303532538621, 0.11214729454479569, \
+0.001943779538592057, 0.00013955709192746535, 0.008051813481657325, \
+0.004415769855839674, 0.00007653580166826102, 5.495023328054765e-6, \
+0.000317038011496061, 0.005062782635784706, 0.00008775007311341096, \
+0.0012222008517951608, 0.07051546546191877, 0.0007387381478132335, \
+0.000012804090387779917, 0.0001783379730998459, 0.010289295056699985, \
+0.003248266129672084, 0.00005630018329364208, 4.042171295379057e-6, \
+0.00023321501531592832, 0.012092023874731395, 0.00020958355422903574, \
+0.000015047422181021731, 0.000868168253637146, 0.017022064531995063, \
+0.0002950328929127189, 0.004109278092104459, \
+0.23708677420049112],\\n\\t\\t\\t\\t\\t[0.000014178266175561732, \
+0.0008180218802369916, 0.011393574994752804, 0.00019747777274616943, \
+0.0011384279429862418, 0.06568214723187125, 0.004715765999816759, \
+0.00008173544887050857, 0.00015921031422914768, 0.00918571558653133, \
+0.0006595047067208506, 0.000011430786268474066, 0.00002965894884373382, \
+0.0017111873058795546, 0.023833764561358047, 0.000413095867091865, \
+4.1217192087471585e-6, 0.0002378045704036936, 0.0033121903856710086, \
+0.00005740814279756349, 0.0011632092389746323, 0.06711191601234966, \
+0.004818418779708041, 0.00008351466587206228, 0.0003862449231110747, \
+0.022284586445407723, 0.0015999613214264458, 0.000027731137801859634, \
+1.7085338226515349e-6, 0.00009857467991839988, 0.001372968175262861, \
+0.000023796806307691483, 0.00002860029380731932, 0.0016501076948266017, \
+0.022983035325386317, 0.0003983507045939486, 0.001943779538592082, \
+0.11214729454479547, 0.008051813481657327, 0.0001395570919274714, \
+0.00007653580166826182, 0.004415769855839663, 0.00031703801149607054, \
+5.495023328055011e-6, 0.00008775007311341303, 0.00506278263578467, \
+0.07051546546191874, 0.0012222008517951718, 0.000012804090387783338, \
+0.0007387381478132388, 0.010289295056700043, 0.0001783379730998408, \
+0.000056300183293647146, 0.003248266129672057, 0.00023321501531592596, \
+4.0421712953801685e-6, 0.00020958355422904867, 0.012092023874731472, \
+0.0008681682536371333, 0.000015047422181023944, 0.0002950328929127214, \
+0.017022064531994997, 0.23708677420049143, 0.004109278092104447],\\n\\t\\t\\t\
+\\t\\t[0.06568214723187135, 0.0011384279429862336, 0.00008173544887050976, \
+0.004715765999816742, 0.0008180218802369822, 0.000014178266175562693, \
+0.00019747777274616582, 0.011393574994752763, 0.0017111873058795767, \
+0.00002965894884373549, 0.0004130958670918614, 0.023833764561357988, \
+0.009185715586531378, 0.00015921031422915394, 0.000011430786268474446, \
+0.0006595047067208661, 0.06711191601234957, 0.0011632092389746275, \
+0.00008351466587206356, 0.004818418779708038, 0.00023780457040368743, \
+4.121719208747529e-6, 0.000057408142797569345, 0.003312190385671012, \
+0.00009857467991840022, 1.708533822651541e-6, 0.000023796806307688945, \
+0.0013729681752628453, 0.0222845864454077, 0.00038624492311108117, \
+0.000027731137801858492, 0.0015999613214264443, 0.11214729454479556, \
+0.0019437795385920486, 0.00013955709192747565, 0.008051813481657316, \
+0.0016501076948265954, 0.000028600293807320186, 0.00039835070459395605, \
+0.02298303532538635, 0.005062782635784686, 0.00008775007311341618, \
+0.0012222008517951773, 0.0705154654619188, 0.004415769855839636, \
+0.00007653580166826213, 5.49502332805582e-6, 0.0003170380114960688, \
+0.003248266129672088, 0.00005630018329364299, 4.0421712953801515e-6, \
+0.00023321501531592767, 0.0007387381478132362, 0.000012804090387781998, \
+0.0001783379730998437, 0.010289295056699977, 0.01702206453199509, \
+0.0002950328929127176, 0.0041092780921044535, 0.23708677420049146, \
+0.012092023874731348, 0.0002095835542290408, 0.00001504742218102398, \
+0.0008681682536371355],\\n\\t\\t\\t\\t\\t[0.0011384279429862447, \
+0.06568214723187128, 0.004715765999816759, 0.0000817354488705105, \
+0.000014178266175560199, 0.0008180218802369819, 0.011393574994752796, \
+0.00019747777274616834, 0.00002965894884373456, 0.0017111873058795407, \
+0.023833764561358002, 0.00041309586709186157, 0.0001592103142291453, \
+0.009185715586531373, 0.0006595047067208547, 0.000011430786268473483, \
+0.001163209238974626, 0.06711191601234956, 0.004818418779708048, \
+0.00008351466587206246, 4.121719208747527e-6, 0.0002378045704036964, \
+0.0033121903856710103, 0.00005740814279756905, 1.7085338226518659e-6, \
+0.00009857467991840048, 0.0013729681752628468, 0.00002379680630769204, \
+0.0003862449231110722, 0.02228458644540777, 0.001599961321426441, \
+0.000027731137801858977, 0.0019437795385920799, 0.11214729454479562, \
+0.008051813481657325, 0.00013955709192747166, 0.000028600293807321778, \
+0.0016501076948266175, 0.022983035325386335, 0.00039835070459395545, \
+0.00008775007311341168, 0.0050627826357846585, 0.0705154654619188, \
+0.0012222008517951718, 0.00007653580166826545, 0.004415769855839673, \
+0.0003170380114960714, 5.495023328055972e-6, 0.00005630018329364269, \
+0.0032482661296720687, 0.00023321501531593265, 4.042171295380427e-6, \
+0.000012804090387781862, 0.0007387381478132213, 0.010289295056699992, \
+0.00017833797309984057, 0.00029503289291271374, 0.01702206453199503, \
+0.2370867742004915, 0.004109278092104478, 0.0002095835542290457, \
+0.012092023874731394, 0.0008681682536371274, \
+0.000015047422181022819],\\n\\t\\t\\t\\t\\t[0.003702314979276506, \
+0.00006416993054849244, 0.0008937718339520321, 0.05156659545385624, \
+0.026245261709773014, 0.00045489285232889315, 0.00003265983736797149, \
+0.0018843250113355825, 0.005223459549261709, 0.00009053498645446649, \
+6.500119574481122e-6, 0.00037502752242353336, 0.0030679656632690813, \
+0.0000531751470739519, 0.0007406342552457979, 0.04273124926151844, \
+0.001569643390186683, 0.000027205655893130072, 0.00037892590429246, \
+0.021862312137579026, 0.04176402043712508, 0.0007238698775974274, \
+0.000051971518912356695, 0.0029985217580931847, 0.014799658672825993, \
+0.0002565133097784683, 0.000018416827033429104, 0.001062567685733933, \
+0.0035925084795966284, 0.00006226672255628503, 0.0008672635662470718, \
+0.050037188210309766, 0.0025356749065385846, 0.00004394928134340769, \
+0.000612134522375521, 0.03531739542417938, 0.15970710010808484, \
+0.002768104167095803, 0.00019874093745837645, 0.011466453889826375, \
+0.029153150770877326, 0.0005052934908856518, 0.00003627844040840042, \
+0.002093102052640042, 0.0004920812749082398, 8.52893970713509e-6, \
+0.0001187928055797501, 0.006853808002735068, 0.0008984861848768608, \
+0.000015572904089752233, 0.00021690257304765793, 0.012514298182560014, \
+0.031810084708383604, 0.0005513444798468853, 0.00003958475265843403, \
+0.002283861326724355, 0.07208433220520964, 0.0012493930465490952, \
+0.00008970238485845949, 0.005175422200081107, 0.005405210691125954, \
+0.00009368516633268364, 0.0013048660363438106, 0.07528487300846043],\\n\\t\\t\
+\\t\\t\\t[0.00006416993054848797, 0.0037023149792765027, \
+0.051566595453856216, 0.0008937718339520472, 0.00045489285232889527, \
+0.026245261709773003, 0.0018843250113355703, 0.000032659837367973836, \
+0.00009053498645446828, 0.0052234595492617565, 0.00037502752242353363, \
+6.500119574482153e-6, 0.00005317514707395493, 0.0030679656632690605, \
+0.042731249261518514, 0.0007406342552458183, 0.000027205655893130123, \
+0.0015696433901867099, 0.02186231213757912, 0.0003789259042924506, \
+0.0007238698775974334, 0.04176402043712505, 0.0029985217580931933, \
+0.00005197151891235802, 0.0002565133097784591, 0.014799658672825901, \
+0.0010625676857339455, 0.00001841682703342982, 0.00006226672255628182, \
+0.0035925084795966167, 0.050037188210309745, 0.0008672635662470772, \
+0.00004394928134340496, 0.002535674906538584, 0.03531739542417948, \
+0.0006121345223755143, 0.0027681041670958215, 0.1597071001080847, \
+0.011466453889826329, 0.00019874093745838426, 0.0005052934908856531, \
+0.029153150770877385, 0.0020931020526400684, 0.000036278440408399, \
+8.528939707134687e-6, 0.0004920812749082424, 0.0068538080027350495, \
+0.00011879280557975266, 0.00001557290408975292, 0.0008984861848768593, \
+0.012514298182560035, 0.00021690257304766546, 0.0005513444798468826, \
+0.03181008470838356, 0.002283861326724354, 0.00003958475265843663, \
+0.0012493930465490904, 0.07208433220520971, 0.005175422200081149, \
+0.00008970238485846013, 0.00009368516633268689, 0.005405210691125981, \
+0.0752848730084605, \
+0.0013048660363438182],\\n\\t\\t\\t\\t\\t[0.02624526170977302, \
+0.0004548928523288924, 0.00003265983736797658, 0.0018843250113355753, \
+0.0037023149792764993, 0.00006416993054849128, 0.0008937718339520377, \
+0.05156659545385624, 0.0030679656632690787, 0.00005317514707395122, \
+0.0007406342552458102, 0.04273124926151842, 0.005223459549261736, \
+0.00009053498645446745, 6.500119574481747e-6, 0.00037502752242353797, \
+0.0417640204371251, 0.0007238698775974443, 0.00005197151891235632, \
+0.0029985217580931886, 0.0015696433901867058, 0.000027205655893129818, \
+0.0003789259042924571, 0.021862312137579117, 0.003592508479596624, \
+0.00006226672255628155, 0.000867263566247082, 0.05003718821030971, \
+0.014799658672825938, 0.00025651330977846583, 0.000018416827033429287, \
+0.001062567685733948, 0.15970710010808464, 0.0027681041670958367, \
+0.00019874093745838507, 0.011466453889826398, 0.0025356749065386036, \
+0.00004394928134340806, 0.0006121345223755243, 0.03531739542417949, \
+0.0004920812749082475, 8.528939707135335e-6, 0.00011879280557975182, \
+0.006853808002735045, 0.029153150770877448, 0.000505293490885647, \
+0.00003627844040840208, 0.002093102052640058, 0.03181008470838353, \
+0.0005513444798468951, 0.000039584752658435955, 0.002283861326724355, \
+0.0008984861848768861, 0.000015572904089752084, 0.00021690257304766438, \
+0.012514298182560023, 0.005405210691125974, 0.00009368516633268923, \
+0.0013048660363438038, 0.07528487300846037, 0.07208433220520982, \
+0.0012493930465490894, 0.0000897023848584667, 0.005175422200081187],\\n\\t\\t\
+\\t\\t\\t[0.00045489285232889267, 0.026245261709773024, \
+0.0018843250113355658, 0.00003265983736797259, 0.00006416993054849117, \
+0.003702314979276463, 0.051566595453856154, 0.0008937718339520309, \
+0.000053175147073953905, 0.0030679656632690605, 0.042731249261518583, \
+0.0007406342552458048, 0.00009053498645446707, 0.005223459549261765, \
+0.00037502752242353607, 6.50011957448082e-6, 0.000723869877597439, \
+0.04176402043712504, 0.0029985217580931916, 0.00005197151891236007, \
+0.0000272056558931296, 0.0015696433901867227, 0.021862312137579085, \
+0.00037892590429245625, 0.00006226672255627896, 0.00359250847959663, \
+0.05003718821030981, 0.0008672635662470708, 0.0002565133097784636, \
+0.014799658672825965, 0.0010625676857339405, 0.000018416827033431344, \
+0.002768104167095814, 0.1597071001080848, 0.011466453889826323, \
+0.0001987409374583829, 0.000043949281343403865, 0.002535674906538616, \
+0.03531739542417946, 0.0006121345223755211, 8.528939707134859e-6, \
+0.0004920812749082432, 0.00685380800273508, 0.00011879280557975176, \
+0.0005052934908856494, 0.0291531507708774, 0.0020931020526400433, \
+0.00003627844040840247, 0.0005513444798468865, 0.03181008470838357, \
+0.0022838613267243645, 0.00003958475265843599, 0.000015572904089753372, \
+0.0008984861848768736, 0.012514298182560028, 0.00021690257304765687, \
+0.00009368516633268654, 0.005405210691125978, 0.07528487300846053, \
+0.0013048660363437828, 0.0012493930465490972, 0.07208433220520985, \
+0.005175422200081164, \
+0.00008970238485846576],\\n\\t\\t\\t\\t\\t[0.00003265983736797432, \
+0.0018843250113355669, 0.026245261709773007, 0.0004548928523288963, \
+0.0008937718339520414, 0.051566595453856216, 0.0037023149792764706, \
+0.00006416993054848794, 0.0007406342552458289, 0.042731249261518514, \
+0.0030679656632690384, 0.00005317514707395173, 6.5001195744817744e-6, \
+0.00037502752242353585, 0.00522345954926176, 0.00009053498645446532, \
+0.00005197151891235835, 0.0029985217580931886, 0.0417640204371251, \
+0.0007238698775974317, 0.00037892590429246064, 0.02186231213757912, \
+0.0015696433901867001, 0.000027205655893130794, 0.000867263566247078, \
+0.050037188210309815, 0.0035925084795966045, 0.00006226672255628204, \
+0.000018416827033431195, 0.0010625676857339548, 0.014799658672825896, \
+0.00025651330977846334, 0.00019874093745838128, 0.011466453889826375, \
+0.15970710010808464, 0.0027681041670958237, 0.000612134522375532, \
+0.03531739542417952, 0.002535674906538601, 0.000043949281343405186, \
+0.0001187928055797544, 0.006853808002735103, 0.0004920812749082457, \
+8.528939707135704e-6, 0.00003627844040839826, 0.002093102052640044, \
+0.029153150770877385, 0.0005052934908856474, 0.000039584752658438523, \
+0.0022838613267243614, 0.03181008470838353, 0.0005513444798468952, \
+0.00021690257304765988, 0.012514298182559993, 0.0008984861848768771, \
+0.00001557290408975188, 0.0013048660363438069, 0.07528487300846054, \
+0.005405210691126007, 0.00009368516633269022, 0.00008970238485846362, \
+0.0051754222000811355, 0.07208433220520982, \
+0.001249393046549086],\\n\\t\\t\\t\\t\\t[0.001884325011335565, \
+0.00003265983736797385, 0.0004548928523289026, 0.02624526170977294, \
+0.051566595453856265, 0.0008937718339520326, 0.0000641699305484858, \
+0.0037023149792764893, 0.04273124926151874, 0.000740634255245812, \
+0.00005317514707395368, 0.003067965663269055, 0.0003750275224235267, \
+6.500119574481387e-6, 0.00009053498645446344, 0.005223459549261711, \
+0.00299852175809323, 0.00005197151891236045, 0.000723869877597421, \
+0.04176402043712523, 0.021862312137579165, 0.00037892590429245625, \
+0.000027205655893131512, 0.001569643390186705, 0.050037188210309884, \
+0.0008672635662470776, 0.00006226672255628213, 0.003592508479596586, \
+0.0010625676857339422, 0.000018416827033430974, 0.0002565133097784664, \
+0.014799658672825976, 0.011466453889826382, 0.00019874093745837925, \
+0.0027681041670958037, 0.1597071001080847, 0.03531739542417965, \
+0.0006121345223755167, 0.000043949281343408425, 0.002535674906538594, \
+0.0068538080027350885, 0.00011879280557974851, 8.528939707134943e-6, \
+0.0004920812749082401, 0.0020931020526400498, 0.00003627844040840087, \
+0.0005052934908856468, 0.02915315077087741, 0.00228386132672435, \
+0.00003958475265843713, 0.0005513444798468936, 0.03181008470838361, \
+0.01251429818256013, 0.00021690257304765552, 0.000015572904089753107, \
+0.0008984861848768891, 0.07528487300846053, 0.0013048660363437806, \
+0.00009368516633268526, 0.005405210691125981, 0.005175422200081115, \
+0.00008970238485846349, 0.0012493930465490802, 0.07208433220520993],\\n\\t\\t\
+\\t\\t\\t[0.0008937718339520393, 0.051566595453856154, 0.0037023149792764936, \
+0.0000641699305484901, 0.00003265983736797647, 0.001884325011335579, \
+0.026245261709772944, 0.00045489285232889755, 6.500119574480601e-6, \
+0.0003750275224235276, 0.005223459549261749, 0.0000905349864544692, \
+0.0007406342552458188, 0.042731249261518466, 0.0030679656632690636, \
+0.00005317514707395102, 0.00037892590429245706, 0.021862312137579106, \
+0.00156964339018671, 0.00002720565589312939, 0.00005197151891235811, \
+0.00299852175809318, 0.04176402043712507, 0.0007238698775974433, \
+0.000018416827033431642, 0.0010625676857339602, 0.014799658672825938, \
+0.00025651330977846063, 0.0008672635662470824, 0.05003718821030984, \
+0.0035925084795966097, 0.00006226672255627985, 0.0006121345223755189, \
+0.03531739542417952, 0.0025356749065385876, 0.000043949281343406047, \
+0.00019874093745838117, 0.011466453889826398, 0.1597071001080846, \
+0.002768104167095821, 0.000036278440408402076, 0.0020931020526400433, \
+0.0291531507708774, 0.0005052934908856514, 0.0001187928055797519, \
+0.006853808002735075, 0.000492081274908244, 8.528939707135099e-6, \
+0.0002169025730476634, 0.012514298182560005, 0.0008984861848768702, \
+0.000015572904089754016, 0.000039584752658436816, 0.0022838613267243566, \
+0.03181008470838351, 0.0005513444798468823, 0.00008970238485846841, \
+0.005175422200081129, 0.07208433220520975, 0.0012493930465490963, \
+0.0013048660363437952, 0.07528487300846046, 0.00540521069112597, \
+0.00009368516633268305],\\n\\t\\t\\t\\t\\t[0.05156659545385638, \
+0.0008937718339520207, 0.00006416993054849038, 0.0037023149792764854, \
+0.0018843250113355621, 0.0000326598373679733, 0.00045489285232889034, \
+0.026245261709772982, 0.0003750275224235423, 6.500119574480674e-6, \
+0.00009053498645446508, 0.0052234595492617495, 0.04273124926151849, \
+0.0007406342552458107, 0.0000531751470739538, 0.0030679656632690627, \
+0.021862312137579065, 0.00037892590429246167, 0.000027205655893130496, \
+0.001569643390186717, 0.002998521758093209, 0.00005197151891235712, \
+0.000723869877597444, 0.0417640204371251, 0.001062567685733947, \
+0.00001841682703343131, 0.0002565133097784669, 0.014799658672825938, \
+0.050037188210309766, 0.0008672635662470724, 0.00006226672255628, \
+0.003592508479596627, 0.03531739542417951, 0.0006121345223755167, \
+0.00004394928134340506, 0.002535674906538593, 0.011466453889826358, \
+0.0001987409374583805, 0.0027681041670958237, 0.15970710010808475, \
+0.002093102052640052, 0.0000362784404083991, 0.0005052934908856565, \
+0.029153150770877375, 0.006853808002735081, 0.00011879280557975393, \
+8.528939707134664e-6, 0.0004920812749082405, 0.012514298182560037, \
+0.00021690257304766048, 0.00001557290408975364, 0.0008984861848768724, \
+0.0022838613267243553, 0.0000395847526584352, 0.0005513444798468849, \
+0.03181008470838354, 0.005175422200081171, 0.00008970238485846369, \
+0.0012493930465490974, 0.07208433220520981, 0.07528487300846047, \
+0.001304866036343812, 0.00009368516633268621, \
+0.0054052106911259435],\\n\\t\\t\\t\\t\\t[0.0009072915549944859, \
+0.000015725522111736254, 0.00021902826787446162, 0.012636941167075897, \
+0.02119657175800062, 0.00036738703897171057, 0.00002637720263681218, \
+0.0015218453814578306, 0.004589442083905118, 0.00007954595474155448, \
+5.711142595094707e-6, 0.00032950711646202415, 0.00814535743709226, \
+0.00014117843132109263, 0.0019663618831716623, 0.11345019376705712, \
+0.0013521744731528156, 0.000023436401958595464, 0.0003264269694657669, \
+0.018833360864863227, 0.09662977245760722, 0.0016748239472409332, \
+0.00012024694926911981, 0.00693770552166877, 0.010116323296518561, \
+0.0001753399608021754, 0.000012588842789216449, 0.0007263193341786508, \
+0.005519944162517065, 0.00009567377047143382, 0.001332563718932896, \
+0.07688290411531058, 0.00006925116322243942, 1.2002874847928051e-6, \
+0.00001671784802294902, 0.0009645442752951144, 0.04916361038402107, \
+0.0008521223832965644, 0.00006117963453062907, 0.0035297884135661556, \
+0.029787168236233896, 0.0005162825225985613, 0.00003706741738778988, \
+0.002138622458601551, 0.008975281774821146, 0.000155562995414276, \
+0.0021667130152404606, 0.12500954860869717, 0.0011159551019107616, \
+0.00001934215802428703, 0.00026940150787435493, 0.015543249455275894, \
+0.08119966931905934, 0.0014073835343373828, 0.00010104559152886232, \
+0.00582987395980529, 0.003485162145852417, 0.000060406155095230676, \
+4.336966807314563e-6, 0.00025022338403828126, 0.0012540257791471545, \
+0.00002173525148570995, 0.00030273299995412477, \
+0.017466325907966023],\\n\\t\\t\\t\\t\\t[0.00001572552211173692, \
+0.0009072915549944806, 0.012636941167075881, 0.0002190282678744648, \
+0.0003673870389717072, 0.02119657175800051, 0.0015218453814578236, \
+0.000026377202636815593, 0.00007954595474155425, 0.004589442083905202, \
+0.00032950711646202653, 5.711142595093727e-6, 0.00014117843132108765, \
+0.008145357437092283, 0.11345019376705712, 0.0019663618831716563, \
+0.000023436401958594994, 0.001352174473152816, 0.01883336086486321, \
+0.0003264269694657602, 0.0016748239472409304, 0.09662977245760732, \
+0.006937705521668746, 0.0001202469492691213, 0.0001753399608021749, \
+0.010116323296518608, 0.00072631933417864, 0.000012588842789214587, \
+0.00009567377047143796, 0.00551994416251709, 0.07688290411531051, \
+0.001332563718932904, 1.2002874847926599e-6, 0.00006925116322243781, \
+0.0009645442752951279, 0.00001671784802294841, 0.0008521223832965638, \
+0.04916361038402106, 0.003529788413566163, 0.00006117963453062778, \
+0.0005162825225985588, 0.029787168236233952, 0.002138622458601563, \
+0.000037067417387786716, 0.00015556299541427508, 0.008975281774821198, \
+0.1250095486086972, 0.002166713015240481, 0.00001934215802428709, \
+0.0011159551019107661, 0.015543249455275928, 0.0002694015078743578, \
+0.0014073835343373965, 0.0811996693190594, 0.005829873959805298, \
+0.0001010455915288572, 0.00006040615509523386, 0.003485162145852388, \
+0.0002502233840382751, 4.336966807314487e-6, 0.000021735251485709496, \
+0.00125402577914715, 0.01746632590796607, 0.0003027329999541295],\\n\\t\\t\\t\
+\\t\\t[0.021196571758000562, 0.0003673870389716998, 0.00002637720263681373, \
+0.0015218453814578089, 0.0009072915549944807, 0.000015725522111737402, \
+0.00021902826787445796, 0.012636941167075897, 0.008145357437092283, \
+0.0001411784313210897, 0.0019663618831716615, 0.11345019376705706, \
+0.004589442083905186, 0.00007954595474155732, 5.711142595093349e-6, \
+0.00032950711646202296, 0.0966297724576075, 0.001674823947240933, \
+0.00012024694926911744, 0.006937705521668813, 0.001352174473152813, \
+0.000023436401958596644, 0.00032642696946575767, 0.018833360864863164, \
+0.005519944162517044, 0.00009567377047143819, 0.0013325637189329075, \
+0.07688290411531057, 0.010116323296518586, 0.0001753399608021875, \
+0.000012588842789214657, 0.0007263193341786394, 0.04916361038402123, \
+0.0008521223832965757, 0.00006117963453062781, 0.0035297884135661716, \
+0.00006925116322244159, 1.2002874847930165e-6, 0.000016717848022948798, \
+0.000964544275295126, 0.00897528177482115, 0.0001555629954142821, \
+0.002166713015240479, 0.12500954860869706, 0.02978716823623402, \
+0.0005162825225985586, 0.00003706741738778813, 0.002138622458601548, \
+0.08119966931905945, 0.0014073835343373896, 0.00010104559152886003, \
+0.005829873959805326, 0.0011159551019107748, 0.000019342158024285544, \
+0.00026940150787436144, 0.015543249455275904, 0.0012540257791471548, \
+0.00002173525148571217, 0.000302732999954124, 0.01746632590796606, \
+0.003485162145852371, 0.00006040615509523138, 4.336966807314099e-6, \
+0.00025022338403828185],\\n\\t\\t\\t\\t\\t[0.0003673870389717023, \
+0.021196571758000566, 0.0015218453814577918, 0.00002637720263681155, \
+0.000015725522111736413, 0.000907291554994491, 0.012636941167075866, \
+0.00021902826787446528, 0.00014117843132109152, 0.008145357437092217, \
+0.11345019376705713, 0.0019663618831716662, 0.00007954595474155491, \
+0.004589442083905152, 0.00032950711646202415, 5.711142595094619e-6, \
+0.0016748239472409142, 0.09662977245760732, 0.006937705521668764, \
+0.00012024694926911659, 0.0000234364019585965, 0.0013521744731528336, \
+0.018833360864863223, 0.00032642696946576775, 0.00009567377047144027, \
+0.005519944162517072, 0.07688290411531044, 0.0013325637189329168, \
+0.0001753399608021788, 0.01011632329651859, 0.0007263193341786435, \
+0.000012588842789213276, 0.0008521223832965673, 0.049163610384021186, \
+0.003529788413566162, 0.0000611796345306263, 1.2002874847930681e-6, \
+0.0000692511632224389, 0.0009645442752951165, 0.000016717848022948314, \
+0.0001555629954142827, 0.00897528177482117, 0.12500954860869692, \
+0.0021667130152404784, 0.0005162825225985671, 0.029787168236234045, \
+0.0021386224586015514, 0.00003706741738778831, 0.0014073835343373757, \
+0.08119966931905956, 0.0058298739598053265, 0.00010104559152886316, \
+0.00001934215802428442, 0.0011159551019107664, 0.015543249455275921, \
+0.0002694015078743603, 0.000021735251485711238, 0.0012540257791471316, \
+0.017466325907965975, 0.00030273299995412753, 0.000060406155095230574, \
+0.003485162145852371, 0.0002502233840382776, 4.3369668073153314e-6],\\n\\t\\t\
+\\t\\t\\t[0.00002637720263681517, 0.0015218453814578052, \
+0.021196571758000576, 0.0003673870389717, 0.0002190282678744631, \
+0.012636941167075862, 0.0009072915549944897, 0.000015725522111737917, \
+0.001966361883171648, 0.11345019376705724, 0.008145357437092262, \
+0.00014117843132109188, 5.711142595093457e-6, 0.0003295071164620294, \
+0.004589442083905149, 0.00007954595474155628, 0.00012024694926912168, \
+0.006937705521668799, 0.09662977245760733, 0.0016748239472409265, \
+0.0003264269694657652, 0.01883336086486321, 0.0013521744731528247, \
+0.00002343640195859618, 0.0013325637189328993, 0.07688290411531074, \
+0.005519944162517065, 0.00009567377047143646, 0.000012588842789215952, \
+0.0007263193341786411, 0.010116323296518596, 0.0001753399608021838, \
+0.00006117963453062789, 0.0035297884135661495, 0.04916361038402115, \
+0.0008521223832965725, 0.000016717848022946725, 0.0009645442752951115, \
+0.00006925116322243878, 1.2002874847928668e-6, 0.002166713015240467, \
+0.12500954860869715, 0.008975281774821129, 0.00015556299541427912, \
+0.000037067417387788546, 0.002138622458601543, 0.029787168236233997, \
+0.0005162825225985664, 0.00010104559152886049, 0.00582987395980534, \
+0.08119966931905952, 0.0014073835343373943, 0.0002694015078743564, \
+0.01554324945527596, 0.001115955101910766, 0.000019342158024285384, \
+0.00030273299995412016, 0.017466325907966, 0.0012540257791471363, \
+0.00002173525148571228, 4.336966807314464e-6, 0.0002502233840382785, \
+0.0034851621458524156, \
+0.00006040615509523276],\\n\\t\\t\\t\\t\\t[0.0015218453814578054, \
+0.000026377202636812124, 0.00036738703897170824, 0.021196571758000587, \
+0.012636941167075871, 0.0002190282678744604, 0.00001572552211173709, \
+0.0009072915549944773, 0.11345019376705705, 0.0019663618831716537, \
+0.00014117843132109174, 0.008145357437092268, 0.000329507116462028, \
+5.711142595094628e-6, 0.0000795459547415557, 0.004589442083905156, \
+0.006937705521668764, 0.00012024694926912222, 0.0016748239472409198, \
+0.09662977245760739, 0.018833360864863233, 0.00032642696946575664, \
+0.000023436401958597765, 0.0013521744731528264, 0.0768829041153106, \
+0.001332563718932908, 0.00009567377047143844, 0.005519944162517053, \
+0.0007263193341786455, 0.00001258884278921603, 0.00017533996080217921, \
+0.0101163232965186, 0.0035297884135661573, 0.00006117963453062659, \
+0.0008521223832965723, 0.049163610384021214, 0.00096454427529512, \
+0.000016717848022950038, 1.20028748479233e-6, 0.00006925116322243725, \
+0.12500954860869695, 0.0021667130152404775, 0.00015556299541427782, \
+0.00897528177482117, 0.002138622458601555, 0.000037067417387786927, \
+0.000516282522598557, 0.029787168236233962, 0.0058298739598053265, \
+0.00010104559152886047, 0.001407383534337381, 0.08119966931905948, \
+0.015543249455275882, 0.00026940150787436166, 0.000019342158024285506, \
+0.001115955101910758, 0.017466325907966016, 0.000302732999954126, \
+0.000021735251485711688, 0.001254025779147138, 0.00025022338403827367, \
+4.336966807314153e-6, 0.000060406155095231536, \
+0.0034851621458523965],\\n\\t\\t\\t\\t\\t[0.0002190282678744652, \
+0.012636941167075843, 0.000907291554994483, 0.00001572552211173648, \
+0.00002637720263681298, 0.0015218453814578295, 0.021196571758000587, \
+0.0003673870389717086, 5.711142595095094e-6, 0.0003295071164620361, \
+0.004589442083905164, 0.00007954595474155465, 0.0019663618831716576, \
+0.11345019376705716, 0.008145357437092259, 0.0001411784313210951, \
+0.0003264269694657598, 0.01883336086486315, 0.0013521744731528262, \
+0.000023436401958595688, 0.00012024694926911356, 0.006937705521668753, \
+0.09662977245760725, 0.0016748239472409198, 0.000012588842789216196, \
+0.0007263193341786469, 0.010116323296518584, 0.00017533996080218534, \
+0.0013325637189329094, 0.07688290411531065, 0.005519944162517053, \
+0.00009567377047143787, 0.000016717848022949994, 0.0009645442752951125, \
+0.0000692511632224419, 1.2002874847926893e-6, 0.0000611796345306264, \
+0.0035297884135661725, 0.049163610384021186, 0.0008521223832965638, \
+0.000037067417387787414, 0.002138622458601551, 0.02978716823623399, \
+0.0005162825225985718, 0.0021667130152404697, 0.12500954860869726, \
+0.008975281774821193, 0.00015556299541427736, 0.0002694015078743614, \
+0.015543249455275921, 0.0011159551019107666, 0.000019342158024286746, \
+0.00010104559152886232, 0.005829873959805337, 0.08119966931905952, \
+0.0014073835343373828, 4.3369668073138584e-6, 0.00025022338403827036, \
+0.003485162145852398, 0.000060406155095229605, 0.0003027329999541228, \
+0.01746632590796607, 0.0012540257791471485, \
+0.000021735251485710404],\\n\\t\\t\\t\\t\\t[0.012636941167075885, \
+0.00021902826787446197, 0.000015725522111737094, 0.0009072915549944879, \
+0.0015218453814578128, 0.000026377202636813848, 0.0003673870389717026, \
+0.021196571758000528, 0.00032950711646202995, 5.711142595094317e-6, \
+0.00007954595474155831, 0.004589442083905193, 0.11345019376705719, \
+0.0019663618831716662, 0.00014117843132109066, 0.008145357437092226, \
+0.018833360864863192, 0.0003264269694657569, 0.0000234364019585976, \
+0.0013521744731528373, 0.00693770552166878, 0.00012024694926911927, \
+0.0016748239472409133, 0.09662977245760727, 0.0007263193341786481, \
+0.000012588842789215952, 0.00017533996080218076, 0.010116323296518598, \
+0.07688290411531071, 0.0013325637189329116, 0.00009567377047144149, \
+0.005519944162517055, 0.0009645442752951106, 0.000016717848022948666, \
+1.200287484792365e-6, 0.00006925116322244003, 0.0035297884135661608, \
+0.00006117963453062685, 0.0008521223832965562, 0.04916361038402103, \
+0.00213862245860155, 0.000037067417387789495, 0.0005162825225985559, \
+0.029787168236233962, 0.12500954860869695, 0.0021667130152404892, \
+0.00015556299541427654, 0.008975281774821178, 0.015543249455275897, \
+0.0002694015078743526, 0.000019342158024284568, 0.0011159551019107614, \
+0.005829873959805315, 0.00010104559152886162, 0.0014073835343373776, \
+0.08119966931905939, 0.0002502233840382777, 4.336966807314035e-6, \
+0.000060406155095234606, 0.0034851621458523883, 0.017466325907966086, \
+0.00030273299995412775, 0.000021735251485711207, \
+0.0012540257791471376],\\n\\t\\t\\t\\t\\t[0.00005576803750199235, \
+0.0032175637225049605, 0.04481488143341123, 0.0007767485600814021, \
+0.00004923634519382582, 0.0028407145960393076, 0.00020395413170483563, \
+3.5350105379570007e-6, 0.0019410218493789053, 0.11198818834046056, \
+0.008040390170142969, 0.00013935909875006385, 0.00007130742732222222, \
+0.004114116285496514, 0.05730224773738173, 0.0009931843395719706, \
+0.00003527168236492931, 0.0020350166635335104, 0.02834412566669201, \
+0.0004912711602524718, 0.0002978119510391064, 0.017182403626048375, \
+0.0012336410764526575, 0.00002138193606995714, 0.0004451545593586631, \
+0.02568340621720699, 0.001843985601917363, 0.0000319606593900807, \
+0.00002006815911940073, 0.0011578420839666729, 0.01612665985405363, \
+0.00027951339867251867, 0.0000357882340688016, 0.0020648193623125618, \
+0.028759223712097343, 0.0004984657973629309, 0.0005465921321462853, \
+0.0315358957240999, 0.00226417544335876, 0.00003924354944492707, \
+0.00023110775321194264, 0.013333872878309663, 0.0009573290005796285, \
+0.000016592790138903595, 0.00003681178456967691, 0.0021238736003185528, \
+0.029581743140654027, 0.0005127220167555774, 0.00019612909246142197, \
+0.011315762237628386, 0.15760823615116573, 0.0027317258591722238, \
+0.0012080944052884268, 0.06970158725198732, 0.0050043488093624395, \
+0.00008673727582193983, 0.0004142725014668884, 0.023901651047046526, \
+0.00171606133625993, 0.000029743427391004694, 0.000022710400863484152, \
+0.0013102874910968843, 0.01824995046608553, \
+0.0003163150786675983],\\n\\t\\t\\t\\t\\t[0.003217563722504994, \
+0.00005576803750199577, 0.0007767485600814074, 0.04481488143341115, \
+0.002840714596039334, 0.000049236345193824365, 3.5350105379557556e-6, \
+0.0002039541317048289, 0.1119881883404605, 0.0019410218493789168, \
+0.00013935909875006054, 0.00804039017014297, 0.0041141162854965215, \
+0.00007130742732221934, 0.0009931843395719778, 0.05730224773738162, \
+0.0020350166635334996, 0.000035271682364931454, 0.0004912711602524808, \
+0.028344125666691856, 0.01718240362604835, 0.00029781195103910233, \
+0.0000213819360699564, 0.0012336410764526538, 0.025683406217206897, \
+0.00044515455935866547, 0.000031960659390081984, 0.0018439856019173714, \
+0.0011578420839666885, 0.000020068159119400278, 0.0002795133986725135, \
+0.016126659854053628, 0.0020648193623125526, 0.00003578823406880078, \
+0.0004984657973629248, 0.02875922371209732, 0.031535895724099816, \
+0.0005465921321463087, 0.00003924354944492549, 0.00226417544335874, \
+0.013333872878309548, 0.0002311077532119493, 0.000016592790138903558, \
+0.0009573290005796457, 0.0021238736003185922, 0.00003681178456967712, \
+0.0005127220167555917, 0.029581743140654062, 0.011315762237628424, \
+0.00019612909246142428, 0.0027317258591722316, 0.1576082361511659, \
+0.06970158725198734, 0.001208094405288449, 0.00008673727582194583, \
+0.005004348809362456, 0.023901651047046547, 0.0004142725014668922, \
+0.0000297434273910066, 0.0017160613362599327, 0.0013102874910969188, \
+0.000022710400863482353, 0.00031631507866761204, 0.018249950466085504],\\n\\t\
+\\t\\t\\t\\t[0.000049236345193825646, 0.002840714596039304, \
+0.00020395413170483273, 3.535010537956832e-6, 0.00005576803750199406, \
+0.003217563722504994, 0.044814881433411335, 0.0007767485600814014, \
+0.00007130742732221979, 0.004114116285496528, 0.057302247737381726, \
+0.0009931843395719724, 0.0019410218493789311, 0.11198818834046076, \
+0.00804039017014296, 0.00013935909875006163, 0.0002978119510391076, \
+0.01718240362604839, 0.0012336410764526443, 0.000021381936069955185, \
+0.00003527168236492796, 0.002035016663533509, 0.02834412566669202, \
+0.0004912711602524862, 0.000020068159119399634, 0.0011578420839666761, \
+0.016126659854053572, 0.00027951339867251563, 0.00044515455935866894, \
+0.025683406217207033, 0.0018439856019173554, 0.000031960659390081205, \
+0.0005465921321462961, 0.03153589572409988, 0.002264175443358752, \
+0.00003924354944492593, 0.000035788234068799936, 0.0020648193623125704, \
+0.028759223712097323, 0.0004984657973629361, 0.00003681178456967488, \
+0.0021238736003185692, 0.029581743140653954, 0.0005127220167555732, \
+0.00023110775321194817, 0.013333872878309623, 0.0009573290005796333, \
+0.00001659279013890259, 0.0012080944052884398, 0.06970158725198741, \
+0.005004348809362456, 0.0000867372758219446, 0.0001961290924614215, \
+0.011315762237628391, 0.15760823615116584, 0.0027317258591722264, \
+0.000022710400863482783, 0.0013102874910969052, 0.01824995046608556, \
+0.0003163150786676012, 0.0004142725014668858, 0.02390165104704653, \
+0.001716061336259935, \
+0.000029743427391008167],\\n\\t\\t\\t\\t\\t[0.0028407145960393167, \
+0.000049236345193822766, 3.5350105379570143e-6, 0.00020395413170482798, \
+0.0032175637225049774, 0.00005576803750199471, 0.0007767485600813971, \
+0.04481488143341131, 0.004114116285496529, 0.0000713074273222184, \
+0.0009931843395719728, 0.0573022477373816, 0.1119881883404605, \
+0.0019410218493789376, 0.00013935909875006572, 0.008040390170142964, \
+0.01718240362604829, 0.0002978119510391152, 0.000021381936069957387, \
+0.0012336410764526534, 0.0020350166635335044, 0.00003527168236492947, \
+0.0004912711602524764, 0.028344125666691943, 0.0011578420839666727, \
+0.000020068159119401647, 0.0002795133986725104, 0.01612665985405361, \
+0.025683406217206942, 0.00044515455935867403, 0.0000319606593900811, \
+0.001843985601917368, 0.031535895724099754, 0.0005465921321463015, \
+0.00003924354944492779, 0.0022641754433587605, 0.002064819362312559, \
+0.00003578823406879954, 0.0004984657973629213, 0.028759223712097246, \
+0.00212387360031857, 0.000036811784569676097, 0.0005127220167555767, \
+0.029581743140653916, 0.0133338728783096, 0.00023110775321195178, \
+0.00001659279013890166, 0.0009573290005796351, 0.06970158725198729, \
+0.0012080944052884485, 0.00008673727582193827, 0.005004348809362442, \
+0.011315762237628424, 0.00019612909246141569, 0.002731725859172218, \
+0.15760823615116573, 0.0013102874910969138, 0.000022710400863482238, \
+0.00031631507866760114, 0.018249950466085525, 0.023901651047046578, \
+0.00041427250146689533, 0.000029743427391006557, \
+0.0017160613362599217],\\n\\t\\t\\t\\t\\t[0.00020395413170483788, \
+3.5350105379571905e-6, 0.000049236345193822136, 0.0028407145960392985, \
+0.04481488143341132, 0.0007767485600814043, 0.00005576803750199193, \
+0.0032175637225050025, 0.05730224773738179, 0.00099318433957197, \
+0.00007130742732221922, 0.004114116285496533, 0.008040390170142927, \
+0.0001393590987500647, 0.0019410218493789314, 0.11198818834046063, \
+0.0012336410764526443, 0.000021381936069955216, 0.0002978119510391064, \
+0.017182403626048413, 0.028344125666692054, 0.0004912711602524856, \
+0.000035271682364930465, 0.00203501666353352, 0.016126659854053652, \
+0.0002795133986725199, 0.000020068159119399214, 0.0011578420839666714, \
+0.0018439856019173808, 0.00003196065939007985, 0.0004451545593586619, \
+0.02568340621720689, 0.0022641754433587453, 0.000039243549444924254, \
+0.0005465921321462881, 0.03153589572409989, 0.028759223712097336, \
+0.0004984657973629346, 0.00003578823406880223, 0.0020648193623125626, \
+0.02958174314065398, 0.0005127220167555726, 0.00003681178456967681, \
+0.0021238736003185684, 0.0009573290005796275, 0.000016592790138903677, \
+0.00023110775321194427, 0.013333872878309613, 0.005004348809362459, \
+0.00008673727582193688, 0.0012080944052884296, 0.06970158725198737, \
+0.1576082361511655, 0.002731725859172228, 0.00019612909246143076, \
+0.011315762237628382, 0.0182499504660856, 0.0003163150786676026, \
+0.000022710400863483217, 0.0013102874910969108, 0.0017160613362599462, \
+0.000029743427391007323, 0.0004142725014668891, \
+0.02390165104704653],\\n\\t\\t\\t\\t\\t[3.535010537956152e-6, \
+0.0002039541317048262, 0.002840714596039311, 0.00004923634519382625, \
+0.0007767485600813938, 0.04481488143341132, 0.003217563722505013, \
+0.000055768037501996014, 0.0009931843395719938, 0.05730224773738177, \
+0.00411411628549651, 0.00007130742732222203, 0.0001393590987500669, \
+0.008040390170142953, 0.11198818834046066, 0.0019410218493789333, \
+0.000021381936069956608, 0.0012336410764526534, 0.017182403626048344, \
+0.000297811951039105, 0.0004912711602524732, 0.028344125666692022, \
+0.0020350166635334983, 0.00003527168236492801, 0.00027951339867251384, \
+0.016126659854053593, 0.0011578420839666868, 0.000020068159119401108, \
+0.00003196065939008478, 0.0018439856019173602, 0.025683406217206998, \
+0.0004451545593586704, 0.000039243549444926063, 0.0022641754433587583, \
+0.031535895724099844, 0.0005465921321462956, 0.0004984657973629257, \
+0.02875922371209732, 0.00206481936231256, 0.0000357882340687989, \
+0.0005127220167555737, 0.029581743140654027, 0.0021238736003185736, \
+0.000036811784569681375, 0.00001659279013890402, 0.0009573290005796281, \
+0.013333872878309623, 0.00023110775321194646, 0.0000867372758219436, \
+0.005004348809362437, 0.06970158725198747, 0.0012080944052884422, \
+0.002731725859172228, 0.15760823615116554, 0.011315762237628412, \
+0.00019612909246142455, 0.0003163150786676029, 0.018249950466085463, \
+0.001310287491096913, 0.000022710400863483305, 0.000029743427391009122, \
+0.001716061336259941, 0.023901651047046578, \
+0.0004142725014669018],\\n\\t\\t\\t\\t\\t[0.04481488143341133, \
+0.0007767485600813882, 0.00005576803750199649, 0.0032175637225050025, \
+0.00020395413170482956, 3.5350105379566035e-6, 0.000049236345193826, \
+0.0028407145960392963, 0.008040390170142955, 0.00013935909875006623, \
+0.0019410218493789246, 0.11198818834046087, 0.05730224773738166, \
+0.0009931843395719795, 0.00007130742732222414, 0.004114116285496526, \
+0.028344125666691936, 0.0004912711602524766, 0.00003527168236493227, \
+0.0020350166635335234, 0.0012336410764526413, 0.00002138193606995669, \
+0.0002978119510391045, 0.017182403626048316, 0.0018439856019173669, \
+0.00003196065939008111, 0.000445154559358666, 0.02568340621720691, \
+0.01612665985405357, 0.00027951339867251124, 0.00002006815911940014, \
+0.0011578420839666681, 0.02875922371209733, 0.0004984657973629253, \
+0.00003578823406880343, 0.0020648193623125605, 0.002264175443358743, \
+0.000039243549444927425, 0.0005465921321462951, 0.03153589572409985, \
+0.0009573290005796354, 0.000016592790138902715, 0.00023110775321194454, \
+0.013333872878309585, 0.02958174314065397, 0.0005127220167555708, \
+0.0000368117845696785, 0.002123873600318577, 0.15760823615116584, \
+0.0027317258591722385, 0.0001961290924614278, 0.011315762237628393, \
+0.005004348809362465, 0.00008673727582193814, 0.0012080944052884457, \
+0.06970158725198744, 0.0017160613362599208, 0.00002974342739100761, \
+0.00041427250146689365, 0.02390165104704658, 0.018249950466085515, \
+0.00031631507866760006, 0.00002271040086348302, \
+0.001310287491096905],\\n\\t\\t\\t\\t\\t[0.0007767485600814048, \
+0.044814881433411266, 0.0032175637225049826, 0.00005576803750199098, \
+3.5350105379567322e-6, 0.00020395413170482994, 0.002840714596039338, \
+0.000049236345193825165, 0.00013935909875006637, 0.00804039017014298, \
+0.11198818834046051, 0.0019410218493789238, 0.0009931843395719767, \
+0.0573022477373818, 0.004114116285496512, 0.00007130742732221884, \
+0.0004912711602524762, 0.028344125666692043, 0.0020350166635335182, \
+0.00003527168236493078, 0.0000213819360699565, 0.0012336410764526532, \
+0.01718240362604833, 0.0002978119510391098, 0.000031960659390083245, \
+0.0018439856019173547, 0.025683406217206946, 0.0004451545593586625, \
+0.0002795133986725145, 0.016126659854053566, 0.0011578420839666798, \
+0.000020068159119401345, 0.000498465797362932, 0.02875922371209735, \
+0.0020648193623125544, 0.000035788234068800255, 0.00003924354944492528, \
+0.002264175443358751, 0.031535895724099795, 0.0005465921321462906, \
+0.000016592790138902687, 0.000957329000579626, 0.013333872878309602, \
+0.0002311077532119415, 0.000512722016755574, 0.029581743140653993, \
+0.002123873600318579, 0.00003681178456967871, 0.002731725859172232, \
+0.1576082361511657, 0.01131576223762839, 0.00019612909246141663, \
+0.00008673727582193935, 0.005004348809362441, 0.06970158725198741, \
+0.001208094405288452, 0.00002974342739100607, 0.0017160613362599301, \
+0.02390165104704655, 0.0004142725014668887, 0.00031631507866760787, \
+0.01824995046608555, 0.0013102874910969075, \
+0.000022710400863481967],\\n\\t\\t\\t\\t\\t[0.00014383434095776389, \
+0.00829859141985362, 0.11558446782074216, 0.0020033539323525106, \
+0.0007834456395217062, 0.04520127264994042, 0.0032453053637017107, \
+0.000056248866172395196, 0.00021458885774432068, 0.01238080726629863, \
+0.0008889019683017392, 0.000015406786804910075, 0.00003906965934820577, \
+0.0022541427706671484, 0.03139615861990828, 0.000544170155539426, \
+5.646612444228197e-6, 0.00032578401839844154, 0.00453758601742926, \
+0.00007864716568581279, 0.00032279113807453543, 0.01862358982558025, \
+0.0013371135901505623, 0.000023175361009442654, 0.0016057212346782359, \
+0.09264285824961754, 0.006651457960366438, 0.00011528559772791377, \
+0.00009846843219292959, 0.00568118351348818, 0.07912867856435399, \
+0.0013714883353497518, 0.00008756643386858773, 0.005052187481308317, \
+0.07036789399711575, 0.0012196430870721922, 0.0007224607168058535, \
+0.04168271822809525, 0.00299268452211339, 0.0000518703457195007, \
+0.0006448382030812371, 0.037204249997954936, 0.0026711449698755343, \
+0.000046297299976181245, 3.7089006346774863e-6, 0.0002139868043964465, \
+0.0029804517002308835, 0.00005165832180068128, 0.0000859096591265665, \
+0.004956599066419089, 0.06903651912807937, 0.0011965671917585135, \
+0.00027303733926558785, 0.015753020494558838, 0.001131015984913018, \
+0.00001960319897343932, 0.0005664083679126379, 0.03267920296915272, \
+0.0023462612103561462, 0.00004066629116105071, 9.650779698963596e-6, \
+0.0005568063723269143, 0.007755312313681679, \
+0.00013441802097779597],\\n\\t\\t\\t\\t\\t[0.008298591419853648, \
+0.00014383434095776627, 0.0020033539323525266, 0.11558446782074205, \
+0.04520127264994047, 0.0007834456395216961, 0.00005624886617239301, \
+0.003245305363701675, 0.012380807266298682, 0.00021458885774432255, \
+0.00001540678680491121, 0.0008889019683017398, 0.002254142770667127, \
+0.00003906965934820401, 0.000544170155539448, 0.031396158619908285, \
+0.00032578401839843227, 5.646612444227688e-6, 0.00007864716568581651, \
+0.004537586017429242, 0.018623589825580298, 0.00032279113807452735, \
+0.000023175361009441458, 0.0013371135901505656, 0.09264285824961753, \
+0.0016057212346782435, 0.00011528559772792008, 0.0066514579603664265, \
+0.005681183513488192, 0.00009846843219293066, 0.001371488335349756, \
+0.07912867856435404, 0.00505218748130831, 0.00008756643386858786, \
+0.0012196430870722065, 0.07036789399711571, 0.04168271822809533, \
+0.0007224607168058553, 0.00005187034571950057, 0.002992684522113396, \
+0.037204249997954866, 0.0006448382030812412, 0.00004629729997617674, \
+0.002671144969875559, 0.00021398680439644078, 3.708900634676322e-6, \
+0.000051658321800683213, 0.002980451700230882, 0.004956599066419134, \
+0.00008590965912656932, 0.0011965671917585118, 0.06903651912807936, \
+0.015753020494558866, 0.0002730373392655862, 0.000019603198973438876, \
+0.0011310159849130185, 0.03267920296915279, 0.0005664083679126468, \
+0.0000406662911610489, 0.0023462612103561415, 0.000556806372326916, \
+9.650779698964905e-6, 0.00013441802097779394, \
+0.00775531231368167],\\n\\t\\t\\t\\t\\t[0.0007834456395217005, \
+0.04520127264994042, 0.003245305363701702, 0.00005624886617239503, \
+0.00014383434095776806, 0.008298591419853625, 0.11558446782074204, \
+0.002003353932352516, 0.00003906965934820571, 0.0022541427706671484, \
+0.03139615861990822, 0.0005441701555394401, 0.00021458885774431442, \
+0.012380807266298645, 0.0008889019683017489, 0.000015406786804909827, \
+0.0003227911380745337, 0.018623589825580284, 0.0013371135901505552, \
+0.000023175361009445446, 5.6466124442283585e-6, 0.00032578401839843585, \
+0.004537586017429236, 0.00007864716568581424, 0.00009846843219293386, \
+0.005681183513488184, 0.07912867856435396, 0.0013714883353497615, \
+0.0016057212346782292, 0.09264285824961752, 0.00665145796036644, \
+0.00011528559772791673, 0.00072246071680585, 0.041682718228095356, \
+0.0029926845221134074, 0.00005187034571949917, 0.00008756643386858851, \
+0.005052187481308305, 0.07036789399711561, 0.0012196430870721926, \
+3.7089006346769273e-6, 0.0002139868043964438, 0.0029804517002308514, \
+0.000051658321800678965, 0.0006448382030812426, 0.03720424999795488, \
+0.0026711449698755647, 0.00004629729997617827, 0.0002730373392655869, \
+0.015753020494558848, 0.0011310159849130129, 0.000019603198973440218, \
+0.00008590965912656651, 0.004956599066419111, 0.06903651912807941, \
+0.0011965671917585322, 9.650779698964487e-6, 0.0005568063723269141, \
+0.007755312313681661, 0.00013441802097779532, 0.0005664083679126368, \
+0.03267920296915271, 0.002346261210356174, 0.000040666291161047956],\\n\\t\\t\
+\\t\\t\\t[0.04520127264994051, 0.0007834456395216948, 0.00005624886617239651, \
+0.003245305363701687, 0.008298591419853635, 0.00014383434095776942, \
+0.002003353932352515, 0.11558446782074201, 0.002254142770667143, \
+0.000039069659348205796, 0.0005441701555394356, 0.031396158619908215, \
+0.012380807266298631, 0.00021458885774432347, 0.00001540678680490958, \
+0.0008889019683017469, 0.018623589825580305, 0.0003227911380745366, \
+0.00002317536100944392, 0.0013371135901505615, 0.000325784018398435, \
+5.646612444228505e-6, 0.00007864716568581658, 0.004537586017429217, \
+0.005681183513488152, 0.00009846843219293086, 0.001371488335349746, \
+0.07912867856435397, 0.09264285824961752, 0.001605721234678229, \
+0.00011528559772791543, 0.0066514579603664465, 0.04168271822809522, \
+0.0007224607168058542, 0.0000518703457195005, 0.002992684522113388, \
+0.0050521874813082585, 0.00008756643386858924, 0.001219643087072196, \
+0.07036789399711564, 0.00021398680439644184, 3.708900634676951e-6, \
+0.000051658321800682224, 0.0029804517002308874, 0.03720424999795492, \
+0.0006448382030812426, 0.00004629729997617749, 0.002671144969875554, \
+0.015753020494558848, 0.00027303733926558655, 0.00001960319897343869, \
+0.0011310159849130235, 0.004956599066419141, 0.00008590965912656459, \
+0.001196567191758521, 0.06903651912807929, 0.0005568063723269172, \
+9.6507796989658e-6, 0.00013441802097779928, 0.0077553123136816565, \
+0.03267920296915271, 0.00056640836791265, 0.00004066629116104738, \
+0.002346261210356155],\\n\\t\\t\\t\\t\\t[0.0032453053637017167, \
+0.00005624886617239482, 0.0007834456395216958, 0.045201272649940415, \
+0.11558446782074214, 0.0020033539323525066, 0.0001438343409577664, \
+0.008298591419853679, 0.03139615861990831, 0.000544170155539441, \
+0.00003906965934820425, 0.0022541427706671514, 0.0008889019683017552, \
+0.00001540678680491039, 0.00021458885774432352, 0.012380807266298645, \
+0.00133711359015056, 0.000023175361009443216, 0.00032279113807452925, \
+0.01862358982558037, 0.004537586017429221, 0.00007864716568581439, \
+5.6466124442284525e-6, 0.00032578401839843975, 0.07912867856435399, \
+0.0013714883353497498, 0.00009846843219293638, 0.0056811835134882, \
+0.006651457960366423, 0.00011528559772791879, 0.0016057212346782292, \
+0.09264285824961754, 0.0029926845221134074, 0.000051870345719501864, \
+0.000722460716805851, 0.04168271822809531, 0.07036789399711571, \
+0.0012196430870721937, 0.00008756643386859147, 0.005052187481308289, \
+0.0029804517002308874, 0.0000516583218006799, 3.7089006346775236e-6, \
+0.00021398680439645447, 0.0026711449698755543, 0.00004629729997617945, \
+0.0006448382030812472, 0.037204249997954825, 0.0011310159849130309, \
+0.00001960319897343883, 0.0002730373392655909, 0.01575302049455887, \
+0.06903651912807945, 0.0011965671917584949, 0.00008590965912656708, \
+0.004956599066419149, 0.00775531231368167, 0.00013441802097779657, \
+9.6507796989645e-6, 0.000556806372326895, 0.002346261210356169, \
+0.000040666291161048965, 0.0005664083679126539, \
+0.03267920296915272],\\n\\t\\t\\t\\t\\t[0.000056248866172393725, \
+0.003245305363701709, 0.04520127264994033, 0.0007834456395216996, \
+0.0020033539323525127, 0.11558446782074189, 0.008298591419853658, \
+0.00014383434095776825, 0.0005441701555394359, 0.031396158619908285, \
+0.0022541427706671514, 0.000039069659348202794, 0.000015406786804909837, \
+0.0008889019683017383, 0.0123808072662986, 0.000214588857744319, \
+0.000023175361009443206, 0.0013371135901505508, 0.018623589825580253, \
+0.00032279113807453077, 0.00007864716568581688, 0.004537586017429222, \
+0.0003257840183984371, 5.646612444228359e-6, 0.0013714883353497423, \
+0.07912867856435414, 0.005681183513488161, 0.00009846843219293175, \
+0.00011528559772792199, 0.0066514579603664335, 0.09264285824961756, \
+0.0016057212346782454, 0.00005187034571949991, 0.0029926845221133957, \
+0.04168271822809525, 0.0007224607168058603, 0.0012196430870722108, \
+0.07036789399711565, 0.0050521874813082785, 0.00008756643386859115, \
+0.00005165832180067816, 0.0029804517002308736, 0.0002139868043964381, \
+3.708900634677102e-6, 0.000046297299976179416, 0.0026711449698755742, \
+0.03720424999795493, 0.0006448382030812428, 0.00001960319897343829, \
+0.0011310159849130153, 0.015753020494558814, 0.00027303733926558693, \
+0.0011965671917585168, 0.06903651912807943, 0.004956599066419134, \
+0.0000859096591265663, 0.00013441802097779575, 0.0077553123136816825, \
+0.0005568063723269226, 9.650779698963931e-6, 0.00004066629116104861, \
+0.0023462612103561627, 0.03267920296915262, \
+0.0005664083679126564],\\n\\t\\t\\t\\t\\t[0.1155844678207423, \
+0.002003353932352513, 0.00014383434095776787, 0.008298591419853663, \
+0.0032453053637017024, 0.0000562488661723973, 0.000783445639521693, \
+0.04520127264994044, 0.0008889019683017382, 0.000015406786804910888, \
+0.00021458885774432274, 0.012380807266298621, 0.03139615861990824, \
+0.0005441701555394413, 0.00003906965934820524, 0.002254142770667152, \
+0.004537586017429259, 0.00007864716568581146, 5.646612444227996e-6, \
+0.0003257840183984357, 0.0013371135901505465, 0.00002317536100944474, \
+0.00032279113807453277, 0.018623589825580284, 0.006651457960366439, \
+0.00011528559772791942, 0.0016057212346782268, 0.09264285824961747, \
+0.07912867856435407, 0.001371488335349766, 0.00009846843219293482, \
+0.005681183513488184, 0.0703678939971156, 0.0012196430870721902, \
+0.00008756643386858999, 0.005052187481308266, 0.0029926845221133827, \
+0.00005187034571950069, 0.0007224607168058473, 0.041682718228095265, \
+0.0026711449698755578, 0.00004629729997617689, 0.0006448382030812415, \
+0.037204249997954936, 0.002980451700230887, 0.000051658321800681824, \
+3.708900634676843e-6, 0.00021398680439644704, 0.06903651912807944, \
+0.0011965671917585146, 0.00008590965912656663, 0.004956599066419144, \
+0.0011310159849130263, 0.00001960319897343917, 0.00027303733926559224, \
+0.015753020494558824, 0.0023462612103561683, 0.00004066629116104823, \
+0.0005664083679126516, 0.032679202969152776, 0.007755312313681685, \
+0.00013441802097779705, 9.650779698964985e-6, \
+0.0005568063723269129],\\n\\t\\t\\t\\t\\t[0.0020033539323525097, \
+0.11558446782074211, 0.008298591419853677, 0.00014383434095776971, \
+0.000056248866172394064, 0.0032453053637017102, 0.04520127264994048, \
+0.0007834456395217082, 0.00001540678680490787, 0.0008889019683017431, \
+0.012380807266298635, 0.00021458885774431507, 0.0005441701555394372, \
+0.03139615861990827, 0.002254142770667156, 0.000039069659348204746, \
+0.0000786471656858147, 0.0045375860174292635, 0.00032578401839843655, \
+5.646612444229079e-6, 0.00002317536100944186, 0.0013371135901505727, \
+0.018623589825580343, 0.0003227911380745221, 0.00011528559772791785, \
+0.00665145796036645, 0.09264285824961765, 0.0016057212346782255, \
+0.0013714883353497507, 0.07912867856435406, 0.0056811835134881715, \
+0.00009846843219292935, 0.0012196430870721787, 0.07036789399711552, \
+0.005052187481308306, 0.00008756643386858744, 0.000051870345719499615, \
+0.002992684522113404, 0.04168271822809533, 0.0007224607168058444, \
+0.00004629729997617867, 0.002671144969875552, 0.03720424999795488, \
+0.0006448382030812438, 0.000051658321800684264, 0.0029804517002308493, \
+0.00021398680439644588, 3.7089006346770116e-6, 0.0011965671917585064, \
+0.06903651912807938, 0.004956599066419125, 0.00008590965912657062, \
+0.00001960319897343884, 0.0011310159849130352, 0.015753020494558848, \
+0.00027303733926558834, 0.00004066629116104907, 0.00234626121035615, \
+0.032679202969152714, 0.0005664083679126448, 0.0001344180209777901, \
+0.007755312313681697, 0.0005568063723269133, \
+9.650779698963897e-6],\\n\\t\\t\\t\\t\\t[0.0009404772376635079, \
+0.00001630070897833118, 0.0002270395874477683, 0.01309915809962546, \
+0.1562699268321382, 0.002708529773335371, 0.0001944636884280824, \
+0.011219675951630089, 0.00217276200680882, 0.000037659137014473246, \
+2.7038043882518124e-6, 0.00015599729346897837, 0.004665961942391173, \
+0.00008087222601564262, 0.0011264047996306, 0.06498846619835516, \
+0.00030011074253954745, 5.2016334680902015e-6, 0.0000724494080729738, \
+0.004180003413679721, 0.030520764820626448, 0.0005289974974547195, \
+0.000037980311509588035, 0.0021912923236418543, 0.0050476775155871845, \
+0.00008748826542838526, 6.281374846557286e-6, 0.0003624069402300938, \
+0.01577581726275456, 0.00027343246151748275, 0.003808422893770013, \
+0.21972878895933431, 0.001527652337400068, 0.00002647785100455237, \
+0.0003687888898923585, 0.02127745222051369, 0.021559514944528697, \
+0.00037367770824293765, 0.000026828852369894208, 0.0015479035298440356, \
+0.011428723435562166, 0.0001980869788829396, 0.000014222005208279409, \
+0.0008205454247479469, 0.002108007999273048, 0.000036536795941506386, \
+0.0005088919192564261, 0.029360763824921563, 0.0006764319756773673, \
+0.00001172417612843801, 0.000163296707824439, 0.009421482028691246, \
+0.03983941732139543, 0.0006905119248135412, 0.000049576525657852195, \
+0.0028603414713821557, 0.029328932804551948, 0.000508340211911748, \
+0.00003649718513632529, 0.0021057226348334575, 0.0013448219491588597, \
+0.00002330896521788288, 0.00032465200464212195, \
+0.01873095341641989],\\n\\t\\t\\t\\t\\t[0.000016300708978330725, \
+0.0009404772376634986, 0.01309915809962545, 0.00022703958744778395, \
+0.0027085297733353527, 0.1562699268321381, 0.011219675951630073, \
+0.0001944636884280918, 0.00003765913701447815, 0.0021727620068088187, \
+0.00015599729346897214, 2.7038043882512135e-6, 0.00008087222601564192, \
+0.004665961942391158, 0.06498846619835519, 0.0011264047996306082, \
+5.201633468090671e-6, 0.00030011074253955027, 0.004180003413679715, \
+0.0000724494080729718, 0.0005289974974547152, 0.030520764820626368, \
+0.00219129232364185, 0.00003798031150959018, 0.00008748826542837936, \
+0.005047677515587148, 0.0003624069402300958, 6.28137484655679e-6, \
+0.00027343246151748416, 0.015775817262754562, 0.21972878895933423, \
+0.0038084228937700065, 0.00002647785100454963, 0.0015276523374000719, \
+0.021277452220513693, 0.0003687888898923436, 0.0003736777082429355, \
+0.021559514944528606, 0.0015479035298440508, 0.000026828852369892236, \
+0.00019808697888293544, 0.011428723435562194, 0.0008205454247479525, \
+0.000014222005208279653, 0.000036536795941509313, 0.002108007999273053, \
+0.029360763824921577, 0.0005088919192564328, 0.000011724176128438453, \
+0.0006764319756773706, 0.009421482028691275, 0.0001632967078244374, \
+0.0006905119248135471, 0.03983941732139539, 0.0028603414713821115, \
+0.00004957652565785379, 0.0005083402119117424, 0.029328932804551944, \
+0.002105722634833484, 0.00003649718513632671, 0.00002330896521788662, \
+0.001344821949158854, 0.018730953416419897, 0.00032465200464211935],\\n\\t\\t\
+\\t\\t\\t[0.15626992683213842, 0.0027085297733353705, 0.00019446368842808727, \
+0.011219675951630028, 0.000940477237663504, 0.0000163007089783299, \
+0.0002270395874477783, 0.013099158099625462, 0.004665961942391146, \
+0.00008087222601564035, 0.0011264047996306123, 0.06498846619835506, \
+0.002172762006808801, 0.000037659137014477116, 2.7038043882516837e-6, \
+0.00015599729346897037, 0.030520764820626458, 0.0005289974974547139, \
+0.00003798031150958952, 0.0021912923236418456, 0.00030011074253954664, \
+5.201633468090796e-6, 0.00007244940807297099, 0.004180003413679728, \
+0.01577581726275454, 0.00027343246151748666, 0.0038084228937700065, \
+0.21972878895933426, 0.005047677515587175, 0.00008748826542837809, \
+6.281374846556281e-6, 0.00036240694023009947, 0.021559514944528645, \
+0.0003736777082429343, 0.00002682885236989354, 0.001547903529844038, \
+0.0015276523374000808, 0.000026477851004549975, 0.0003687888898923414, \
+0.02127745222051371, 0.0021080079992730517, 0.00003653679594150704, \
+0.0005088919192564293, 0.029360763824921605, 0.011428723435562203, \
+0.0001980869788829396, 0.00001422200520827895, 0.0008205454247479533, \
+0.03983941732139537, 0.0006905119248135529, 0.00004957652565785282, \
+0.0028603414713820902, 0.0006764319756773709, 0.000011724176128438582, \
+0.00016329670782443766, 0.00942148202869126, 0.0013448219491588777, \
+0.000023308965217883814, 0.0003246520046421208, 0.01873095341641998, \
+0.02932893280455197, 0.0005083402119117425, 0.00003649718513632735, \
+0.002105722634833487],\\n\\t\\t\\t\\t\\t[0.002708529773335377, \
+0.1562699268321382, 0.011219675951630093, 0.00019446368842808122, \
+0.000016300708978332388, 0.0009404772376635077, 0.013099158099625427, \
+0.00022703958744777936, 0.00008087222601563906, 0.004665961942391183, \
+0.06498846619835512, 0.0011264047996306155, 0.000037659137014478044, \
+0.0021727620068088095, 0.00015599729346897468, 2.703804388250905e-6, \
+0.0005289974974547233, 0.030520764820626413, 0.002191292323641861, \
+0.00003798031150958856, 5.201633468090713e-6, 0.00030011074253954545, \
+0.004180003413679737, 0.00007244940807297183, 0.0002734324615174882, \
+0.01577581726275461, 0.21972878895933426, 0.003808422893770012, \
+0.00008748826542838088, 0.005047677515587151, 0.00036240694023010483, \
+6.281374846555565e-6, 0.0003736777082429469, 0.021559514944528718, \
+0.001547903529844042, 0.00002682885236989159, 0.000026477851004552533, \
+0.0015276523374000738, 0.021277452220513682, 0.000368788889892343, \
+0.00003653679594150775, 0.002108007999273063, 0.029360763824921622, \
+0.0005088919192564314, 0.00019808697888293994, 0.011428723435562178, \
+0.000820545424747953, 0.000014222005208277622, 0.0006905119248135406, \
+0.03983941732139523, 0.002860341471382118, 0.00004957652565785438, \
+0.000011724176128440386, 0.000676431975677387, 0.009421482028691218, \
+0.00016329670782443985, 0.00002330896521788715, 0.001344821949158868, \
+0.018730953416419914, 0.00032465200464212017, 0.0005083402119117458, \
+0.02932893280455195, 0.0021057226348334965, 0.00003649718513632626],\\n\\t\\t\
+\\t\\t\\t[0.0001944636884280829, 0.011219675951630058, 0.1562699268321381, \
+0.0027085297733353652, 0.0002270395874477822, 0.013099158099625438, \
+0.0009404772376635121, 0.000016300708978331148, 0.0011264047996305932, \
+0.06498846619835517, 0.004665961942391158, 0.000080872226015641, \
+2.7038043882511996e-6, 0.00015599729346897238, 0.0021727620068088026, \
+0.00003765913701447463, 0.00003798031150958796, 0.0021912923236418213, \
+0.030520764820626347, 0.0005289974974547198, 0.0000724494080729732, \
+0.0041800034136797405, 0.0003001107425395458, 5.201633468091389e-6, \
+0.003808422893770001, 0.21972878895933445, 0.01577581726275458, \
+0.0002734324615174861, 6.2813748465571284e-6, 0.0003624069402300956, \
+0.005047677515587194, 0.00008748826542837864, 0.000026828852369893896, \
+0.0015479035298440382, 0.02155951494452862, 0.00037367770824293624, \
+0.00036878888989235094, 0.021277452220513707, 0.0015276523374000808, \
+0.000026477851004552655, 0.0005088919192564363, 0.029360763824921532, \
+0.0021080079992730687, 0.000036536795941507924, 0.000014222005208277493, \
+0.0008205454247479521, 0.011428723435562253, 0.0001980869788829403, \
+0.0000495765256578533, 0.0028603414713821084, 0.0398394173213953, \
+0.0006905119248135407, 0.00016329670782443863, 0.009421482028691246, \
+0.0006764319756773798, 0.000011724176128437693, 0.00032465200464212504, \
+0.018730953416419973, 0.0013448219491588723, 0.000023308965217885786, \
+0.00003649718513632281, 0.00210572263483349, 0.029328932804552028, \
+0.0005083402119117518],\\n\\t\\t\\t\\t\\t[0.011219675951630089, \
+0.00019446368842809158, 0.002708529773335357, 0.156269926832138, \
+0.01309915809962544, 0.0002270395874477748, 0.000016300708978330132, \
+0.0009404772376634987, 0.06498846619835515, 0.0011264047996306199, \
+0.00008087222601563765, 0.004665961942391154, 0.00015599729346897352, \
+2.7038043882521334e-6, 0.00003765913701447499, 0.0021727620068087796, \
+0.00219129232364186, 0.00003798031150958968, 0.0005289974974547169, \
+0.030520764820626472, 0.004180003413679707, 0.00007244940807296996, \
+5.201633468091792e-6, 0.00030011074253955157, 0.21972878895933434, \
+0.003808422893770016, 0.0002734324615174815, 0.01577581726275453, \
+0.0003624069402301005, 6.281374846556835e-6, 0.00008748826542837774, \
+0.005047677515587144, 0.0015479035298440313, 0.000026828852369893188, \
+0.0003736777082429299, 0.021559514944528707, 0.021277452220513665, \
+0.0003687888898923372, 0.000026477851004552262, 0.0015276523374000732, \
+0.02936076382492166, 0.0005088919192564244, 0.00003653679594150631, \
+0.002108007999273037, 0.0008205454247479584, 0.000014222005208278154, \
+0.0001980869788829388, 0.011428723435562211, 0.0028603414713821123, \
+0.000049576525657852594, 0.0006905119248135545, 0.03983941732139521, \
+0.00942148202869124, 0.00016329670782443443, 0.000011724176128438592, \
+0.0006764319756773753, 0.01873095341641994, 0.0003246520046421218, \
+0.000023308965217886253, 0.0013448219491588702, 0.0021057226348334844, \
+0.00003649718513632755, 0.0005083402119117372, \
+0.029328932804552014],\\n\\t\\t\\t\\t\\t[0.0002270395874477748, \
+0.013099158099625434, 0.0009404772376635139, 0.000016300708978330443, \
+0.00019446368842809117, 0.011219675951630075, 0.15626992683213825, \
+0.002708529773335377, 2.703804388250579e-6, 0.0001559972934689691, \
+0.00217276200680878, 0.00003765913701447509, 0.0011264047996305945, \
+0.06498846619835515, 0.004665961942391146, 0.00008087222601563783, \
+0.00007244940807297074, 0.004180003413679737, 0.00030011074253954577, \
+5.201633468092394e-6, 0.00003798031150958847, 0.0021912923236418404, \
+0.030520764820626416, 0.0005289974974547217, 6.281374846556566e-6, \
+0.0003624069402300995, 0.005047677515587162, 0.00008748826542837756, \
+0.0038084228937700264, 0.21972878895933426, 0.015775817262754562, \
+0.0002734324615174822, 0.0003687888898923435, 0.02127745222051372, \
+0.0015276523374000753, 0.00002647785100455324, 0.00002682885236989436, \
+0.0015479035298440447, 0.021559514944528645, 0.00037367770824293803, \
+0.000014222005208279014, 0.0008205454247479608, 0.011428723435562175, \
+0.0001980869788829376, 0.0005088919192564251, 0.029360763824921626, \
+0.0021080079992730565, 0.000036536795941508114, 0.00016329670782444286, \
+0.009421482028691237, 0.0006764319756773695, 0.000011724176128438407, \
+0.00004957652565785102, 0.002860341471382124, 0.03983941732139542, \
+0.0006905119248135596, 0.00003649718513632706, 0.0021057226348334865, \
+0.029328932804552024, 0.0005083402119117318, 0.0003246520046421268, \
+0.018730953416419893, 0.0013448219491588767, \
+0.000023308965217884824],\\n\\t\\t\\t\\t\\t[0.013099158099625465, \
+0.0002270395874477743, 0.00001630070897833109, 0.0009404772376635101, \
+0.011219675951630093, 0.00019446368842808036, 0.0027085297733353726, \
+0.15626992683213833, 0.0001559972934689755, 2.703804388251104e-6, \
+0.00003765913701447243, 0.0021727620068088156, 0.06498846619835517, \
+0.0011264047996305975, 0.00008087222601564299, 0.004665961942391192, \
+0.004180003413679717, 0.00007244940807297002, 5.201633468090627e-6, \
+0.0003001107425395477, 0.0021912923236418647, 0.00003798031150958612, \
+0.000528997497454723, 0.03052076482062644, 0.00036240694023010483, \
+6.281374846556876e-6, 0.00008748826542837644, 0.005047677515587181, \
+0.21972878895933412, 0.003808422893770021, 0.0002734324615174853, \
+0.01577581726275458, 0.021277452220513707, 0.0003687888898923452, \
+0.00002647785100455026, 0.001527652337400077, 0.0015479035298440423, \
+0.00002682885236989379, 0.0003736777082429389, 0.02155951494452865, \
+0.0008205454247479477, 0.000014222005208278062, 0.0001980869788829382, \
+0.011428723435562217, 0.02936076382492159, 0.0005088919192564186, \
+0.00003653679594150926, 0.0021080079992730413, 0.009421482028691246, \
+0.00016329670782444188, 0.000011724176128438526, 0.0006764319756773768, \
+0.0028603414713821145, 0.00004957652565785362, 0.0006905119248135462, \
+0.03983941732139534, 0.0021057226348334844, 0.000036497185136325866, \
+0.0005083402119117386, 0.02932893280455204, 0.018730953416419966, \
+0.00032465200464211957, 0.000023308965217883783, \
+0.0013448219491588665],\\n\\t\\t\\t\\t\\t[0.0018734843162841034, \
+0.00003247194232056588, 0.00045227581192263023, 0.026094270305938784, \
+0.05305119253028483, 0.0009195034348072152, 0.00006601737636973044, \
+0.0038089042537064596, 0.053856068294213036, 0.0009334538474977997, \
+0.000067018970937241, 0.0038666917335860623, 0.005251809977655404, \
+0.00009102636685598204, 0.0012678337368837217, 0.07314827669557328, \
+0.006061841967871204, 0.00010506614922057062, 0.0014633826789665551, \
+0.08443056687832348, 0.09185657441190737, 0.001592093064320038, \
+0.00011430713911894382, 0.006595005320732274, 0.009968794181307711, \
+0.00017278293009843356, 0.000012405256244599575, 0.0007157272202661939, \
+0.0002510044126092429, 4.350503891390953e-6, 0.00006059470235340405, \
+0.003496040470517445, 0.0005946452587794846, 0.00001030661766231613, \
+0.00014355266541748587, 0.008282340014200338, 0.02052291261522381, \
+0.00035571092263711023, 0.000025538895201063257, 0.001473478831111053, \
+0.033027922583822804, 0.0005724525088297511, 0.00004110024095465526, \
+0.002371298152229032, 0.0037459091930671746, 0.000064925522032985, \
+0.0009042958657071588, 0.05217378452319699, 0.00017614791794387546, \
+3.0530626713254655e-6, 0.00004252367736099253, 0.0024534239997122172, \
+0.09409578740595016, 0.0016309039551046776, 0.00011709363570741263, \
+0.006755773580429618, 0.02440781613883136, 0.0004230455472416889, \
+0.000030373303738283642, 0.0017524023547973813, 0.003309042525568066, \
+0.00005735358288969422, 0.0007988323584721645, 0.04608901679373614],\\n\\t\\t\
+\\t\\t\\t[0.000032471942320567735, 0.0018734843162841086, \
+0.026094270305938763, 0.00045227581192264324, 0.0009195034348072134, \
+0.05305119253028478, 0.0038089042537065073, 0.00006601737636973318, \
+0.0009334538474977885, 0.053856068294213, 0.0038666917335860775, \
+0.00006701897093724182, 0.0000910263668559744, 0.00525180997765542, \
+0.07314827669557336, 0.0012678337368836994, 0.0001050661492205703, \
+0.006061841967871223, 0.08443056687832355, 0.001463382678966561, \
+0.0015920930643200284, 0.09185657441190746, 0.006595005320732247, \
+0.00011430713911894327, 0.0001727829300984306, 0.009968794181307748, \
+0.0007157272202661873, 0.000012405256244599855, 4.350503891391129e-6, \
+0.0002510044126092479, 0.003496040470517485, 0.00006059470235340699, \
+0.000010306617662316199, 0.0005946452587794769, 0.008282340014200354, \
+0.0001435526654174831, 0.0003557109226371162, 0.020522912615223748, \
+0.0014734788311110802, 0.00002553889520106334, 0.0005724525088297614, \
+0.03302792258382273, 0.0023712981522290124, 0.0000411002409546565, \
+0.00006492552203298535, 0.0037459091930671885, 0.05217378452319696, \
+0.0009042958657071652, 3.053062671325476e-6, 0.00017614791794387863, \
+0.0024534239997122125, 0.00004252367736099327, 0.0016309039551046722, \
+0.09409578740595034, 0.006755773580429673, 0.00011709363570740996, \
+0.0004230455472416723, 0.024407816138831355, 0.0017524023547973923, \
+0.000030373303738283798, 0.000057353582889696055, 0.00330904252556807, \
+0.04608901679373602, \
+0.0007988323584721625],\\n\\t\\t\\t\\t\\t[0.05305119253028487, \
+0.0009195034348072232, 0.00006601737636972957, 0.0038089042537064934, \
+0.0018734843162841078, 0.00003247194232056621, 0.00045227581192263397, \
+0.026094270305938822, 0.005251809977655428, 0.00009102636685598228, \
+0.0012678337368837095, 0.07314827669557328, 0.05385606829421298, \
+0.0009334538474978085, 0.00006701897093724051, 0.0038666917335860584, \
+0.09185657441190737, 0.001592093064320043, 0.00011430713911894453, \
+0.006595005320732295, 0.006061841967871214, 0.00010506614922057036, \
+0.0014633826789665456, 0.08443056687832363, 0.00025100441260924114, \
+4.3505038913907904e-6, 0.00006059470235340672, 0.0034960404705174503, \
+0.009968794181307736, 0.00017278293009843242, 0.000012405256244600412, \
+0.0007157272202661973, 0.020522912615223817, 0.000355710922637103, \
+0.000025538895201062803, 0.0014734788311110542, 0.0005946452587794707, \
+0.000010306617662316839, 0.00014355266541748806, 0.008282340014200364, \
+0.0037459091930671855, 0.00006492552203298623, 0.0009042958657071577, \
+0.05217378452319697, 0.03302792258382272, 0.0005724525088297579, \
+0.000041100240954656126, 0.0023712981522290393, 0.0940957874059503, \
+0.0016309039551046774, 0.00011709363570740973, 0.006755773580429643, \
+0.00017614791794387833, 3.053062671325651e-6, 0.00004252367736099467, \
+0.002453423999712194, 0.003309042525568047, 0.00005735358288969844, \
+0.0007988323584721648, 0.04608901679373607, 0.02440781613883139, \
+0.000423045547241677, 0.000030373303738283096, \
+0.0017524023547973947],\\n\\t\\t\\t\\t\\t[0.0009195034348072239, \
+0.053051192530284785, 0.0038089042537065086, 0.00006601737636972936, \
+0.00003247194232056781, 0.0018734843162841127, 0.026094270305938784, \
+0.0004522758119226339, 0.00009102636685597984, 0.00525180997765542, \
+0.07314827669557328, 0.0012678337368837143, 0.000933453847497795, \
+0.053856068294212994, 0.00386669173358607, 0.00006701897093723689, \
+0.0015920930643200395, 0.09185657441190744, 0.006595005320732247, \
+0.00011430713911894546, 0.00010506614922056711, 0.006061841967871208, \
+0.0844305668783235, 0.001463382678966557, 4.3505038913908345e-6, \
+0.0002510044126092432, 0.0034960404705174928, 0.000060594702353405845, \
+0.00017278293009842833, 0.00996879418130772, 0.0007157272202661957, \
+0.00001240525624459891, 0.00035571092263711403, 0.020522912615223786, \
+0.0014734788311110726, 0.000025538895201063646, 0.000010306617662316571, \
+0.0005946452587794761, 0.008282340014200357, 0.000143552665417481, \
+0.00006492552203298449, 0.003745909193067197, 0.052173784523196966, \
+0.000904295865707165, 0.0005724525088297532, 0.03302792258382273, \
+0.0023712981522290458, 0.00004110024095465916, 0.0016309039551046717, \
+0.0940957874059503, 0.006755773580429618, 0.00011709363570741028, \
+3.0530626713253515e-6, 0.0001761479179438763, 0.0024534239997121956, \
+0.00004252367736099285, 0.00005735358288969421, 0.0033090425255680495, \
+0.04608901679373612, 0.0007988323584721491, 0.00042304554724168826, \
+0.024407816138831404, 0.001752402354797391, 0.00003037330373828227],\\n\\t\\t\
+\\t\\t\\t[0.00006601737636973441, 0.0038089042537064605, 0.05305119253028487, \
+0.0009195034348072191, 0.00045227581192263386, 0.026094270305938735, \
+0.001873484316284108, 0.00003247194232056691, 0.00126783373688371, \
+0.0731482766955734, 0.005251809977655432, 0.00009102636685597956, \
+0.0000670189709372416, 0.0038666917335860814, 0.053856068294213084, \
+0.0009334538474977926, 0.00011430713911894488, 0.00659500532073225, \
+0.09185657441190732, 0.0015920930643200382, 0.0014633826789665582, \
+0.08443056687832351, 0.006061841967871227, 0.00010506614922056632, \
+0.00006059470235340744, 0.0034960404705174633, 0.00025100441260924645, \
+4.35050389139219e-6, 0.00001240525624459886, 0.0007157272202662026, \
+0.009968794181307725, 0.00017278293009843326, 0.00002553889520106365, \
+0.0014734788311110698, 0.0205229126152238, 0.000355710922637113, \
+0.0001435526654174825, 0.008282340014200347, 0.0005946452587794727, \
+0.000010306617662316746, 0.0009042958657071671, 0.052173784523197035, \
+0.0037459091930671764, 0.00006492552203298838, 0.000041100240954654696, \
+0.002371298152229039, 0.033027922583822755, 0.0005724525088297481, \
+0.00011709363570741227, 0.006755773580429653, 0.09409578740595034, \
+0.0016309039551046813, 0.00004252367736099537, 0.0024534239997121925, \
+0.00017614791794388042, 3.0530626713261855e-6, 0.0007988323584721596, \
+0.046089016793736094, 0.0033090425255680855, 0.000057353582889695954, \
+0.00003037330373828229, 0.0017524023547974, 0.024407816138831407, \
+0.00042304554724168923],\\n\\t\\t\\t\\t\\t[0.003808904253706493, \
+0.00006601737636973452, 0.0009195034348071983, 0.053051192530284785, \
+0.026094270305938812, 0.00045227581192263164, 0.000032471942320568846, \
+0.0018734843162840885, 0.07314827669557332, 0.0012678337368837147, \
+0.0000910263668559832, 0.005251809977655432, 0.0038666917335860554, \
+0.00006701897093724346, 0.0009334538474978094, 0.05385606829421305, \
+0.006595005320732263, 0.00011430713911894652, 0.0015920930643200145, \
+0.09185657441190728, 0.0844305668783235, 0.0014633826789665601, \
+0.00010506614922057173, 0.006061841967871213, 0.0034960404705174815, \
+0.000060594702353402064, 4.350503891391695e-6, 0.00025100441260923745, \
+0.0007157272202662019, 0.000012405256244600082, 0.00017278293009843237, \
+0.009968794181307764, 0.001473478831111065, 0.000025538895201062217, \
+0.0003557109226371169, 0.020522912615223755, 0.008282340014200324, \
+0.00014355266541748402, 0.000010306617662315297, 0.0005946452587794762, \
+0.05217378452319691, 0.0009042958657071594, 0.00006492552203298243, \
+0.0037459091930671807, 0.0023712981522290254, 0.00004110024095465687, \
+0.000572452508829746, 0.03302792258382281, 0.006755773580429675, \
+0.00011709363570740795, 0.0016309039551046767, 0.09409578740595036, \
+0.002453423999712192, 0.00004252367736099364, 3.053062671325886e-6, \
+0.00017614791794387462, 0.04608901679373603, 0.00079883235847217, \
+0.00005735358288969775, 0.003309042525568039, 0.0017524023547973921, \
+0.000030373303738282656, 0.00042304554724169465, 0.024407816138831414],\\n\\t\
+\\t\\t\\t\\t[0.0004522758119226344, 0.026094270305938784, \
+0.0018734843162841138, 0.0000324719423205673, 0.0000660173763697336, \
+0.003808904253706493, 0.053051192530284765, 0.0009195034348072122, \
+0.00006701897093724184, 0.0038666917335860723, 0.05385606829421288, \
+0.0009334538474978077, 0.0012678337368837286, 0.07314827669557336, \
+0.005251809977655421, 0.00009102636685598232, 0.001463382678966554, \
+0.08443056687832343, 0.006061841967871195, 0.00010506614922057112, \
+0.0001143071391189494, 0.0065950053207322785, 0.09185657441190732, \
+0.0015920930643200373, 0.000012405256244599555, 0.0007157272202661897, \
+0.009968794181307701, 0.0001727829300984307, 0.00006059470235340145, \
+0.0034960404705174654, 0.0002510044126092446, 4.350503891391071e-6, \
+0.0001435526654174783, 0.008282340014200406, 0.0005946452587794856, \
+0.000010306617662316046, 0.00002553889520106138, 0.00147347883111106, \
+0.020522912615223807, 0.000355710922637106, 0.0000411002409546573, \
+0.0023712981522290358, 0.033027922583822734, 0.0005724525088297489, \
+0.0009042958657071583, 0.05217378452319696, 0.003745909193067161, \
+0.0000649255220329919, 0.000042523677360993934, 0.0024534239997122077, \
+0.0001761479179438763, 3.0530626713250847e-6, 0.00011709363570741595, \
+0.006755773580429645, 0.09409578740595022, 0.0016309039551046843, \
+0.000030373303738282988, 0.0017524023547973826, 0.024407816138831376, \
+0.00042304554724168923, 0.0007988323584721602, 0.04608901679373603, \
+0.0033090425255680577, \
+0.000057353582889700365],\\n\\t\\t\\t\\t\\t[0.02609427030593884, \
+0.00045227581192262714, 0.00003247194232056854, 0.0018734843162841023, \
+0.003808904253706493, 0.00006601737636973127, 0.0009195034348072083, \
+0.053051192530284785, 0.0038666917335860623, 0.00006701897093724318, \
+0.0009334538474977896, 0.05385606829421296, 0.07314827669557328, \
+0.001267833736883706, 0.00009102636685597536, 0.005251809977655397, \
+0.0844305668783235, 0.0014633826789665547, 0.00010506614922057131, \
+0.006061841967871187, 0.006595005320732252, 0.00011430713911894166, \
+0.0015920930643200288, 0.09185657441190742, 0.000715727220266196, \
+0.000012405256244599787, 0.0001727829300984312, 0.009968794181307734, \
+0.0034960404705174546, 0.00006059470235340456, 4.3505038913919695e-6, \
+0.00025100441260924623, 0.008282340014200336, 0.00014355266541747928, \
+0.000010306617662315008, 0.0005946452587794836, 0.0014734788311110524, \
+0.000025538895201063067, 0.00035571092263711403, 0.020522912615223793, \
+0.0023712981522290393, 0.00004110024095465811, 0.0005724525088297551, \
+0.03302792258382277, 0.052173784523197014, 0.0009042958657071629, \
+0.00006492552203298491, 0.0037459091930671555, 0.0024534239997121943, \
+0.00004252367736099695, 3.053062671325583e-6, 0.00017614791794388123, \
+0.006755773580429677, 0.00011709363570740903, 0.001630903955104665, \
+0.09409578740595025, 0.001752402354797389, 0.000030373303738283218, \
+0.0004230455472416888, 0.0244078161388314, 0.04608901679373595, \
+0.0007988323584721522, 0.000057353582889694646, 0.0033090425255680464],\\n\\t\
+\\t\\t\\t\\t[0.00003095049222969705, 0.0017857035221722252, \
+0.02487164156583365, 0.00043108474585227624, 0.0001110341682466105, \
+0.006406169693456209, 0.0004599422902970926, 7.971894609152205e-6, \
+0.0011299870315687117, 0.06519514479143347, 0.004680800797745362, \
+0.00008112941869719908, 6.860231020227877e-6, 0.00039580432533406636, \
+0.00551284308267495, 0.00009555069185634579, 0.00018286754487134343, \
+0.010550630876701437, 0.14695133105831787, 0.0025470163291895867, \
+0.000014113234196244608, 0.0008142698289397715, 0.0000584619434019918, \
+1.0132846256555748e-6, 0.0006564107990676232, 0.03787193648449517, \
+0.0027190827027978393, 0.00004712817498532577, 0.000014642111426196086, \
+0.0008447836548689856, 0.011766318430630189, 0.00020393830366440205, \
+0.000056606344937746524, 0.003265930272851738, 0.04548854057618799, \
+0.0007884246764159962, 0.00012471194765080145, 0.0071953157489147695, \
+0.0005166004279198358, 8.953914987377696e-6, 0.0030030878668434436, \
+0.1732645975843208, 0.012439838414168026, 0.00021561200803816219, \
+0.00003591832896265782, 0.002072325249729495, 0.028863767237464172, \
+0.0005002777854837804, 0.00003842499592663919, 0.0022169486047726368, \
+0.03087811071834895, 0.0005351911523887316, 0.0005817152431438663, \
+0.03356234049119934, 0.0024096676316615936, 0.00004176527535722461, \
+0.0009788859198194338, 0.056477293538781566, 0.0040548872388663695, \
+0.00007028084697182098, 2.283698170333915e-6, 0.00013175906334793452, \
+0.0018351670117408023, \
+0.000031807812233010067],\\n\\t\\t\\t\\t\\t[0.001785703522172229, \
+0.000030950492229697655, 0.0004310847458522669, 0.024871641565833675, \
+0.006406169693456185, 0.00011103416824661305, 7.971894609151544e-6, \
+0.00045994229029709113, 0.06519514479143339, 0.0011299870315687089, \
+0.00008112941869719947, 0.004680800797745376, 0.00039580432533406853, \
+6.860231020225468e-6, 0.00009555069185634387, 0.005512843082674981, \
+0.010550630876701422, 0.00018286754487133636, 0.002547016329189577, \
+0.14695133105831804, 0.0008142698289397707, 0.000014113234196244805, \
+1.0132846256554012e-6, 0.000058461943401989525, 0.03787193648449522, \
+0.000656410799067609, 0.000047128174985324834, 0.002719082702797842, \
+0.0008447836548689815, 0.000014642111426196893, 0.00020393830366440525, \
+0.01176631843063017, 0.00326593027285171, 0.00005660634493774957, \
+0.0007884246764159957, 0.04548854057618801, 0.007195315748914758, \
+0.0001247119476508068, 8.953914987377986e-6, 0.000516600427919834, \
+0.1732645975843207, 0.0030030878668434323, 0.00021561200803816636, \
+0.01243983841416807, 0.0020723252497295277, 0.000035918328962658245, \
+0.0005002777854837771, 0.02886376723746419, 0.0022169486047726294, \
+0.0000384249959266397, 0.0005351911523887333, 0.03087811071834898, \
+0.03356234049119933, 0.0005817152431438752, 0.000041765275357227184, \
+0.0024096676316615953, 0.056477293538781614, 0.0009788859198194308, \
+0.00007028084697182092, 0.004054887238866372, 0.00013175906334793956, \
+2.283698170333048e-6, 0.00003180781223301039, \
+0.0018351670117407997],\\n\\t\\t\\t\\t\\t[0.00011103416824660772, \
+0.006406169693456152, 0.00045994229029708853, 7.971894609152353e-6, \
+0.00003095049222969697, 0.0017857035221722376, 0.024871641565833637, \
+0.0004310847458522837, 6.860231020225195e-6, 0.0003958043253340668, \
+0.005512843082674992, 0.00009555069185634318, 0.0011299870315687104, \
+0.06519514479143339, 0.004680800797745358, 0.00008112941869720034, \
+0.00001411323419624475, 0.0008142698289397681, 0.00005846194340199012, \
+1.0132846256553974e-6, 0.00018286754487133815, 0.010550630876701442, \
+0.14695133105831784, 0.0025470163291895762, 0.000014642111426198383, \
+0.0008447836548690031, 0.011766318430630167, 0.00020393830366440094, \
+0.0006564107990676135, 0.037871936484495175, 0.0027190827027978384, \
+0.00004712817498532611, 0.00012471194765080568, 0.007195315748914842, \
+0.0005166004279198393, 8.953914987377703e-6, 0.00005660634493774606, \
+0.0032659302728517475, 0.045488540576188015, 0.0007884246764159872, \
+0.000035918328962660644, 0.002072325249729515, 0.02886376723746419, \
+0.0005002777854837738, 0.0030030878668434284, 0.17326459758432092, \
+0.012439838414168035, 0.00021561200803816904, 0.0005817152431438758, \
+0.03356234049119945, 0.002409667631661582, 0.00004176527535722621, \
+0.00003842499592663778, 0.0022169486047726597, 0.030878110718349006, \
+0.0005351911523887275, 2.283698170332715e-6, 0.0001317590633479353, \
+0.0018351670117407954, 0.00003180781223301084, 0.000978885919819417, \
+0.05647729353878165, 0.004054887238866392, \
+0.00007028084697182129],\\n\\t\\t\\t\\t\\t[0.006406169693456174, \
+0.00011103416824660927, 7.97189460915174e-6, 0.0004599422902970871, \
+0.001785703522172226, 0.00003095049222969698, 0.00043108474585226855, \
+0.02487164156583371, 0.0003958043253340697, 6.86023102022554e-6, \
+0.00009555069185634476, 0.00551284308267495, 0.06519514479143336, \
+0.0011299870315687119, 0.0000811294186972037, 0.004680800797745423, \
+0.0008142698289397787, 0.000014113234196246184, 1.0132846256552782e-6, \
+0.000058461943401993334, 0.010550630876701422, 0.00018286754487134284, \
+0.0025470163291895533, 0.14695133105831787, 0.0008447836548689868, \
+0.000014642111426196935, 0.00020393830366439834, 0.011766318430630193, \
+0.03787193648449519, 0.0006564107990676097, 0.00004712817498532354, \
+0.0027190827027978536, 0.007195315748914788, 0.0001247119476508053, \
+8.953914987375979e-6, 0.0005166004279198295, 0.003265930272851726, \
+0.000056606344937745806, 0.0007884246764160035, 0.045488540576188036, \
+0.0020723252497295277, 0.00003591832896265769, 0.0005002777854837791, \
+0.02886376723746426, 0.17326459758432078, 0.003003087866843422, \
+0.00021561200803817086, 0.012439838414168012, 0.033562340491199355, \
+0.0005817152431438718, 0.00004176527535722654, 0.0024096676316615793, \
+0.0022169486047726224, 0.00003842499592663852, 0.0005351911523887266, \
+0.03087811071834904, 0.0001317590633479368, 2.2836981703336283e-6, \
+0.000031807812233009294, 0.001835167011740809, 0.05647729353878173, \
+0.000978885919819426, 0.00007028084697181934, 0.004054887238866367],\\n\\t\\t\
+\\t\\t\\t[0.00045994229029708907, 7.971894609152883e-6, \
+0.0001110341682466053, 0.006406169693456148, 0.024871641565833612, \
+0.000431084745852274, 0.00003095049222969792, 0.0017857035221722321, \
+0.005512843082675008, 0.00009555069185634174, 6.860231020226163e-6, \
+0.0003958043253340783, 0.004680800797745342, 0.00008112941869719944, \
+0.0011299870315687214, 0.06519514479143347, 0.00005846194340199115, \
+1.0132846256550558e-6, 0.000014113234196243973, 0.0008142698289397663, \
+0.14695133105831784, 0.0025470163291895784, 0.00018286754487134525, \
+0.010550630876701451, 0.011766318430630193, 0.0002039383036644047, \
+0.000014642111426195827, 0.0008447836548689759, 0.0027190827027978523, \
+0.00004712817498532372, 0.000656410799067616, 0.03787193648449517, \
+0.0005166004279198394, 8.953914987376422e-6, 0.0001247119476508018, \
+0.007195315748914827, 0.04548854057618786, 0.0007884246764160008, \
+0.00005660634493774693, 0.0032659302728517293, 0.02886376723746418, \
+0.0005002777854837751, 0.00003591832896265772, 0.0020723252497295407, \
+0.012439838414168096, 0.00021561200803816931, 0.0030030878668434414, \
+0.17326459758432103, 0.002409667631661596, 0.000041765275357226316, \
+0.0005817152431438732, 0.033562340491199376, 0.030878110718348933, \
+0.0005351911523887284, 0.00003842499592663755, 0.0022169486047726402, \
+0.0018351670117408144, 0.00003180781223300918, 2.2836981703328994e-6, \
+0.00013175906334794075, 0.004054887238866378, 0.00007028084697182168, \
+0.0009788859198194258, \
+0.05647729353878159],\\n\\t\\t\\t\\t\\t[7.971894609151944e-6, \
+0.00045994229029708555, 0.006406169693456217, 0.00011103416824660368, \
+0.00043108474585228107, 0.024871641565833758, 0.00178570352217225, \
+0.00003095049222969567, 0.00009555069185634267, 0.005512843082674947, \
+0.00039580432533406826, 6.860231020225809e-6, 0.00008112941869719993, \
+0.004680800797745413, 0.06519514479143342, 0.001129987031568708, \
+1.0132846256555274e-6, 0.00005846194340198911, 0.0008142698289397662, \
+0.00001411323419624428, 0.0025470163291895632, 0.14695133105831767, \
+0.010550630876701491, 0.00018286754487134295, 0.00020393830366440574, \
+0.011766318430630215, 0.0008447836548689778, 0.000014642111426197431, \
+0.00004712817498532828, 0.002719082702797839, 0.03787193648449519, \
+0.0006564107990676116, 8.953914987377066e-6, 0.0005166004279198401, \
+0.007195315748914814, 0.0001247119476508029, 0.000788424676415996, \
+0.04548854057618801, 0.0032659302728517306, 0.00005660634493774498, \
+0.0005002777854837787, 0.028863767237464154, 0.0020723252497295047, \
+0.0000359183289626591, 0.0002156120080381719, 0.012439838414168089, \
+0.17326459758432106, 0.0030030878668434245, 0.00004176527535722626, \
+0.002409667631661606, 0.033562340491199355, 0.0005817152431438755, \
+0.0005351911523887374, 0.030878110718349033, 0.0022169486047726385, \
+0.00003842499592663833, 0.000031807812233010094, 0.001835167011740799, \
+0.0001317590633479399, 2.2836981703340408e-6, 0.00007028084697181932, \
+0.004054887238866359, 0.05647729353878155, \
+0.0009788859198194156],\\n\\t\\t\\t\\t\\t[0.02487164156583369, \
+0.0004310847458522755, 0.000030950492229699634, 0.0017857035221722356, \
+0.00045994229029709335, 7.971894609152503e-6, 0.00011103416824661259, \
+0.006406169693456185, 0.004680800797745382, 0.00008112941869719904, \
+0.0011299870315687097, 0.06519514479143337, 0.005512843082674937, \
+0.00009555069185634246, 6.860231020226046e-6, 0.00039580432533406967, \
+0.14695133105831787, 0.002547016329189591, 0.00018286754487133826, \
+0.010550630876701444, 0.000058461943401988285, 1.01328462565576e-6, \
+0.000014113234196245718, 0.0008142698289397702, 0.002719082702797848, \
+0.00004712817498532502, 0.0006564107990676159, 0.03787193648449513, \
+0.011766318430630184, 0.00020393830366440392, 0.00001464211142619591, \
+0.0008447836548689866, 0.04548854057618802, 0.0007884246764159877, \
+0.000056606344937746314, 0.003265930272851726, 0.000516600427919839, \
+8.953914987377464e-6, 0.0001247119476508043, 0.007195315748914764, \
+0.012439838414168042, 0.00021561200803816893, 0.0030030878668434228, \
+0.17326459758432106, 0.028863767237464134, 0.000500277785483773, \
+0.00003591832896265643, 0.002072325249729523, 0.03087811071834903, \
+0.0005351911523887304, 0.00003842499592663801, 0.002216948604772654, \
+0.0024096676316616174, 0.00004176527535722771, 0.0005817152431438708, \
+0.033562340491199376, 0.004054887238866362, 0.00007028084697182125, \
+0.000978885919819426, 0.05647729353878156, 0.0018351670117407954, \
+0.0000318078122330092, 2.2836981703340175e-6, \
+0.00013175906334793506],\\n\\t\\t\\t\\t\\t[0.0004310847458522756, \
+0.024871641565833654, 0.001785703522172244, 0.000030950492229696625, \
+7.971894609151746e-6, 0.0004599422902970916, 0.0064061696934561785, \
+0.00011103416824660273, 0.00008112941869719921, 0.0046808007977453625, \
+0.06519514479143335, 0.0011299870315686989, 0.00009555069185634582, \
+0.005512843082674969, 0.00039580432533407655, 6.860231020225378e-6, \
+0.0025470163291895736, 0.14695133105831779, 0.010550630876701467, \
+0.0001828675448713463, 1.0132846256556087e-6, 0.00005846194340198663, \
+0.0008142698289397673, 0.000014113234196245035, 0.0000471281749853266, \
+0.0027190827027978193, 0.03787193648449514, 0.0006564107990675985, \
+0.0002039383036643998, 0.011766318430630184, 0.0008447836548690003, \
+0.00001464211142619719, 0.0007884246764160008, 0.04548854057618805, \
+0.003265930272851703, 0.00005660634493774308, 8.953914987376897e-6, \
+0.0005166004279198282, 0.0071953157489148215, 0.00012471194765080535, \
+0.00021561200803817482, 0.01243983841416802, 0.17326459758432078, \
+0.0030030878668434523, 0.0005002777854837725, 0.028863767237464255, \
+0.0020723252497295277, 0.0000359183289626533, 0.0005351911523887193, \
+0.030878110718349047, 0.002216948604772647, 0.00003842499592663651, \
+0.000041765275357225754, 0.002409667631661588, 0.033562340491199424, \
+0.0005817152431438727, 0.0000702808469718211, 0.004054887238866376, \
+0.05647729353878153, 0.0009788859198194087, 0.000031807812233010534, \
+0.001835167011740804, 0.00013175906334794512, \
+2.2836981703327893e-6]],\\n}\"\>"], "Output",
  CellChangeTimes->{
   3.814186234830806*^9, 3.814197814385559*^9, {3.814198051399117*^9, 
    3.814198069642906*^9}, 3.814199897841984*^9, 3.81420300166024*^9, 
@@ -5804,66 +7128,15 @@ Cell[BoxData["\<\"{\\n    \\\"qubits\\\": 6,\\n    \\\"ancillas\\\": 1,\\n    \
    3.8145558851754417`*^9, 3.814556033370676*^9, 3.81455624221203*^9, 
    3.8145562935040817`*^9, 3.81455634392223*^9, 3.814556615635735*^9, 
    3.81455780965877*^9, 3.814558054373645*^9, 3.8227573057975597`*^9, 
-   3.822757843654704*^9, 3.822759267794264*^9, 3.8227598822160683`*^9},
- CellLabel->
-  "Out[1999]=",ExpressionUUID->"1f74874d-700b-49fd-9e6a-30fe3f35a8b4"]
+   3.822757843654704*^9, 3.822759267794264*^9, 3.8227598822160683`*^9, 
+   3.82276211600115*^9},
+ CellLabel->"Out[59]=",ExpressionUUID->"4e7f91a0-2e9e-4b33-8d55-03c42d0bae5d"]
 }, Open  ]],
 
 Cell["\<\
 This can be copied as-is as valid JSON to python, by right-clicking and \
 selecting \[OpenCurlyDoubleQuote]copy as... plain text\[CloseCurlyDoubleQuote]\
-\>", "Text",ExpressionUUID->"bc1fc14f-a9cc-4d9d-8d04-6b90bdb9affa"],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"Apply", "[", 
-  RowBox[{"Max", ",", 
-   RowBox[{"{", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"1", ",", "2", ",", "3"}], "}"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"4", ",", "5", ",", "6"}], "}"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"7", ",", "8", ",", "9"}], "}"}]}], "}"}], ",", "1"}], 
-  "]"}]], "Input",
- CellChangeTimes->{{3.8227567368313*^9, 3.822756766313238*^9}, {
-  3.822756796333847*^9, 3.822756828160478*^9}},
- CellLabel->"In[45]:=",ExpressionUUID->"224c59cf-6930-43f1-98e7-04fc3d463cb6"],
-
-Cell[BoxData[
- RowBox[{"{", 
-  RowBox[{"3", ",", "6", ",", "9"}], "}"}]], "Output",
- CellChangeTimes->{{3.8227567596805477`*^9, 3.822756766885661*^9}, {
-  3.8227568075265493`*^9, 3.822756828509893*^9}},
- CellLabel->"Out[45]=",ExpressionUUID->"bac7b5ec-97f0-4169-bdb5-196e0493de7e"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"SingularValueList", "[", 
-   RowBox[{"{", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"1", ",", "0"}], "}"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"0", ",", "0"}], "}"}]}], "}"}], "]"}], "//", 
-  RowBox[{"DeleteCases", "[", 
-   RowBox[{
-    RowBox[{"#", "\[Equal]", "0"}], "&"}], "]"}]}]], "Input",
- CellChangeTimes->{{3.82275883080595*^9, 3.822758854227489*^9}},
- CellLabel->
-  "In[1549]:=",ExpressionUUID->"915092f1-aa9f-4a17-8b4f-58717879a329"],
-
-Cell[BoxData[
- RowBox[{"{", "1", "}"}]], "Output",
- CellChangeTimes->{{3.822758839283215*^9, 3.822758858163653*^9}},
- CellLabel->
-  "Out[1549]=",ExpressionUUID->"e7c12922-fca8-4a42-a9ed-005d59ceaf09"]
-}, Open  ]]
+\>", "Text",ExpressionUUID->"bc1fc14f-a9cc-4d9d-8d04-6b90bdb9affa"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -5916,109 +7189,109 @@ Cell[30046, 784, 337, 5, 27, "Text",ExpressionUUID->"838cea77-711e-4fdc-87d8-e00
 Cell[CellGroupData[{
 Cell[30408, 793, 2424, 52, 274, "Input",ExpressionUUID->"12e33b89-62ec-4efc-98f2-8874a51bd704",
  InitializationCell->True],
-Cell[32835, 847, 14156, 400, 54, "Output",ExpressionUUID->"46dcb939-6b14-47b3-88c8-06bed0e8a0a1"]
+Cell[32835, 847, 14180, 400, 54, "Output",ExpressionUUID->"4421640a-352f-4601-aefa-122fadb972ff"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[47028, 1252, 300, 6, 22, "Input",ExpressionUUID->"e5aedbab-d75b-4c73-9c01-cf601b61387d"],
-Cell[47331, 1260, 4937, 107, 59, "Output",ExpressionUUID->"a661a6c0-e195-42ae-b6b1-cbe22bd5266f"]
+Cell[47052, 1252, 300, 6, 22, "Input",ExpressionUUID->"e5aedbab-d75b-4c73-9c01-cf601b61387d"],
+Cell[47355, 1260, 4937, 107, 59, "Output",ExpressionUUID->"a661a6c0-e195-42ae-b6b1-cbe22bd5266f"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[52317, 1373, 102, 0, 50, "Section",ExpressionUUID->"8b007e8f-7b03-49eb-b835-1c3263d1a707"],
-Cell[52422, 1375, 6630, 157, 279, "Input",ExpressionUUID->"78909daa-8a3c-4f17-a001-5620c7918049",
+Cell[52341, 1373, 102, 0, 50, "Section",ExpressionUUID->"8b007e8f-7b03-49eb-b835-1c3263d1a707"],
+Cell[52446, 1375, 6648, 156, 279, "Input",ExpressionUUID->"78909daa-8a3c-4f17-a001-5620c7918049",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[59077, 1536, 573, 15, 39, "Input",ExpressionUUID->"e0dc75bd-b2e3-4207-8024-990b58a3456e"],
-Cell[59653, 1553, 1508, 23, 25, "Output",ExpressionUUID->"da187017-468c-450f-8dab-107998059e59"],
-Cell[61164, 1578, 1347, 19, 25, "Output",ExpressionUUID->"d9d4e311-b1f6-4306-bbc7-b4e8ffab9569"]
+Cell[59119, 1535, 573, 15, 39, "Input",ExpressionUUID->"e0dc75bd-b2e3-4207-8024-990b58a3456e"],
+Cell[59695, 1552, 1508, 23, 25, "Output",ExpressionUUID->"da187017-468c-450f-8dab-107998059e59"],
+Cell[61206, 1577, 1347, 19, 25, "Output",ExpressionUUID->"d9d4e311-b1f6-4306-bbc7-b4e8ffab9569"]
 }, Open  ]],
-Cell[62526, 1600, 1755, 45, 68, "Input",ExpressionUUID->"1940155d-54c3-4d23-bae7-482a125a3abc",
+Cell[62568, 1599, 1755, 45, 68, "Input",ExpressionUUID->"1940155d-54c3-4d23-bae7-482a125a3abc",
  InitializationCell->True],
-Cell[64284, 1647, 177, 3, 27, "Text",ExpressionUUID->"916375cd-8522-4e7a-832e-4f02ac7c2bdb"],
+Cell[64326, 1646, 177, 3, 27, "Text",ExpressionUUID->"916375cd-8522-4e7a-832e-4f02ac7c2bdb"],
 Cell[CellGroupData[{
-Cell[64486, 1654, 7779, 152, 629, "Input",ExpressionUUID->"2d401271-a148-4a02-a195-aef8d3dfc4b6"],
-Cell[72268, 1808, 520, 10, 18, "Print",ExpressionUUID->"d1a90364-10b7-4dca-8ca9-41e1f629e5aa"],
-Cell[72791, 1820, 5630, 92, 282, "Output",ExpressionUUID->"d8ad512e-3d56-4183-b4a0-cc2a06ac8748"],
-Cell[78424, 1914, 3158, 44, 25, "Output",ExpressionUUID->"541ed9d5-aa23-45c8-9996-60d68bf9fba0"],
-Cell[81585, 1960, 3238, 47, 25, "Output",ExpressionUUID->"ea6fae19-64d5-4264-8ccb-07fd139608f8"],
-Cell[84826, 2009, 4282, 62, 25, "Output",ExpressionUUID->"574a3086-c69c-4e7f-844e-92e8736df1db"]
+Cell[64528, 1653, 7885, 153, 629, "Input",ExpressionUUID->"2d401271-a148-4a02-a195-aef8d3dfc4b6"],
+Cell[72416, 1808, 421, 10, 31, "Message",ExpressionUUID->"b0699777-3b5d-4d21-9557-d337e7e4e664"],
+Cell[72840, 1820, 458, 11, 18, "Message",ExpressionUUID->"cbfcf1ab-1f36-4dce-94c6-81ec0e96dd98"],
+Cell[73301, 1833, 421, 10, 31, "Message",ExpressionUUID->"4b3633aa-ea86-4830-be81-3191fbf38eb5"],
+Cell[73725, 1845, 456, 11, 18, "Message",ExpressionUUID->"ebc8da0b-cd2a-428a-a48c-5cdf9d270c8c"],
+Cell[74184, 1858, 421, 10, 31, "Message",ExpressionUUID->"5cf09c17-1f7e-4d87-b9c8-801b2d979ea1"],
+Cell[74608, 1870, 501, 11, 18, "Message",ExpressionUUID->"8ca9a078-821d-44e9-afd5-cbf761223ebb"],
+Cell[75112, 1883, 456, 11, 18, "Message",ExpressionUUID->"7fdbaf1b-86a9-4665-b322-ce90198d950f"],
+Cell[75571, 1896, 505, 11, 18, "Message",ExpressionUUID->"4fd3fd48-b9ce-4988-a119-9f223b623b53"],
+Cell[76079, 1909, 250, 6, 18, "Print",ExpressionUUID->"4406020f-ac42-496a-aa1a-72dd5b09df6c"],
+Cell[76332, 1917, 15972, 260, 282, "Output",ExpressionUUID->"293f5f91-1d1a-47a1-b4af-3d379a30ff42"],
+Cell[92307, 2179, 3224, 44, 25, "Output",ExpressionUUID->"1cf7a7f0-5989-4b81-8196-0f3ee8d6164f"],
+Cell[95534, 2225, 3307, 47, 25, "Output",ExpressionUUID->"c3ac2127-5c28-4372-b975-3d6343908e6d"],
+Cell[98844, 2274, 4752, 68, 42, "Output",ExpressionUUID->"be8b3654-b487-4fe4-8345-ff8ab4dd92cc"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[89157, 2077, 97, 0, 50, "Section",ExpressionUUID->"b3bc4768-56f0-433c-aa07-5e633a743020"],
-Cell[89257, 2079, 5519, 143, 258, "Input",ExpressionUUID->"883b8024-8eb2-4495-a218-a12bff506cd1",
+Cell[103645, 2348, 97, 0, 50, "Section",ExpressionUUID->"b3bc4768-56f0-433c-aa07-5e633a743020"],
+Cell[103745, 2350, 5523, 144, 258, "Input",ExpressionUUID->"883b8024-8eb2-4495-a218-a12bff506cd1",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[94801, 2226, 2040, 52, 198, "Input",ExpressionUUID->"708bf0a6-c662-4c6a-82f4-63f1b771cf26"],
-Cell[96844, 2280, 1826, 31, 25, "Output",ExpressionUUID->"5f602dc8-06c1-41ad-8801-d88cca81b4ae"],
-Cell[98673, 2313, 1479, 24, 25, "Output",ExpressionUUID->"a95602ca-3b03-4a02-92fc-e7e6b71e8fcb"],
-Cell[100155, 2339, 1633, 27, 25, "Output",ExpressionUUID->"6f7205ba-f283-418a-ac8a-196aeee2f2ea"],
-Cell[101791, 2368, 19857, 342, 178, "Output",ExpressionUUID->"0592e065-8b39-4c81-927b-e53718dae3ef"],
-Cell[121651, 2712, 1340, 19, 25, "Output",ExpressionUUID->"c99dd720-f51c-4fed-a3cd-4e919145df21"],
-Cell[122994, 2733, 1708, 29, 25, "Output",ExpressionUUID->"5ed8c120-fe9c-4dea-9341-c6d528e00a80"],
-Cell[124705, 2764, 23528, 402, 185, "Output",ExpressionUUID->"d55f3340-6cfc-4121-bf24-c900ac217f1a"],
-Cell[148236, 3168, 1339, 19, 25, "Output",ExpressionUUID->"dc0a0fd5-f340-4a5d-b0ac-e51bbbd28f66"]
+Cell[109293, 2498, 2040, 52, 198, "Input",ExpressionUUID->"708bf0a6-c662-4c6a-82f4-63f1b771cf26"],
+Cell[111336, 2552, 1826, 31, 25, "Output",ExpressionUUID->"5f602dc8-06c1-41ad-8801-d88cca81b4ae"],
+Cell[113165, 2585, 1479, 24, 25, "Output",ExpressionUUID->"a95602ca-3b03-4a02-92fc-e7e6b71e8fcb"],
+Cell[114647, 2611, 1633, 27, 25, "Output",ExpressionUUID->"6f7205ba-f283-418a-ac8a-196aeee2f2ea"],
+Cell[116283, 2640, 19857, 342, 178, "Output",ExpressionUUID->"0592e065-8b39-4c81-927b-e53718dae3ef"],
+Cell[136143, 2984, 1340, 19, 25, "Output",ExpressionUUID->"c99dd720-f51c-4fed-a3cd-4e919145df21"],
+Cell[137486, 3005, 1708, 29, 25, "Output",ExpressionUUID->"5ed8c120-fe9c-4dea-9341-c6d528e00a80"],
+Cell[139197, 3036, 23528, 402, 185, "Output",ExpressionUUID->"d55f3340-6cfc-4121-bf24-c900ac217f1a"],
+Cell[162728, 3440, 1339, 19, 25, "Output",ExpressionUUID->"dc0a0fd5-f340-4a5d-b0ac-e51bbbd28f66"]
 }, Open  ]],
-Cell[149590, 3190, 12661, 350, 418, "Input",ExpressionUUID->"e458b7bc-2776-4909-b424-20385297d78a",
+Cell[164082, 3462, 12661, 350, 418, "Input",ExpressionUUID->"e458b7bc-2776-4909-b424-20385297d78a",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[162276, 3544, 2772, 85, 166, "Input",ExpressionUUID->"113ae0bf-dd59-4478-a865-72396e22e0c8"],
-Cell[165051, 3631, 1316, 19, 25, "Output",ExpressionUUID->"ee6d3b65-89e3-4758-9411-214cbfb588b5"],
-Cell[166370, 3652, 1666, 29, 25, "Output",ExpressionUUID->"ff535a3e-8ed7-4814-9e92-fe3c31cc2ee8"],
-Cell[168039, 3683, 23360, 400, 178, "Output",ExpressionUUID->"7410bbeb-468b-4752-ba15-1fe5b59f6ebf"],
-Cell[191402, 4085, 1314, 19, 25, "Output",ExpressionUUID->"f04f734f-843c-424d-ba10-70dc66e7f717"]
+Cell[176768, 3816, 2772, 85, 166, "Input",ExpressionUUID->"113ae0bf-dd59-4478-a865-72396e22e0c8"],
+Cell[179543, 3903, 1316, 19, 25, "Output",ExpressionUUID->"ee6d3b65-89e3-4758-9411-214cbfb588b5"],
+Cell[180862, 3924, 1666, 29, 25, "Output",ExpressionUUID->"ff535a3e-8ed7-4814-9e92-fe3c31cc2ee8"],
+Cell[182531, 3955, 23360, 400, 178, "Output",ExpressionUUID->"7410bbeb-468b-4752-ba15-1fe5b59f6ebf"],
+Cell[205894, 4357, 1314, 19, 25, "Output",ExpressionUUID->"f04f734f-843c-424d-ba10-70dc66e7f717"]
 }, Open  ]],
-Cell[192731, 4107, 15107, 402, 609, "Input",ExpressionUUID->"1cb79cb3-a41f-4900-9b72-57b8e51c0b86",
+Cell[207223, 4379, 15107, 402, 609, "Input",ExpressionUUID->"1cb79cb3-a41f-4900-9b72-57b8e51c0b86",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[207863, 4513, 3227, 96, 166, "Input",ExpressionUUID->"c82a75b6-fdbd-431c-935e-70ed61eb59a3"],
+Cell[222355, 4785, 3227, 96, 166, "Input",ExpressionUUID->"c82a75b6-fdbd-431c-935e-70ed61eb59a3"],
 Cell[CellGroupData[{
-Cell[211115, 4613, 1366, 21, 18, "Print",ExpressionUUID->"c93da3ed-93cf-4d8d-a6da-806f646c8be2"],
-Cell[212484, 4636, 1388, 22, 18, "Print",ExpressionUUID->"c80068e3-f41c-4822-8ecb-3985e179b01a"],
-Cell[213875, 4660, 1386, 22, 18, "Print",ExpressionUUID->"d484c88f-de0d-464d-9f9a-22e3d41b1fae"]
+Cell[225607, 4885, 1366, 21, 18, "Print",ExpressionUUID->"c93da3ed-93cf-4d8d-a6da-806f646c8be2"],
+Cell[226976, 4908, 1388, 22, 18, "Print",ExpressionUUID->"c80068e3-f41c-4822-8ecb-3985e179b01a"],
+Cell[228367, 4932, 1386, 22, 18, "Print",ExpressionUUID->"d484c88f-de0d-464d-9f9a-22e3d41b1fae"]
 }, Open  ]],
-Cell[215276, 4685, 1701, 28, 25, "Output",ExpressionUUID->"a2f3363c-c30c-4744-86f1-a2c73fd67fc8"],
-Cell[216980, 4715, 1338, 20, 25, "Output",ExpressionUUID->"00b01086-61d9-44b2-9569-73291c251287"],
-Cell[218321, 4737, 1340, 20, 25, "Output",ExpressionUUID->"17c21c98-3870-4097-9efb-e86f848ba0aa"],
-Cell[219664, 4759, 1913, 34, 25, "Output",ExpressionUUID->"e1541cfc-78e2-497c-9c3c-75350602f51c"],
+Cell[229768, 4957, 1701, 28, 25, "Output",ExpressionUUID->"a2f3363c-c30c-4744-86f1-a2c73fd67fc8"],
+Cell[231472, 4987, 1338, 20, 25, "Output",ExpressionUUID->"00b01086-61d9-44b2-9569-73291c251287"],
+Cell[232813, 5009, 1340, 20, 25, "Output",ExpressionUUID->"17c21c98-3870-4097-9efb-e86f848ba0aa"],
+Cell[234156, 5031, 1913, 34, 25, "Output",ExpressionUUID->"e1541cfc-78e2-497c-9c3c-75350602f51c"],
 Cell[CellGroupData[{
-Cell[221602, 4797, 1364, 21, 18, "Print",ExpressionUUID->"0eddbd6c-ce53-4e54-aa36-f9986a20e3f9"],
-Cell[222969, 4820, 1388, 22, 18, "Print",ExpressionUUID->"73a288c6-15d1-4838-93a6-badb1ef832fe"],
-Cell[224360, 4844, 1388, 22, 18, "Print",ExpressionUUID->"6e98cc0f-a53e-47bf-8f69-333d7bc9b046"]
+Cell[236094, 5069, 1364, 21, 18, "Print",ExpressionUUID->"0eddbd6c-ce53-4e54-aa36-f9986a20e3f9"],
+Cell[237461, 5092, 1388, 22, 18, "Print",ExpressionUUID->"73a288c6-15d1-4838-93a6-badb1ef832fe"],
+Cell[238852, 5116, 1388, 22, 18, "Print",ExpressionUUID->"6e98cc0f-a53e-47bf-8f69-333d7bc9b046"]
 }, Open  ]],
-Cell[225763, 4869, 2534, 45, 58, "Output",ExpressionUUID->"db0d4434-298e-4b2f-83cd-bddc51df83d2"],
-Cell[228300, 4916, 1338, 20, 25, "Output",ExpressionUUID->"de597697-2703-41a1-bbf3-9e59dabdede5"],
-Cell[229641, 4938, 1338, 20, 25, "Output",ExpressionUUID->"1bcfd089-3135-46bc-a2da-911df5c95322"],
-Cell[230982, 4960, 1732, 30, 25, "Output",ExpressionUUID->"1633f23a-b95b-4df5-bc90-c6cb4c44d30f"]
+Cell[240255, 5141, 2534, 45, 58, "Output",ExpressionUUID->"db0d4434-298e-4b2f-83cd-bddc51df83d2"],
+Cell[242792, 5188, 1338, 20, 25, "Output",ExpressionUUID->"de597697-2703-41a1-bbf3-9e59dabdede5"],
+Cell[244133, 5210, 1338, 20, 25, "Output",ExpressionUUID->"1bcfd089-3135-46bc-a2da-911df5c95322"],
+Cell[245474, 5232, 1732, 30, 25, "Output",ExpressionUUID->"1633f23a-b95b-4df5-bc90-c6cb4c44d30f"]
 }, Open  ]],
-Cell[232729, 4993, 8490, 204, 610, "Input",ExpressionUUID->"5ef0d1b1-9539-4139-95cb-7fac723be106",
+Cell[247221, 5265, 8490, 204, 610, "Input",ExpressionUUID->"5ef0d1b1-9539-4139-95cb-7fac723be106",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[241244, 5201, 253, 5, 22, "Input",ExpressionUUID->"50fc68e0-accc-4052-affe-1a667d445a58"],
-Cell[241500, 5208, 2309, 34, 27, "Output",ExpressionUUID->"a2727638-430a-4a2a-94c4-6c56ed2416bb"]
+Cell[255736, 5473, 253, 5, 22, "Input",ExpressionUUID->"50fc68e0-accc-4052-affe-1a667d445a58"],
+Cell[255992, 5480, 2309, 34, 27, "Output",ExpressionUUID->"a2727638-430a-4a2a-94c4-6c56ed2416bb"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[243858, 5248, 101, 0, 50, "Section",ExpressionUUID->"9a2649e5-1524-406c-87e8-a46d3390d393"],
-Cell[243962, 5250, 4879, 112, 258, "Input",ExpressionUUID->"6f9bb709-1461-4e27-bec9-6fd90d16010f",
+Cell[258350, 5520, 101, 0, 50, "Section",ExpressionUUID->"9a2649e5-1524-406c-87e8-a46d3390d393"],
+Cell[258454, 5522, 4879, 112, 258, "Input",ExpressionUUID->"6f9bb709-1461-4e27-bec9-6fd90d16010f",
  InitializationCell->True],
 Cell[CellGroupData[{
-Cell[248866, 5366, 157, 3, 22, "Input",ExpressionUUID->"fb24f64a-2f74-41e5-befa-79d420f46938"],
+Cell[263358, 5638, 152, 2, 22, "Input",ExpressionUUID->"fb24f64a-2f74-41e5-befa-79d420f46938"],
 Cell[CellGroupData[{
-Cell[249048, 5373, 695, 12, 18, "Print",ExpressionUUID->"eb2af439-80c5-4ba9-82b0-cb16fcfb39b3"],
-Cell[249746, 5387, 699, 12, 18, "Print",ExpressionUUID->"38dd1b8c-3cc1-4f51-9a0e-83e7203545a5"]
+Cell[263535, 5644, 717, 12, 18, "Print",ExpressionUUID->"be8401e8-1e91-429d-925e-c91071195719"],
+Cell[264255, 5658, 718, 12, 18, "Print",ExpressionUUID->"3a183886-b825-4245-91fc-2f29a6ed4131"]
 }, Open  ]],
-Cell[250460, 5402, 28132, 406, 1678, "Output",ExpressionUUID->"1f74874d-700b-49fd-9e6a-30fe3f35a8b4"]
+Cell[264988, 5673, 101628, 1459, 6252, "Output",ExpressionUUID->"4e7f91a0-2e9e-4b33-8d55-03c42d0bae5d"]
 }, Open  ]],
-Cell[278607, 5811, 231, 3, 27, "Text",ExpressionUUID->"bc1fc14f-a9cc-4d9d-8d04-6b90bdb9affa"],
-Cell[CellGroupData[{
-Cell[278863, 5818, 536, 14, 22, "Input",ExpressionUUID->"224c59cf-6930-43f1-98e7-04fc3d463cb6"],
-Cell[279402, 5834, 281, 5, 25, "Output",ExpressionUUID->"bac7b5ec-97f0-4169-bdb5-196e0493de7e"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[279720, 5844, 487, 14, 22, "Input",ExpressionUUID->"915092f1-aa9f-4a17-8b4f-58717879a329"],
-Cell[280210, 5860, 200, 4, 25, "Output",ExpressionUUID->"e7c12922-fca8-4a42-a9ed-005d59ceaf09"]
-}, Open  ]]
+Cell[366631, 7135, 231, 3, 27, "Text",ExpressionUUID->"bc1fc14f-a9cc-4d9d-8d04-6b90bdb9affa"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
