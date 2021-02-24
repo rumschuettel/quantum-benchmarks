@@ -62,8 +62,7 @@ if __name__ == "__main__":
     corrected_U = np.empty(U.shape, dtype=np.complex_)
     for i, j in it.product(range(2 ** (n + 1)), repeat=2):
         corrected_U[
-            int("".join(reversed(f"{i:0{n+1}b}")), 2),
-            int("".join(reversed(f"{j:0{n+1}b}")), 2),
+            int("".join(reversed(f"{i:0{n+1}b}")), 2), int("".join(reversed(f"{j:0{n+1}b}")), 2),
         ] = U[i][j]
 
     M = np.diag(R) @ corrected_U

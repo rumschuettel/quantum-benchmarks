@@ -221,19 +221,11 @@ def argparser(toadd, **argparse_options):
         default=0,
     )
     parser.add_argument(
-        "-e",
-        "--strength",
-        type=float,
-        help="The strength of the mesurements",
-        default=0.93,
+        "-e", "--strength", type=float, help="The strength of the mesurements", default=0.93,
     )
     parser.add_argument("-t", "--num_steps", type=int, help="Depth of fractal", default=2)
     parser.add_argument(
-        "-s",
-        "--num_shots",
-        type=int,
-        help="Number of shots per orientation",
-        default=1024,
+        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=1024,
     )
     parser.add_argument(
         "-m",

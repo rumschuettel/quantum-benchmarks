@@ -565,10 +565,7 @@ if __name__ == "__main__":
     parser_A = subparsers.add_parser("benchmark", help="Run new benchmark", **argparse_options)
     parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
-        "vendor",
-        metavar="VENDOR",
-        type=str,
-        help=f"vendor to use; one of {', '.join(VENDORS)}",
+        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}",
     )
     parser_A.add_argument(
         "mode", metavar="MODE", type=str, help=f"mode to run; one of {', '.join(MODES)}"

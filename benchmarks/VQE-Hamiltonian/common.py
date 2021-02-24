@@ -45,9 +45,7 @@ class VQEHamiltonianBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "VQE-Hamiltonian",
-        help="VQE Hamiltonian Ground State Benchmark",
-        **argparse_options,
+        "VQE-Hamiltonian", help="VQE Hamiltonian Ground State Benchmark", **argparse_options,
     )
     parser.add_argument(
         "--hamiltonian_type",
@@ -55,10 +53,7 @@ def argparser(toadd, **argparse_options):
         help=f"Which Hamiltonian to simulate. One of {', '.join(t.name for t in HamiltonianType)}",
     )
     parser.add_argument(
-        "--qubits",
-        default=6,
-        type=int,
-        help="How many qubits the Hamiltonian is defined on",
+        "--qubits", default=6, type=int, help="How many qubits the Hamiltonian is defined on",
     )
     parser.add_argument("--J1", default=1.0, type=float, help="First coupling constant")
     parser.add_argument("--J2", default=1.0, type=float, help="Second coupling constant")

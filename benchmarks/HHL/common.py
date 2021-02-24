@@ -18,11 +18,7 @@ from .matrices import MATRICES
 
 class HHLBenchmarkMixin:
     def __init__(
-        self,
-        matrix,
-        num_shots,
-        shots_multiplier,
-        **_,
+        self, matrix, num_shots, shots_multiplier, **_,
     ):
         super().__init__()
 
@@ -194,17 +190,9 @@ def argparser(toadd, **argparse_options):
         default=list(MATRICES.keys())[0],
     )
     parser.add_argument(
-        "-s",
-        "--num_shots",
-        type=int,
-        help="Number of shots per orientation",
-        default=8192,
+        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=8192,
     )
     parser.add_argument(
-        "-m",
-        "--shots_multiplier",
-        type=int,
-        help="Multiplier for shots",
-        default=1,
+        "-m", "--shots_multiplier", type=int, help="Multiplier for shots", default=1,
     )
     return parser

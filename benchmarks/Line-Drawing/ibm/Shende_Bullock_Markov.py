@@ -48,12 +48,7 @@ def Shende_Bullock_Markov(circuit, qubits, state, GRAY_CODE=True, REVERSE_ZS=Tru
             for j in range(2 ** i)
         ]
         prepare_multiplexed(
-            circuit,
-            qubits[:i],
-            qubits[i],
-            states,
-            GRAY_CODE=GRAY_CODE,
-            REVERSE_ZS=REVERSE_ZS,
+            circuit, qubits[:i], qubits[i], states, GRAY_CODE=GRAY_CODE, REVERSE_ZS=REVERSE_ZS,
         )
     return circuit
 
@@ -176,6 +171,5 @@ if __name__ == "__main__":
     print("State that was prepared:", np.round(corrected_result, 4))
     print("Norm of the resulting vector:", np.linalg.norm(corrected_result))
     print(
-        "Inner product error:",
-        abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0),
+        "Inner product error:", abs(abs(np.sum(np.conj(corrected_result) * state)) - 1.0),
     )

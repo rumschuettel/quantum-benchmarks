@@ -10,14 +10,7 @@ from libbench.ibm import Job as IBMJob
 class IBMMandelbrotJob(IBMJob):
     @staticmethod
     def job_factory(
-        num_post_selections,
-        num_pixels,
-        num_shots,
-        xmin,
-        xmax,
-        ymin,
-        ymax,
-        add_measurements,
+        num_post_selections, num_pixels, num_shots, xmin, xmax, ymin, ymax, add_measurements,
     ):
         xs = np.linspace(xmin, xmax, num_pixels + 1)
         xs = 0.5 * (xs[:-1] + xs[1:])
@@ -68,8 +61,7 @@ class IBMMandelbrotJob(IBMJob):
                 circuit.x(l + 2 ** (k - 1))
         if add_measurements:
             circuit.measure(
-                list(range(2 ** num_post_selections)),
-                list(range(2 ** num_post_selections)),
+                list(range(2 ** num_post_selections)), list(range(2 ** num_post_selections)),
             )
 
         # store the resulting circuit

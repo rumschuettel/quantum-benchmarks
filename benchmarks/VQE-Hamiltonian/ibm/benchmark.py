@@ -28,12 +28,7 @@ class IBMVQEHamiltonianBenchmark(IBMVQEHamiltonianBenchmarkBase):
 
     def get_jobs(self):
         yield IBMVQEHamiltonianJob(
-            self.depth,
-            self.rounds,
-            self.qubits,
-            self.J1,
-            self.J2,
-            self.hamiltonian_type,
+            self.depth, self.rounds, self.qubits, self.J1, self.J2, self.hamiltonian_type,
         )
 
     def parse_result(self, job, result):
