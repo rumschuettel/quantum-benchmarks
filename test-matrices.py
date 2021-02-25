@@ -120,7 +120,7 @@ def test_matrices(verbose: bool = False):
 
         print_hl(
             f"minimum rank = {min_rank} reached on {len(min_partition_str)} partitions\n",
-            color="cyan",
+            color = "cyan" if min_rank > 1 else "red",
         )
         verbose and print(min_partition_str)
 

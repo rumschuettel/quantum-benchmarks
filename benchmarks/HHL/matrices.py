@@ -65,6 +65,18 @@ MATRICES = {
             [0.00117358, 0.0624122, 0.105389, 0.350174],
         ],
     },
+    # "4qubit-test": {
+    #     "qubits": 4,
+    #     "ancillas": 1,
+    #     "circuit": [
+    #         ("CZ", 2, 4),
+    #         ("CZ", 4, 1),
+    #         ("CZ", 1, 3),  
+    #         ("CZ", 1, 4),                      
+    #     ],
+    #     "angles": [],
+    #     "histogram": [],
+    # },
     "4qubit-1ancilla-CZ": {
         "qubits": 4,
         "ancillas": 1,
