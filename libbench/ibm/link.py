@@ -137,9 +137,12 @@ class IBMCloudLink(IBMLinkBase):
 
         # check whether we have accounts
         providers = IBMQ.providers()
-        assert len(providers) == 1, "no account loaded, or multiple accounts found."
+        assert len(providers) > 0, "no account loaded"
 
-        self.IBMQ_cloud = providers[0]
+        # choose account with most backends
+        providers.sort(key=lambda p: len(p.backends()))
+
+        self.IBMQ_cloud = providers[-1]
 
         print_hl("IBMQ cloud account loaded.")
 
