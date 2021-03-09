@@ -72,11 +72,11 @@ class HHLJob(AmazonJob):
             "TY": lambda index: circuit.ry(index, np.pi / 4),
             "CX": lambda control, target: circuit.cnot(control, target),
             # Old method
-            "CZ": lambda qubit1, qubit2: circuit.cz(qubit1, qubit2),               
+            "CZ": lambda qubit1, qubit2: circuit.cz(qubit1, qubit2),
             # Needed for IonQ
             # "CZ": lambda qubit1, qubit2: circuit.h(qubit2).cnot(qubit1, qubit2).h(qubit2),
-            # TODO: Define the gate below   
-            # "SQSWAP": lambda qubit1, qubit2: circuit.append(SwapGate().power(0.5), [qubit1, qubit2])   
+            # TODO: Define the gate below
+            # "SQSWAP": lambda qubit1, qubit2: circuit.append(SwapGate().power(0.5), [qubit1, qubit2])
         }
 
         for gate, *indices in circuit_list:
@@ -86,7 +86,10 @@ class HHLJob(AmazonJob):
 
     @staticmethod
     def job_factory(
-        matrix, num_shots, shots_multiplier, add_measurements,
+        matrix,
+        num_shots,
+        shots_multiplier,
+        add_measurements,
     ):
         if matrix is None:
             raise NotImplementedError("The matrix is Not specified")
@@ -158,7 +161,14 @@ class HHLJob(AmazonJob):
                 )
 
     def __init__(
-        self, circuit, num_qubits, num_ancillas, basis_vec, shots, m_idx, add_measurements,
+        self,
+        circuit,
+        num_qubits,
+        num_ancillas,
+        basis_vec,
+        shots,
+        m_idx,
+        add_measurements,
     ):
         super().__init__()
 

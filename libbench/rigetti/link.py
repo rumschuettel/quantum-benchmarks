@@ -78,7 +78,11 @@ class RigettiQVM(RigettiDevice):
         }
 
     def execute(
-        self, program: pq.Program, num_shots: int, measure_qubits: list = None, optimize=True,
+        self,
+        program: pq.Program,
+        num_shots: int,
+        measure_qubits: list = None,
+        optimize=True,
     ):
         return self._run_and_measure(program, num_shots, measure_qubits, optimize)
 
@@ -109,7 +113,7 @@ class RigettiStatevectorSimulator(RigettiDevice):
 
 
 # with rigetti we can have any kind of qvm we want, and also other topologies etc
-RIGETTI_EXTRA_QVMS = [nn for n in [2, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]]
+RIGETTI_EXTRA_QVMS = [nn for n in [2, 3, 4, 8, 16, 24] for nn in [f"{n}q-qvm", f"{n}q-noisy-qvm"]]
 
 
 class RigettiJob(VendorJob):
@@ -178,7 +182,7 @@ class RigettiMeasureLocalLink(RigettiLinkBase):
         names = [
             *[
                 n
-                for qc_n in pq.list_quantum_computers(qpus=True, qvms=False)
+                for qc_n in pq.list_quantum_computers(qpus=False, qvms=False)
                 for n in [f"{qc_n}-qvm", f"{qc_n}-noisy-qvm"]
             ],
             *[n for n in pq.list_quantum_computers(qpus=False, qvms=True)],

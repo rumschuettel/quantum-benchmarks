@@ -13,21 +13,21 @@ from tqdm import tqdm
 
 def reshuffle_qubits(unitary: np.array, permutation: list) -> np.array:
     """
-        same effect as adding swap gates to achieve a permutation of the unitary
-        example:
+    same effect as adding swap gates to achieve a permutation of the unitary
+    example:
 
-        reshuffle_qubits(
-            np.array([
-                [1, 2, 0, 0],
-                [3, 4, 0, 0],
-                [0, 0, 5, 6],
-                [0, 0, 7, 8]
-            ]), [1, 0]) == np.array([
-                [1, 0, 2, 0],
-                [0, 5, 0, 6],
-                [3, 0, 4, 0],
-                [0, 7, 0, 8]
-            ])
+    reshuffle_qubits(
+        np.array([
+            [1, 2, 0, 0],
+            [3, 4, 0, 0],
+            [0, 0, 5, 6],
+            [0, 0, 7, 8]
+        ]), [1, 0]) == np.array([
+            [1, 0, 2, 0],
+            [0, 5, 0, 6],
+            [3, 0, 4, 0],
+            [0, 7, 0, 8]
+        ])
     """
     n_qubits = int(np.log2(unitary.shape[0]))
     unitary = unitary.reshape([2] * 2 * n_qubits)
@@ -37,10 +37,10 @@ def reshuffle_qubits(unitary: np.array, permutation: list) -> np.array:
 
 def partial_transpose(unitary: np.array, qubits_to_pair_off: int) -> np.array:
     """
-        performs a partial transpose of a tensor
-        A[i1,i2,...in ; j1,j2,...jn] -> A[i1,j1,i2,j2, ...in,jn]
-        and then reshapes to a matrix where the first m=qubits_to_pair_off pairs of indices are on the left, i.e.
-        -> A[i1,j1,...,im,jm ; i(m+1),j(m+1), ..., in,jn]
+    performs a partial transpose of a tensor
+    A[i1,i2,...in ; j1,j2,...jn] -> A[i1,j1,i2,j2, ...in,jn]
+    and then reshapes to a matrix where the first m=qubits_to_pair_off pairs of indices are on the left, i.e.
+    -> A[i1,j1,...,im,jm ; i(m+1),j(m+1), ..., in,jn]
     """
     n_qubits = int(np.log2(unitary.shape[0]))
     assert (
@@ -120,7 +120,7 @@ def test_matrices(verbose: bool = False):
 
         print_hl(
             f"minimum rank = {min_rank} reached on {len(min_partition_str)} partitions\n",
-            color = "cyan" if min_rank > 1 else "red",
+            color="cyan" if min_rank > 1 else "red",
         )
         verbose and print(min_partition_str)
 

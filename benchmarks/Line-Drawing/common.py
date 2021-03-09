@@ -216,7 +216,10 @@ class LineDrawingBenchmarkMixin:
 
         def interp(a, fac=100):
             return np.interp(
-                np.linspace(0, len(a) - 1 / fac, fac * len(a)), range(len(a)), a, period=len(a),
+                np.linspace(0, len(a) - 1 / fac, fac * len(a)),
+                range(len(a)),
+                a,
+                period=len(a),
             )
 
         all = np.array(collated_result)
@@ -239,7 +242,10 @@ class LineDrawingBenchmarkMixin:
             # print("X coordinates:", np.round(xs,3))
             # print("Y coordinates:", np.round(ys,3))
             ax.plot(
-                xs + [xs[0]], ys + [ys[0]], color="red", alpha=0.3 / len(collated_result) * 25,
+                xs + [xs[0]],
+                ys + [ys[0]],
+                color="red",
+                alpha=0.3 / len(collated_result) * 25,
             )
 
         # Plot the ideal contour
@@ -275,10 +281,16 @@ class LineDrawingBenchmarkMixin:
         plt.margins(0, 0)
         plt.axis("off")
         fig.savefig(
-            path / "visualize-devpage.svg", transparent=True, bbox_inches="tight", pad_inches=0,
+            path / "visualize-devpage.svg",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
         )
         fig.savefig(
-            path / "visualize-devpage.pdf", transparent=True, bbox_inches="tight", pad_inches=0,
+            path / "visualize-devpage.pdf",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
         )
         plt.close()
 

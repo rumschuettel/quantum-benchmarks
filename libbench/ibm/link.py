@@ -139,16 +139,21 @@ class IBMCloudLink(IBMLinkBase):
         providers = IBMQ.providers()
         assert len(providers) > 0, "no account loaded"
 
-        # choose account with most backends
+        # choose account with most backends coming up last
         providers.sort(key=lambda p: len(p.backends()))
 
-        self.IBMQ_cloud = providers[-1]
+        self.IBMQ_cloud_providers = providers
 
         print_hl("IBMQ cloud account loaded.")
 
     @functools.lru_cache()
     def get_devices(self):
-        return {device.name(): IBMDevice(device) for device in self.IBMQ_cloud.backends()}
+        devices = {}
+        for provider in self.IBMQ_cloud_providers:
+            devices.update(
+                {device.name(): IBMDevice(device) for device in provider.backends()}
+            )
+        return devices
 
 
 class IBMMeasureLocalLink(IBMLinkBase):

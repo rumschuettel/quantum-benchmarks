@@ -168,7 +168,9 @@ class SchroedingerMicroscopeBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "Schroedinger-Microscope", help="Schroedinger microscope benchmark.", **argparse_options,
+        "Schroedinger-Microscope",
+        help="Schroedinger microscope benchmark.",
+        **argparse_options,
     )
     parser.add_argument(
         "-ps",

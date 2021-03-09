@@ -12,7 +12,9 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, RigettiBenchmark):
 
     def get_jobs(self):
         yield from HHLJob.job_factory(
-            self.matrix, self.num_shots, self.shots_multiplier,
+            self.matrix,
+            self.num_shots,
+            self.shots_multiplier,
         )
 
     def __str__(self):

@@ -113,17 +113,25 @@ class BellTestBenchmarkMixin:
         # save
         plt.margins(0, 0)
         fig.savefig(
-            path / "visualize-devpage.svg", transparent=True, bbox_inches="tight", pad_inches=0,
+            path / "visualize-devpage.svg",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
         )
         fig.savefig(
-            path / "visualize-devpage.pdf", transparent=True, bbox_inches="tight", pad_inches=0,
+            path / "visualize-devpage.pdf",
+            transparent=True,
+            bbox_inches="tight",
+            pad_inches=0,
         )
         plt.close()
 
         # fancy one
         fig = plt.figure(figsize=(12, 8))
         plt.title(
-            f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15,
+            f"Expected Bell Violation ± {1/np.sqrt(self.num_shots):.2f}",
+            y=1.05,
+            size=15,
         )
 
         # combine them and build a new colormap
@@ -158,7 +166,9 @@ class BellTestBenchmarkMixin:
         # GRAPH
         fig = plt.figure(figsize=(9, 8))
         plt.title(
-            f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}", y=1.05, size=15,
+            f"Graph Neighbour Bell Violation ± {1/np.sqrt(self.num_shots):.2f}",
+            y=1.05,
+            size=15,
         )
 
         qubit_edges = [e for e in self.topology]

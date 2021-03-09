@@ -85,7 +85,10 @@ class HHLJob(IBMJob):
 
     @staticmethod
     def job_factory(
-        matrix, num_shots, shots_multiplier, add_measurements,
+        matrix,
+        num_shots,
+        shots_multiplier,
+        add_measurements,
     ):
         if matrix is None:
             raise NotImplementedError("The matrix is Not specified")
@@ -161,7 +164,14 @@ class HHLJob(IBMJob):
                 )
 
     def __init__(
-        self, circuit, num_qubits, num_ancillas, basis_vec, shots, m_idx, add_measurements,
+        self,
+        circuit,
+        num_qubits,
+        num_ancillas,
+        basis_vec,
+        shots,
+        m_idx,
+        add_measurements,
     ):
         super().__init__()
 

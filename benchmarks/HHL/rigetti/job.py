@@ -70,7 +70,9 @@ class HHLJob(RigettiJob):
 
     @staticmethod
     def job_factory(
-        matrix, num_shots, shots_multiplier,
+        matrix,
+        num_shots,
+        shots_multiplier,
     ):
         if matrix is None:
             raise NotImplementedError("The matrix is Not specified")
@@ -90,7 +92,11 @@ class HHLJob(RigettiJob):
 
         # Quanutm Singular Value Transformation
         qsvt_circuit = HHLJob.create_qsvt_circuit(
-            num_qubits, num_ancillas, block_encoding.dagger(), block_encoding, angles,
+            num_qubits,
+            num_ancillas,
+            block_encoding.dagger(),
+            block_encoding,
+            angles,
         )
 
         used_qubits = num_qubits - num_ancillas
@@ -107,11 +113,22 @@ class HHLJob(RigettiJob):
                 instance_circuit += qsvt_circuit
 
                 yield HHLJob(
-                    instance_circuit, num_qubits, num_ancillas, basis_vec, num_shots, m_idx,
+                    instance_circuit,
+                    num_qubits,
+                    num_ancillas,
+                    basis_vec,
+                    num_shots,
+                    m_idx,
                 )
 
     def __init__(
-        self, circuit, num_qubits, num_ancillas, basis_vec, shots, m_idx,
+        self,
+        circuit,
+        num_qubits,
+        num_ancillas,
+        basis_vec,
+        shots,
+        m_idx,
     ):
         super().__init__()
 
