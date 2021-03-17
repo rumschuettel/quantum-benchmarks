@@ -45,7 +45,7 @@ if __name__ == "__main__":
     state /= np.linalg.norm(state)
     qubits = [cirq.GridQubit(0, i) for i in range(n)]
     circuit = Bergholm_Vartiainen_Mottonen_Salomaa(state, qubits)
-    result = cirq.Simulator().simulate(circuit, qubit_order=qubits).final_state
+    result = cirq.Simulator().simulate(circuit, qubit_order=qubits).final_state_vector
 
     # Statistics
     np.set_printoptions(linewidth=200)

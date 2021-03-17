@@ -345,7 +345,12 @@ def make_tex(args):
             "Mandelbrot",
             "Line-Drawing",
             "Platonic-Fractals",
-        ].index(x[0]),
+        ].index(x[0]) if x in [
+            "Schroedinger-Microscope",
+            "Mandelbrot",
+            "Line-Drawing",
+            "Platonic-Fractals",
+        ] else float('inf'),
     ):
         print()
         print(f"TeX for {benchmark}:")
