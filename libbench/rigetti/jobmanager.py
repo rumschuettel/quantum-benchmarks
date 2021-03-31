@@ -34,3 +34,28 @@ class RigettiJobManager(VendorJobManager):
         Thaw a promise.
         """
         return promise.thaw()
+
+    def gate_statistics(self):
+        """
+            TODO: do something with jobs[i].device_info
+        """
+        from collections import defaultdict
+        import numpy as np
+
+        jobs = self.results.keys()
+        gatestats = defaultdict(list)
+
+        for job in jobs:
+            for slug in job.device_info.values():
+                for sslug in slug.values():
+                    for param, value in sslug.items():
+                        if value is not None:
+                            gatestats[param].append(value)
+
+        for key, value in gatestats.items():
+            gatestats[key] = (np.mean(value), np.std(value))
+        
+        return {
+            "gates": dict(gatestats),
+            "date": None
+        }

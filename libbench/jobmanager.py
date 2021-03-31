@@ -115,6 +115,7 @@ class VendorJobManager(ABC):
     def score(self, collated_result, reference_collated_result):
         return self.benchmark.score(collated_result, reference_collated_result)
 
+
     def finalize(
         self,
         figure_callback=lambda *_: None,
@@ -207,6 +208,18 @@ class VendorJobManager(ABC):
             slug = pickle.load(f)
             assert slug["jobmanager"].ID == ID, "instance ID does not match passed ID"
             return slug
+
+    def print_gate_statistics(self):
+        assert self.done, "benchmark not done yet"
+        stats = self.gate_statistics()
+        print(f"date: {stats['date']}, gates: ", end="")
+        for g, (v, e) in stats["gates"].items():
+            print(f"{g} {v:.02e} ± {e:.02e}  ", end="")
+        print("")
+
+    @abstractmethod
+    def gate_statistics(self):
+        pass
 
     def thaw(self, device):
         # thaw queued promises

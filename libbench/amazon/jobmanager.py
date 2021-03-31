@@ -1,3 +1,4 @@
+from typing import DefaultDict
 from libbench import VendorJobManager
 
 
@@ -32,3 +33,15 @@ class AmazonJobManager(VendorJobManager):
         Thaw a promise.
         """
         return promise.thaw()
+
+    def gate_statistics(self):
+        """
+            TODO: do something with jobs[i].device_info
+        """
+        jobs = self.results.keys()
+        breakpoint()
+        return {
+            "date": None,
+            "gates": {}
+        }
+

@@ -35,15 +35,18 @@ class AmazonCloudPromise(AmazonPromiseBase):
     AWS Cloud Promise
     """
 
+    try:
+        S3_BUCKET = open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r").read().strip()
+    except FileNotFoundError:
+        S3_BUCKET = None    
+
     def __init__(
         self,
         circuit: braket.circuits.Circuit,
         device,
         num_shots: int,
         *,
-        s3_bucket: str = open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r")
-        .read()
-        .strip(),
+        s3_bucket: str = S3_BUCKET,
         s3_bucket_folder: str = "benchmarks"
     ):
         super().__init__()
