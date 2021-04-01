@@ -6457,7 +6457,7 @@ MATRICES = {
             ],
         ],
     },
-    "6qubit-1ancilla-CZ": {
+    "6qubit-1ancilla-CZ-2SV": {
         "qubits": 6,
         "ancillas": 1,
         "circuit": [
@@ -17362,7 +17362,7 @@ MATRICES = {
             ],
         ],
     },
-    "7qubit-1ancilla-CZ": {
+    "7qubit-1ancilla-CZ-2SV": {
         "qubits": 7,
         "ancillas": 1,
         "circuit": [
@@ -25975,7 +25975,7 @@ MATRICES = {
             ],
         ],
     },
-    "8qubit-1ancilla-CZ": {
+    "8qubit-1ancilla-CZ-2SV": {
         "qubits": 8,
         "ancillas": 1,
         "circuit": [
