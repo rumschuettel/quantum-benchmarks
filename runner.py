@@ -261,6 +261,8 @@ def score(args):
         jobmanager_ref.collate_results() if REFERENCE_ID else None,
     )
 
+    jobmanager_bench.print_gate_statistics()
+
 
 """
     STATUS
