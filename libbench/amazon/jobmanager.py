@@ -39,7 +39,7 @@ class AmazonJobManager(VendorJobManager):
             TODO: do something with jobs[i].device_info
         """
         jobs = self.results.keys()
-        breakpoint()
+        # breakpoint()
         return {
             "date": None,
             "gates": {}
