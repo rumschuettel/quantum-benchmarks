@@ -24,12 +24,21 @@ class IBMDevice:
         initial_layout=None,
         optimization_level=3,
     ):
-        experiment = qiskit.compiler.transpile(
-            circuit,
-            initial_layout=initial_layout,
-            optimization_level=optimization_level,
-            backend=self.device,
-        )
+        while optimization_level >= 0:
+            try:
+                experiment = qiskit.compiler.transpile(
+                    circuit,
+                    initial_layout=initial_layout,
+                    optimization_level=optimization_level,
+                    backend=self.device,
+                )
+                break
+            except qiskit.transpiler.exceptions.TranspilerError as e:
+                print_stderr("transpiler error. Lowering optimization level")
+                optimization_level -= 1
+                if optimization_level < 0:
+                    raise e
+
         print_hl(circuit, color="white")
         print_hl(experiment, color="white")
         qobj = qiskit.compiler.assemble(
