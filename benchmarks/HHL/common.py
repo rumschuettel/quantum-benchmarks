@@ -107,15 +107,25 @@ class HHLBenchmarkMixin:
             for j in range(len(histograms[i])):
                 postProbs[j] += histograms[i][j]
 
-        for j in range(len(histograms)):
-            if postProbs[j] == 0:
-                postProbs[j] = 1
+        for i in range(len(histograms)):
+            if postProbs[i] == 0:
+                postProbs[i] = 1
 
         for i in range(len(histograms)):
             for j in range(len(histograms[i])):
                 postHistograms[i][j] = -histograms[i][j] / postProbs[j]
+                # Avoid subnormalisation for now
+                postHistograms[i][j] = -histograms[i][j]
 
+        # Used to be normalized using the measurement data:
         min_value = np.min(postHistograms)
+        print('Maximal observed success probability: {}'.format(-min_value))
+        # Now normalized by the ideal distribution
+        min_value = -np.max(self.matrix["histogram"])
+        print('Maximal ideal success probability: {}'.format(-min_value))
+
+        min_value = 1.1*min_value
+
 
         # Set up the figure
         fig, ax = plt.subplots(nrows=1, ncols=1)  # create figure & 1 axis

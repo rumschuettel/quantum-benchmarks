@@ -17,6 +17,7 @@ echo "$VENDOR, $MODE, $DEVICE"
 
 ./runner.py benchmark "$VENDOR" "$MODE" "$DEVICE" Platonic-Fractals -t 1 -m 32 -s 8192
 ./runner.py benchmark "$VENDOR" "$MODE" "$DEVICE" Platonic-Fractals -t 2 -m 32 -s 8192
+./runner.py benchmark "$VENDOR" "$MODE" "$DEVICE" Platonic-Fractals -t 3 -m 32 -s 8192
 
 ./runner.py benchmark "$VENDOR" "$MODE" "$DEVICE" Line-Drawing -n 2 -r 25 -s 8192
 ./runner.py benchmark "$VENDOR" "$MODE" "$DEVICE" Line-Drawing -n 4 -r 25 -s 8192
