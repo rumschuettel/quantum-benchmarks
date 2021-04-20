@@ -118,6 +118,9 @@ class IBMJobManager(VendorJobManager):
             return None
 
     def gate_statistics(self):
+        """
+        Get statistics of gate fidelities
+        """
         from collections import defaultdict
         import numpy as np
 

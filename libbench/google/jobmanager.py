@@ -32,3 +32,9 @@ class GoogleJobManager(VendorJobManager):
         Thaw a promise.
         """
         return promise.thaw()
+
+    def gate_statistics(self):
+        """
+        Get statistics of gate fidelities
+        """
+        return {}
