@@ -3,17 +3,11 @@
 
 ## Dependencies
 
-We strongly recommend having a separate conda environment per vendor.
+We recommend setting up a separate conda environment per vendor.
 Each requires the following dependencies.
 
     pip install termcolor matplotlib seaborn networkx
     conda install pycairo
-
-
-## Development Instructions
-
-Since python has no strong typing, I recommend you use `pylint` to detect bugs.
-Also, use `black` to indent code uniformly before committing.
 
 
 ## Vendor-Specific Notes
@@ -36,14 +30,14 @@ To set up the QMI, use the following steps:
 
 https://www.rigetti.com/qcs/docs/getting-started-with-your-qmi#qmi
 
-Inside the QMI, run
-
-    conda create -n "bench" python=3.7
-    pip install pyquil
-
 as well as the requirements listed at the start.
 
 
 ### IBM
 
 To work with run benchmarks from pre 2020 try to look at `iterate-all-ibm.sh`, which attempts to run a command using various conda environments; it appears for our runs three environments with `qiskit==>.20,.17,.14.1` seems to suffice.
+
+
+## License
+
+(c) 2021, Johannes Bausch, Arjan Cornelissen, András Gilyén
