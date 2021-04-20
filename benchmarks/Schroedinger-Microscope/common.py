@@ -168,16 +168,10 @@ class SchroedingerMicroscopeBenchmarkMixin:
 
 def argparser(toadd, **argparse_options):
     parser = toadd.add_parser(
-        "Schroedinger-Microscope",
-        help="Schroedinger microscope benchmark.",
-        **argparse_options,
+        "Schroedinger-Microscope", help="Schroedinger microscope benchmark.", **argparse_options
     )
     parser.add_argument(
-        "-ps",
-        "--num_post_selections",
-        type=int,
-        help="Number of post selections rounds",
-        default=1,
+        "-ps", "--num_post_selections", type=int, help="Number of post selections rounds", default=1
     )
     parser.add_argument("-p", "--num_pixels", type=int, help="Number of pixels", default=4)
     parser.add_argument(

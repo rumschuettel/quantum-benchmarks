@@ -159,9 +159,7 @@ class IBMCloudLink(IBMLinkBase):
     def get_devices(self):
         devices = {}
         for provider in self.IBMQ_cloud_providers:
-            devices.update(
-                {device.name(): IBMDevice(device) for device in provider.backends()}
-            )
+            devices.update({device.name(): IBMDevice(device) for device in provider.backends()})
         return devices
 
 

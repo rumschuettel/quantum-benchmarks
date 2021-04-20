@@ -12,13 +12,7 @@ DEFAULT_MPL_BACKEND = matplotlib.get_backend()
 matplotlib.use("Cairo")  # backend without X server requirements
 import matplotlib.pyplot as plt
 
-from libbench import (
-    VendorBenchmark,
-    VendorLink,
-    VendorJobManager,
-    print_hl,
-    print_stderr,
-)
+from libbench import VendorBenchmark, VendorLink, VendorJobManager, print_hl, print_stderr
 
 
 """
@@ -37,11 +31,7 @@ VENDORS = [
     if os.path.isdir(folder) and not os.path.basename(folder) == "__pycache__"
 ]
 
-MODE_CLASS_NAMES = {
-    "cloud": "Cloud",
-    "measure_local": "MeasureLocal",
-    "statevector": "Statevector",
-}
+MODE_CLASS_NAMES = {"cloud": "Cloud", "measure_local": "MeasureLocal", "statevector": "Statevector"}
 MODES = list(MODE_CLASS_NAMES.keys())
 
 
@@ -294,10 +284,7 @@ if __name__ == "__main__":
     parser_A = subparsers.add_parser("benchmark", help="Run new benchmark", **argparse_options)
     parser_A.set_defaults(func=new_benchmark)
     parser_A.add_argument(
-        "vendor",
-        metavar="VENDOR",
-        type=str,
-        help=f"vendor to use; one of {', '.join(VENDORS)}",
+        "vendor", metavar="VENDOR", type=str, help=f"vendor to use; one of {', '.join(VENDORS)}"
     )
     parser_A.add_argument(
         "mode", metavar="MODE", type=str, help=f"mode to run; one of {', '.join(MODES)}"

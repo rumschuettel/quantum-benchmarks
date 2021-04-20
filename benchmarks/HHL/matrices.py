@@ -9,11 +9,7 @@ MATRICES = {
     "2qubit-1ancilla-SQSWAP": {
         "qubits": 2,
         "ancillas": 1,
-        "circuit": [
-            ("TX", 1),
-            ("RY", 2),
-            ("SQSWAP", 1, 2),
-        ],
+        "circuit": [("TX", 1), ("RY", 2), ("SQSWAP", 1, 2)],
         "angles": [3.98119, 3.98119, -0.731195],
         "histogram": [[0.211582, 0.487322], [0.634747, 0.00844645]],
     },

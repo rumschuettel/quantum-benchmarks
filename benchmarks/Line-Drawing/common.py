@@ -216,10 +216,7 @@ class LineDrawingBenchmarkMixin:
 
         def interp(a, fac=100):
             return np.interp(
-                np.linspace(0, len(a) - 1 / fac, fac * len(a)),
-                range(len(a)),
-                a,
-                period=len(a),
+                np.linspace(0, len(a) - 1 / fac, fac * len(a)), range(len(a)), a, period=len(a)
             )
 
         all = np.array(collated_result)
@@ -241,12 +238,7 @@ class LineDrawingBenchmarkMixin:
             xs, ys = list(np.real(curve)), list(np.imag(curve))
             # print("X coordinates:", np.round(xs,3))
             # print("Y coordinates:", np.round(ys,3))
-            ax.plot(
-                xs + [xs[0]],
-                ys + [ys[0]],
-                color="red",
-                alpha=0.3 / len(collated_result) * 25,
-            )
+            ax.plot(xs + [xs[0]], ys + [ys[0]], color="red", alpha=0.3 / len(collated_result) * 25)
 
         # Plot the ideal contour
         ideal_xs, ideal_ys = list(np.real(self.points)), list(np.imag(self.points))
@@ -259,12 +251,7 @@ class LineDrawingBenchmarkMixin:
                 xmin, xmax, ymin, ymax = (-0.45, 0.45, -0.45, 0.35)
             dx, dy = (xmax - xmin, ymax - ymin)
         else:
-            xmin, xmax, ymin, ymax = (
-                min(ideal_xs),
-                max(ideal_xs),
-                min(ideal_ys),
-                max(ideal_ys),
-            )
+            xmin, xmax, ymin, ymax = (min(ideal_xs), max(ideal_xs), min(ideal_ys), max(ideal_ys))
             dx, dy = xmax - xmin, ymax - ymin
             if dx < dy * 1.5:
                 dx = dy * 1.5
@@ -281,16 +268,10 @@ class LineDrawingBenchmarkMixin:
         plt.margins(0, 0)
         plt.axis("off")
         fig.savefig(
-            path / "visualize-devpage.svg",
-            transparent=True,
-            bbox_inches="tight",
-            pad_inches=0,
+            path / "visualize-devpage.svg", transparent=True, bbox_inches="tight", pad_inches=0
         )
         fig.savefig(
-            path / "visualize-devpage.pdf",
-            transparent=True,
-            bbox_inches="tight",
-            pad_inches=0,
+            path / "visualize-devpage.pdf", transparent=True, bbox_inches="tight", pad_inches=0
         )
         plt.close()
 

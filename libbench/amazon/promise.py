@@ -36,9 +36,13 @@ class AmazonCloudPromise(AmazonPromiseBase):
     """
 
     try:
-        S3_BUCKET = open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r").read().strip()
+        S3_BUCKET = (
+            open(os.path.join(os.path.dirname(__file__), "../../s3_location.txt"), "r")
+            .read()
+            .strip()
+        )
     except FileNotFoundError:
-        S3_BUCKET = None    
+        S3_BUCKET = None
 
     def __init__(
         self,

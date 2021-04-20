@@ -80,10 +80,7 @@ class IBMBellTestJob(IBMJob):
     def run(self, device):
         super().run(device)
         return device.execute(
-            self.circuit,
-            num_shots=self.num_shots,
-            initial_layout=self.path,
-            optimization_level=0,
+            self.circuit, num_shots=self.num_shots, initial_layout=self.path, optimization_level=0
         )
 
     def __str__(self):

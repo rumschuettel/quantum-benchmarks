@@ -52,11 +52,7 @@ def Shende_Bullock_Markov(state, qubits, GRAY_CODE=True, REVERSE_ZS=True):
         ]
         circuit.append(
             prepare_multiplexed(
-                states,
-                qubits[:i],
-                qubits[i],
-                GRAY_CODE=GRAY_CODE,
-                REVERSE_ZS=REVERSE_ZS,
+                states, qubits[:i], qubits[i], GRAY_CODE=GRAY_CODE, REVERSE_ZS=REVERSE_ZS
             )
         )
 

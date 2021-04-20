@@ -214,26 +214,14 @@ def argparser(toadd, **argparse_options):
         "Platonic-Fractals", help="Platonic Fractals benchmark.", **argparse_options
     )
     parser.add_argument(
-        "-b",
-        "--body",
-        type=int,
-        help="The type of the Platonic body; (0 -- Octahedron)",
-        default=0,
+        "-b", "--body", type=int, help="The type of the Platonic body; (0 -- Octahedron)", default=0
     )
     parser.add_argument(
-        "-e",
-        "--strength",
-        type=float,
-        help="The strength of the mesurements",
-        default=0.93,
+        "-e", "--strength", type=float, help="The strength of the mesurements", default=0.93
     )
     parser.add_argument("-t", "--num_steps", type=int, help="Depth of fractal", default=2)
     parser.add_argument(
-        "-s",
-        "--num_shots",
-        type=int,
-        help="Number of shots per orientation",
-        default=1024,
+        "-s", "--num_shots", type=int, help="Number of shots per orientation", default=1024
     )
     parser.add_argument(
         "-m",

@@ -128,7 +128,7 @@ class IBMJobManager(VendorJobManager):
         gatestats = defaultdict(list)
         for job in jobs:
             for gate in job.device_info["properties"]["gates"]:
-                params_filtered = [ p for p in gate["parameters"] if p["name"] == "gate_error" ]
+                params_filtered = [p for p in gate["parameters"] if p["name"] == "gate_error"]
                 if len(params_filtered) != 1:
                     continue
                 gatestats[gate["gate"]].append(params_filtered[0]["value"])
@@ -137,5 +137,5 @@ class IBMJobManager(VendorJobManager):
             gatestats[key] = (np.mean(value), np.std(value))
         return {
             "gates": dict(gatestats),
-            "date": list(jobs)[0].device_info["properties"]["last_update_date"]
+            "date": list(jobs)[0].device_info["properties"]["last_update_date"],
         }

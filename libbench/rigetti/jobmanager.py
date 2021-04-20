@@ -54,8 +54,5 @@ class RigettiJobManager(VendorJobManager):
 
         for key, value in gatestats.items():
             gatestats[key] = (np.mean(value), np.std(value))
-        
-        return {
-            "gates": dict(gatestats),
-            "date": None
-        }
+
+        return {"gates": dict(gatestats), "date": None}

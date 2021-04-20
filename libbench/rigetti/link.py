@@ -78,11 +78,7 @@ class RigettiQVM(RigettiDevice):
         }
 
     def execute(
-        self,
-        program: pq.Program,
-        num_shots: int,
-        measure_qubits: list = None,
-        optimize=True,
+        self, program: pq.Program, num_shots: int, measure_qubits: list = None, optimize=True
     ):
         return self._run_and_measure(program, num_shots, measure_qubits, optimize)
 

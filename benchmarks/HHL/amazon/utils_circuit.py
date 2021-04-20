@@ -29,10 +29,7 @@ def get_unitary(self):
         gate_matrix = np.reshape(matrix, [2] * len(targets) * 2)
 
         # Construct a tuple specifying the axes along which we contract (i.e., which qubits the gate acts on)
-        axes = (
-            np.arange(len(targets), 2 * len(targets)),
-            targets,
-        )
+        axes = (np.arange(len(targets), 2 * len(targets)), targets)
 
         # Apply the gate by contracting the existing unitary with the new gate
         unitary = np.tensordot(gate_matrix, unitary, axes=axes)

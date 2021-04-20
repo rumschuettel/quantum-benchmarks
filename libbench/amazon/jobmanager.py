@@ -40,8 +40,4 @@ class AmazonJobManager(VendorJobManager):
         """
         jobs = self.results.keys()
         # breakpoint()
-        return {
-            "date": None,
-            "gates": {}
-        }
-
+        return {"date": None, "gates": {}}

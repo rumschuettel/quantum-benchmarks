@@ -30,12 +30,7 @@ class RigettiLineDrawingJob(RigettiJob):
                 if tomography_method == "custom" and pauli_string.count("Z") < n - 1:
                     continue
                 yield RigettiLineDrawingJob(
-                    points,
-                    num_shots,
-                    add_measurements,
-                    state_preparation_method,
-                    j,
-                    pauli_string,
+                    points, num_shots, add_measurements, state_preparation_method, j, pauli_string
                 )
 
     def __init__(

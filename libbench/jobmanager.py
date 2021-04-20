@@ -115,7 +115,6 @@ class VendorJobManager(ABC):
     def score(self, collated_result, reference_collated_result):
         return self.benchmark.score(collated_result, reference_collated_result)
 
-
     def finalize(
         self,
         figure_callback=lambda *_: None,
