@@ -10,33 +10,18 @@ Each requires the following dependencies.
     conda install pycairo
 
 
-## Vendor-Specific Notes
+## Usage
 
-### Rigetti
+The benchmarking program is called `runner.py`; available commands can be seen with
 
-To run the rigetti tests on a local QVM, first launch
+    ./runner.py --help
 
-    # shell 1
-    qvm -S
-    # shell 2
-    quilc -S
+The default output directory is under `./runs`, but can be modified. `./refresh.sh` periodically tries to update the benchmarks (e.g. for IBM); it takes as optional parameter a conda environment to launch first.
+The default runs can e.g. be invoked via
 
-QPU access is only possible in a QMI (quantum machine image), to which you have
-access to via the web interface.
+    ./run-all-benchmarks.sh ibm cloud ibmq_lima
 
-http://docs.rigetti.com/en/stable/advanced_usage.html#advanced-usage
-
-To set up the QMI, use the following steps:
-
-https://www.rigetti.com/qcs/docs/getting-started-with-your-qmi#qmi
-
-as well as the requirements listed at the start.
-
-
-### IBM
-
-To work with run benchmarks from pre 2020 try to look at `iterate-all-ibm.sh`, which attempts to run a command using various conda environments; it appears for our runs three environments with `qiskit==>.20,.17,.14.1` seems to suffice.
-
+Some helper scripts can be found in the `./scripts` folder.
 
 ## License
 
