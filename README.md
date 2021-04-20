@@ -21,8 +21,6 @@ The default runs can e.g. be invoked via
 
     ./run-all-benchmarks.sh ibm cloud ibmq_lima
 
-Some helper scripts can be found in the `./scripts` folder.
-
 ## License
 
 (c) 2021, Johannes Bausch, Arjan Cornelissen, András Gilyén
