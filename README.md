@@ -3,8 +3,7 @@
 
 ## Dependencies
 
-We recommend setting up a separate conda environment per vendor.
-Each requires the following dependencies.
+We recommend setting up a separate conda environment per vendor; supported are IBM (qiskit), Google (cirq), Rigetti (forest) and Amazon (braket). Each requires the following dependencies.
 
     pip install termcolor matplotlib seaborn networkx
     conda install pycairo
