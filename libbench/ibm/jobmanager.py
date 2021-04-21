@@ -16,14 +16,14 @@ def utc_timestamp():
 def time_elapsed(then: str):
     # current time in UTC format
     now = utc_timestamp()
-    now = dateutil.parser.parse(now)
-    then = dateutil.parser.parse(then)
+    now = dateutil.parser.isoparse(now)
+    then = dateutil.parser.isoparse(then)
     return now - then
 
 
 class IBMJobManager(VendorJobManager):
     # maximum time for a job to be considered a failure
-    MAX_JOB_AGE = datetime.timedelta(minutes=10)
+    MAX_JOB_AGE = datetime.timedelta(minutes=60*24*2)
 
     def job_alive(self, promise, meta: dict):
         """

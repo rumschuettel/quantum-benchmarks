@@ -153,12 +153,13 @@ class IBMCloudLink(IBMLinkBase):
 
         self.IBMQ_cloud_providers = providers
 
-        print_hl("IBMQ cloud account loaded.")
+        print_hl(f"IBMQ cloud account{'s' if len(providers)>1 else ''} loaded: " + " ".join(p.credentials.group for p in providers))
 
     @functools.lru_cache()
     def get_devices(self):
         devices = {}
-        for provider in self.IBMQ_cloud_providers:
+        import random
+        for provider in random.sample(self.IBMQ_cloud_providers, len(self.IBMQ_cloud_providers)):
             devices.update({device.name(): IBMDevice(device) for device in provider.backends()})
         return devices
 
