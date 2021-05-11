@@ -23,7 +23,7 @@ def time_elapsed(then: str):
 
 class QuTechJobManager(VendorJobManager):
     VENDOR = 'QuTech'
-    
+
     # maximum time for a job to be considered a failure
     MAX_JOB_AGE = datetime.timedelta(minutes=60*24*2)
 
@@ -120,21 +120,4 @@ class QuTechJobManager(VendorJobManager):
         """
         Get statistics of gate fidelities
         """
-        from collections import defaultdict
-        import numpy as np
-
-        jobs = self.results.keys()
-        gatestats = defaultdict(list)
-        for job in jobs:
-            for gate in job.device_info["properties"]["gates"]:
-                params_filtered = [p for p in gate["parameters"] if p["name"] == "gate_error"]
-                if len(params_filtered) != 1:
-                    continue
-                gatestats[gate["gate"]].append(params_filtered[0]["value"])
-
-        for key, value in gatestats.items():
-            gatestats[key] = (np.mean(value), np.std(value))
-        return {
-            "gates": dict(gatestats),
-            "date": list(jobs)[0].device_info["properties"]["last_update_date"],
-        }
+        return {"date": None, "gates": {}}
