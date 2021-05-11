@@ -23,7 +23,7 @@ class IBMPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, IBMBenchm
         )
 
     def __str__(self):
-        return "IBM-Platonic-Fractals"
+        return "Qiskit-PlatonicFractals"
 
 
 class IBMPlatonicFractalsBenchmark(IBMPlatonicFractalsBenchmarkBase):

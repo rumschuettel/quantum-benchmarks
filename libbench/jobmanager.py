@@ -19,7 +19,7 @@ class VendorJobManager(ABC):
     def __init__(self, benchmark: VendorBenchmark):
         self.benchmark = benchmark
         self.scheduled = benchmark.get_jobs()
-        self.ID = str(benchmark) + "--" + benchmark_id()
+        self.ID = self.VENDOR + "-" + str(benchmark) + "--" + benchmark_id()
 
         self.queued = {}  # job: promise
         self.results = {}  # job: result

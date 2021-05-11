@@ -19,7 +19,7 @@ class IBMBellTestBenchmarkBase(BellTestBenchmarkMixin, IBMBenchmark):
         )
 
     def __str__(self):
-        return "IBM-BellTest"
+        return "Qiskit-BellTest"
 
 
 class IBMBellTestBenchmark(IBMBellTestBenchmarkBase):

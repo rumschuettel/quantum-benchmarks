@@ -1,10 +1,10 @@
 from libbench import VendorJobManager, print_stderr
-from .benchmark import IBMBenchmark
+from .benchmark import QuTechBenchmark
 
-from .link import IBMDevice
+from .link import QuTechDevice
 
 from qiskit.providers import JobStatus
-from qiskit.exceptions import QiskitError
+from quantuminspire.exceptions import ApiError
 
 import datetime, dateutil
 
@@ -21,27 +21,24 @@ def time_elapsed(then: str):
     return now - then
 
 
-class IBMJobManager(VendorJobManager):
-    VENDOR = 'IBM'
-
+class QuTechJobManager(VendorJobManager):
+    VENDOR = 'QuTech'
+    
     # maximum time for a job to be considered a failure
     MAX_JOB_AGE = datetime.timedelta(minutes=60*24*2)
 
     def job_alive(self, promise, meta: dict):
         """
-        check whether we consider the job behind the promise alive on an IBM backend; however we should also check whether job_id is successful
+        check whether we consider the job behind the promise alive on an QuTech backend; however we should also check whether job_id is successful
         since only that makes a call to the cloud backend
         """
         try:
             id = promise.job_id()
 
-        except QiskitError as e:
-            message = e.message.rstrip("\n .")
-            if message.endswith("QUEUE_DISABLED"):
-                print_stderr("The queue for this device is disabled.")
-                return False
-            elif message.endswith("NOT_CREDITS_AVALIABLES") or message.endswith("Error code: 3458"):
-                print_stderr("You don't have enough credits to run this job.")
+        except ApiError as e:
+            message = str(e)
+            if "Please wait for those jobs to finish or cancel a job." in str(e):
+                print_stderr(str(e))
                 return False
 
             raise
@@ -50,7 +47,7 @@ class IBMJobManager(VendorJobManager):
         # this does not mean that the job is broken;
         # it could e.g. be a network issue. We let that error propagate
         status = promise.status()
-        print(f"The job with IBM ID {id} is reported to be in status: {status}")
+        print(f"The job with QuTech ID {id} is reported to be in status: {status}")
 
         if status in [JobStatus.QUEUED, JobStatus.RUNNING, JobStatus.DONE]:
             return True
@@ -70,19 +67,19 @@ class IBMJobManager(VendorJobManager):
 
         # otherwise try to cancel old job
         print(
-            f"The job with IBM ID {id} seems stuck in status: {status} for more than {age}, trying to cancel it."
+            f"The job with QuTech ID {id} seems stuck in status: {status} for more than {age}, trying to cancel it."
         )
         try:
             promise.cancel()
             del meta["last-status"]
-        except QiskitError as e:
-            print_stderr(e)
+        except ApiError as e:
+            print_stderr(str(e))
         finally:
             return False
 
     def queued_successfully(self, promise, meta: dict):
         """
-        check whether we consider the job behind the promise queued, or more than queued, on an IBM backend;
+        check whether we consider the job behind the promise queued, or more than queued, on an QuTech backend;
         this happens to coincide with self.job_alive
         """
         if not self.job_alive(promise, meta):
@@ -90,7 +87,7 @@ class IBMJobManager(VendorJobManager):
 
         return True
 
-    def try_get_results(self, promise, device: IBMDevice):
+    def try_get_results(self, promise, device: QuTechDevice):
         """
         obtain job results when done
         """
@@ -109,14 +106,14 @@ class IBMJobManager(VendorJobManager):
         """
         return promise.job_id()
 
-    def thaw_promise(self, job_id, device: IBMDevice):
+    def thaw_promise(self, job_id, device: QuTechDevice):
         """
         load job by job_id
         """
         try:
             return device.device.retrieve_job(job_id)
-        except QiskitError as e:
-            print_stderr(e)
+        except ApiError as e:
+            print_stderr(str(e))
             return None
 
     def gate_statistics(self):

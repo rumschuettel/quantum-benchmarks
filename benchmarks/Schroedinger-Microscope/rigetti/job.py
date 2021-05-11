@@ -57,4 +57,4 @@ class RigettiSchroedingerMicroscopeJob(RigettiJob):
         return device.execute(self.program, num_shots=self.shots)
 
     def __str__(self):
-        return f"RigettiSchroedingerMicroscopeJob-{self.i}-{self.j}"
+        return f"ForestSchroedingerMicroscopeJob-{self.i}-{self.j}"

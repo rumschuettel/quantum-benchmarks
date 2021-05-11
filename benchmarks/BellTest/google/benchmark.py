@@ -18,7 +18,7 @@ class GoogleBellTestBenchmarkBase(BellTestBenchmarkMixin, GoogleBenchmark):
         )
 
     def __str__(self):
-        return "Google-BellTest"
+        return "Cirq-BellTest"
 
 
 class GoogleBellTestBenchmark(GoogleBellTestBenchmarkBase):

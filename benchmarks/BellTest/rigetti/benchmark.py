@@ -19,7 +19,7 @@ class RigettiBellTestBenchmarkBase(BellTestBenchmarkMixin, RigettiBenchmark):
         )
 
     def __str__(self):
-        return "Rigetti-BellTest"
+        return "Forest-BellTest"
 
 
 class RigettiBellTestBenchmark(RigettiBellTestBenchmarkBase):

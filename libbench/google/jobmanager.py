@@ -2,6 +2,8 @@ from libbench import VendorJobManager
 
 
 class GoogleJobManager(VendorJobManager):
+    VENDOR = 'Google'
+    
     def job_alive(self, promise, meta: dict):
         """
         Check whether the job is alive.

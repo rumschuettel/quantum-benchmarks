@@ -24,7 +24,7 @@ class IBMLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, IBMBenchmark):
         )
 
     def __str__(self):
-        return f"IBM-Line-Drawing--{self.shape}-{len(self.points)}"
+        return f"Qiskit-Line-Drawing--{self.shape}-{len(self.points)}"
 
 
 class IBMLineDrawingBenchmark(IBMLineDrawingBenchmarkBase):

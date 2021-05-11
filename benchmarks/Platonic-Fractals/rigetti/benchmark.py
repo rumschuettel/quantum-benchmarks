@@ -23,7 +23,7 @@ class RigettiPlatonicFractalsBenchmarkBase(PlatonicFractalsBenchmarkMixin, Riget
         )
 
     def __str__(self):
-        return "Rigetti-Platonic-Fractals"
+        return "Forest-PlatonicFractals"
 
 
 class RigettiPlatonicFractalsBenchmark(RigettiPlatonicFractalsBenchmarkBase):

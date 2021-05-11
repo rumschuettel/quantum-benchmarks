@@ -23,7 +23,7 @@ class GoogleLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, GoogleBenchmark)
         )
 
     def __str__(self):
-        return f"Google-Line-Drawing--{self.shape}-{len(self.points)}"
+        return f"Cirq-Line-Drawing--{self.shape}-{len(self.points)}"
 
 
 class GoogleLineDrawingBenchmark(GoogleLineDrawingBenchmarkBase):

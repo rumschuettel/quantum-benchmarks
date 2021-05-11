@@ -105,5 +105,5 @@ class RigettiLineDrawingJob(RigettiJob):
 
     def __str__(self):
         if not self.add_measurements:
-            return f"RigettiLineDrawingJob-{''.join(self.pauli_string)}"
-        return f"RigettiLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"
+            return f"ForestLineDrawingJob-{''.join(self.pauli_string)}"
+        return f"ForestLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"

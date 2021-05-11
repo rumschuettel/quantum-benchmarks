@@ -121,5 +121,5 @@ class GoogleLineDrawingJob(GoogleJob):
 
     def __str__(self):
         if not self.add_measurements:
-            return f"GoogleLineDrawingJob-{''.join(self.pauli_string)}"
-        return f"GoogleLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"
+            return f"CirqLineDrawingJob-{''.join(self.pauli_string)}"
+        return f"CirqLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"

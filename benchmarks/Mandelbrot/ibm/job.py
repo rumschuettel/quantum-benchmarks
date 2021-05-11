@@ -72,4 +72,4 @@ class IBMMandelbrotJob(IBMJob):
         return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
-        return f"IBMMandelbrotJob-{self.i}-{self.j}"
+        return f"QiskitMandelbrotJob-{self.i}-{self.j}"

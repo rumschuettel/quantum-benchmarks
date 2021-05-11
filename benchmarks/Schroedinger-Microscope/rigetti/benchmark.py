@@ -23,7 +23,7 @@ class RigettiSchroedingerMicroscopeBenchmarkBase(
         )
 
     def __str__(self):
-        return "Rigetti-Schroedinger-Microscope"
+        return "Forest-SchroedingerMicroscope"
 
 
 class RigettiSchroedingerMicroscopeSimulatedBenchmark(RigettiSchroedingerMicroscopeBenchmarkBase):

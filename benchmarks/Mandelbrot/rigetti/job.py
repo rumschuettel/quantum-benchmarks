@@ -66,4 +66,4 @@ class RigettiMandelbrotJob(RigettiJob):
         return device.execute(self.program, num_shots=self.shots)
 
     def __str__(self):
-        return f"RigettiMandelbrotJob-{self.i}-{self.j}"
+        return f"ForestMandelbrotJob-{self.i}-{self.j}"

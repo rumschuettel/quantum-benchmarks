@@ -123,4 +123,4 @@ class HHLJob(RigettiJob):
         return device.execute(self.circuit, num_shots=self.shots)
 
     def __str__(self):
-        return f"RigettiHHLJob--{self.num_qubits-self.num_ancillas}-{self.basis_vec}-{self.shots}-{self.m_idx}"
+        return f"ForestHHLJob--{self.num_qubits-self.num_ancillas}-{self.basis_vec}-{self.shots}-{self.m_idx}"

@@ -65,4 +65,4 @@ class IBMSchroedingerMicroscopeJob(IBMJob):
         return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
-        return f"IBMSchroedingerMicroscopeJob-{self.i}-{self.j}"
+        return f"QiskitSchroedingerMicroscopeJob-{self.i}-{self.j}"

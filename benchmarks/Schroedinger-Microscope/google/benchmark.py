@@ -27,7 +27,7 @@ class GoogleSchroedingerMicroscopeBenchmarkBase(
         )
 
     def __str__(self):
-        return "Google-Schroedinger-Microscope"
+        return "Cirq-SchroedingerMicroscope"
 
 
 class GoogleSchroedingerMicroscopeBenchmark(GoogleSchroedingerMicroscopeBenchmarkBase):

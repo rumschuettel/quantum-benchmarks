@@ -76,4 +76,4 @@ class RigettiPlatonicFractalsJob(RigettiJob):
         return device.execute(self.program, num_shots=self.shots)
 
     def __str__(self):
-        return f"RigettiPlatonicFractalsJob--{self.strength}-{self.meas_dirs}-{self.final_meas_dir}-{self.m_idx}"
+        return f"ForestPlatonicFractalsJob--{self.strength}-{self.meas_dirs}-{self.final_meas_dir}-{self.m_idx}"

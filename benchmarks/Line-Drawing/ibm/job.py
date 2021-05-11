@@ -109,5 +109,5 @@ class IBMLineDrawingJob(IBMJob):
 
     def __str__(self):
         if not self.add_measurements:
-            return f"IBMLineDrawingJob-{''.join(self.pauli_string)}"
-        return f"IBMLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"
+            return f"QiskitLineDrawingJob-{''.join(self.pauli_string)}"
+        return f"QiskitLineDrawingJob-{self.repetition}-{''.join(self.pauli_string)}"

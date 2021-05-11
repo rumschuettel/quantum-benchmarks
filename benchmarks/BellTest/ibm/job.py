@@ -84,4 +84,4 @@ class IBMBellTestJob(IBMJob):
         )
 
     def __str__(self):
-        return f"IBMBellTestJob--{self.qubit_a}-{self.qubit_b}-{self.test_type}"
+        return f"QiskitBellTestJob--{self.qubit_a}-{self.qubit_b}-{self.test_type}"

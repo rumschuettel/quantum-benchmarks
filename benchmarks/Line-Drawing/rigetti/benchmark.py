@@ -24,7 +24,7 @@ class RigettiLineDrawingBenchmarkBase(LineDrawingBenchmarkMixin, RigettiBenchmar
         )
 
     def __str__(self):
-        return f"Rigetti-Line-Drawing--{self.shape}-{len(self.points)}"
+        return f"Forest-Line-Drawing--{self.shape}-{len(self.points)}"
 
 
 class RigettiLineDrawingBenchmark(RigettiLineDrawingBenchmarkBase):

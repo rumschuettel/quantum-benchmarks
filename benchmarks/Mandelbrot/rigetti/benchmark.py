@@ -21,7 +21,7 @@ class RigettiMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, RigettiBenchmark)
         )
 
     def __str__(self):
-        return "Rigetti-Mandelbrot"
+        return "Forest-Mandelbrot"
 
 
 class RigettiMandelbrotSimulatedBenchmark(RigettiMandelbrotBenchmarkBase):

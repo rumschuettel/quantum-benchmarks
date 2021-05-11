@@ -26,7 +26,7 @@ class IBMSchroedingerMicroscopeBenchmarkBase(SchroedingerMicroscopeBenchmarkMixi
         )
 
     def __str__(self):
-        return "IBM-Schroedinger-Microscope"
+        return "Qiskit-SchroedingerMicroscope"
 
 
 class IBMSchroedingerMicroscopeBenchmark(IBMSchroedingerMicroscopeBenchmarkBase):

@@ -18,7 +18,7 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, IBMBenchmark):
         )
 
     def __str__(self):
-        return "IBM-HHL"
+        return "Qiskit-HHL"
 
 
 class HHLBenchmark(HHLBenchmarkBase):

@@ -65,4 +65,4 @@ class GoogleSchroedingerMicroscopeJob(GoogleJob):
         return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
-        return f"GoogleSchroedingerMicroscopeJob-{self.i}-{self.j}"
+        return f"CirqSchroedingerMicroscopeJob-{self.i}-{self.j}"

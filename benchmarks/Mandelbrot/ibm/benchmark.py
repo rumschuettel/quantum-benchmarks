@@ -26,7 +26,7 @@ class IBMMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, IBMBenchmark):
         )
 
     def __str__(self):
-        return "IBM-Mandelbrot"
+        return "Qiskit-Mandelbrot"
 
 
 class IBMMandelbrotBenchmark(IBMMandelbrotBenchmarkBase):

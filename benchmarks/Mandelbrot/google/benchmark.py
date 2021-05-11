@@ -25,7 +25,7 @@ class GoogleMandelbrotBenchmarkBase(MandelbrotBenchmarkMixin, GoogleBenchmark):
         )
 
     def __str__(self):
-        return "Google-Mandelbrot"
+        return "Cirq-Mandelbrot"
 
 
 class GoogleMandelbrotBenchmark(GoogleMandelbrotBenchmarkBase):

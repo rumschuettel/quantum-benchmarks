@@ -183,4 +183,4 @@ class HHLJob(IBMJob):
         return device.execute(self.circuit, num_shots=self.shots)
 
     def __str__(self):
-        return f"IBMHHLJob--{self.num_qubits-self.num_ancillas}-{self.basis_vec}-{self.shots}-{self.m_idx}"
+        return f"QiskitHHLJob--{self.num_qubits-self.num_ancillas}-{self.basis_vec}-{self.shots}-{self.m_idx}"

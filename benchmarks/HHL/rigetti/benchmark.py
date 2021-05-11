@@ -14,7 +14,7 @@ class HHLBenchmarkBase(HHLBenchmarkMixin, RigettiBenchmark):
         yield from HHLJob.job_factory(self.matrix, self.num_shots, self.shots_multiplier)
 
     def __str__(self):
-        return "Rigetti-HHL"
+        return "Forest-HHL"
 
 
 class HHLBenchmark(HHLBenchmarkBase):

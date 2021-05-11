@@ -82,4 +82,4 @@ class IBMPlatonicFractalsJob(IBMJob):
         return device.execute(self.circuit, num_shots=self.shots)
 
     def __str__(self):
-        return f"IBMPlatonicFractalsJob--{self.strength}-{self.meas_dirs}-{self.final_meas_dir}-{self.m_idx}"
+        return f"QiskitPlatonicFractalsJob--{self.strength}-{self.meas_dirs}-{self.final_meas_dir}-{self.m_idx}"

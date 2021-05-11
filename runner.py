@@ -40,7 +40,14 @@ MODES = list(MODE_CLASS_NAMES.keys())
 """
 
 
+IMPLEMENTATION_PLATFORM_REPLACE = {
+    'qutech' : 'ibm'
+}
+
 def import_benchmark(name, vendor, mode, device):
+    if vendor in IMPLEMENTATION_PLATFORM_REPLACE:
+        vendor = IMPLEMENTATION_PLATFORM_REPLACE[vendor]
+
     benchmark_module = importlib.import_module(f"benchmarks.{name}.{vendor}")
     return getattr(benchmark_module, "SimulatedBenchmark" if mode == "Statevector" else "Benchmark")
 

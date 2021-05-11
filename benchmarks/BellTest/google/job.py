@@ -81,4 +81,4 @@ class GoogleBellTestJob(GoogleJob):
         return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
-        return f"GoogleBellTestJob--{self.qubit_a}-{self.qubit_b}-{self.test_type}"
+        return f"CirqBellTestJob--{self.qubit_a}-{self.qubit_b}-{self.test_type}"

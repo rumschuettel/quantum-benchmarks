@@ -95,4 +95,4 @@ class GoogleMandelbrotJob(GoogleJob):
         return device.execute(self.circuit, num_shots=self.num_shots)
 
     def __str__(self):
-        return f"GoogleMandelbrotJob-{self.i}-{self.j}"
+        return f"CirqMandelbrotJob-{self.i}-{self.j}"
