@@ -126,6 +126,9 @@ class RigettiJob(VendorJob):
         info.update({"program": self.program})
         return info
 
+    def qasm(self):
+        return self.program.out()
+
 
 class RigettiLinkBase(VendorLink):
     def get_device_topology(self, name) -> Union[Dict[Tuple[int, int], float], None]:

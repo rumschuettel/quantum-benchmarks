@@ -75,6 +75,9 @@ class QuTechJob(VendorJob):
         info.update({"circuit": self.circuit})
         return info
 
+    def qasm(self):
+        return self.circuit.qasm()
+
 
 class QuTechThinPromise(ThinPromise):
     """

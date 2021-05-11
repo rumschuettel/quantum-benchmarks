@@ -75,6 +75,7 @@ class VendorJobManager(ABC):
                     self._save_in_run_folder(f"jobs/{str(job)}.raw-result.pickle", result)
                     self._save_in_run_folder(f"jobs/{str(job)}.pickle", self.results[job])
                     self._save_in_run_folder(f"jobs/{str(job)}.circuit.pickle", job.serialize())
+                    self._save_in_run_folder(f"jobs/{str(job)}.circuit.qasm", job.qasm(), pickle_dump = False)
 
             # 2. if that failed, check whether job is alive and if not reschedule
             elif not self.job_alive(promise, job.meta):
@@ -192,14 +193,18 @@ class VendorJobManager(ABC):
         for key, what in additional_stored_info.items():
             self._save_in_run_folder(f"{what}.{key}")
 
-    def _save_in_run_folder(self, filename: str, obj: object = None):
+    def _save_in_run_folder(self, filename: str, obj: object = None, pickle_dump: bool = True):
         full_filename = f"{self.RUN_FOLDER}/{self.ID}/{filename}"
         full_folder = os.path.dirname(full_filename)
         if not os.path.exists(full_folder):
             os.makedirs(full_folder)
 
-        with open(full_filename, "wb") as f:
-            pickle.dump(obj, f)
+        if pickle_dump:
+            with open(full_filename, 'wb') as f:
+                pickle.dump(obj, f)
+        else:
+            with open(full_filename, 'w') as f:
+                f.write(obj)
 
     @classmethod
     def load(clx, ID):

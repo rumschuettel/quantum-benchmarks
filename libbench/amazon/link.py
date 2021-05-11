@@ -68,6 +68,9 @@ class AmazonJob(VendorJob):
     def run(self, device):
         self.device_info = device.properties if hasattr(device, "properties") else None
 
+    def qasm(self):
+        return str(self.circuit.to_ir().json())
+
 
 class AmazonLinkBase(VendorLink):
     def get_device_topology(self, name):

@@ -62,6 +62,9 @@ class GoogleJob(VendorJob):
     def run(self, device):
         self.device_info = None
 
+    def qasm(self):
+        return self.circuit.to_qasm()
+
 
 class GoogleLinkBase(VendorLink):
     def get_device_topology(self, name):
