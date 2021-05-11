@@ -22,7 +22,16 @@ function check() {
             continue
         fi
 
-        if [[ $lastline == "IBM" ]]; then
+        if [[ $line =~ ^QuTech- ]]; then
+            lastline="QuTech"
+            path=$(echo "$line" | cut -f1 -d ":")
+            todo=$(echo "$line" | cut -f2 -d " ")
+            scheduled=$(echo "$line" | cut -f3 -d " ")
+
+            continue
+        fi
+
+        if [[ $lastline == "IBM" ]] || [[ $lastline == "QuTech" ]]; then
             lastline="info"
 
             # read in info json
@@ -35,7 +44,6 @@ function check() {
                     cmd="./runner.py resume \"$path\""
                     echo "$cmd"
                     eval $cmd
-                    return
                 fi
             fi
         fi
@@ -53,5 +61,5 @@ trap 'on_ctrl_c' SIGINT
 while :; do
 #    date
     check
-    sleep 0
+    sleep 60
 done
